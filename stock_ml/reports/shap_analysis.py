@@ -39,17 +39,17 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
     suffix = "_tuned" if tuned else ""
     logger.info(f"Running SHAP analysis: {ticker} | {model_name}{suffix} | label_version={label_version}")
 
+    from sklearn.preprocessing import StandardScaler
+
     X, y = build_feature_matrix(ticker, label_version)
 
     # Use last portion for SHAP (more representative of recent behavior)
     X_sample = X.iloc[-n_samples:] if len(X) > n_samples else X
 
-    # Load scaler
-    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}{suffix}.joblib")
-    if not os.path.exists(scaler_path):
-        logger.error(f"Scaler not found: {scaler_path}")
-        return
-    scaler = joblib.load(scaler_path)
+    # Re-fit scaler on train portion only to avoid data leakage
+    split_idx = int(len(X) * 0.8)
+    scaler = StandardScaler()
+    scaler.fit(X.iloc[:split_idx])
     X_scaled = scaler.transform(X_sample)
     X_scaled_df = pd.DataFrame(X_scaled, columns=X_sample.columns, index=X_sample.index)
 
@@ -62,7 +62,7 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
             return
         model = xgb.XGBClassifier()
         model.load_model(model_path)
-        explainer = shap.TreeExplainer(model)
+        explainer = shap.TreeExplainer(model.get_booster())
     elif model_name == "lightgbm":
         import lightgbm as lgb
         model_path = os.path.join(MODEL_DIR, f"lightgbm_{ticker}_{label_version}{suffix}.txt")

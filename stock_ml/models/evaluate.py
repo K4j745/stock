@@ -74,55 +74,50 @@ def print_classification_report(results: dict) -> None:
 
 def evaluate_saved_models(ticker: str, label_version: str = "A"):
     """
-    Load saved models, run evaluation on test split (last 20%), print metrics.
+    Evaluate models on a held-out test split (last 20%).
+
+    Since the saved models were retrained on the full dataset, we retrain
+    fresh copies on only the train portion (first 80%) to get a proper
+    out-of-sample evaluation.
     """
     import os
-    import joblib
     import pandas as pd
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.ensemble import RandomForestClassifier
+    from xgboost import XGBClassifier
+    from lightgbm import LGBMClassifier
     from features.pipeline import build_feature_matrix
-    from config import MODEL_DIR
+    from config import RANDOM_STATE
 
     X, y = build_feature_matrix(ticker, label_version)
     split_idx = int(len(X) * 0.8)
+    X_train = X.iloc[:split_idx]
+    y_train = y.iloc[:split_idx]
     X_test = X.iloc[split_idx:]
     y_test = y.iloc[split_idx:]
 
-    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
-    if not os.path.exists(scaler_path):
-        logger.error(f"Scaler not found: {scaler_path}")
-        return
-    scaler = joblib.load(scaler_path)
-    X_test_scaled = scaler.transform(X_test)
+    # Fit scaler on train portion only
+    scaler = StandardScaler()
+    X_train_scaled = pd.DataFrame(
+        scaler.fit_transform(X_train), columns=X_train.columns, index=X_train.index
+    )
+    X_test_scaled = pd.DataFrame(
+        scaler.transform(X_test), columns=X_test.columns, index=X_test.index
+    )
 
-    model_configs = [
-        ("logistic_regression", "logistic_regression", ".joblib"),
-        ("random_forest", "random_forest", ".joblib"),
-        ("xgboost", "xgboost", ".json"),
-        ("lightgbm", "lightgbm", ".txt"),
-    ]
+    model_configs = {
+        "logistic_regression": LogisticRegression(random_state=RANDOM_STATE, max_iter=1000),
+        "random_forest": RandomForestClassifier(n_estimators=200, random_state=RANDOM_STATE),
+        "xgboost": XGBClassifier(n_estimators=200, random_state=RANDOM_STATE, eval_metric="logloss"),
+        "lightgbm": LGBMClassifier(n_estimators=200, random_state=RANDOM_STATE, verbose=-1),
+    }
 
     all_results = {}
-    for model_name, file_prefix, ext in model_configs:
-        model_path = os.path.join(MODEL_DIR, f"{file_prefix}_{ticker}_{label_version}{ext}")
-        if not os.path.exists(model_path):
-            logger.warning(f"Model not found: {model_path}, skipping")
-            continue
-
-        if model_name == "xgboost":
-            import xgboost as xgb
-            model = xgb.XGBClassifier()
-            model.load_model(model_path)
-            preds = model.predict(X_test_scaled)
-            proba = model.predict_proba(X_test_scaled)[:, 1]
-        elif model_name == "lightgbm":
-            import lightgbm as lgb
-            booster = lgb.Booster(model_file=model_path)
-            proba = booster.predict(X_test_scaled)
-            preds = (proba > 0.5).astype(int)
-        else:
-            model = joblib.load(model_path)
-            preds = model.predict(X_test_scaled)
-            proba = model.predict_proba(X_test_scaled)[:, 1] if hasattr(model, "predict_proba") else None
+    for model_name, model in model_configs.items():
+        model.fit(X_train_scaled, y_train)
+        preds = model.predict(X_test_scaled)
+        proba = model.predict_proba(X_test_scaled)[:, 1] if hasattr(model, "predict_proba") else None
 
         metrics = evaluate_model(y_test, preds, proba)
         all_results[model_name] = metrics
