@@ -114,10 +114,15 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
 
     # 3. Waterfall for a single prediction (last sample)
     try:
+        expected_val = explainer.expected_value
+        if isinstance(expected_val, list):
+            expected_val = expected_val[1]
+        elif isinstance(expected_val, np.ndarray):
+            expected_val = float(expected_val[1]) if len(expected_val) > 1 else float(expected_val[0])
+
         exp = shap.Explanation(
             values=shap_vals[-1],
-            base_values=explainer.expected_value if not isinstance(explainer.expected_value, list)
-                        else explainer.expected_value[1],
+            base_values=expected_val,
             data=X_scaled_df.iloc[-1].values,
             feature_names=list(X_scaled_df.columns)
         )

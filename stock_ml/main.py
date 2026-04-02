@@ -78,7 +78,7 @@ def cmd_plots(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Stock ML Pipeline — predict next-day price direction",
+        description="Stock ML Pipeline - predict next-day price direction",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )

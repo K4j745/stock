@@ -24,13 +24,14 @@ os.makedirs(PLOTS_DIR, exist_ok=True)
 def plot_equity_curve(ticker: str, model_name: str, label_version: str = "A"):
     """
     Plot equity curve: strategy vs. buy-and-hold vs. SPY.
+    Loads backtest results JSON.
     """
-    import json
     import joblib
     from data.download import download_single
     from backtest.strategy import compute_strategy_returns, compute_buyhold_returns, build_signals
     from features.pipeline import build_feature_matrix
 
+    # Load model predictions (same logic as backtest/run.py)
     X, y = build_feature_matrix(ticker, label_version)
     split_idx = int(len(X) * 0.8)
     X_test = X.iloc[split_idx:]
@@ -81,7 +82,7 @@ def plot_equity_curve(ticker: str, model_name: str, label_version: str = "A"):
     axes[0].plot(bh_equity.index, bh_equity.values, label=f"Buy & Hold ({ticker})", linewidth=1.5, linestyle="--")
     axes[0].plot(spy_equity.index, spy_equity.values, label="SPY", linewidth=1.5, linestyle=":")
     axes[0].set_ylabel("Portfolio Value (normalized)")
-    axes[0].set_title(f"Equity Curve — {ticker} | {model_name} | label={label_version}")
+    axes[0].set_title(f"Equity Curve - {ticker} | {model_name} | label={label_version}")
     axes[0].legend()
     axes[0].yaxis.set_major_formatter(mticker.PercentFormatter(xmax=1, decimals=0))
 
@@ -195,9 +196,9 @@ def plot_model_comparison(ticker: str, label_version: str = "A"):
     # Expect structure: {model_name: {mean_metrics: {...}}}
     models = []
     metrics_list = []
-    for model_name, model_data in data.items():
+    for m_name, model_data in data.items():
         if "mean_metrics" in model_data:
-            models.append(model_name)
+            models.append(m_name)
             metrics_list.append(model_data["mean_metrics"])
 
     if not models:
@@ -222,7 +223,7 @@ def plot_model_comparison(ticker: str, label_version: str = "A"):
         for i, val in enumerate(df[metric]):
             ax.text(i, val + 0.01, f"{val:.3f}", ha="center", fontsize=9)
 
-    plt.suptitle(f"Model Comparison — {ticker} | label={label_version}", fontsize=13, y=1.02)
+    plt.suptitle(f"Model Comparison - {ticker} | label={label_version}", fontsize=13, y=1.02)
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"model_comparison_{ticker}_{label_version}.png")
     plt.savefig(out, dpi=150, bbox_inches="tight")

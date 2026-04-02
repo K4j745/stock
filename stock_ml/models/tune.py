@@ -31,7 +31,6 @@ def tune_xgboost(X, y, n_trials: int = 50) -> dict:
             "gamma": trial.suggest_float("gamma", 0, 1),
             "random_state": RANDOM_STATE,
             "eval_metric": "logloss",
-            "use_label_encoder": False,
         }
         model = xgb.XGBClassifier(**params)
         tscv = TimeSeriesSplit(n_splits=N_SPLITS)
@@ -113,7 +112,6 @@ def tune_and_retrain(ticker: str, label_version: str = "A", n_trials: int = 50):
             import xgboost as xgb
             best_params["random_state"] = RANDOM_STATE
             best_params["eval_metric"] = "logloss"
-            best_params["use_label_encoder"] = False
             model = xgb.XGBClassifier(**best_params)
             model.fit(X_scaled, y)
             model_path = os.path.join(MODEL_DIR, f"xgboost_{ticker}_{label_version}_tuned.json")
