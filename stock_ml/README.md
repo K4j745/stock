@@ -16,17 +16,14 @@ pip install -r requirements.txt
 # Train all models for a single ticker (label version A)
 python main.py train --ticker JNJ --label-version A
 
-# Train all models for a single ticker (label version B, 0.2% threshold)
-python main.py train --ticker JNJ --label-version B
+# Train with Optuna hyperparameter tuning
+python main.py train --ticker JNJ --label-version A --tune --n-trials 50
 
 # Train all models for all tickers
 python main.py train --label-version A
 
 # Force re-download of data
 python main.py train --ticker JNJ --label-version A --refresh
-
-# Train with Optuna hyperparameter tuning
-python main.py train --ticker JNJ --label-version A --tune --n-trials 50
 ```
 
 ### Backtest
@@ -102,14 +99,14 @@ stock_ml/
 ├── backtest/
 │   ├── __init__.py
 │   ├── strategy.py            # signals, strategy returns, buy-and-hold returns
-│   └── run.py                 # backtest execution + portfolio metrics
+│   └── run.py                 # backtest execution and portfolio metrics
 │
 ├── reports/
 │   ├── __init__.py
 │   ├── generate.py            # CSV/JSON result export
-│   ├── plots.py               # equity curves, confusion matrices, feature importance
+│   ├── plots.py               # equity curves, confusion matrix, feature importance, model comparison
 │   ├── shap_analysis.py       # SHAP summary, bar, and waterfall plots
-│   └── plots/                 # saved PNG visualizations (gitignored)
+│   └── plots/                 # saved PNG plots (gitignored)
 │
 ├── requirements.txt
 ├── .gitignore
@@ -136,6 +133,10 @@ Uses expanding window (TimeSeriesSplit with 5 folds) to avoid data leakage. Stan
 
 Optuna-based Bayesian optimization for XGBoost and LightGBM. Tuned models saved with `_tuned` suffix.
 
+## SHAP Analysis
+
+TreeExplainer-based SHAP analysis for tree models (XGBoost, LightGBM, Random Forest). Generates summary, bar, and waterfall plots.
+
 ## Portfolio Metrics
 
-Backtest computes: total return, annualized return, Sharpe ratio, max drawdown, Calmar ratio, and volatility — compared against buy-and-hold and SPY benchmark.
+Backtest computes: total return, annualized return, Sharpe ratio, max drawdown, Calmar ratio, and volatility - compared against buy-and-hold and SPY benchmark.

@@ -32,7 +32,6 @@ def _get_models() -> dict:
             n_estimators=200,
             random_state=RANDOM_STATE,
             eval_metric="logloss",
-            use_label_encoder=False,
         ),
         "lightgbm": LGBMClassifier(
             n_estimators=200, random_state=RANDOM_STATE, verbose=-1
