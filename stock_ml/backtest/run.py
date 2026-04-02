@@ -73,21 +73,23 @@ def run_backtest(ticker: str, model_name: str, label_version: str = "A") -> dict
 
     logger.info(f"Running backtest: {ticker} | {model_name} | label_version={label_version}")
 
+    from sklearn.preprocessing import StandardScaler
+
     # Load feature matrix and labels
     X, y = build_feature_matrix(ticker, label_version)
 
     # Use last 20% of data as out-of-sample test period
     split_idx = int(len(X) * 0.8)
+    X_train = X.iloc[:split_idx]
     X_test = X.iloc[split_idx:]
     y_test = y.iloc[split_idx:]
 
-    # Load scaler
-    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
-    if not os.path.exists(scaler_path):
-        logger.error(f"Scaler not found: {scaler_path}. Run train first.")
-        return {}
-    scaler = joblib.load(scaler_path)
-    X_test_scaled = scaler.transform(X_test)
+    # Re-fit scaler on train portion only to avoid data leakage
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_test_scaled = pd.DataFrame(
+        scaler.transform(X_test), columns=X_test.columns, index=X_test.index
+    )
 
     # Load model
     if model_name == "xgboost":

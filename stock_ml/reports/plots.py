@@ -27,6 +27,7 @@ def plot_equity_curve(ticker: str, model_name: str, label_version: str = "A"):
     Loads backtest results JSON.
     """
     import joblib
+    from sklearn.preprocessing import StandardScaler
     from data.download import download_single
     from backtest.strategy import compute_strategy_returns, compute_buyhold_returns, build_signals
     from features.pipeline import build_feature_matrix
@@ -34,14 +35,15 @@ def plot_equity_curve(ticker: str, model_name: str, label_version: str = "A"):
     # Load model predictions (same logic as backtest/run.py)
     X, y = build_feature_matrix(ticker, label_version)
     split_idx = int(len(X) * 0.8)
+    X_train = X.iloc[:split_idx]
     X_test = X.iloc[split_idx:]
 
-    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
-    if not os.path.exists(scaler_path):
-        logger.warning(f"Scaler not found for {ticker}, skipping equity curve")
-        return
-    scaler = joblib.load(scaler_path)
-    X_test_scaled = scaler.transform(X_test)
+    # Re-fit scaler on train portion only to avoid data leakage
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_test_scaled = pd.DataFrame(
+        scaler.transform(X_test), columns=X_test.columns, index=X_test.index
+    )
 
     if model_name == "xgboost":
         import xgboost as xgb
@@ -105,19 +107,21 @@ def plot_equity_curve(ticker: str, model_name: str, label_version: str = "A"):
 def plot_confusion_matrix(ticker: str, model_name: str, label_version: str = "A"):
     """Plot confusion matrix for a model on the test period."""
     import joblib
+    from sklearn.preprocessing import StandardScaler
     from features.pipeline import build_feature_matrix
 
     X, y = build_feature_matrix(ticker, label_version)
     split_idx = int(len(X) * 0.8)
+    X_train = X.iloc[:split_idx]
     X_test = X.iloc[split_idx:]
     y_test = y.iloc[split_idx:]
 
-    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
-    if not os.path.exists(scaler_path):
-        logger.warning(f"Scaler not found for {ticker}, skipping confusion matrix")
-        return
-    scaler = joblib.load(scaler_path)
-    X_test_scaled = scaler.transform(X_test)
+    # Re-fit scaler on train portion only to avoid data leakage
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_test_scaled = pd.DataFrame(
+        scaler.transform(X_test), columns=X_test.columns, index=X_test.index
+    )
 
     if model_name == "xgboost":
         import xgboost as xgb
