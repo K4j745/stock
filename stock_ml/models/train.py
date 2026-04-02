@@ -22,19 +22,19 @@ logger = logging.getLogger("stock_ml")
 def _get_models() -> dict:
     """Return dictionary of model name -> model instance."""
     return {
-        "LogisticRegression": LogisticRegression(
+        "logistic_regression": LogisticRegression(
             random_state=RANDOM_STATE, max_iter=1000
         ),
-        "RandomForest": RandomForestClassifier(
+        "random_forest": RandomForestClassifier(
             n_estimators=200, random_state=RANDOM_STATE
         ),
-        "XGBoost": XGBClassifier(
+        "xgboost": XGBClassifier(
             n_estimators=200,
             random_state=RANDOM_STATE,
             eval_metric="logloss",
             use_label_encoder=False,
         ),
-        "LightGBM": LGBMClassifier(
+        "lightgbm": LGBMClassifier(
             n_estimators=200, random_state=RANDOM_STATE, verbose=-1
         ),
     }
@@ -155,11 +155,11 @@ def _clone_model(model_name: str):
 
 def _save_model(model, model_name: str, ticker: str, label_version: str) -> None:
     """Save a trained model to disk."""
-    if model_name == "XGBoost":
+    if model_name == "xgboost":
         path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{label_version}.json")
         model.save_model(path)
-    elif model_name == "LightGBM":
-        path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{label_version}.json")
+    elif model_name == "lightgbm":
+        path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{label_version}.txt")
         model.booster_.save_model(path)
     else:
         path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{label_version}.joblib")
