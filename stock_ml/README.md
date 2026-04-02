@@ -10,6 +10,8 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Train models
+
 ```bash
 # Train all models for a single ticker (label version A)
 python main.py train --ticker JNJ --label-version A
@@ -22,6 +24,53 @@ python main.py train --label-version A
 
 # Force re-download of data
 python main.py train --ticker JNJ --label-version A --refresh
+
+# Train with Optuna hyperparameter tuning
+python main.py train --ticker JNJ --label-version A --tune --n-trials 50
+```
+
+### Backtest
+
+```bash
+# Backtest a single model
+python main.py backtest --ticker JNJ --model xgboost --label-version A
+
+# Backtest all models for a ticker
+python main.py backtest --ticker JNJ --label-version A
+```
+
+### Evaluate saved models
+
+```bash
+# Evaluate all saved models on test split (last 20%)
+python main.py evaluate --ticker JNJ --label-version A
+```
+
+### Report (model comparison plots)
+
+```bash
+# Generate model comparison bar charts
+python main.py report --ticker JNJ --label-version A
+```
+
+### SHAP analysis
+
+```bash
+# Generate SHAP plots for XGBoost (default)
+python main.py shap --ticker JNJ --label-version A
+
+# SHAP for a specific model
+python main.py shap --ticker JNJ --model random_forest --label-version A
+
+# SHAP for a tuned model
+python main.py shap --ticker JNJ --model xgboost --label-version A --tuned
+```
+
+### Visualization plots
+
+```bash
+# Generate equity curve, confusion matrix, feature importance
+python main.py plots --ticker JNJ --model xgboost --label-version A
 ```
 
 ## Project Structure
@@ -29,7 +78,7 @@ python main.py train --ticker JNJ --label-version A --refresh
 ```
 stock_ml/
 ├── config.py                  # paths, parameters, Colab/local detection
-├── main.py                    # CLI runner (argparse): train / evaluate
+├── main.py                    # CLI runner (argparse subparsers)
 │
 ├── data/
 │   ├── __init__.py
@@ -46,12 +95,21 @@ stock_ml/
 ├── models/
 │   ├── __init__.py
 │   ├── train.py               # training and model saving
-│   ├── evaluate.py            # classification metrics
+│   ├── evaluate.py            # classification metrics + evaluate_saved_models
+│   ├── tune.py                # Optuna hyperparameter tuning (XGBoost, LightGBM)
 │   └── saved/                 # trained models (gitignored)
+│
+├── backtest/
+│   ├── __init__.py
+│   ├── strategy.py            # signals, strategy returns, buy-and-hold returns
+│   └── run.py                 # backtest execution + portfolio metrics
 │
 ├── reports/
 │   ├── __init__.py
-│   └── generate.py            # CSV/JSON result export
+│   ├── generate.py            # CSV/JSON result export
+│   ├── plots.py               # equity curves, confusion matrices, feature importance
+│   ├── shap_analysis.py       # SHAP summary, bar, and waterfall plots
+│   └── plots/                 # saved PNG visualizations (gitignored)
 │
 ├── requirements.txt
 ├── .gitignore
@@ -73,3 +131,11 @@ stock_ml/
 ## Cross-Validation
 
 Uses expanding window (TimeSeriesSplit with 5 folds) to avoid data leakage. StandardScaler is fit only on training data per fold.
+
+## Hyperparameter Tuning
+
+Optuna-based Bayesian optimization for XGBoost and LightGBM. Tuned models saved with `_tuned` suffix.
+
+## Portfolio Metrics
+
+Backtest computes: total return, annualized return, Sharpe ratio, max drawdown, Calmar ratio, and volatility — compared against buy-and-hold and SPY benchmark.
