@@ -124,10 +124,22 @@ def train_all_models(ticker: str, label_version: str = "A", refresh: bool = Fals
 
     # 4. Retrain on full data and save
     logger.info("Retraining all models on full dataset for %s...", ticker)
+    split_idx = int(len(X) * 0.8)
     final_scaler = StandardScaler()
+    final_scaler.fit(X.iloc[:split_idx])          # fit TYLKO na train 80%
     X_scaled_full = pd.DataFrame(
-        final_scaler.fit_transform(X), columns=X.columns, index=X.index,
+        final_scaler.transform(X), columns=X.columns, index=X.index,
     )
+    # split_idx = int(len(X) * 0.8)
+    # X_train_final = X.iloc[:split_idx]
+
+    # final_scaler = StandardScaler()
+    # final_scaler.fit(X_train_final)          # fit TYLKO na train
+    # X_scaled_full = pd.DataFrame(
+    #     final_scaler.transform(X),           # transform na całości (do retraining modelu)
+    #     columns=X.columns, index=X.index,
+    # )
+    
 
     # Save the scaler
     scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
