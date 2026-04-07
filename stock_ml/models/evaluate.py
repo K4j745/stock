@@ -92,7 +92,11 @@ def evaluate_saved_models(ticker: str, label_version: str = "A"):
         logger.error(f"Scaler not found: {scaler_path}")
         return
     scaler = joblib.load(scaler_path)
-    X_test_scaled = scaler.transform(X_test)
+    X_test_scaled = pd.DataFrame(
+        scaler.transform(X_test),
+        columns=X_test.columns,
+        index=X_test.index,
+    )
 
     model_configs = [
         ("logistic_regression", "logistic_regression", ".joblib"),
