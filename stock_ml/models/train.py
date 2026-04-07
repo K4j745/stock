@@ -2,6 +2,7 @@ import logging
 import os
 
 import joblib
+from matplotlib import ticker
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
@@ -122,24 +123,19 @@ def train_all_models(ticker: str, label_version: str = "A", refresh: bool = Fals
             mean_metrics["mcc"],
         )
 
-    # 4. Retrain on full data and save
-    logger.info("Retraining all models on full dataset for %s...", ticker)
+    # 4. Train final saved models only on the train split and save
+    logger.info("Training final saved models on train split only for %s...", ticker)
     split_idx = int(len(X) * 0.8)
-    final_scaler = StandardScaler()
-    final_scaler.fit(X.iloc[:split_idx])          # fit TYLKO na train 80%
-    X_scaled_full = pd.DataFrame(
-        final_scaler.transform(X), columns=X.columns, index=X.index,
-    )
-    # split_idx = int(len(X) * 0.8)
-    # X_train_final = X.iloc[:split_idx]
 
-    # final_scaler = StandardScaler()
-    # final_scaler.fit(X_train_final)          # fit TYLKO na train
-    # X_scaled_full = pd.DataFrame(
-    #     final_scaler.transform(X),           # transform na całości (do retraining modelu)
-    #     columns=X.columns, index=X.index,
-    # )
-    
+    X_train_final = X.iloc[:split_idx]
+    y_train_final = y.iloc[:split_idx]
+
+    final_scaler = StandardScaler()
+    X_train_final_scaled = pd.DataFrame(
+        final_scaler.fit_transform(X_train_final),
+        columns=X_train_final.columns,
+        index=X_train_final.index,
+    )
 
     # Save the scaler
     scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
@@ -148,7 +144,7 @@ def train_all_models(ticker: str, label_version: str = "A", refresh: bool = Fals
 
     for model_name in models:
         final_model = _clone_model(model_name)
-        final_model.fit(X_scaled_full, y)
+        final_model.fit(X_train_final_scaled, y_train_final)
         _save_model(final_model, model_name, ticker, label_version)
 
     # 5. Print report and export results
