@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STOCK TERMINAL — Charts</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0a;
+    color: #00ff41;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0, 255, 65, 0.03) 2px, rgba(0, 255, 65, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  .nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .nav a {
+    color: #00ff41;
+    text-decoration: none;
+    border: 1px solid #00ff41;
+    padding: 4px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav a:hover, .nav a.active {
+    background: #00ff41;
+    color: #0a0a0a;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: normal;
+    border-bottom: 1px solid #003300;
+    padding-bottom: 8px;
+  }
+
+  .subtitle {
+    color: #00cc33;
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    border: 1px solid #003300;
+    padding: 12px;
+    background: #0d0d0d;
+  }
+  .card-title {
+    font-size: 13px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #001a00;
+    color: #00ff41;
+  }
+  .card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid #001a00;
+    background: #111;
+  }
+  .card .placeholder {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #003300;
+    color: #004400;
+    font-size: 12px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #004400;
+    border: 1px dashed #003300;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #004400;
+    font-size: 11px;
+    border-top: 1px solid #001a00;
+    margin-top: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="nav">
+    <a href="../">[HOME]</a>
+    <a href="./" class="active">[CHARTS]</a>
+    <a href="../prices/">[PRICES]</a>
+    <a href="../portfolio/">[PORTFOLIO]</a>
+  </nav>
+
+  <h1>&gt; ML ANALYSIS PLOTS</h1>
+  <div class="subtitle">Model performance, SHAP analysis, and feature importance charts</div>
+
+  <div id="content">
+    <div class="empty-state">
+      Loading plots<span style="animation: blink 1s step-end infinite">_</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    STOCK TERMINAL v1.0 &mdash; Charts auto-generated from ML pipeline
+  </div>
+</div>
+
+<script>
+(function() {
+  var contentEl = document.getElementById('content');
+
+  // Known plot patterns to look for — the generate.py copies PNGs to plots/ subdirectory
+  // We also load tickers to try ticker-specific plots
+  var knownPlots = [
+    'confusion_matrix.png',
+    'feature_importance.png',
+    'roc_curve.png',
+    'shap_summary.png',
+    'equity_curve.png',
+    'drawdown.png',
+    'cumulative_returns.png',
+    'learning_curve.png'
+  ];
+
+  function tryLoadImage(src) {
+    return new Promise(function(resolve) {
+      var img = new Image();
+      img.onload = function() { resolve(true); };
+      img.onerror = function() { resolve(false); };
+      img.src = src;
+    });
+  }
+
+  function formatTitle(filename) {
+    return filename.replace('.png', '').replace(/_/g, ' ').replace(/\b\w/g, function(c) {
+      return c.toUpperCase();
+    });
+  }
+
+  async function loadPlots() {
+    var tickers = [];
+    try {
+      var resp = await fetch('../data/tickers.json');
+      if (resp.ok) tickers = await resp.json();
+    } catch(e) {}
+
+    // Build candidate list: generic + per-ticker
+    var candidates = knownPlots.slice();
+    tickers.forEach(function(t) {
+      knownPlots.forEach(function(p) {
+        candidates.push(t.toLowerCase() + '_' + p);
+        candidates.push(t + '_' + p);
+      });
+    });
+
+    // Test which exist
+    var found = [];
+    var checks = candidates.map(function(fname) {
+      return tryLoadImage('plots/' + fname).then(function(exists) {
+        if (exists) found.push(fname);
+      });
+    });
+
+    await Promise.all(checks);
+
+    if (found.length === 0) {
+      contentEl.innerHTML = '<div class="empty-state">' +
+        'NO PLOTS AVAILABLE<br><br>' +
+        'Run the ML pipeline to generate analysis plots in reports/plots/<br>' +
+        'Then run `python dashboard/generate.py` to copy them here.' +
+        '</div>';
+      return;
+    }
+
+    // Sort and group by ticker
+    found.sort();
+    var html = '<div class="grid">';
+    found.forEach(function(fname) {
+      html += '<div class="card">';
+      html += '<div class="card-title">' + formatTitle(fname) + '</div>';
+      html += '<img src="plots/' + fname + '" alt="' + fname + '" loading="lazy">';
+      html += '</div>';
+    });
+    html += '</div>';
+    contentEl.innerHTML = html;
+  }
+
+  loadPlots();
+})();
+</script>
+</body>
+</html>

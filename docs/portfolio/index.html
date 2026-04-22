@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STOCK TERMINAL — Portfolio</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0a;
+    color: #00ff41;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0, 255, 65, 0.03) 2px, rgba(0, 255, 65, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  .nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .nav a {
+    color: #00ff41;
+    text-decoration: none;
+    border: 1px solid #00ff41;
+    padding: 4px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav a:hover, .nav a.active {
+    background: #00ff41;
+    color: #0a0a0a;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-weight: normal;
+    border-bottom: 1px solid #003300;
+    padding-bottom: 8px;
+  }
+
+  /* Summary cards */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .summary-card {
+    border: 1px solid #003300;
+    padding: 12px;
+    text-align: center;
+    background: #0d0d0d;
+  }
+  .summary-card .label {
+    font-size: 11px;
+    color: #00cc33;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .summary-card .value {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  th {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 2px solid #00ff41;
+    color: #00ff41;
+    white-space: nowrap;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #001a00;
+    white-space: nowrap;
+  }
+  tr:hover td { background: rgba(0, 255, 65, 0.05); }
+
+  .pos { color: #00ff41; }
+  .neg { color: #ff4444; }
+
+  /* Buttons */
+  button, .btn {
+    background: transparent;
+    color: #00ff41;
+    border: 1px solid #00ff41;
+    padding: 4px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  button:hover, .btn:hover {
+    background: #00ff41;
+    color: #0a0a0a;
+  }
+  .btn-danger { border-color: #ff4444; color: #ff4444; }
+  .btn-danger:hover { background: #ff4444; color: #0a0a0a; }
+  .btn-sm { padding: 2px 6px; font-size: 11px; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: #0a0a0a;
+    border: 2px solid #00ff41;
+    padding: 24px;
+    min-width: 320px;
+    max-width: 90vw;
+  }
+  .modal h2 {
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #003300;
+    padding-bottom: 8px;
+  }
+  .modal label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #00cc33;
+  }
+  .modal input {
+    background: #0a0a0a;
+    color: #00ff41;
+    border: 1px solid #00ff41;
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  .modal input:focus { outline: 1px solid #00ff41; }
+  .modal .cost-preview {
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #00cc33;
+  }
+  .modal .modal-btns {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  /* Layout sections */
+  .section-title {
+    font-size: 14px;
+    margin: 20px 0 10px;
+    color: #00ff41;
+    border-bottom: 1px solid #003300;
+    padding-bottom: 4px;
+  }
+
+  .actions-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .chart-container {
+    border: 1px solid #003300;
+    padding: 12px;
+    background: #0d0d0d;
+  }
+
+  .table-wrapper { overflow-x: auto; }
+
+  .empty-row {
+    text-align: center;
+    padding: 20px;
+    color: #004400;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #004400;
+    font-size: 11px;
+    border-top: 1px solid #001a00;
+    margin-top: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; }
+    .summary { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="nav">
+    <a href="../">[HOME]</a>
+    <a href="../charts/">[CHARTS]</a>
+    <a href="../prices/">[PRICES]</a>
+    <a href="./" class="active">[PORTFOLIO]</a>
+  </nav>
+
+  <h1>&gt; VIRTUAL PORTFOLIO</h1>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="actions-bar">
+    <select id="buyTickerSelect"><option value="">Select ticker...</option></select>
+    <button id="buyBtn">BUY</button>
+    <button id="resetBtn" class="btn-danger">RESET PORTFOLIO</button>
+    <button id="exportBtn">EXPORT CSV</button>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="section-title">&gt; POSITIONS</div>
+      <div class="table-wrapper" id="positionsTable"></div>
+
+      <div class="section-title">&gt; TRANSACTION HISTORY</div>
+      <div class="table-wrapper" id="historyTable"></div>
+    </div>
+    <div>
+      <div class="section-title">&gt; ALLOCATION</div>
+      <div class="chart-container">
+        <canvas id="allocationChart" width="280" height="280"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    STOCK TERMINAL v1.0 &mdash; Virtual portfolio &mdash; Not real money
+  </div>
+</div>
+
+<!-- Trade Modal -->
+<div class="modal-overlay" id="tradeModal">
+  <div class="modal">
+    <h2 id="modalTitle">BUY</h2>
+    <label id="modalTickerLabel">TICKER</label>
+    <label>Shares</label>
+    <input type="number" id="modalShares" min="1" step="1" value="1">
+    <div class="cost-preview" id="modalPreview"></div>
+    <div class="modal-btns">
+      <button id="modalCancel">CANCEL</button>
+      <button id="modalConfirm">CONFIRM</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var STORAGE_KEY = 'stock_terminal_portfolio';
+  var pricesMap = {};
+  var allocationChart = null;
+
+  function getPortfolio() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return { cash: 10000, positions: {}, transactions: [] };
+  }
+
+  function savePortfolio(p) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+  }
+
+  function fmt(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function pct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
+
+  function loadPrices() {
+    return fetch('../data/signals.json')
+      .then(function(r) { return r.json(); })
+      .then(function(signals) {
+        pricesMap = {};
+        signals.forEach(function(s) { pricesMap[s.ticker] = s.price; });
+        // Populate ticker select
+        var sel = document.getElementById('buyTickerSelect');
+        sel.innerHTML = '<option value="">Select ticker...</option>';
+        signals.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s.ticker;
+          opt.textContent = s.ticker + ' ($' + s.price.toFixed(2) + ')';
+          sel.appendChild(opt);
+        });
+      });
+  }
+
+  function render() {
+    var p = getPortfolio();
+
+    // Compute totals
+    var invested = 0;
+    var currentValue = 0;
+    var posKeys = Object.keys(p.positions);
+    posKeys.forEach(function(t) {
+      var pos = p.positions[t];
+      invested += pos.shares * pos.avg_cost;
+      currentValue += pos.shares * (pricesMap[t] || pos.avg_cost);
+    });
+    var totalValue = p.cash + currentValue;
+    var totalPnL = totalValue - 10000;
+    var totalPnLPct = ((totalValue / 10000) - 1) * 100;
+
+    // Summary
+    document.getElementById('summary').innerHTML =
+      '<div class="summary-card"><div class="label">Total Value</div><div class="value">' + fmt(totalValue) + '</div></div>' +
+      '<div class="summary-card"><div class="label">Cash</div><div class="value">' + fmt(p.cash) + '</div></div>' +
+      '<div class="summary-card"><div class="label">Invested</div><div class="value">' + fmt(invested) + '</div></div>' +
+      '<div class="summary-card"><div class="label">Total P&L</div><div class="value ' + (totalPnL >= 0 ? 'pos' : 'neg') + '">' + fmt(totalPnL) + '</div></div>' +
+      '<div class="summary-card"><div class="label">Total P&L%</div><div class="value ' + (totalPnLPct >= 0 ? 'pos' : 'neg') + '">' + pct(totalPnLPct) + '</div></div>';
+
+    // Positions table
+    var posHtml = '<table><thead><tr><th>Ticker</th><th>Shares</th><th>Avg Cost</th><th>Current</th><th>Value</th><th>P&L</th><th>P&L%</th><th>Actions</th></tr></thead><tbody>';
+    if (posKeys.length === 0) {
+      posHtml += '<tr><td colspan="8" class="empty-row">No positions — buy some stocks!</td></tr>';
+    } else {
+      posKeys.forEach(function(t) {
+        var pos = p.positions[t];
+        var cur = pricesMap[t] || pos.avg_cost;
+        var val = pos.shares * cur;
+        var cost = pos.shares * pos.avg_cost;
+        var pnl = val - cost;
+        var pnlP = cost > 0 ? ((val / cost) - 1) * 100 : 0;
+        posHtml += '<tr>';
+        posHtml += '<td><strong>' + t + '</strong></td>';
+        posHtml += '<td>' + pos.shares + '</td>';
+        posHtml += '<td>' + fmt(pos.avg_cost) + '</td>';
+        posHtml += '<td>' + fmt(cur) + '</td>';
+        posHtml += '<td>' + fmt(val) + '</td>';
+        posHtml += '<td class="' + (pnl >= 0 ? 'pos' : 'neg') + '">' + fmt(pnl) + '</td>';
+        posHtml += '<td class="' + (pnlP >= 0 ? 'pos' : 'neg') + '">' + pct(pnlP) + '</td>';
+        posHtml += '<td><button class="btn-sm sell-btn" data-ticker="' + t + '">SELL</button></td>';
+        posHtml += '</tr>';
+      });
+    }
+    posHtml += '</tbody></table>';
+    document.getElementById('positionsTable').innerHTML = posHtml;
+
+    // Bind sell buttons
+    document.querySelectorAll('.sell-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { openModal('SELL', btn.getAttribute('data-ticker')); });
+    });
+
+    // Transaction history
+    var txHtml = '<table><thead><tr><th>Date</th><th>Type</th><th>Ticker</th><th>Shares</th><th>Price</th><th>Total</th></tr></thead><tbody>';
+    if (p.transactions.length === 0) {
+      txHtml += '<tr><td colspan="6" class="empty-row">No transactions yet</td></tr>';
+    } else {
+      var txList = p.transactions.slice().reverse();
+      txList.forEach(function(tx) {
+        txHtml += '<tr>';
+        txHtml += '<td>' + tx.date + '</td>';
+        txHtml += '<td class="' + (tx.type === 'BUY' ? 'pos' : 'neg') + '">' + tx.type + '</td>';
+        txHtml += '<td>' + tx.ticker + '</td>';
+        txHtml += '<td>' + tx.shares + '</td>';
+        txHtml += '<td>' + fmt(tx.price) + '</td>';
+        txHtml += '<td>' + fmt(tx.total) + '</td>';
+        txHtml += '</tr>';
+      });
+    }
+    txHtml += '</tbody></table>';
+    document.getElementById('historyTable').innerHTML = txHtml;
+
+    // Allocation pie chart
+    renderAllocationChart(p, posKeys);
+  }
+
+  function renderAllocationChart(p, posKeys) {
+    var labels = ['Cash'];
+    var values = [p.cash];
+    var colors = ['#003300'];
+    var palette = ['#00ff41', '#ff4444', '#ffff00', '#ff8800', '#00ccff', '#ff00ff', '#88ff00', '#ff6600', '#0088ff'];
+
+    posKeys.forEach(function(t, i) {
+      var pos = p.positions[t];
+      var cur = pricesMap[t] || pos.avg_cost;
+      labels.push(t);
+      values.push(pos.shares * cur);
+      colors.push(palette[i % palette.length]);
+    });
+
+    var ctx = document.getElementById('allocationChart').getContext('2d');
+    if (allocationChart) allocationChart.destroy();
+
+    allocationChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors,
+          borderColor: '#0a0a0a',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#00ff41', font: { family: 'Courier New', size: 11 } }
+          }
+        }
+      }
+    });
+  }
+
+  // Modal logic
+  var modalOverlay = document.getElementById('tradeModal');
+  var modalTitle = document.getElementById('modalTitle');
+  var modalTickerLabel = document.getElementById('modalTickerLabel');
+  var modalShares = document.getElementById('modalShares');
+  var modalPreview = document.getElementById('modalPreview');
+  var modalType = '';
+  var modalTicker = '';
+
+  function openModal(type, ticker) {
+    modalType = type;
+    modalTicker = ticker;
+    modalTitle.textContent = type + ' — ' + ticker;
+    modalTickerLabel.textContent = ticker + ' @ ' + fmt(pricesMap[ticker] || 0);
+    modalShares.value = 1;
+    modalShares.min = 1;
+    if (type === 'SELL') {
+      var p = getPortfolio();
+      var maxShares = (p.positions[ticker] && p.positions[ticker].shares) || 0;
+      modalShares.max = maxShares;
+      modalTickerLabel.textContent += ' (max: ' + maxShares + ' shares)';
+    } else {
+      modalShares.removeAttribute('max');
+    }
+    updatePreview();
+    modalOverlay.classList.add('active');
+    modalShares.focus();
+  }
+
+  function updatePreview() {
+    var shares = parseInt(modalShares.value) || 0;
+    var price = pricesMap[modalTicker] || 0;
+    var total = shares * price;
+    if (modalType === 'BUY') {
+      var p = getPortfolio();
+      var canAfford = Math.floor(p.cash / price);
+      modalPreview.textContent = 'Total cost: ' + fmt(total) + ' | Can afford: ' + canAfford + ' shares';
+    } else {
+      modalPreview.textContent = 'Total proceeds: ' + fmt(total);
+    }
+  }
+
+  modalShares.addEventListener('input', updatePreview);
+
+  document.getElementById('modalCancel').addEventListener('click', function() {
+    modalOverlay.classList.remove('active');
+  });
+
+  document.getElementById('modalConfirm').addEventListener('click', function() {
+    var shares = parseInt(modalShares.value) || 0;
+    if (shares <= 0) return;
+
+    var price = pricesMap[modalTicker] || 0;
+    var total = shares * price;
+    var p = getPortfolio();
+    var today = new Date().toISOString().slice(0, 10);
+
+    if (modalType === 'BUY') {
+      if (total > p.cash) { alert('Insufficient cash!'); return; }
+      p.cash -= total;
+      if (!p.positions[modalTicker]) {
+        p.positions[modalTicker] = { shares: 0, avg_cost: 0 };
+      }
+      var pos = p.positions[modalTicker];
+      var oldCost = pos.shares * pos.avg_cost;
+      pos.shares += shares;
+      pos.avg_cost = (oldCost + total) / pos.shares;
+    } else {
+      if (!p.positions[modalTicker] || p.positions[modalTicker].shares < shares) {
+        alert('Insufficient shares!'); return;
+      }
+      p.cash += total;
+      p.positions[modalTicker].shares -= shares;
+      if (p.positions[modalTicker].shares <= 0) {
+        delete p.positions[modalTicker];
+      }
+    }
+
+    p.transactions.push({ date: today, type: modalType, ticker: modalTicker, shares: shares, price: price, total: total });
+    savePortfolio(p);
+    modalOverlay.classList.remove('active');
+    render();
+  });
+
+  // Buy button
+  document.getElementById('buyBtn').addEventListener('click', function() {
+    var ticker = document.getElementById('buyTickerSelect').value;
+    if (!ticker) { alert('Select a ticker first'); return; }
+    openModal('BUY', ticker);
+  });
+
+  // Reset
+  document.getElementById('resetBtn').addEventListener('click', function() {
+    if (confirm('Reset portfolio to $10,000 cash? All positions and history will be lost.')) {
+      localStorage.removeItem(STORAGE_KEY);
+      render();
+    }
+  });
+
+  // Export CSV
+  document.getElementById('exportBtn').addEventListener('click', function() {
+    var p = getPortfolio();
+    if (p.transactions.length === 0) { alert('No transactions to export'); return; }
+    var csv = 'Date,Type,Ticker,Shares,Price,Total\n';
+    p.transactions.forEach(function(tx) {
+      csv += tx.date + ',' + tx.type + ',' + tx.ticker + ',' + tx.shares + ',' + tx.price.toFixed(2) + ',' + tx.total.toFixed(2) + '\n';
+    });
+    var blob = new Blob([csv], { type: 'text/csv' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'portfolio_transactions.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Close modal on overlay click
+  modalOverlay.addEventListener('click', function(e) {
+    if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+  });
+
+  // Init
+  loadPrices().then(render).catch(function() { render(); });
+})();
+</script>
+</body>
+</html>
