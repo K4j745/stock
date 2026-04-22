@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STOCK TERMINAL — Prices</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0a;
+    color: #00ff41;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0, 255, 65, 0.03) 2px, rgba(0, 255, 65, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  .nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .nav a {
+    color: #00ff41;
+    text-decoration: none;
+    border: 1px solid #00ff41;
+    padding: 4px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav a:hover, .nav a.active {
+    background: #00ff41;
+    color: #0a0a0a;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-weight: normal;
+    border-bottom: 1px solid #003300;
+    padding-bottom: 8px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  select {
+    background: #0a0a0a;
+    color: #00ff41;
+    border: 1px solid #00ff41;
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  select:focus { outline: 1px solid #00ff41; }
+
+  .range-btns {
+    display: flex;
+    gap: 4px;
+  }
+  .range-btn {
+    background: transparent;
+    color: #00ff41;
+    border: 1px solid #003300;
+    padding: 4px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .range-btn:hover, .range-btn.active {
+    background: #00ff41;
+    color: #0a0a0a;
+  }
+
+  .chart-box {
+    border: 1px solid #003300;
+    margin-bottom: 16px;
+    min-height: 400px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .error-msg {
+    color: #ff4444;
+    text-align: center;
+    padding: 40px 20px;
+    border: 1px solid #ff4444;
+    margin: 20px 0;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #004400;
+    font-size: 11px;
+    border-top: 1px solid #001a00;
+    margin-top: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .chart-box { min-height: 300px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="nav">
+    <a href="../">[HOME]</a>
+    <a href="../charts/">[CHARTS]</a>
+    <a href="./" class="active">[PRICES]</a>
+    <a href="../portfolio/">[PORTFOLIO]</a>
+  </nav>
+
+  <h1>&gt; PRICE CHARTS</h1>
+
+  <div class="controls">
+    <label>TICKER: </label>
+    <select id="tickerSelect"><option value="">Loading...</option></select>
+    <div class="range-btns">
+      <button class="range-btn" data-range="30">1M</button>
+      <button class="range-btn" data-range="90">3M</button>
+      <button class="range-btn" data-range="180">6M</button>
+      <button class="range-btn active" data-range="365">1Y</button>
+      <button class="range-btn" data-range="0">MAX</button>
+    </div>
+  </div>
+
+  <div id="candlestickChart" class="chart-box">
+    <div class="loading">Loading chart data<span style="animation:blink 1s step-end infinite">_</span></div>
+  </div>
+  <div id="rsiChart" class="chart-box" style="min-height:200px;"></div>
+  <div id="macdChart" class="chart-box" style="min-height:200px;"></div>
+
+  <div class="footer">
+    STOCK TERMINAL v1.0 &mdash; Interactive price charts powered by Plotly.js
+  </div>
+</div>
+
+<style>@keyframes blink { 50% { opacity: 0; } }</style>
+
+<script>
+(function() {
+  var tickerSelect = document.getElementById('tickerSelect');
+  var rangeBtns = document.querySelectorAll('.range-btn');
+  var currentRange = 365;
+  var currentData = null;
+
+  var plotlyLayout = {
+    paper_bgcolor: '#0a0a0a',
+    plot_bgcolor: '#0a0a0a',
+    font: { color: '#00ff41', family: 'Courier New, monospace', size: 11 },
+    margin: { l: 50, r: 20, t: 30, b: 40 },
+    xaxis: {
+      color: '#003300',
+      gridcolor: '#001a00',
+      linecolor: '#003300',
+      rangeslider: { visible: false }
+    },
+    yaxis: {
+      color: '#003300',
+      gridcolor: '#001a00',
+      linecolor: '#003300'
+    }
+  };
+
+  var plotlyConfig = { responsive: true, displayModeBar: false };
+
+  // Load tickers list
+  fetch('../data/tickers.json')
+    .then(function(r) { return r.json(); })
+    .then(function(tickers) {
+      tickerSelect.innerHTML = '';
+      tickers.forEach(function(t) {
+        var opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        tickerSelect.appendChild(opt);
+      });
+      if (tickers.length > 0) loadTicker(tickers[0]);
+    })
+    .catch(function() {
+      tickerSelect.innerHTML = '<option>ERROR</option>';
+    });
+
+  tickerSelect.addEventListener('change', function() {
+    loadTicker(this.value);
+  });
+
+  rangeBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      rangeBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentRange = parseInt(btn.getAttribute('data-range'));
+      if (currentData) renderCharts(currentData);
+    });
+  });
+
+  function filterByRange(data) {
+    if (currentRange === 0) return data;
+    var cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - currentRange);
+    var cutoffStr = cutoff.toISOString().slice(0, 10);
+    return data.filter(function(d) { return d.date >= cutoffStr; });
+  }
+
+  function loadTicker(ticker) {
+    document.getElementById('candlestickChart').innerHTML =
+      '<div class="loading">Loading ' + ticker + '...</div>';
+    document.getElementById('rsiChart').innerHTML = '';
+    document.getElementById('macdChart').innerHTML = '';
+
+    fetch('../data/' + ticker + '_ohlcv.json')
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(data) {
+        currentData = data;
+        renderCharts(data);
+      })
+      .catch(function(err) {
+        document.getElementById('candlestickChart').innerHTML =
+          '<div class="error-msg">ERROR: ' + err.message + '</div>';
+      });
+  }
+
+  function renderCharts(rawData) {
+    var data = filterByRange(rawData);
+    var dates = data.map(function(d) { return d.date; });
+    var opens = data.map(function(d) { return d.open; });
+    var highs = data.map(function(d) { return d.high; });
+    var lows = data.map(function(d) { return d.low; });
+    var closes = data.map(function(d) { return d.close; });
+
+    // Candlestick
+    var candleTrace = {
+      x: dates, open: opens, high: highs, low: lows, close: closes,
+      type: 'candlestick',
+      increasing: { line: { color: '#00ff41' }, fillcolor: '#00ff41' },
+      decreasing: { line: { color: '#ff4444' }, fillcolor: '#ff4444' }
+    };
+
+    var sma20 = data.map(function(d) { return d.sma20; });
+    var sma50 = data.map(function(d) { return d.sma50; });
+    var bbUpper = data.map(function(d) { return d.bb_upper; });
+    var bbLower = data.map(function(d) { return d.bb_lower; });
+
+    var traces = [candleTrace];
+    traces.push({ x: dates, y: sma20, type: 'scatter', mode: 'lines',
+      line: { color: '#ffff00', width: 1 }, name: 'SMA20' });
+    traces.push({ x: dates, y: sma50, type: 'scatter', mode: 'lines',
+      line: { color: '#ff8800', width: 1 }, name: 'SMA50' });
+    traces.push({ x: dates, y: bbUpper, type: 'scatter', mode: 'lines',
+      line: { color: '#444444', width: 1, dash: 'dot' }, name: 'BB Upper' });
+    traces.push({ x: dates, y: bbLower, type: 'scatter', mode: 'lines',
+      line: { color: '#444444', width: 1, dash: 'dot' }, name: 'BB Lower' });
+
+    var candleLayout = Object.assign({}, plotlyLayout, {
+      title: { text: tickerSelect.value + ' — Candlestick', font: { color: '#00ff41', size: 14 } },
+      showlegend: true,
+      legend: { font: { size: 10 }, bgcolor: 'transparent' },
+      height: 450
+    });
+
+    Plotly.newPlot('candlestickChart', traces, candleLayout, plotlyConfig);
+
+    // RSI
+    var rsiVals = data.map(function(d) { return d.rsi; });
+    var rsiTraces = [
+      { x: dates, y: rsiVals, type: 'scatter', mode: 'lines',
+        line: { color: '#00ff41', width: 1.5 }, name: 'RSI' },
+      { x: [dates[0], dates[dates.length-1]], y: [70, 70], type: 'scatter', mode: 'lines',
+        line: { color: '#ff4444', width: 1, dash: 'dash' }, name: 'Overbought', showlegend: false },
+      { x: [dates[0], dates[dates.length-1]], y: [30, 30], type: 'scatter', mode: 'lines',
+        line: { color: '#00cc33', width: 1, dash: 'dash' }, name: 'Oversold', showlegend: false }
+    ];
+    var rsiLayout = Object.assign({}, plotlyLayout, {
+      title: { text: 'RSI (14)', font: { color: '#00ff41', size: 13 } },
+      yaxis: Object.assign({}, plotlyLayout.yaxis, { range: [0, 100] }),
+      height: 220, showlegend: false
+    });
+    Plotly.newPlot('rsiChart', rsiTraces, rsiLayout, plotlyConfig);
+
+    // MACD
+    var macdVals = data.map(function(d) { return d.macd; });
+    var macdSig = data.map(function(d) { return d.macd_signal; });
+    var macdHist = data.map(function(d) { return d.macd_hist; });
+    var histColors = macdHist.map(function(v) { return v >= 0 ? '#00ff41' : '#ff4444'; });
+
+    var macdTraces = [
+      { x: dates, y: macdHist, type: 'bar', marker: { color: histColors }, name: 'Histogram' },
+      { x: dates, y: macdVals, type: 'scatter', mode: 'lines',
+        line: { color: '#00ff41', width: 1.5 }, name: 'MACD' },
+      { x: dates, y: macdSig, type: 'scatter', mode: 'lines',
+        line: { color: '#ff8800', width: 1 }, name: 'Signal' }
+    ];
+    var macdLayout = Object.assign({}, plotlyLayout, {
+      title: { text: 'MACD', font: { color: '#00ff41', size: 13 } },
+      height: 220, showlegend: true,
+      legend: { font: { size: 10 }, bgcolor: 'transparent' },
+      barmode: 'relative'
+    });
+    Plotly.newPlot('macdChart', macdTraces, macdLayout, plotlyConfig);
+  }
+})();
+</script>
+</body>
+</html>

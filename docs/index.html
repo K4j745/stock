@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STOCK TERMINAL v1.0</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0a;
+    color: #00ff41;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 65, 0.03) 2px,
+      rgba(0, 255, 65, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  /* Nav */
+  .nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .nav a {
+    color: #00ff41;
+    text-decoration: none;
+    border: 1px solid #00ff41;
+    padding: 4px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav a:hover, .nav a.active {
+    background: #00ff41;
+    color: #0a0a0a;
+  }
+
+  /* ASCII header */
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    white-space: pre;
+    font-size: 11px;
+    line-height: 1.2;
+    color: #00ff41;
+    overflow-x: auto;
+  }
+
+  .subheader {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #00cc33;
+    font-size: 12px;
+  }
+
+  /* Status bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #003300;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: #00cc33;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Table */
+  .table-wrapper { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid #00ff41;
+    color: #00ff41;
+    white-space: nowrap;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #001a00;
+    white-space: nowrap;
+  }
+  tr:hover td { background: rgba(0, 255, 65, 0.05); }
+
+  .signal-buy { color: #00ff41; font-weight: bold; }
+  .signal-sell { color: #ff4444; font-weight: bold; }
+  .signal-hold { color: #ffff00; }
+  .change-pos { color: #00ff41; }
+  .change-neg { color: #ff4444; }
+
+  /* Loading */
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 16px;
+  }
+  .blink { animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .error-msg {
+    color: #ff4444;
+    text-align: center;
+    padding: 40px 20px;
+    border: 1px solid #ff4444;
+    margin: 20px 0;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #004400;
+    font-size: 11px;
+    border-top: 1px solid #001a00;
+    margin-top: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .header { font-size: 8px; }
+    table { font-size: 11px; }
+    th, td { padding: 4px 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="nav">
+    <a href="./" class="active">[HOME]</a>
+    <a href="charts/">[CHARTS]</a>
+    <a href="prices/">[PRICES]</a>
+    <a href="portfolio/">[PORTFOLIO]</a>
+  </nav>
+
+  <div class="header">
+ _____ _____ _____ _____ _  __  _____ _____ ____  __  __ ___ _   _    _    _
+/ ____|_   _/ _ \ / ____| |/ / |_   _| ____|  _ \|  \/  |_ _| \ | |  / \  | |
+\___ \  | || | | | |    | ' /    | | |  _| | |_) | |\/| || ||  \| | / _ \ | |
+ ___) | | || |_| | |____| . \    | | | |___|  _ &lt;| |  | || || |\  |/ ___ \| |___
+|____/  |_| \___/ \_____|_|\_\   |_| |_____|_| \_\_|  |_|___|_| \_/_/   \_\_____|
+                                    v1.0
+  </div>
+
+  <div class="subheader" id="dateDisplay"></div>
+
+  <div class="status-bar">
+    <span id="lastUpdated">Last updated: loading...</span>
+    <span>Press [R] to refresh | Auto-refresh: 60s</span>
+  </div>
+
+  <div id="content">
+    <div class="loading">
+      Initializing terminal<span class="blink">_</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    STOCK TERMINAL v1.0 &mdash; Data provided by Yahoo Finance &mdash; Not financial advice
+  </div>
+</div>
+
+<script>
+(function() {
+  const contentEl = document.getElementById('content');
+  const lastUpdatedEl = document.getElementById('lastUpdated');
+  const dateEl = document.getElementById('dateDisplay');
+  let lastUpdateTime = null;
+
+  // Display current date
+  const now = new Date();
+  dateEl.textContent = '[ ' + now.toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  }) + ' ]';
+
+  function formatChange(val) {
+    const sign = val >= 0 ? '+' : '';
+    const cls = val >= 0 ? 'change-pos' : 'change-neg';
+    return '<span class="' + cls + '">' + sign + val.toFixed(2) + '%</span>';
+  }
+
+  function signalClass(sig) {
+    if (sig === 'BUY') return 'signal-buy';
+    if (sig === 'SELL') return 'signal-sell';
+    return 'signal-hold';
+  }
+
+  function renderTable(signals) {
+    let html = '<div class="table-wrapper"><table>';
+    html += '<thead><tr>';
+    html += '<th>Ticker</th><th>Price</th><th>Change%</th>';
+    html += '<th>RSI</th><th>MACD</th><th>Signal</th><th>Score</th>';
+    html += '</tr></thead><tbody>';
+
+    signals.forEach(function(s) {
+      html += '<tr>';
+      html += '<td><strong>' + s.ticker + '</strong></td>';
+      html += '<td>$' + s.price.toFixed(2) + '</td>';
+      html += '<td>' + formatChange(s.change_pct) + '</td>';
+      html += '<td>' + (s.rsi !== null ? s.rsi.toFixed(1) : 'N/A') + '</td>';
+      html += '<td>' + (s.macd !== null ? s.macd.toFixed(4) : 'N/A') + '</td>';
+      html += '<td class="' + signalClass(s.signal) + '">' + s.signal + '</td>';
+      html += '<td>' + s.score + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    return html;
+  }
+
+  function updateTimer() {
+    if (!lastUpdateTime) return;
+    const diff = Math.floor((Date.now() - lastUpdateTime) / 60000);
+    if (diff < 1) {
+      lastUpdatedEl.textContent = 'Last updated: just now';
+    } else {
+      lastUpdatedEl.textContent = 'Last updated: ' + diff + ' minute' + (diff !== 1 ? 's' : '') + ' ago';
+    }
+  }
+
+  function loadData() {
+    Promise.all([
+      fetch('data/signals.json').then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      }),
+      fetch('data/last_updated.json').then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+    ]).then(function(results) {
+      var signals = results[0];
+      var meta = results[1];
+      lastUpdateTime = new Date(meta.timestamp).getTime();
+      contentEl.innerHTML = renderTable(signals);
+      updateTimer();
+    }).catch(function(err) {
+      contentEl.innerHTML = '<div class="error-msg">ERROR: Failed to load data<br>' +
+        err.message + '<br><br>Run `python dashboard/generate.py` to generate data.</div>';
+    });
+  }
+
+  // Initial load
+  loadData();
+
+  // Auto-refresh every 60s
+  setInterval(loadData, 60000);
+  setInterval(updateTimer, 30000);
+
+  // Keyboard shortcut: R to refresh
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'r' || e.key === 'R') {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      loadData();
+    }
+  });
+})();
+</script>
+</body>
+</html>
