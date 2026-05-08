@@ -1,101 +1,101 @@
 [
   {
     "ticker": "JNJ",
-    "price": 222.15,
-    "change_pct": -1.1,
-    "rsi": 33.95,
-    "macd": -3.7026,
-    "macd_signal_value": -3.2377,
+    "price": 221.66,
+    "change_pct": -0.38,
+    "rsi": 33.33,
+    "macd": -3.8283,
+    "macd_signal_value": -3.3512,
     "signal": "HOLD",
     "score": 1,
-    "date": "2026-05-07"
+    "date": "2026-05-08"
   },
   {
     "ticker": "UNH",
-    "price": 367.52,
-    "change_pct": 0.07,
-    "rsi": 76.08,
-    "macd": 19.3678,
-    "macd_signal_value": 19.2318,
+    "price": 375.36,
+    "change_pct": 1.52,
+    "rsi": 78.98,
+    "macd": 19.3794,
+    "macd_signal_value": 19.2897,
     "signal": "HOLD",
     "score": 1,
-    "date": "2026-05-07"
+    "date": "2026-05-08"
   },
   {
     "ticker": "ABT",
-    "price": 87.59,
-    "change_pct": 1.49,
-    "rsi": 29.41,
-    "macd": -4.13,
-    "macd_signal_value": -3.8603,
+    "price": 84.68,
+    "change_pct": -2.68,
+    "rsi": 23.81,
+    "macd": -4.3072,
+    "macd_signal_value": -3.9571,
     "signal": "HOLD",
     "score": 1,
-    "date": "2026-05-07"
+    "date": "2026-05-08"
   },
   {
     "ticker": "PG",
-    "price": 147.01,
-    "change_pct": -0.61,
-    "rsi": 52.76,
-    "macd": 0.2652,
-    "macd_signal_value": -0.1067,
+    "price": 147.28,
+    "change_pct": 0.84,
+    "rsi": 53.24,
+    "macd": 0.2868,
+    "macd_signal_value": -0.0401,
     "signal": "HOLD",
-    "score": 0,
-    "date": "2026-05-07"
+    "score": 1,
+    "date": "2026-05-08"
   },
   {
     "ticker": "KO",
-    "price": 78.69,
-    "change_pct": -0.68,
-    "rsi": 58.54,
-    "macd": 0.6765,
-    "macd_signal_value": 0.3949,
+    "price": 78.5,
+    "change_pct": 0.09,
+    "rsi": 57.25,
+    "macd": 0.656,
+    "macd_signal_value": 0.4437,
     "signal": "HOLD",
     "score": 1,
-    "date": "2026-05-07"
+    "date": "2026-05-08"
   },
   {
     "ticker": "WMT",
-    "price": 129.97,
-    "change_pct": -0.08,
-    "rsi": 55.63,
-    "macd": 1.4055,
-    "macd_signal_value": 1.3929,
+    "price": 130.98,
+    "change_pct": 0.6,
+    "rsi": 58.28,
+    "macd": 1.4233,
+    "macd_signal_value": 1.4019,
     "signal": "HOLD",
     "score": 1,
-    "date": "2026-05-07"
+    "date": "2026-05-08"
   },
   {
     "ticker": "NEE",
-    "price": 93.36,
-    "change_pct": -2.13,
-    "rsi": 48.31,
-    "macd": 0.8829,
-    "macd_signal_value": 0.916,
+    "price": 93.33,
+    "change_pct": 0.01,
+    "rsi": 48.24,
+    "macd": 0.6918,
+    "macd_signal_value": 0.8706,
     "signal": "HOLD",
-    "score": 1,
-    "date": "2026-05-07"
+    "score": 0,
+    "date": "2026-05-08"
   },
   {
     "ticker": "DUK",
-    "price": 124.47,
-    "change_pct": -0.85,
-    "rsi": 38.03,
-    "macd": -0.8483,
-    "macd_signal_value": -0.5849,
+    "price": 124.4,
+    "change_pct": -0.38,
+    "rsi": 37.77,
+    "macd": -0.9761,
+    "macd_signal_value": -0.658,
     "signal": "HOLD",
     "score": 1,
-    "date": "2026-05-07"
+    "date": "2026-05-08"
   },
   {
     "ticker": "SPY",
-    "price": 730.34,
-    "change_pct": -0.48,
-    "rsi": 71.72,
-    "macd": 13.7965,
-    "macd_signal_value": 12.5691,
+    "price": 737.72,
+    "change_pct": 0.84,
+    "rsi": 75.53,
+    "macd": 14.4392,
+    "macd_signal_value": 12.959,
     "signal": "HOLD",
     "score": 1,
-    "date": "2026-05-07"
+    "date": "2026-05-08"
   }
 ]
