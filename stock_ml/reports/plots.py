@@ -206,7 +206,10 @@ def plot_model_comparison(ticker: str, label_version: str = "A"):
         return
 
     df = pd.DataFrame(metrics_list, index=models)
-    metric_cols = [c for c in ["accuracy", "f1", "roc_auc", "mcc"] if c in df.columns]
+    metric_cols = [
+        c for c in ["f1_macro", "balanced_accuracy", "accuracy", "roc_auc", "mcc"]
+        if c in df.columns
+    ]
 
     fig, axes = plt.subplots(1, len(metric_cols), figsize=(4 * len(metric_cols), 5))
     if len(metric_cols) == 1:
