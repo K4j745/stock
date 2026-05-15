@@ -4,14 +4,21 @@ import numpy as np
 import pandas as pd
 import ta
 
+from features.candlestick import add_candlestick_patterns
+from features.external import add_earnings_dummy, add_vix_feature
+
 logger = logging.getLogger("stock_ml")
 
 
 def add_technical_indicators(df: pd.DataFrame, ticker: str = None) -> pd.DataFrame:
     """Add all technical indicators to OHLCV DataFrame.
 
-    Uses the `ta` library for standard indicators and manual calculations
-    for price-based features. Drops rows with NaN after indicator computation.
+    Uses the `ta` library for standard indicators, manual calculations for
+    price-based features, plus VIX, earnings-window dummy and candlestick
+    patterns. Drops rows with NaN after indicator computation.
+
+    All added columns are leakage-free: only data available at the close of
+    day T is used to predict the move from T to T+1.
     """
     df = df.copy()
 
@@ -79,6 +86,16 @@ def add_technical_indicators(df: pd.DataFrame, ticker: str = None) -> pd.DataFra
 
     # High-Low spread
     df["HL_spread"] = (df["High"] - df["Low"]) / df["Close"]
+
+    # --- External features (VIX + earnings dummy) ---
+    df = add_vix_feature(df)
+    if ticker is not None:
+        df = add_earnings_dummy(df, ticker=ticker)
+    else:
+        df["earnings_flag"] = 0
+
+    # --- Candlestick patterns (binary) ---
+    df = add_candlestick_patterns(df)
 
     # Drop rows with NaN from indicator warm-up periods
     rows_before = len(df)
