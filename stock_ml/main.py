@@ -49,6 +49,16 @@ def cmd_backtest(args):
             run_backtest(ticker, model_name, args.label_version)
 
 
+def cmd_portfolio(args):
+    from backtest.portfolio import run_multi_backtest
+    tickers = [args.ticker] if args.ticker else TICKERS
+    run_multi_backtest(
+        tickers=tickers,
+        model_name=args.model,
+        label_version=args.label_version,
+    )
+
+
 def cmd_evaluate(args):
     from models.evaluate import evaluate_saved_models
     tickers = [args.ticker] if args.ticker else TICKERS
@@ -111,6 +121,15 @@ def main():
     p_bt.add_argument("--model", type=str, default=None,
                       help="Model name (default: all). Options: logistic_regression, random_forest, xgboost, lightgbm")
 
+    # portfolio (multi-ticker, SPY benchmark)
+    p_pf = subparsers.add_parser(
+        "portfolio",
+        help="Multi-portfolio backtest: one equity curve per ticker plus SPY benchmark",
+    )
+    add_common(p_pf)
+    p_pf.add_argument("--model", type=str, default="xgboost",
+                      help="Model name (default: xgboost)")
+
     # evaluate
     p_eval = subparsers.add_parser("evaluate", help="Evaluate saved models on test split")
     add_common(p_eval)
@@ -135,6 +154,7 @@ def main():
     dispatch = {
         "train": cmd_train,
         "backtest": cmd_backtest,
+        "portfolio": cmd_portfolio,
         "evaluate": cmd_evaluate,
         "report": cmd_report,
         "shap": cmd_shap,
