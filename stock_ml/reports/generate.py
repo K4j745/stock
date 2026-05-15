@@ -22,34 +22,23 @@ def export_results(results: dict, ticker: str, label_version: str) -> None:
     """
     rows = []
 
-    for model_name, model_results in results.items():
-        # Individual fold metrics
-        for i, fold_metrics in enumerate(model_results["fold_metrics"]):
-            row = {
-                "model": model_name,
-                "fold": i + 1,
-                "accuracy": fold_metrics["accuracy"],
-                "precision": fold_metrics["precision"],
-                "recall": fold_metrics["recall"],
-                "f1": fold_metrics["f1"],
-                "roc_auc": fold_metrics.get("roc_auc"),
-                "mcc": fold_metrics["mcc"],
-            }
-            rows.append(row)
-
-        # Mean metrics row
-        mean = model_results["mean_metrics"]
-        mean_row = {
+    def _row(model_name, fold, m):
+        return {
             "model": model_name,
-            "fold": "mean",
-            "accuracy": mean["accuracy"],
-            "precision": mean["precision"],
-            "recall": mean["recall"],
-            "f1": mean["f1"],
-            "roc_auc": mean.get("roc_auc"),
-            "mcc": mean["mcc"],
+            "fold": fold,
+            "f1_macro": m.get("f1_macro", m.get("f1")),
+            "balanced_accuracy": m.get("balanced_accuracy"),
+            "accuracy": m["accuracy"],
+            "precision": m["precision"],
+            "recall": m["recall"],
+            "roc_auc": m.get("roc_auc"),
+            "mcc": m["mcc"],
         }
-        rows.append(mean_row)
+
+    for model_name, model_results in results.items():
+        for i, fold_metrics in enumerate(model_results["fold_metrics"]):
+            rows.append(_row(model_name, i + 1, fold_metrics))
+        rows.append(_row(model_name, "mean", model_results["mean_metrics"]))
 
     df = pd.DataFrame(rows)
 
