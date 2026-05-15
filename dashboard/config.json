@@ -1,0 +1,12 @@
+{
+  "tickers": ["JNJ", "UNH", "ABT", "PG", "KO", "WMT", "NEE", "DUK"],
+  "benchmark": "SPY",
+  "data_period": "2y",
+  "data_interval": "1d",
+  "signals": {
+    "buy_threshold": 3,
+    "sell_threshold": 3,
+    "rsi_buy": 35,
+    "rsi_sell": 65
+  }
+}
