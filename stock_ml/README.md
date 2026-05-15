@@ -76,6 +76,8 @@ python main.py plots --ticker JNJ --model xgboost --label-version A
 stock_ml/
 ├── config.py                  # paths, parameters, Colab/local detection
 ├── main.py                    # CLI runner (argparse subparsers)
+├── retrain.py                 # monthly retrain entrypoint
+├── predict.py                 # daily prediction entrypoint
 │
 ├── data/
 │   ├── __init__.py
@@ -85,8 +87,11 @@ stock_ml/
 │
 ├── features/
 │   ├── __init__.py
-│   ├── indicators.py          # technical indicators (ta library)
-│   ├── labels.py              # label generation (version A and B)
+│   ├── indicators.py          # technical indicators (ta library) + VIX/earnings/candlestick
+│   ├── labels.py              # label generation (binary / multiclass / legacy)
+│   ├── validation.py          # rolling walk-forward fold generator
+│   ├── external.py            # VIX + earnings-window dummy features
+│   ├── candlestick.py         # binary candlestick pattern features
 │   └── pipeline.py            # feature matrix assembly
 │
 ├── models/
@@ -99,7 +104,8 @@ stock_ml/
 ├── backtest/
 │   ├── __init__.py
 │   ├── strategy.py            # signals, strategy returns, buy-and-hold returns
-│   └── run.py                 # backtest execution and portfolio metrics
+│   ├── portfolio.py           # multi-ticker portfolio simulator + SPY benchmark
+│   └── run.py                 # single-ticker backtest execution
 │
 ├── reports/
 │   ├── __init__.py
@@ -120,14 +126,16 @@ stock_ml/
 - XGBoost (200 estimators)
 - LightGBM (200 estimators)
 
-## Label Versions
+## Label Modes
 
-- **A**: next-day return >= 0 (up or flat)
-- **B**: next-day return > 0.2% (significant upward move)
+- **binary** (default): label = 1 if next-day return > `LABEL_THRESHOLD` (0.5%), else 0.
+- **multiclass**: {-1, 0, +1} for down / hold / up around the threshold. Trains models with `class_weight='balanced'`.
+- **legacy**: original version A (>= 0) or B (> 0.2%) for back-compat.
 
 ## Cross-Validation
 
-Uses expanding window (TimeSeriesSplit with 5 folds) to avoid data leakage. StandardScaler is fit only on training data per fold.
+Rolling-window walk-forward validation via `features.validation.get_time_series_folds`:
+`train_size=252`, `test_size=21`, `step=21`, `mode='rolling'` (fixed-size training window). Produces ~10–12 folds on three years of data. StandardScaler is fit only on training data per fold.
 
 ## Hyperparameter Tuning
 
