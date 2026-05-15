@@ -21,9 +21,24 @@ for d in [DATA_DIR, MODEL_DIR, REPORTS_DIR]:
     os.makedirs(d, exist_ok=True)
 
 # --- Tickers ---
-TICKERS = ["JNJ", "UNH", "ABT", "PG", "KO", "WMT", "NEE", "DUK"]
-BENCHMARK_TICKER = "SPY"
-ALL_TICKERS = TICKERS + [BENCHMARK_TICKER]
+# Diversified ticker universe across sectors. SPY is used ONLY as a benchmark
+# for buy-and-hold comparison in the backtest module - it is never used as a
+# training input.
+TICKERS = [
+    "AAPL",  # Technology
+    "MSFT",  # Technology
+    "JPM",   # Financials
+    "XOM",   # Energy
+    "JNJ",   # Healthcare
+    "UNH",   # Healthcare
+    "PG",    # Consumer Staples
+    "WMT",   # Consumer Staples
+    "KO",    # Consumer Staples
+    "NEE",   # Utilities
+]
+BENCHMARK = "SPY"
+BENCHMARK_TICKER = BENCHMARK  # kept for backwards compatibility
+ALL_TICKERS = TICKERS + [BENCHMARK]
 
 # --- Data params ---
 DATA_START = "2011-04-01"
@@ -31,13 +46,23 @@ DATA_END = "2026-04-01"
 DATA_INTERVAL = "1d"
 
 # --- Label params ---
-LABEL_THRESHOLD_B = 0.002  # 0.2% for version B
+# Binary label: 1 if next-day return > LABEL_THRESHOLD, else 0.
+LABEL_THRESHOLD = 0.005  # 0.5% - main binary threshold (default mode)
+LABEL_THRESHOLD_B = 0.002  # 0.2% for legacy version B
+DEFAULT_LABEL_MODE = "binary"  # 'binary' (default) or 'multiclass'
 
 # --- Model params ---
 RANDOM_STATE = 42
 
 # --- Walk-forward params ---
-N_SPLITS = 5  # minimum 5 folds for TimeSeriesSplit
+# Rolling window walk-forward CV (used by features.validation.get_time_series_folds)
+WF_TRAIN_SIZE = 252  # ~1 trading year
+WF_TEST_SIZE = 21    # ~1 trading month
+WF_STEP = 21         # window slide step
+WF_MODE = "rolling"  # 'rolling' (default) or 'expanding'
+
+# Legacy: number of TimeSeriesSplit folds (deprecated, kept for transitional use)
+N_SPLITS = 5
 
 # --- Logging ---
 def setup_logging(level=logging.INFO):
