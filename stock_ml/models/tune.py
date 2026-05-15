@@ -6,11 +6,11 @@ import numpy as np
 import logging
 import os
 import joblib
-from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import f1_score
 
-from config import MODEL_DIR, RANDOM_STATE, N_SPLITS
+from config import MODEL_DIR, RANDOM_STATE, WF_TRAIN_SIZE, WF_TEST_SIZE, WF_STEP, WF_MODE
+from features.validation import get_time_series_folds
 
 logger = logging.getLogger(__name__)
 optuna.logging.set_verbosity(optuna.logging.WARNING)
@@ -33,9 +33,10 @@ def tune_xgboost(X, y, n_trials: int = 50) -> dict:
             "eval_metric": "logloss",
         }
         model = xgb.XGBClassifier(**params)
-        tscv = TimeSeriesSplit(n_splits=N_SPLITS)
         scores = []
-        for train_idx, val_idx in tscv.split(X):
+        for train_idx, val_idx in get_time_series_folds(
+            X, WF_TRAIN_SIZE, WF_TEST_SIZE, WF_STEP, WF_MODE
+        ):
             X_tr, X_val = X.iloc[train_idx], X.iloc[val_idx]
             y_tr, y_val = y.iloc[train_idx], y.iloc[val_idx]
             scaler = StandardScaler()
@@ -43,12 +44,12 @@ def tune_xgboost(X, y, n_trials: int = 50) -> dict:
             X_val_s = scaler.transform(X_val)
             model.fit(X_tr_s, y_tr)
             preds = model.predict(X_val_s)
-            scores.append(f1_score(y_val, preds, zero_division=0))
+            scores.append(f1_score(y_val, preds, average="macro", zero_division=0))
         return np.mean(scores)
 
     study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE))
     study.optimize(objective, n_trials=n_trials, show_progress_bar=False)
-    logger.info(f"XGBoost best F1: {study.best_value:.4f} | params: {study.best_params}")
+    logger.info(f"XGBoost best macro-F1: {study.best_value:.4f} | params: {study.best_params}")
     return study.best_params
 
 
@@ -69,9 +70,10 @@ def tune_lightgbm(X, y, n_trials: int = 50) -> dict:
             "verbose": -1,
         }
         model = lgb.LGBMClassifier(**params)
-        tscv = TimeSeriesSplit(n_splits=N_SPLITS)
         scores = []
-        for train_idx, val_idx in tscv.split(X):
+        for train_idx, val_idx in get_time_series_folds(
+            X, WF_TRAIN_SIZE, WF_TEST_SIZE, WF_STEP, WF_MODE
+        ):
             X_tr, X_val = X.iloc[train_idx], X.iloc[val_idx]
             y_tr, y_val = y.iloc[train_idx], y.iloc[val_idx]
             scaler = StandardScaler()
@@ -79,12 +81,12 @@ def tune_lightgbm(X, y, n_trials: int = 50) -> dict:
             X_val_s = scaler.transform(X_val)
             model.fit(X_tr_s, y_tr)
             preds = model.predict(X_val_s)
-            scores.append(f1_score(y_val, preds, zero_division=0))
+            scores.append(f1_score(y_val, preds, average="macro", zero_division=0))
         return np.mean(scores)
 
     study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE))
     study.optimize(objective, n_trials=n_trials, show_progress_bar=False)
-    logger.info(f"LightGBM best F1: {study.best_value:.4f} | params: {study.best_params}")
+    logger.info(f"LightGBM best macro-F1: {study.best_value:.4f} | params: {study.best_params}")
     return study.best_params
 
 
