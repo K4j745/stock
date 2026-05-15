@@ -18,15 +18,20 @@ import os
 # Ensure the stock_ml directory is on the path so imports work
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from config import TICKERS, logger
+from config import TICKERS, DEFAULT_LABEL_MODE, logger
 
 
 def cmd_train(args):
     from models.train import train_all_models
     tickers = [args.ticker] if args.ticker else TICKERS
     for ticker in tickers:
-        logger.info(f"=== Training {ticker} | label_version={args.label_version} ===")
-        results = train_all_models(ticker, args.label_version, refresh=args.refresh)
+        logger.info(
+            f"=== Training {ticker} | label_mode={args.label_mode} | "
+            f"label_version={args.label_version} ==="
+        )
+        results = train_all_models(
+            ticker, args.label_version, refresh=args.refresh, label_mode=args.label_mode,
+        )
         if args.tune:
             from models.tune import tune_and_retrain
             logger.info(f"=== Tuning {ticker} | label_version={args.label_version} ===")
@@ -88,7 +93,10 @@ def main():
     def add_common(p):
         p.add_argument("--ticker", type=str, default=None, help="Single ticker (default: all from config)")
         p.add_argument("--label-version", type=str, default="A", choices=["A", "B"],
-                       help="Label version: A (threshold=0) or B (threshold=0.2%%)")
+                       help="Legacy label version (only used when --label-mode=legacy)")
+        p.add_argument("--label-mode", type=str, default=DEFAULT_LABEL_MODE,
+                       choices=["binary", "multiclass", "legacy"],
+                       help="Label mode (default: binary, threshold=0.5%%)")
 
     # train
     p_train = subparsers.add_parser("train", help="Train all models and save to disk")

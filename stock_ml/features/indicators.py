@@ -7,7 +7,7 @@ import ta
 logger = logging.getLogger("stock_ml")
 
 
-def add_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
+def add_technical_indicators(df: pd.DataFrame, ticker: str = None) -> pd.DataFrame:
     """Add all technical indicators to OHLCV DataFrame.
 
     Uses the `ta` library for standard indicators and manual calculations
