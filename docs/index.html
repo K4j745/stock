@@ -510,7 +510,8 @@
     <a href="./" class="active">Overview</a>
     <a href="prices/">Prices</a>
     <a href="charts/">Charts</a>
-    <a href="portfolio/">Portfolio</a>
+    <a href="signals/">Signals</a>
+    <a href="portfolio/">Portfolios</a>
   </nav>
   <div class="header-right">
     <span class="last-update" id="headerUpdate"></span>
@@ -530,7 +531,8 @@
   <a href="./" class="active">Overview</a>
   <a href="prices/">Prices</a>
   <a href="charts/">Charts</a>
-  <a href="portfolio/">Portfolio</a>
+  <a href="signals/">Signals</a>
+  <a href="portfolio/">Portfolios</a>
 </div>
 
 <div class="container">
@@ -542,9 +544,23 @@
     <div class="kpi-card"><div class="kpi-label">HOLD Signals</div><div class="kpi-value" style="color:var(--color-warning)" id="kpiHold">--</div></div>
   </div>
 
-  <div class="refresh-bar">
+  <div class="refresh-bar" style="gap:12px;flex-wrap:wrap">
     <span id="lastUpdated">Loading...</span>
-    <span>Auto-refresh: 60s</span>
+    <span style="display:flex;align-items:center;gap:8px;">
+      <label style="font-size:12px;color:var(--color-text-muted)">Model:
+        <select id="modelSelect" style="margin-left:6px;background:var(--color-surface-2);border:1px solid var(--color-border);color:var(--color-text);border-radius:var(--radius-md);padding:3px 8px;font-size:12px;">
+          <option value="technical_rule_based">technical_rule_based</option>
+        </select>
+      </label>
+      <span style="color:var(--color-text-faint)">|</span>
+      <span>Auto-refresh: 60s</span>
+    </span>
+  </div>
+
+  <!-- Portfolios overview strip -->
+  <div class="card" id="portfolioStripCard" style="margin-bottom:16px;display:none">
+    <div class="card-header"><h2>Portfolios</h2><a href="portfolio/" style="font-size:12px;color:var(--color-primary);text-decoration:none">Open portfolio analyzer →</a></div>
+    <div id="portfolioStrip" style="padding:12px 16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;"></div>
   </div>
 
   <div class="main-grid">
@@ -625,6 +641,9 @@
   var sortCol = null;
   var sortAsc = true;
   var currentSignals = [];
+  var allLatestRecords = []; // full rich latest.json (per ticker × model)
+  var currentModel = 'technical_rule_based';
+  var availableModels = [];
 
   // Sector mapping
   var sectorMap = {
@@ -778,25 +797,115 @@
     });
   }
 
+  function recordsToLegacyShape(records, model) {
+    // Pick latest row per ticker for the requested model.
+    var perTicker = {};
+    records.forEach(function(r) {
+      if (r.model_name !== model) return;
+      var prev = perTicker[r.ticker];
+      if (!prev || r.signal_date > prev.signal_date) perTicker[r.ticker] = r;
+    });
+    return Object.values(perTicker).map(function(r) {
+      return {
+        ticker: r.ticker,
+        price: r.close,
+        change_pct: (r.close != null && r.previous_close) ? +(((r.close - r.previous_close) / r.previous_close) * 100).toFixed(2) : 0,
+        rsi: r.rsi,
+        macd: r.macd,
+        macd_signal_value: r.macd_signal,
+        signal: r.signal,
+        score: r.score,
+        date: r.signal_date,
+        probability_up: r.probability_up,
+        confidence: r.confidence,
+        model_name: r.model_name,
+        signal_source: r.signal_source
+      };
+    });
+  }
+
+  function applyModel(model) {
+    currentModel = model;
+    if (allLatestRecords.length) {
+      currentSignals = recordsToLegacyShape(allLatestRecords, model);
+      doRender();
+    }
+  }
+
+  document.getElementById('modelSelect').addEventListener('change', function(e){
+    applyModel(e.target.value);
+  });
+
+  function renderPortfolioStrip(portfolios) {
+    if (!portfolios || !portfolios.length) return;
+    var card = document.getElementById('portfolioStripCard');
+    card.style.display = '';
+    var host = document.getElementById('portfolioStrip');
+    host.innerHTML = '';
+    portfolios.slice(0, 8).forEach(function(p){
+      var tot = p.total_return;
+      var cls = tot == null ? '' : (tot >= 0 ? 'change-pos' : 'change-neg');
+      var sign = tot == null ? '' : (tot >= 0 ? '+' : '');
+      var totStr = tot == null ? '—' : sign + (tot * 100).toFixed(2) + '%';
+      var sharpe = p.sharpe == null ? '—' : Number(p.sharpe).toFixed(2);
+      var card = document.createElement('a');
+      card.href = 'portfolio/?p=' + encodeURIComponent(p.portfolio_id);
+      card.style.cssText = 'text-decoration:none;color:inherit;display:block;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:10px 12px;';
+      card.innerHTML =
+        '<div style="font-size:11px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">' + p.portfolio_id + '</div>' +
+        '<div style="font-weight:600;font-size:13px;margin-bottom:4px;">' + p.portfolio_name + '</div>' +
+        '<div style="font-family:var(--font-mono);font-size:14px;" class="' + cls + '">' + totStr + '</div>' +
+        '<div style="font-size:11px;color:var(--color-text-muted);margin-top:2px;">Sharpe ' + sharpe + ' • tx ' + (p.n_transactions || 0) + '</div>';
+      host.appendChild(card);
+    });
+  }
+
   function loadData() {
+    // Prefer the new rich data layout; fall back to the legacy flat signals.json
+    // so partial deploys / older browsers still work.
     Promise.all([
-      fetch('data/signals.json').then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      }),
-      fetch('data/last_updated.json').then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      })
+      fetch('data/signals/latest.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
+      fetch('data/registry/models.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
+      fetch('data/portfolios/index.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
+      fetch('data/last_updated.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     ]).then(function(results) {
-      currentSignals = results[0];
-      var meta = results[1];
+      var latest = results[0];
+      var models = results[1];
+      var portfolios = results[2];
+      var meta = results[3];
+
+      if (latest && Array.isArray(latest)) {
+        allLatestRecords = latest;
+        availableModels = models && models.length
+          ? models.map(function(m){ return m.name; })
+          : Array.from(new Set(latest.map(function(r){ return r.model_name; })));
+
+        var sel = document.getElementById('modelSelect');
+        sel.innerHTML = '';
+        availableModels.forEach(function(m){
+          var o = document.createElement('option'); o.value = m; o.textContent = m;
+          if (m === currentModel) o.selected = true;
+          sel.appendChild(o);
+        });
+        if (!availableModels.includes(currentModel)) currentModel = availableModels[0] || 'technical_rule_based';
+        sel.value = currentModel;
+        currentSignals = recordsToLegacyShape(latest, currentModel);
+      } else {
+        // Legacy fallback
+        return fetch('data/signals.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function(legacy){
+          currentSignals = legacy;
+        });
+      }
+      renderPortfolioStrip(portfolios);
+
       lastUpdateTime = new Date(meta.timestamp).getTime();
-      if (results[0].length > 0) {
-        document.getElementById('signalDate').textContent = results[0][0].date;
+      if (currentSignals.length > 0) {
+        document.getElementById('signalDate').textContent = currentSignals[0].date;
       }
       doRender();
       updateTimer();
+    }).then(function(){
+      if (currentSignals && !document.getElementById('content').firstChild) doRender();
     }).catch(function(err) {
       contentEl.innerHTML = '<div class="error-state">Failed to load data<p>' + err.message + '</p><p>Run <code>python dashboard/generate.py</code> to generate data.</p></div>';
     });
