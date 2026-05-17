@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-05-17T18:43:21Z",
-  "git_commit": "c0ddb884a9684c1e19e7a9b3997d4e3543bc3add",
+  "generated_at_utc": "2026-05-17T21:13:24Z",
+  "git_commit": "13030990bb04f24567af518b3815972f16f4cb2f",
   "schema_version": "2.0",
   "data_version": "2026-05-15",
   "strategy_version": "1.0",
@@ -10,7 +10,7 @@
   "label_threshold": 0.005,
   "label_version": "binary-2026-05",
   "n_tickers": 12,
-  "n_portfolios": 6,
+  "n_portfolios": 0,
   "ml_artifacts_present": {
     "logistic_regression": false,
     "random_forest": false,
