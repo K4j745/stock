@@ -1,0 +1,32 @@
+[
+  {
+    "name": "technical_rule_based",
+    "family": "technical",
+    "description": "Score-based rule signal using RSI/MACD/BB/SMA."
+  },
+  {
+    "name": "logistic_regression",
+    "family": "ml",
+    "description": "Linear classifier trained on technical features."
+  },
+  {
+    "name": "random_forest",
+    "family": "ml",
+    "description": "Bagged decision tree ensemble."
+  },
+  {
+    "name": "xgboost",
+    "family": "ml",
+    "description": "Gradient boosted trees (XGBoost)."
+  },
+  {
+    "name": "lightgbm",
+    "family": "ml",
+    "description": "Gradient boosted trees (LightGBM)."
+  },
+  {
+    "name": "ensemble_majority",
+    "family": "ml",
+    "description": "Majority vote across ML models."
+  }
+]

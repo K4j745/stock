@@ -1,0 +1,53 @@
+{
+  "portfolio_id": "experimental_ensemble",
+  "portfolio_name": "Experimental \u2013 Model Consensus",
+  "description": "Enters only when at least 2 ML models agree on BUY; exits when 2 agree on SELL.",
+  "initial_capital": 100000.0,
+  "final_value": 128447.52,
+  "cash": 43880.65658950806,
+  "metadata": {
+    "generated_at_utc": "2026-05-17T18:43:36Z",
+    "data_version": "2026-05-15",
+    "strategy_version": "1.0",
+    "signal_source": "ensemble_majority",
+    "rules": {
+      "min_buy_votes": 2,
+      "min_sell_votes": 2,
+      "max_positions": 6,
+      "rebalance": "on_signal"
+    },
+    "n_decisions": 6024,
+    "n_transactions": 168,
+    "first_date": "2023-05-16",
+    "last_date": "2026-05-15",
+    "label_mode": "binary",
+    "label_version": "binary-2026-05"
+  },
+  "metrics": {
+    "total_return": 0.284475,
+    "cagr": 0.087514,
+    "volatility_annualised": 0.093694,
+    "sharpe_ratio": 0.934033,
+    "max_drawdown": -0.100661,
+    "calmar_ratio": 0.869388,
+    "n_observations": 752,
+    "trade_n_trades": 82,
+    "trade_n_wins": 44,
+    "trade_n_losses": 38,
+    "trade_win_rate": 0.536585,
+    "trade_avg_trade_pnl": 289.539349,
+    "trade_avg_win": 1208.398395,
+    "trade_avg_loss": -774.402704,
+    "trade_profit_factor": 1.806809,
+    "trade_expectancy": 289.539349
+  },
+  "benchmark_metrics": {
+    "total_return": 0.801755,
+    "cagr": 0.218107,
+    "volatility_annualised": 0.151966,
+    "sharpe_ratio": 1.435234,
+    "max_drawdown": -0.189989,
+    "calmar_ratio": 1.147995,
+    "n_observations": 752
+  }
+}
