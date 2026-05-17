@@ -557,12 +557,6 @@
     </span>
   </div>
 
-  <!-- Portfolios overview strip -->
-  <div class="card" id="portfolioStripCard" style="margin-bottom:16px;display:none">
-    <div class="card-header"><h2>Portfolios</h2><a href="portfolio/" style="font-size:12px;color:var(--color-primary);text-decoration:none">Open portfolio analyzer →</a></div>
-    <div id="portfolioStrip" style="padding:12px 16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;"></div>
-  </div>
-
   <div class="main-grid">
     <!-- Table -->
     <div class="card">
@@ -836,43 +830,17 @@
     applyModel(e.target.value);
   });
 
-  function renderPortfolioStrip(portfolios) {
-    if (!portfolios || !portfolios.length) return;
-    var card = document.getElementById('portfolioStripCard');
-    card.style.display = '';
-    var host = document.getElementById('portfolioStrip');
-    host.innerHTML = '';
-    portfolios.slice(0, 8).forEach(function(p){
-      var tot = p.total_return;
-      var cls = tot == null ? '' : (tot >= 0 ? 'change-pos' : 'change-neg');
-      var sign = tot == null ? '' : (tot >= 0 ? '+' : '');
-      var totStr = tot == null ? '—' : sign + (tot * 100).toFixed(2) + '%';
-      var sharpe = p.sharpe == null ? '—' : Number(p.sharpe).toFixed(2);
-      var card = document.createElement('a');
-      card.href = 'portfolio/?p=' + encodeURIComponent(p.portfolio_id);
-      card.style.cssText = 'text-decoration:none;color:inherit;display:block;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:10px 12px;';
-      card.innerHTML =
-        '<div style="font-size:11px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">' + p.portfolio_id + '</div>' +
-        '<div style="font-weight:600;font-size:13px;margin-bottom:4px;">' + p.portfolio_name + '</div>' +
-        '<div style="font-family:var(--font-mono);font-size:14px;" class="' + cls + '">' + totStr + '</div>' +
-        '<div style="font-size:11px;color:var(--color-text-muted);margin-top:2px;">Sharpe ' + sharpe + ' • tx ' + (p.n_transactions || 0) + '</div>';
-      host.appendChild(card);
-    });
-  }
-
   function loadData() {
     // Prefer the new rich data layout; fall back to the legacy flat signals.json
     // so partial deploys / older browsers still work.
     Promise.all([
       fetch('data/signals/latest.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
       fetch('data/registry/models.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
-      fetch('data/portfolios/index.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
       fetch('data/last_updated.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     ]).then(function(results) {
       var latest = results[0];
       var models = results[1];
-      var portfolios = results[2];
-      var meta = results[3];
+      var meta = results[2];
 
       if (latest && Array.isArray(latest)) {
         allLatestRecords = latest;
@@ -896,8 +864,6 @@
           currentSignals = legacy;
         });
       }
-      renderPortfolioStrip(portfolios);
-
       lastUpdateTime = new Date(meta.timestamp).getTime();
       if (currentSignals.length > 0) {
         document.getElementById('signalDate').textContent = currentSignals[0].date;

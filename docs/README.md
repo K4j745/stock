@@ -80,10 +80,135 @@ exports/
 
 ## How to add / change things
 
-* **New portfolio** → add a block under `portfolios` in `dashboard/config.json`.
-* **New ticker** → add it to the `tickers` array. Then reference it from any portfolio.
-* **New model** → add the name to `ml_signals.models` (and either drop trained
-  artifacts into `stock_ml/models/saved/` or rely on the deterministic proxy
-  defined in `dashboard/lib/signals.py`).
-* **New signal source** → register a generator in `dashboard/lib/signals.py`
-  and add it to the signal-resolution code in `dashboard/generate.py`.
+* **New portfolio** → use the *Portfolios* tab in the UI. Portfolios live in
+  `localStorage`, not in a config file. Each one starts with 100 000 PLN cash.
+* **New ticker** → add it to `tickers` in `dashboard/config.json`. Generator
+  will fetch it from yfinance; UI picks it up automatically from `tickers.json`.
+* **New model** → add its name to `ml_signals.models` in `config.json`. If you
+  have trained artifacts in `stock_ml/models/saved/`, they're used; otherwise
+  a deterministic *probability proxy* (see `dashboard/lib/signals.py`) is used.
+
+## How signals are produced (BUY / SELL / HOLD) — and how HOLD is defined
+
+This dashboard exposes **multiple parallel signal streams**, one per model
+declared in `dashboard/config.json`. They all use the same OHLCV input, but
+the decision rule that converts indicators / probabilities into a label is
+different per model.
+
+### 1. `technical_rule_based` — score-based rule signal
+
+Pure rule engine in `dashboard/lib/signals.technical_rule_based`. For every
+day and every ticker we score four BUY rules and four SELL rules independently:
+
+| BUY rule | Condition |
+|---|---|
+| `rsi_oversold` | `RSI(14) < rsi_buy` (default `35`) |
+| `macd_cross_up` | `MACD` crossed *above* `MACD_signal` on this bar |
+| `bb_break_lower` | `Close < BB_lower` (lower Bollinger band) |
+| `above_sma20_50` | `Close > SMA20` *and* `Close > SMA50` |
+
+| SELL rule | Condition |
+|---|---|
+| `rsi_overbought` | `RSI(14) > rsi_sell` (default `65`) |
+| `macd_cross_down` | `MACD` crossed *below* `MACD_signal` |
+| `bb_break_upper` | `Close > BB_upper` |
+| `below_sma20_50` | `Close < SMA20` *and* `Close < SMA50` |
+
+Each rule contributes `+1` to its side's score (max 4 per side). The final
+label is:
+
+- `BUY` if `buy_score >= buy_threshold` (default **3**),
+- `SELL` if `sell_score >= sell_threshold` (default **3**),
+- `HOLD` otherwise.
+
+`HOLD` here means **"the rule engine didn't accumulate enough evidence to
+trigger an action"** — it is *not* a separate predicted class, just the
+absence of a buy/sell trigger.
+
+**Known issue (observed at thresholds = 3):** several BUY rules are
+*mutually exclusive* — e.g. `bb_break_lower` (`Close < BB_lower`) almost
+never co-occurs with `above_sma20_50` (`Close > SMA20 && Close > SMA50`).
+With `buy_threshold = 3` we need 3 out of 4 rules to agree, which in
+practice never happens on this universe. The same holds on the SELL side.
+That is why `technical_rule_based` currently sits at **100% HOLD**.
+Lowering the threshold to `2` (and/or swapping `above_sma20_50` for a less
+strict trend rule) would unblock real signals — this is *intentionally not
+changed yet*; the user will pick the right policy before we flip the knob.
+
+### 2. ML signals (`logistic_regression`, `random_forest`, `xgboost`, `lightgbm`)
+
+Each ML model emits a **`probability_up`** ∈ `[0, 1]` per (ticker, day) — the
+probability that the next-day return exceeds the binary label threshold
+(`config.label.threshold = 0.005`). The signal mapping is:
+
+- `BUY` if `probability_up >= probability_threshold_buy` (default **0.55**),
+- `SELL` if `probability_up <= probability_threshold_sell` (default **0.45**),
+- `HOLD` for `probability_up` strictly between the two thresholds.
+
+`HOLD` for ML here means **"the model's confidence is in the dead band
+0.45–0.55"** — i.e. the model has *no clear opinion*. It is **not** a third
+output class; the underlying task is binary (`label_mode = "binary"`).
+
+Probabilities have two possible sources:
+
+1. **Real model output** — when trained artifacts exist in
+   `stock_ml/models/saved/` and the scaler exposes `feature_names_in_`,
+   `dashboard/lib/ml_loader.py` runs real inference.
+2. **Probability proxy** — otherwise we fall back to deterministic mappings
+   from indicators (logistic-style for LR, step-wise for RF, momentum-biased
+   for XGBoost, mean-reversion-biased for LightGBM). These mappings are
+   intentionally simple and reproducible. The dashboard *always* tags such
+   signals with `signal_source = "<model>_proxy"` so you can tell real ML
+   from a proxy at a glance.
+
+### 3. `ensemble_majority`
+
+Aggregates the four ML models. Emits `BUY` only when **≥ 2 ML models** vote
+BUY *and zero models vote SELL* (and vice versa). Anything else is `HOLD`.
+
+So here `HOLD` means **"models disagree, or fewer than two agree"** — it is
+explicitly a *disagreement* signal.
+
+### 4. `buy_and_hold`
+
+Trivial baseline: `BUY` on the first available bar, `HOLD` on every other
+bar, no `SELL` ever.
+
+### Empirical distribution on the current dataset
+
+Counted on `docs/data/signals/history.json` (12 tickers × 3y, n ≈ 9 789 rows
+per model):
+
+| model                     |   BUY  |  SELL  |  HOLD  |
+|---------------------------|:------:|:------:|:------:|
+| `technical_rule_based`    |   0.0% |   0.0% | 100.0% |
+| `logistic_regression`     |  24.5% |  40.1% |  35.4% |
+| `random_forest`           |  37.4% |  37.0% |  25.6% |
+| `xgboost`                 |  40.3% |  45.9% |  13.8% |
+| `lightgbm`                |  28.1% |  44.3% |  27.6% |
+| `ensemble_majority`       |   9.6% |  18.0% |  72.3% |
+| `buy_and_hold`            |   0.1% |   0.0% |  99.9% |
+
+Reads:
+
+- **Technical**: broken by design — too strict, see "Known issue" above.
+- **LR**: most balanced ML stream; meaningful HOLD bucket because logistic
+  output is smooth and frequently sits near 0.5.
+- **RF / XGB / LGBM**: more decisive — XGBoost in particular almost never
+  hits the dead band, so its HOLD share is the smallest (14%).
+- **Ensemble**: dominated by HOLD (72%) because requiring ≥ 2 agreeing votes
+  *and* zero opposing votes is a strict gate. This is expected — the
+  ensemble exists to filter out single-model overconfidence.
+- **Buy & Hold**: by construction, exactly one BUY per ticker, the rest is
+  HOLD.
+
+### Is this distribution "correct"?
+
+- ML streams (LR/RF/XGB/LGBM) — distribution shapes are reasonable for the
+  fall-back proxy implementations (real trained models will shift these).
+- Ensemble — expected behaviour given the rule.
+- Buy & Hold — expected.
+- **Technical rule based — broken**. It should produce 5–15% non-HOLD
+  signals on a realistic universe; 0% indicates the threshold is too high
+  relative to the rule set. Action item: lower `buy_threshold` /
+  `sell_threshold` to 2, or relax one of the rules, after consultation.

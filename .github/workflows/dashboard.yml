@@ -29,6 +29,26 @@ jobs:
       - name: Install dependencies
         run: pip install -r dashboard/requirements.txt
 
+      # Try to (re)generate ML analysis plots from the stock_ml/ pipeline so
+      # they end up in stock_ml/reports/plots/ — generate.py will then copy
+      # them into docs/charts/plots/. We DO NOT retrain models here; we only
+      # run the plot helpers, which need pre-existing trained artifacts in
+      # stock_ml/models/saved/. If those aren't committed (default case),
+      # the step fails harmlessly and the dashboard simply shows the empty
+      # state on the Charts tab.
+      - name: Generate ML plots (best effort)
+        continue-on-error: true
+        run: |
+          if [ -f stock_ml/requirements.txt ]; then
+            pip install -r stock_ml/requirements.txt
+          fi
+          if [ -d stock_ml/models/saved ] && [ -n "$(ls -A stock_ml/models/saved 2>/dev/null)" ]; then
+            python -m stock_ml.main report  || true
+            python -m stock_ml.main plots   || true
+          else
+            echo "No trained models in stock_ml/models/saved/ — skipping plot generation."
+          fi
+
       - name: Generate dashboard data
         run: python dashboard/generate.py
 

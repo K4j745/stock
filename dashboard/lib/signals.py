@@ -48,7 +48,20 @@ TECH_RULE_NAMES = [
 
 
 def technical_rule_based(df: pd.DataFrame, rules: Dict) -> pd.DataFrame:
-    """Score-based BUY/SELL/HOLD from RSI / MACD / Bollinger / SMA."""
+    """Score-based BUY/SELL/HOLD from RSI / MACD / Bollinger / SMA.
+
+    Each side has four rules (max score = 4). The signal fires when
+    ``buy_score >= rules["buy_threshold"]`` (default 3) or the SELL mirror.
+    HOLD here means "not enough triggered rules" — it is *not* a third class.
+
+    KNOWN ISSUE (default thresholds = 3): the BUY rules are partly mutually
+    exclusive (e.g. ``Close < BB_lower`` and ``Close > SMA20 && Close > SMA50``
+    rarely co-occur), so on a typical 3-year universe the score almost never
+    reaches 3 → the stream sits at ~100% HOLD. Lower the threshold to 2 or
+    relax one of the rules to make this generator useful. See the README
+    section "How signals are produced" for the full discussion + empirical
+    distribution per model.
+    """
     rsi_buy = rules.get("rsi_buy", 35)
     rsi_sell = rules.get("rsi_sell", 65)
     buy_thr = rules.get("buy_threshold", 3)
@@ -124,7 +137,18 @@ def technical_rule_based(df: pd.DataFrame, rules: Dict) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 def from_probabilities(prob_up: pd.Series, buy_threshold: float, sell_threshold: float) -> pd.DataFrame:
-    """Convert a probability-of-up series into BUY/SELL/HOLD signals."""
+    """Convert a probability-of-up series into BUY/SELL/HOLD signals.
+
+    Used by every ML model. Binary task (``label_mode = binary``): the model
+    predicts P(next-day return > LABEL_THRESHOLD). The mapping is:
+
+        BUY  if probability_up >= buy_threshold   (default 0.55)
+        SELL if probability_up <= sell_threshold  (default 0.45)
+        HOLD otherwise                            (the 0.45–0.55 dead band)
+
+    For ML signals **HOLD == "model unsure"** (probability in the dead band),
+    *not* a separately predicted class. See README "How signals are produced".
+    """
     sig = np.where(prob_up >= buy_threshold, "BUY",
                    np.where(prob_up <= sell_threshold, "SELL", "HOLD"))
     confidence = np.abs(prob_up - 0.5) * 2.0
@@ -228,7 +252,10 @@ def buy_and_hold(df: pd.DataFrame) -> pd.DataFrame:
 def ensemble_majority(per_model_signals: Dict[str, pd.DataFrame], min_votes: int = 2) -> pd.DataFrame:
     """Compute a consensus signal across the supplied per-model DataFrames.
 
-    A BUY consensus requires ``min_votes`` BUYs and zero SELLs (and v.v.).
+    BUY requires ``min_votes`` ML models voting BUY *and zero* SELL votes
+    (and the mirror for SELL). Anything else is HOLD. Here HOLD means
+    "models disagree, or fewer than ``min_votes`` agree" — i.e. it is an
+    explicit *disagreement* label, not a model's individual decision.
     """
     if not per_model_signals:
         raise ValueError("ensemble_majority needs at least one model")
