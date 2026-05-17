@@ -1,12 +1,121 @@
 {
-  "tickers": ["JNJ", "UNH", "ABT", "PG", "KO", "WMT", "NEE", "DUK"],
+  "schema_version": "2.0",
+  "data_version": "2026-05-15",
+  "strategy_version": "1.0",
+
+  "tickers": [
+    {"symbol": "AAPL", "name": "Apple Inc.",            "sector": "Technology"},
+    {"symbol": "MSFT", "name": "Microsoft Corp.",       "sector": "Technology"},
+    {"symbol": "JPM",  "name": "JPMorgan Chase",        "sector": "Financials"},
+    {"symbol": "XOM",  "name": "Exxon Mobil",           "sector": "Energy"},
+    {"symbol": "JNJ",  "name": "Johnson & Johnson",     "sector": "Healthcare"},
+    {"symbol": "UNH",  "name": "UnitedHealth Group",    "sector": "Healthcare"},
+    {"symbol": "ABT",  "name": "Abbott Laboratories",   "sector": "Healthcare"},
+    {"symbol": "PG",   "name": "Procter & Gamble",      "sector": "Consumer Staples"},
+    {"symbol": "KO",   "name": "Coca-Cola Co.",         "sector": "Consumer Staples"},
+    {"symbol": "WMT",  "name": "Walmart Inc.",          "sector": "Consumer Staples"},
+    {"symbol": "NEE",  "name": "NextEra Energy",        "sector": "Utilities"},
+    {"symbol": "DUK",  "name": "Duke Energy",           "sector": "Utilities"}
+  ],
+
   "benchmark": "SPY",
-  "data_period": "2y",
+
+  "data_period": "3y",
   "data_interval": "1d",
-  "signals": {
+
+  "label": {
+    "mode": "binary",
+    "threshold": 0.005,
+    "version": "binary-2026-05"
+  },
+
+  "technical_signals": {
     "buy_threshold": 3,
     "sell_threshold": 3,
     "rsi_buy": 35,
     "rsi_sell": 65
-  }
+  },
+
+  "ml_signals": {
+    "models": [
+      "logistic_regression",
+      "random_forest",
+      "xgboost",
+      "lightgbm"
+    ],
+    "probability_threshold_buy": 0.55,
+    "probability_threshold_sell": 0.45,
+    "models_dir": "stock_ml/models/saved",
+    "reports_dir": "stock_ml/reports",
+    "use_proxy_when_artifacts_missing": true
+  },
+
+  "portfolios": [
+    {
+      "id": "growth",
+      "name": "Growth Portfolio",
+      "description": "Equal-weighted technology + healthcare leaders driven by technical scoring.",
+      "tickers": ["AAPL", "MSFT", "UNH", "JNJ", "ABT"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "technical_rule_based",
+      "rules": {"buy_score": 3, "sell_score": 3, "max_positions": 5, "rebalance": "on_signal"},
+      "benchmark": "SPY"
+    },
+    {
+      "id": "dividend",
+      "name": "Dividend & Defensive",
+      "description": "Defensive dividend-paying staples / utilities / healthcare names.",
+      "tickers": ["JNJ", "PG", "KO", "WMT", "NEE", "DUK"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "technical_rule_based",
+      "rules": {"buy_score": 3, "sell_score": 3, "max_positions": 6, "rebalance": "on_signal"},
+      "benchmark": "SPY"
+    },
+    {
+      "id": "ml_xgboost",
+      "name": "ML – XGBoost",
+      "description": "Same universe as growth, but entry/exit driven by xgboost probability signals.",
+      "tickers": ["AAPL", "MSFT", "JPM", "UNH", "JNJ"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "xgboost",
+      "rules": {"buy_prob": 0.55, "sell_prob": 0.45, "max_positions": 5, "rebalance": "on_signal"},
+      "benchmark": "SPY"
+    },
+    {
+      "id": "ml_lightgbm",
+      "name": "ML – LightGBM",
+      "description": "Defensive universe driven by lightgbm probability signals.",
+      "tickers": ["JNJ", "PG", "WMT", "NEE", "DUK"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "lightgbm",
+      "rules": {"buy_prob": 0.55, "sell_prob": 0.45, "max_positions": 5, "rebalance": "on_signal"},
+      "benchmark": "SPY"
+    },
+    {
+      "id": "benchmark",
+      "name": "Benchmark (SPY Buy & Hold)",
+      "description": "Buy-and-hold SPY position used as performance baseline.",
+      "tickers": ["SPY"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "buy_and_hold",
+      "rules": {},
+      "benchmark": "SPY"
+    },
+    {
+      "id": "experimental_ensemble",
+      "name": "Experimental – Model Consensus",
+      "description": "Enters only when at least 2 ML models agree on BUY; exits when 2 agree on SELL.",
+      "tickers": ["AAPL", "MSFT", "JPM", "XOM", "UNH", "JNJ", "PG", "WMT"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "ensemble_majority",
+      "rules": {"min_buy_votes": 2, "min_sell_votes": 2, "max_positions": 6, "rebalance": "on_signal"},
+      "benchmark": "SPY"
+    }
+  ]
 }
