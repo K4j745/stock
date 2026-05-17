@@ -359,7 +359,8 @@
     <a href="../">Overview</a>
     <a href="./" class="active">Prices</a>
     <a href="../charts/">Charts</a>
-    <a href="../portfolio/">Portfolio</a>
+    <a href="../signals/">Signals</a>
+    <a href="../portfolio/">Portfolios</a>
   </nav>
   <div class="header-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -373,7 +374,8 @@
   <a href="../">Overview</a>
   <a href="./" class="active">Prices</a>
   <a href="../charts/">Charts</a>
-  <a href="../portfolio/">Portfolio</a>
+  <a href="../signals/">Signals</a>
+  <a href="../portfolio/">Portfolios</a>
 </div>
 
 <div class="container">
@@ -466,6 +468,11 @@
     results[1].forEach(function(s) { signalsMap[s.ticker] = s; });
 
     tickerPills.innerHTML = '';
+    if (!Array.isArray(tickers) || tickers.length === 0) {
+      tickerPills.innerHTML = '<div style="color:var(--color-text-muted);font-size:13px;padding:8px;">No tickers available. Run <code>python dashboard/generate.py</code> to generate data.</div>';
+      document.getElementById('candlestickChart').innerHTML = '<div class="empty-state" style="padding:60px 20px;text-align:center;color:var(--color-text-muted);">No data yet.</div>';
+      return;
+    }
     tickers.forEach(function(t, i) {
       var btn = document.createElement('button');
       btn.className = 'ticker-pill' + (i === 0 ? ' active' : '');
@@ -477,9 +484,10 @@
       });
       tickerPills.appendChild(btn);
     });
-    if (tickers.length > 0) loadTicker(tickers[0]);
-  }).catch(function() {
-    tickerPills.innerHTML = '<div style="color:var(--color-error)">Failed to load tickers</div>';
+    loadTicker(tickers[0]);
+  }).catch(function(err) {
+    tickerPills.innerHTML = '<div style="color:var(--color-error);font-size:13px;padding:8px;">Failed to load tickers: ' + (err && err.message || err) + '</div>';
+    document.getElementById('candlestickChart').innerHTML = '<div class="error-state">tickers.json could not be loaded. Run <code>python dashboard/generate.py</code>.</div>';
   });
 
   rangeBtns.forEach(function(btn) {
@@ -520,33 +528,47 @@
       });
   }
 
+  // Null-safe number formatter — every OHLCV / indicator field can be null
+  // when we're inside a warm-up window or a market holiday.
+  function fmt(v, digits, prefix) {
+    if (v === null || v === undefined || (typeof v === 'number' && isNaN(v))) return 'N/A';
+    return (prefix || '') + Number(v).toFixed(digits);
+  }
+
   function updateInfoPanel(data, ticker) {
     var panel = document.getElementById('infoPanel');
     var last = data[data.length - 1];
-    if (!last) { panel.innerHTML = '<h3>No Data</h3>'; return; }
+    if (!last) {
+      panel.innerHTML = '<h3>No Data</h3><div style="color:var(--color-text-muted);font-size:13px;">No OHLCV records available for ' + ticker + '.</div>';
+      return;
+    }
 
     var sig = signalsMap[ticker];
-    var dayRange = '$' + last.low.toFixed(2) + ' - $' + last.high.toFixed(2);
+    var dayRange = (last.low != null && last.high != null)
+      ? (fmt(last.low, 2, '$') + ' - ' + fmt(last.high, 2, '$'))
+      : 'N/A';
 
-    // Compute 52-week range
+    // Compute 52-week range — skip null entries defensively.
     var cutoff52 = new Date();
     cutoff52.setDate(cutoff52.getDate() - 365);
     var cutoffStr = cutoff52.toISOString().slice(0, 10);
     var yearData = data.filter(function(d) { return d.date >= cutoffStr; });
     var yearLow = Infinity, yearHigh = -Infinity;
     yearData.forEach(function(d) {
-      if (d.low < yearLow) yearLow = d.low;
-      if (d.high > yearHigh) yearHigh = d.high;
+      if (d.low != null && d.low < yearLow) yearLow = d.low;
+      if (d.high != null && d.high > yearHigh) yearHigh = d.high;
     });
-    var range52 = (yearLow !== Infinity) ? ('$' + yearLow.toFixed(2) + ' - $' + yearHigh.toFixed(2)) : 'N/A';
+    var range52 = (yearLow !== Infinity)
+      ? (fmt(yearLow, 2, '$') + ' - ' + fmt(yearHigh, 2, '$'))
+      : 'N/A';
 
     var html = '<h3>' + ticker + ' Stats</h3>';
     var rows = [
-      ['Price', '$' + last.close.toFixed(2)],
+      ['Price', fmt(last.close, 2, '$')],
       ['Day Range', dayRange],
       ['52W Range', range52],
-      ['RSI', last.rsi !== null ? last.rsi.toFixed(1) : 'N/A'],
-      ['MACD', last.macd !== null ? last.macd.toFixed(4) : 'N/A'],
+      ['RSI', fmt(last.rsi, 1)],
+      ['MACD', fmt(last.macd, 4)],
       ['Signal', sig ? sig.signal : 'N/A']
     ];
     rows.forEach(function(r) {
@@ -563,6 +585,12 @@
 
   function renderCharts(rawData) {
     var data = filterByRange(rawData);
+    if (!data || data.length === 0) {
+      document.getElementById('candlestickChart').innerHTML = '<div class="empty-state" style="padding:60px 20px;text-align:center;color:var(--color-text-muted);">No data in selected range. Try a wider range.</div>';
+      document.getElementById('rsiChart').innerHTML = '';
+      document.getElementById('macdChart').innerHTML = '';
+      return;
+    }
     var dates = data.map(function(d) { return d.date; });
     var opens = data.map(function(d) { return d.open; });
     var highs = data.map(function(d) { return d.high; });

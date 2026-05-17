@@ -67,8 +67,12 @@ def _normalise(raw: Dict[str, Any]) -> Dict[str, Any]:
     ml.setdefault("reports_dir", "stock_ml/reports")
     ml.setdefault("use_proxy_when_artifacts_missing", True)
 
-    portfolios = raw.get("portfolios") or _default_portfolios([t["symbol"] for t in tickers])
-    portfolios = [_normalise_portfolio(p) for p in portfolios]
+    # An *explicit* empty list means "no portfolios" — respect it. Only fall
+    # back to the legacy default when the key is missing entirely.
+    raw_portfolios = raw.get("portfolios")
+    if raw_portfolios is None:
+        raw_portfolios = _default_portfolios([t["symbol"] for t in tickers])
+    portfolios = [_normalise_portfolio(p) for p in raw_portfolios]
 
     return {
         "schema_version": schema_version,

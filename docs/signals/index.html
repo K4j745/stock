@@ -159,7 +159,7 @@
     <div class="filter-group"><label>Ticker</label><select id="filterTicker"><option value="">All tickers</option></select></div>
     <div class="filter-group"><label>Model</label><select id="filterModel"><option value="">All models</option></select></div>
     <div class="filter-group"><label>Signal</label><select id="filterSignal"><option value="">All</option><option>BUY</option><option>SELL</option><option>HOLD</option></select></div>
-    <div class="filter-group"><label>Portfolio</label><select id="filterPortfolio"><option value="">All / any</option></select></div>
+    <div class="filter-group" id="filterPortfolioGroup" style="display:none"><label>Portfolio</label><select id="filterPortfolio"><option value="">All / any</option></select></div>
     <div class="filter-group"><label>Date from</label><input type="date" id="filterDateFrom"></div>
     <div class="filter-group"><label>Date to</label><input type="date" id="filterDateTo"></div>
     <div class="filter-group"><label>Executed only</label><select id="filterExecuted"><option value="">All</option><option value="yes">Executed</option><option value="no">Not executed</option></select></div>
@@ -463,7 +463,10 @@
       var meta = res[4] || {};
       fillSelect('filterTicker', registry.tickers.map(t => t.symbol).sort(), true);
       fillSelect('filterModel', registry.models.map(m => m.name).sort(), true);
-      fillSelect('filterPortfolio', portfolios.map(p => p.portfolio_id).sort(), true);
+      if (portfolios.length) {
+        document.getElementById('filterPortfolioGroup').style.display = '';
+        fillSelect('filterPortfolio', portfolios.map(p => p.portfolio_id).sort(), true);
+      }
       if (meta.generated_at_utc) {
         document.getElementById('headerUpdate').textContent = 'Updated ' + meta.generated_at_utc.replace('T',' ').replace('Z','');
       }

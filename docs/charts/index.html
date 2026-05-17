@@ -329,7 +329,8 @@
     <a href="../">Overview</a>
     <a href="../prices/">Prices</a>
     <a href="./" class="active">Charts</a>
-    <a href="../portfolio/">Portfolio</a>
+    <a href="../signals/">Signals</a>
+    <a href="../portfolio/">Portfolios</a>
   </nav>
   <div class="header-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -343,7 +344,8 @@
   <a href="../">Overview</a>
   <a href="../prices/">Prices</a>
   <a href="./" class="active">Charts</a>
-  <a href="../portfolio/">Portfolio</a>
+  <a href="../signals/">Signals</a>
+  <a href="../portfolio/">Portfolios</a>
 </div>
 
 <div class="container">
@@ -398,11 +400,13 @@
   var filterPills = document.getElementById('filterPills');
   var allPlots = [];
   var activeFilter = 'all';
+  var tickerSet = [];
 
   var knownPlots = [
     'confusion_matrix.png', 'feature_importance.png', 'roc_curve.png',
     'shap_summary.png', 'equity_curve.png', 'drawdown.png',
-    'cumulative_returns.png', 'learning_curve.png'
+    'cumulative_returns.png', 'learning_curve.png',
+    'model_comparison.png'
   ];
 
   function tryLoadImage(src) {
@@ -424,7 +428,7 @@
     var parts = filename.split('_');
     if (parts.length > 1) {
       var first = parts[0].toUpperCase();
-      if (['JNJ','UNH','ABT','PG','KO','WMT','NEE','DUK','SPY'].indexOf(first) >= 0) return first;
+      if (tickerSet.indexOf(first) >= 0) return first;
     }
     return 'General';
   }
@@ -459,6 +463,7 @@
       var resp = await fetch('../data/tickers.json');
       if (resp.ok) tickers = await resp.json();
     } catch(e) {}
+    tickerSet = (tickers || []).map(function(t) { return String(t).toUpperCase(); });
 
     // Build filter pills
     tickers.forEach(function(t) {
