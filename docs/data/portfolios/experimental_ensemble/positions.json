@@ -1,0 +1,50 @@
+[
+  {
+    "ticker": "AAPL",
+    "shares": 74.0,
+    "avg_cost": 254.08,
+    "last_price": 300.23,
+    "market_value": 22217.02,
+    "unrealised_pnl_abs": 3415.1,
+    "unrealised_pnl_pct": 0.181636,
+    "entry_date": "2026-04-01",
+    "entry_price": 254.0800018310547,
+    "last_signal_id": "S-AAPL-ensemble_majority-20260401-5c6c7e"
+  },
+  {
+    "ticker": "XOM",
+    "shares": 141.0,
+    "avg_cost": 150.06,
+    "last_price": 157.92,
+    "market_value": 22266.72,
+    "unrealised_pnl_abs": 1108.26,
+    "unrealised_pnl_pct": 0.052379,
+    "entry_date": "2026-05-13",
+    "entry_price": 150.05999755859375,
+    "last_signal_id": "S-XOM-ensemble_majority-20260513-a48381"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 95.0,
+    "avg_cost": 221.32,
+    "last_price": 226.71,
+    "market_value": 21537.45,
+    "unrealised_pnl_abs": 512.05,
+    "unrealised_pnl_pct": 0.024354,
+    "entry_date": "2026-05-11",
+    "entry_price": 221.32000732421875,
+    "last_signal_id": "S-JNJ-ensemble_majority-20260511-2d9114"
+  },
+  {
+    "ticker": "PG",
+    "shares": 131.0,
+    "avg_cost": 144.09,
+    "last_price": 141.57,
+    "market_value": 18545.67,
+    "unrealised_pnl_abs": -330.12,
+    "unrealised_pnl_pct": -0.017489,
+    "entry_date": "2026-04-02",
+    "entry_price": 144.08999633789062,
+    "last_signal_id": "S-PG-ensemble_majority-20260402-60d5b7"
+  }
+]
