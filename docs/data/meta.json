@@ -1,15 +1,37 @@
 {
-  "generated_at_utc": "2026-05-26T19:23:11Z",
-  "git_commit": "c60cf5fd74840985ef55ef8dc8b99e1654d00cf7",
+  "generated_at_utc": "2026-05-27T09:40:15Z",
+  "git_commit": "c7088f59ac1438434fc835ade4666a6cd36da745",
   "schema_version": "2.0",
   "data_version": "2026-05-15",
   "strategy_version": "1.0",
   "data_period": "3y",
   "data_interval": "1d",
-  "label_mode": "binary",
-  "label_threshold": 0.005,
-  "label_version": "binary-2026-05",
-  "n_tickers": 12,
+  "label": {
+    "mode": "binary",
+    "threshold": 0.005,
+    "version": "binary-2026-05",
+    "is_binary": true
+  },
+  "ml_thresholds": {
+    "buy_threshold": 0.55,
+    "sell_threshold": 0.45,
+    "dead_band": [
+      0.45,
+      0.55
+    ]
+  },
+  "benchmark": "SPY",
+  "benchmark_tickers": [
+    "SPY"
+  ],
+  "sector_palette": {
+    "Technology": "#388bfd",
+    "Financials": "#3fb950",
+    "Energy": "#f0883e",
+    "Benchmark": "#8b949e",
+    "Other": "#a371f7"
+  },
+  "n_tickers": 4,
   "n_portfolios": 0,
   "ml_artifacts_present": {
     "logistic_regression": false,
