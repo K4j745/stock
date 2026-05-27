@@ -68,16 +68,63 @@ def fetch_all_prices(reg: registry_mod.Registry, period: str, interval: str) -> 
     return out
 
 
+# Fallback used only when yfinance refuses to return a value for USDPLN=X.
+# Documented + made visible to the UI via the ``source`` field of fx.json.
+_FX_FALLBACK_USD_PLN = 4.0
+
+
+def fetch_fx_usd_pln(period: str = "1mo", interval: str = "1d") -> Dict:
+    """Fetch the latest USD→PLN close from yfinance.
+
+    Returns a dict with the rate, the as-of date, and the source. Falls back
+    to the documented constant when yfinance is unreachable. The dashboard
+    frontend reads ``docs/data/fx.json`` and uses ``rate`` directly — so
+    when the rate is "real" (source = "yfinance") the simulator's USD→PLN
+    conversion is accurate; otherwise it transparently uses the constant.
+    """
+    df = data_fetcher.download("USDPLN=X", period=period, interval=interval)
+    if df is None or df.empty or "Close" not in df.columns:
+        return {
+            "rate": _FX_FALLBACK_USD_PLN,
+            "as_of": None,
+            "source": "fallback_constant",
+            "note": f"USDPLN=X unavailable — using documented fallback {_FX_FALLBACK_USD_PLN} PLN/USD.",
+        }
+    closes = df["Close"].dropna()
+    if closes.empty:
+        return {
+            "rate": _FX_FALLBACK_USD_PLN,
+            "as_of": None,
+            "source": "fallback_constant",
+            "note": "USDPLN=X returned an empty close series.",
+        }
+    last_idx = closes.index[-1]
+    return {
+        "rate": round(float(closes.iloc[-1]), 4),
+        "as_of": last_idx.strftime("%Y-%m-%d") if hasattr(last_idx, "strftime") else str(last_idx),
+        "source": "yfinance",
+        "symbol": "USDPLN=X",
+    }
+
+
 def generate_all_signals(reg: registry_mod.Registry, prices: Dict[str, pd.DataFrame],
                           config: Dict) -> Dict[str, Dict[str, pd.DataFrame]]:
-    """For each ticker, compute one signal DataFrame per model."""
+    """For each *non-benchmark* ticker, compute one signal DataFrame per model.
+
+    Benchmark tickers (e.g. SPY) are deliberately excluded — they are only
+    used for Buy-and-Hold comparison in the portfolio tab, never for model
+    training or model-driven signals.
+    """
     tech_rules = config["technical_signals"]
     ml_cfg = config["ml_signals"]
     p_buy = ml_cfg["probability_threshold_buy"]
     p_sell = ml_cfg["probability_threshold_sell"]
+    benchmark_set = set(config.get("benchmark_tickers", [config.get("benchmark", "SPY")]))
 
     out: Dict[str, Dict[str, pd.DataFrame]] = {}
     for ticker, df in prices.items():
+        if ticker in benchmark_set:
+            continue  # benchmark — no signals generated
         per_model: Dict[str, pd.DataFrame] = {}
 
         # 1) Technical rule based
@@ -130,6 +177,7 @@ def build_signal_records(reg: registry_mod.Registry, prices: Dict[str, pd.DataFr
                     continue
                 price_row = df_prices.loc[idx]
                 signal_id = row["signal_id"]
+                signal_reason = _classify_signal_reason(model_name, row)
                 rec = {
                     "signal_id": signal_id,
                     "generated_at_utc": generated_at,
@@ -141,6 +189,10 @@ def build_signal_records(reg: registry_mod.Registry, prices: Dict[str, pd.DataFr
                     "signal_source": signal_source,
                     "model_version": model_version,
                     "signal": row["signal"],
+                    # signal_reason explains *why* this signal fired — useful
+                    # in the UI for distinguishing "HOLD because the model
+                    # says so" from "HOLD because confidence is low".
+                    "signal_reason": signal_reason,
                     "score": _f(row.get("score"), 4),
                     "probability_up": _f(row.get("probability_up"), 4),
                     "probability_down": _f(1 - row["probability_up"], 4) if pd.notna(row.get("probability_up")) else None,
@@ -238,6 +290,39 @@ def build_model_summaries(reg: registry_mod.Registry, signal_records: List[Dict]
 # Plumbing
 # ---------------------------------------------------------------------------
 
+_ML_MODELS = {"logistic_regression", "random_forest", "xgboost", "lightgbm"}
+
+
+def _classify_signal_reason(model_name: str, row) -> str:
+    """Map (model, row) → a short, UI-friendly reason code.
+
+    The reason answers "why this label?" — distinct from the *source*
+    (which is the model name) and the *triggered rules* (which is the raw
+    trace). This makes the HOLD bucket transparent in the UI.
+
+    Codes:
+      * ``rule_triggered``         — technical_rule_based fired (BUY/SELL)
+      * ``rule_threshold_not_met`` — technical_rule_based at HOLD
+      * ``model_prediction``       — ML model picked BUY or SELL above the
+                                     0.45/0.55 dead band
+      * ``low_confidence``         — ML model probability inside dead band
+                                     (HOLD = "model unsure")
+      * ``majority_vote``          — ensemble_majority decided BUY/SELL
+      * ``model_disagreement``     — ensemble_majority at HOLD (no quorum)
+      * ``buy_and_hold_entry`` / ``buy_and_hold_carry`` — benchmark stream
+    """
+    sig = str(row.get("signal", "HOLD"))
+    if model_name == "technical_rule_based":
+        return "rule_triggered" if sig in ("BUY", "SELL") else "rule_threshold_not_met"
+    if model_name == "ensemble_majority":
+        return "majority_vote" if sig in ("BUY", "SELL") else "model_disagreement"
+    if model_name == "buy_and_hold":
+        return "buy_and_hold_entry" if sig == "BUY" else "buy_and_hold_carry"
+    if model_name in _ML_MODELS:
+        return "model_prediction" if sig in ("BUY", "SELL") else "low_confidence"
+    return "unknown"
+
+
 def _previous_close(df, idx):
     if idx not in df.index:
         return None
@@ -277,7 +362,12 @@ def _f(x, n=4):
 
 
 def copy_report_plots() -> List[str]:
-    """Copy PNG plots from stock_ml/reports/plots and reports/plots to docs/."""
+    """Copy PNG plots from stock_ml/reports/plots and reports/plots to docs/.
+
+    Always ensures the destination directory exists (so the frontend can
+    fetch ``plots_index.json`` even on a clean repo with no models trained
+    yet — it will simply be an empty list).
+    """
     import shutil
     sources = [
         os.path.join(REPO_ROOT, "stock_ml", "reports", "plots"),
@@ -287,10 +377,19 @@ def copy_report_plots() -> List[str]:
     copied = []
     for src in sources:
         if not os.path.isdir(src):
+            logger.info("Plot source not found: %s (skipping)", src)
             continue
         for fname in sorted(os.listdir(src)):
             if fname.lower().endswith(".png"):
-                shutil.copy2(os.path.join(src, fname), os.path.join(DOCS_CHARTS_DIR, fname))
+                dst = os.path.join(DOCS_CHARTS_DIR, fname)
+                logger.info("Copying chart %s -> %s", fname, dst)
+                shutil.copy2(os.path.join(src, fname), dst)
+                copied.append(fname)
+    # Also pick up any *.png already in the destination (e.g. committed
+    # by hand) so the index is always authoritative.
+    if os.path.isdir(DOCS_CHARTS_DIR):
+        for fname in sorted(os.listdir(DOCS_CHARTS_DIR)):
+            if fname.lower().endswith(".png") and fname not in copied:
                 copied.append(fname)
     return copied
 
@@ -355,6 +454,12 @@ def main() -> None:
     exporters.write_last_updated(DOCS_DATA_DIR, run_meta)
     exporters.write_registry(DOCS_DATA_DIR, reg.to_dict())
 
+    # FX rate — the portfolio simulator uses it to convert USD prices to PLN.
+    fx_payload = fetch_fx_usd_pln()
+    fx_payload["generated_at_utc"] = run_meta["generated_at_utc"]
+    audit.write_json(os.path.join(DOCS_DATA_DIR, "fx.json"), fx_payload)
+    logger.info("FX USD→PLN: %.4f (source=%s)", fx_payload["rate"], fx_payload["source"])
+
     for ticker, df in prices.items():
         exporters.write_ticker_ohlcv(DOCS_DATA_DIR, ticker, df)
         per_model_signals = {
@@ -410,10 +515,24 @@ def main() -> None:
     # Legacy tickers.json (a plain list of symbols for the old frontend)
     audit.write_json(os.path.join(DOCS_DATA_DIR, "tickers.json"), reg.all_symbols_with_benchmark)
 
-    # Optional plot copy
+    # Optional plot copy + a stable plots_index.json so the frontend doesn't
+    # have to probe a hardcoded list of filenames.
     copied = copy_report_plots()
+    plots_index = {
+        "generated_at_utc": run_meta["generated_at_utc"],
+        "plots": copied,
+        "count": len(copied),
+        "source_directories_checked": [
+            os.path.relpath(os.path.join(REPO_ROOT, "stock_ml", "reports", "plots"), REPO_ROOT),
+            os.path.relpath(REPORTS_PLOTS_DIR, REPO_ROOT),
+        ],
+    }
+    audit.write_json(os.path.join(DOCS_CHARTS_DIR, "..", "plots_index.json"), plots_index)
+    audit.write_json(os.path.join(DOCS_DATA_DIR, "plots_index.json"), plots_index)
     if copied:
-        logger.info("Copied %d plot(s).", len(copied))
+        logger.info("Indexed %d plot(s).", len(copied))
+    else:
+        logger.info("No ML plots available — frontend will show empty state.")
 
     logger.info("Dashboard data generation complete.")
 

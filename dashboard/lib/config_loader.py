@@ -80,6 +80,12 @@ def _normalise(raw: Dict[str, Any]) -> Dict[str, Any]:
         "strategy_version": raw.get("strategy_version", "1.0"),
         "tickers": tickers,
         "benchmark": benchmark,
+        # ``benchmark_tickers`` is the full list of symbols that should be
+        # treated as benchmarks (i.e. excluded from model-driven signal
+        # generation). It defaults to ``[benchmark]`` for backwards compat.
+        "benchmark_tickers": raw.get("benchmark_tickers", [benchmark]),
+        # Stable colour mapping for sectors used by the frontend. Optional.
+        "sector_palette": raw.get("sector_palette", {}),
         "data_period": data_period,
         "data_interval": data_interval,
         "label": label,

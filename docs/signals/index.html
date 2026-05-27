@@ -169,31 +169,33 @@
   <div class="agreement-row" id="agreementRow"></div>
 
   <div class="tabs">
-    <button data-tab="table" class="active">Table</button>
-    <button data-tab="latest">Latest per ticker</button>
+    <button data-tab="latest" class="active">Latest per ticker</button>
     <button data-tab="matrix">Model matrix</button>
+    <button data-tab="table">Full history</button>
   </div>
 
-  <div id="tab-table" class="tab-panel">
-    <div class="card">
-      <div class="card-header"><h2>Signal history</h2><span class="badge" id="tableBadge">0 rows</span></div>
-      <div class="table-wrapper"><div id="tableHost"><div class="empty"><div class="spinner"></div>Loading…</div></div></div>
-    </div>
-  </div>
-
-  <div id="tab-latest" class="tab-panel" style="display:none">
+  <div id="tab-latest" class="tab-panel">
     <div class="card">
       <div class="card-header"><h2>Latest signal per (ticker, model)</h2><span class="badge" id="latestBadge"></span></div>
-      <div class="table-wrapper"><div id="latestHost"></div></div>
+      <div class="table-wrapper"><div id="latestHost"><div class="empty"><div class="spinner"></div>Loading…</div></div></div>
     </div>
   </div>
 
   <div id="tab-matrix" class="tab-panel" style="display:none">
-    <div class="card-header" style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);margin-bottom:12px;">
-      <h2>Latest signal — ticker × model</h2>
-      <span class="badge">Row coloured green = all non-HOLD models agree</span>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header">
+        <h2>Latest signal — ticker × model</h2>
+        <span class="badge">Tickers grouped by sector · Green=all agree · Red=disagree · Tooltip=reason</span>
+      </div>
     </div>
     <div id="matrixHost"></div>
+  </div>
+
+  <div id="tab-table" class="tab-panel" style="display:none">
+    <div class="card">
+      <div class="card-header"><h2>Signal history</h2><span class="badge" id="tableBadge">0 rows</span></div>
+      <div class="table-wrapper"><div id="tableHost"></div></div>
+    </div>
   </div>
 
   <div class="download-row">
@@ -218,6 +220,22 @@
   var allRows = [];
   var registry = { tickers: [], models: [] };
   var portfolios = [];
+  var metaData = {};
+
+  function tickerMeta(symbol){
+    for (var i=0;i<registry.tickers.length;i++) if (registry.tickers[i].symbol===symbol) return registry.tickers[i];
+    return { symbol: symbol, sector: 'Other', name: symbol };
+  }
+  function sectorColor(sector){
+    var p = metaData && metaData.sector_palette || {};
+    return p[sector] || p['Other'] || '#a371f7';
+  }
+  function hexAlpha(hex, a) {
+    var h = String(hex).replace('#', '');
+    if (h.length === 3) h = h.split('').map(function(c){ return c+c; }).join('');
+    var r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
 
   // Tab switching
   document.querySelectorAll('.tabs button').forEach(function(b){
@@ -288,20 +306,24 @@
     if (!rows.length) return '<div class="empty">No matching signals.</div>';
     var html = '<table><thead><tr>';
     var cols = [
-      ['signal_date','Date'],['ticker','Ticker'],['model_name','Model'],['signal_source','Source'],
-      ['signal','Signal'],['probability_up','P(up)',1],['confidence','Conf.',1],['score','Score',1],
+      ['signal_date','Date'],['ticker','Ticker'],['sector','Sector'],['model_name','Model'],['signal_source','Source'],
+      ['signal','Signal'],['signal_reason','Reason'],['probability_up','P(up)',1],['confidence','Conf.',1],['score','Score',1],
       ['close','Close',1],['rsi','RSI',1],['return_1d_after','R1d',1],['return_5d_after','R5d',1],
       ['executed_in_portfolio','In port?'],['triggered_rules','Rules']
     ];
     cols.forEach(c => html += '<th>' + c[1] + '</th>');
     html += '</tr></thead><tbody>';
     rows.slice(0, 3000).forEach(function(r){
+      var sector = (tickerMeta(r.ticker).sector) || '—';
+      var col = sectorColor(sector);
       html += '<tr>';
       html += '<td class="mono small">' + r.signal_date + '</td>';
-      html += '<td class="ticker">' + r.ticker + '</td>';
+      html += '<td class="ticker" style="border-left:3px solid ' + col + ';padding-left:9px;">' + r.ticker + '</td>';
+      html += '<td><span class="pill" style="background:' + hexAlpha(col,0.15) + ';color:' + col + ';">' + sector + '</span></td>';
       html += '<td class="mono">' + r.model_name + '</td>';
       html += '<td>' + source(r.signal_source) + '</td>';
       html += '<td>' + badge(r.signal) + '</td>';
+      html += '<td class="small">' + (r.signal_reason || '—') + '</td>';
       html += '<td class="mono">' + fmt(r.probability_up, 3) + '</td>';
       html += '<td class="mono">' + fmt(r.confidence, 3) + '</td>';
       html += '<td class="mono">' + fmt(r.score, 2) + '</td>';
@@ -341,50 +363,75 @@
       var key = r.ticker + '|' + r.model_name;
       if (!latest[key] || r.signal_date > latest[key].signal_date) latest[key] = r;
     });
-    var tickerSet = new Set(rows.map(r => r.ticker));
-    var modelSet = new Set(rows.map(r => r.model_name));
+    var tickerSet = new Set(rows.map(function(r){ return r.ticker; }));
+    var modelSet = new Set(rows.map(function(r){ return r.model_name; }));
     var tickers = Array.from(tickerSet).sort();
     var models = Array.from(modelSet).sort();
     if (!tickers.length || !models.length) return '<div class="empty">No data.</div>';
 
+    // Group tickers by sector for readability.
+    var bySector = {};
+    tickers.forEach(function(t){
+      var info = tickerMeta(t);
+      (bySector[info.sector || 'Other'] = bySector[info.sector || 'Other'] || []).push(t);
+    });
+    var sectorsOrdered = Object.keys(bySector).sort();
+
     var grid = document.createElement('div');
     grid.className = 'matrix-grid';
-    grid.style.gridTemplateColumns = 'minmax(110px, auto) repeat(' + models.length + ', minmax(140px, 1fr))';
-    var headRow = ['Ticker'].concat(models);
-    headRow.forEach(function(h){
+    grid.style.gridTemplateColumns = 'minmax(130px, auto) repeat(' + models.length + ', minmax(150px, 1fr))';
+
+    function addCell(html, cls, style){
       var c = document.createElement('div');
-      c.className = 'matrix-cell head';
-      c.textContent = h;
+      c.className = 'matrix-cell ' + (cls || '');
+      if (style) c.setAttribute('style', style);
+      c.innerHTML = html;
       grid.appendChild(c);
-    });
-    tickers.forEach(function(t){
-      var nonHold = [];
-      var row = [];
-      var tcell = document.createElement('div');
-      tcell.className = 'matrix-cell ticker';
-      tcell.textContent = t;
-      grid.appendChild(tcell);
-      models.forEach(function(m){
-        var r = latest[t + '|' + m];
-        var cell = document.createElement('div');
-        cell.className = 'matrix-cell';
-        if (r) {
-          if (r.signal !== 'HOLD') nonHold.push(r.signal);
-          cell.innerHTML = badge(r.signal) + ' <span class="small mono">p=' + fmt(r.probability_up, 2) + '</span>';
-          cell.title = (r.signal_date || '') + ' • ' + (r.triggered_rules || '');
-        } else {
-          cell.textContent = '—';
-        }
-        row.push(cell);
+      return c;
+    }
+    // Header
+    addCell('Ticker / Sector', 'head');
+    models.forEach(function(m){ addCell(m, 'head'); });
+
+    sectorsOrdered.forEach(function(sector){
+      var col = sectorColor(sector);
+      // sector header row — spans all model columns
+      var headStyle = 'grid-column: 1 / span ' + (models.length + 1) + '; background:' + hexAlpha(col, 0.10) + '; color:' + col + '; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.05em; border-bottom:1px solid ' + hexAlpha(col, 0.35) + ';';
+      addCell('● ' + sector + ' <span style="color:var(--color-text-muted);font-weight:500;text-transform:none;letter-spacing:0;">(' + bySector[sector].length + ')</span>', '', headStyle);
+
+      bySector[sector].forEach(function(t){
+        var nonHold = [];
+        var rowCells = [];
+        var info = tickerMeta(t);
+        addCell('<div style="font-weight:600;color:' + col + ';">' + t + '</div><div style="font-size:10px;color:var(--color-text-muted);font-family:var(--font-body);white-space:normal;">' + (info.name || '') + '</div>', 'ticker', 'border-left:2px solid ' + col + ';');
+        models.forEach(function(m){
+          var r = latest[t + '|' + m];
+          var cell = document.createElement('div');
+          cell.className = 'matrix-cell';
+          if (r) {
+            if (r.signal !== 'HOLD') nonHold.push(r.signal);
+            var reason = r.signal_reason ? ' · reason=' + r.signal_reason : '';
+            var rules = r.triggered_rules ? ' · ' + r.triggered_rules : '';
+            cell.innerHTML = badge(r.signal) +
+              '<div style="font-size:10.5px;color:var(--color-text-muted);margin-top:4px;font-family:var(--font-mono);">p(up)=' + fmt(r.probability_up, 3) +
+              '  ·  conf=' + fmt(r.confidence, 2) + '</div>' +
+              (r.signal_reason ? '<div style="font-size:10px;color:var(--color-text-faint);margin-top:2px;">' + r.signal_reason + '</div>' : '');
+            cell.title = (r.signal_date || '') + reason + rules;
+          } else {
+            cell.textContent = '—';
+          }
+          rowCells.push(cell);
+        });
+        var allAgree = nonHold.length > 1 && nonHold.every(function(s){ return s === nonHold[0]; });
+        var disagree = nonHold.length > 1 && (new Set(nonHold)).size > 1;
+        rowCells.forEach(function(c){
+          if (allAgree) c.classList.add('agree');
+          if (disagree) c.classList.add('disagree');
+          grid.appendChild(c);
+        });
       });
-      var allAgree = nonHold.length > 1 && nonHold.every(s => s === nonHold[0]);
-      var disagree = nonHold.length > 1 && (new Set(nonHold)).size > 1;
-      row.forEach(function(c){
-        if (allAgree) c.classList.add('agree');
-        if (disagree) c.classList.add('disagree');
-        grid.appendChild(c);
-      });
     });
+
     var host = document.createElement('div');
     host.appendChild(grid);
     return host.outerHTML;
@@ -461,6 +508,7 @@
       registry.models = res[2] || [];
       portfolios = res[3] || [];
       var meta = res[4] || {};
+      metaData = meta;
       fillSelect('filterTicker', registry.tickers.map(t => t.symbol).sort(), true);
       fillSelect('filterModel', registry.models.map(m => m.name).sort(), true);
       if (portfolios.length) {

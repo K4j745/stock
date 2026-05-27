@@ -156,7 +156,7 @@
 <div class="container">
   <h1>Portfolio Simulator</h1>
   <div class="subtitle">Trade virtually using last-session close prices from this project. Portfolios are stored in your browser only — no server, no network calls beyond loading the local JSON files.</div>
-  <div class="note">Kurs FX zaszyty na sztywno: <code>1 USD = 4.0 PLN</code>. Ceny tickerów pochodzą z <code>docs/data/&lt;TICKER&gt;_ohlcv.json</code> (kolumna <code>close</code> z ostatniego rekordu).</div>
+  <div class="note" id="fxNote">FX rate loading…</div>
 
   <div class="pf-bar" id="pfBar"></div>
 
@@ -164,6 +164,8 @@
     <div class="empty">Loading…</div>
   </div>
 </div>
+
+<input id="importFile" type="file" accept="application/json,.json" style="display:none">
 
 <!-- New portfolio modal -->
 <dialog id="newPfDialog" style="border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:var(--radius-lg);padding:16px;min-width:280px;">
@@ -180,15 +182,27 @@
 <script>
 (function(){
   // ---------- Constants ----------
-  var STORAGE_KEY = 'stockwatch.portfolios.v1';
-  var STORAGE_SELECTED = 'stockwatch.portfolios.selected.v1';
-  var FX_USD_PLN = 4.0; // stała, świadomie uproszczona
+  var STORAGE_KEY = 'stockwatch.portfolios.v2';   // bumped — schema added currency_view + auto_seed flags
+  var STORAGE_SELECTED = 'stockwatch.portfolios.selected.v2';
+  var STORAGE_DISPLAY_CCY = 'stockwatch.portfolios.display_ccy.v1';
   var INITIAL_CASH_PLN = 100000;
+  var FX_FALLBACK = 4.0;
+
+  // Three empty manual portfolios + two auto-buying benchmark portfolios.
+  // The "auto" ones are bootstrapped with positions on first load — they
+  // hold a benchmark (SPY) or equal-weight basket of the configured universe.
+  // They still live in localStorage and can be reset / deleted by the user.
   var SEED_PORTFOLIOS = [
-    { name: 'Portfel Techniczny', note: 'oparty na sygnałach technicznych' },
-    { name: 'Portfel XGBoost',    note: 'oparty na sygnałach modelu XGBoost' },
-    { name: 'Portfel Mieszany',   note: 'dowolna kombinacja' }
+    { name: 'Portfel Techniczny',   note: 'oparty na sygnałach technicznych',  auto: null },
+    { name: 'Portfel XGBoost',      note: 'oparty na sygnałach modelu XGBoost', auto: null },
+    { name: 'Portfel Mieszany',     note: 'dowolna kombinacja',                 auto: null },
+    { name: 'Benchmark SPY (B&H)',  note: 'auto: cała gotówka w SPY przy starcie',  auto: { kind: 'single', ticker: 'SPY' } },
+    { name: 'Auto Equal-Weight',    note: 'auto: równe wagi we wszystkich tickerach',  auto: { kind: 'equal_weight' } }
   ];
+
+  // Display currency: 'PLN' or 'USD'. Persisted across reloads.
+  var displayCcy = localStorage.getItem(STORAGE_DISPLAY_CCY) || 'PLN';
+  var fxRate = { rate: FX_FALLBACK, source: 'fallback_constant', as_of: null, note: 'no fx.json yet' };
 
   // ---------- Theme ----------
   var saved = localStorage.getItem('stockwatch-theme');
@@ -231,7 +245,9 @@
         id: uuid(), name: s.name, note: s.note,
         cash_pln: INITIAL_CASH_PLN,
         created_at: new Date().toISOString(),
-        positions: [], transactions: []
+        positions: [], transactions: [],
+        auto: s.auto || null,           // marks portfolio for one-shot auto-population once prices are loaded
+        is_seeded: true
       });
     });
     saveState();
@@ -239,19 +255,29 @@
   function uuid(){ return 'p_' + Math.random().toString(36).slice(2, 10); }
 
   // ---------- Data loading ----------
+  var registryTickers = [];      // [{symbol, name, sector}]
+  var sectorPalette = {};
   function fetchJson(url){ return fetch(url).then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + url); return r.json(); }); }
 
   function loadProjectData(){
     return Promise.all([
       fetchJson('../data/tickers.json').catch(function(){ return []; }),
-      fetchJson('../data/last_updated.json').catch(function(){ return {}; })
+      fetchJson('../data/last_updated.json').catch(function(){ return {}; }),
+      fetchJson('../data/fx.json').catch(function(){ return null; }),
+      fetchJson('../data/registry/tickers.json').catch(function(){ return null; }),
+      fetchJson('../data/meta.json').catch(function(){ return null; })
     ]).then(function(res){
       tickerList = (res[0] || []).filter(function(t){ return typeof t === 'string'; });
       meta = res[1] || {};
-      // Load latest close per ticker from the per-ticker OHLCV file.
+      if (res[2] && typeof res[2].rate === 'number') fxRate = res[2];
+      registryTickers = res[3] || [];
+      var metaJson = res[4] || {};
+      sectorPalette = (metaJson && metaJson.sector_palette) || {};
+
+      updateFxNote();
+
       return Promise.all(tickerList.map(function(t){
         return fetchJson('../data/' + t + '_ohlcv.json').then(function(rows){
-          // Last record with non-null close.
           for (var i = rows.length - 1; i >= 0; i--){
             if (rows[i] && rows[i].close != null) {
               prices[t] = { price_usd: Number(rows[i].close), date: rows[i].date };
@@ -259,21 +285,104 @@
             }
           }
         }).catch(function(){ /* skip missing */ });
-      }));
+      })).then(function(){
+        runPendingAutoSeeds();
+      });
+    });
+  }
+
+  function updateFxNote(){
+    var n = document.getElementById('fxNote'); if (!n) return;
+    var src = (fxRate.source === 'yfinance')
+      ? ('yfinance · USDPLN=X · as of ' + (fxRate.as_of || '—'))
+      : ('fallback constant — yfinance unavailable');
+    n.innerHTML = 'Kurs FX: <code>1 USD = ' + Number(fxRate.rate).toFixed(4) + ' PLN</code> <span style="color:var(--color-text-faint)">(' + src + ')</span>. Ceny tickerów: <code>docs/data/&lt;TICKER&gt;_ohlcv.json</code>, kolumna <code>close</code> z ostatniej sesji.';
+  }
+
+  // Auto-buy seeded portfolios once their auto={} spec can be satisfied with
+  // the loaded prices. Runs at most once per portfolio (we clear .auto after).
+  function runPendingAutoSeeds(){
+    portfolios.forEach(function(p){
+      if (!p.auto) return;
+      if (p.positions.length || p.transactions.length) { p.auto = null; return; }
+      try {
+        if (p.auto.kind === 'single') {
+          autoExecuteSingle(p, p.auto.ticker);
+        } else if (p.auto.kind === 'equal_weight') {
+          autoExecuteEqualWeight(p);
+        }
+      } catch(e) { /* ignore — leave it as a manual portfolio */ }
+      p.auto = null;
+    });
+    saveState();
+  }
+
+  function autoExecuteSingle(p, ticker){
+    var pr = priceFor(ticker); if (!pr) return;
+    var shares = Math.floor(p.cash_pln / pr.pln);
+    if (shares > 0) buyInternal(p, ticker, shares, pr, true);
+  }
+
+  function autoExecuteEqualWeight(p){
+    var ts = tickerList.filter(function(t){ return prices[t]; });
+    if (!ts.length) return;
+    var bucket = p.cash_pln / ts.length;
+    ts.forEach(function(t){
+      var pr = priceFor(t); if (!pr) return;
+      var shares = Math.floor(bucket / pr.pln);
+      if (shares > 0) buyInternal(p, t, shares, pr, true);
+    });
+  }
+
+  function buyInternal(p, ticker, shares, pr, isAuto){
+    var cost = pr.pln * shares;
+    if (cost > p.cash_pln + 1e-6) return;
+    var existing = p.positions.find(function(x){ return x.ticker === ticker; });
+    if (existing) {
+      var totalCost = existing.avg_cost_pln * existing.shares + cost;
+      existing.shares += shares;
+      existing.avg_cost_pln = totalCost / existing.shares;
+    } else {
+      p.positions.push({ ticker: ticker, shares: shares, avg_cost_pln: pr.pln });
+    }
+    p.cash_pln -= cost;
+    p.transactions.unshift({
+      ts: new Date().toISOString(), ticker: ticker, action: 'BUY',
+      shares: shares, price_usd: pr.usd, price_pln: pr.pln, value_pln: cost,
+      cash_after_pln: p.cash_pln, price_date: pr.date,
+      auto: !!isAuto
     });
   }
 
   // ---------- Helpers ----------
   function getPortfolio(){ return portfolios.find(function(p){ return p.id === selectedId; }); }
+  // fmtPln/fmtView naming: callers pass a PLN amount; we render it in the
+  // current display currency. Kept under both names so older call sites work.
   function fmtPln(v){ if (v == null || isNaN(v)) return '—'; return Number(v).toLocaleString('pl-PL', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) + ' zł'; }
   function fmtUsd(v){ if (v == null || isNaN(v)) return '—'; return '$' + Number(v).toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }); }
   function pctClass(v){ if (v == null) return ''; return v >= 0 ? 'pos' : 'neg'; }
   function fmtPct(v){ if (v == null || isNaN(v)) return '—'; var s = (v >= 0 ? '+' : ''); return s + (v * 100).toFixed(2) + '%'; }
+  function sectorOf(symbol){ var t = registryTickers.find(function(r){ return r.symbol === symbol; }); return t && t.sector || 'Other'; }
+  function sectorColor(sector){ return sectorPalette[sector] || sectorPalette['Other'] || '#a371f7'; }
+  function tickerCell(symbol){ var col = sectorColor(sectorOf(symbol)); return '<td class="ticker" style="border-left:3px solid ' + col + ';padding-left:9px;">' + symbol + '</td>'; }
 
   function priceFor(ticker){
     var q = prices[ticker];
     if (!q) return null;
-    return { usd: q.usd != null ? q.usd : q.price_usd, pln: (q.price_usd != null ? q.price_usd : 0) * FX_USD_PLN, date: q.date };
+    var usd = q.price_usd != null ? q.price_usd : q.usd;
+    return { usd: usd, pln: (usd || 0) * Number(fxRate.rate || FX_FALLBACK), date: q.date };
+  }
+
+  function plnToView(pln){
+    if (displayCcy === 'USD') return pln / Number(fxRate.rate || FX_FALLBACK);
+    return pln;
+  }
+  function ccySymbol(){ return displayCcy === 'USD' ? '$' : 'zł'; }
+  function fmtView(plnVal){
+    if (plnVal == null || isNaN(plnVal)) return '—';
+    var v = plnToView(plnVal);
+    if (displayCcy === 'USD') return '$' + v.toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    return v.toLocaleString('pl-PL', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) + ' zł';
   }
 
   function portfolioValuation(p){
@@ -307,21 +416,8 @@
     var pr = priceFor(ticker); if (!pr) return 'Brak ceny dla ' + ticker + '.';
     if (!(shares > 0)) return 'Liczba akcji musi być dodatnia.';
     var cost = pr.pln * shares;
-    if (cost > p.cash_pln + 1e-6) return 'Za mało gotówki — potrzeba ' + fmtPln(cost) + ', masz ' + fmtPln(p.cash_pln) + '.';
-    var existing = p.positions.find(function(x){ return x.ticker === ticker; });
-    if (existing) {
-      var totalCost = existing.avg_cost_pln * existing.shares + cost;
-      existing.shares += shares;
-      existing.avg_cost_pln = totalCost / existing.shares;
-    } else {
-      p.positions.push({ ticker: ticker, shares: shares, avg_cost_pln: pr.pln });
-    }
-    p.cash_pln -= cost;
-    p.transactions.unshift({
-      ts: new Date().toISOString(), ticker: ticker, action: 'BUY',
-      shares: shares, price_usd: pr.usd, price_pln: pr.pln, value_pln: cost,
-      cash_after_pln: p.cash_pln, price_date: pr.date
-    });
+    if (cost > p.cash_pln + 1e-6) return 'Za mało gotówki — potrzeba ' + fmtView(cost) + ', masz ' + fmtView(p.cash_pln) + '.';
+    buyInternal(p, ticker, shares, pr, false);
     saveState(); return null;
   }
 
@@ -406,11 +502,63 @@
     bar.appendChild(addBtn);
 
     var actions = document.createElement('div'); actions.className = 'pf-actions';
-    actions.innerHTML = '<button id="btnExport">Eksport JSON</button><button id="btnReset">Reset</button>';
+    actions.innerHTML =
+      '<button id="btnCcy" title="Switch display currency">View: <b>' + displayCcy + '</b></button>' +
+      '<button id="btnImport">Import JSON</button>' +
+      '<button id="btnExport">Eksport JSON</button>' +
+      '<button id="btnReset">Reset</button>';
     bar.appendChild(actions);
     document.getElementById('btnExport').addEventListener('click', exportPortfolio);
     document.getElementById('btnReset').addEventListener('click', resetPortfolio);
+    document.getElementById('btnImport').addEventListener('click', function(){ document.getElementById('importFile').click(); });
+    document.getElementById('btnCcy').addEventListener('click', function(){
+      displayCcy = displayCcy === 'PLN' ? 'USD' : 'PLN';
+      localStorage.setItem(STORAGE_DISPLAY_CCY, displayCcy);
+      renderAll();
+    });
   }
+
+  // Import file binding (the input element is outside the bar so it survives re-renders).
+  document.getElementById('importFile').addEventListener('change', function(ev){
+    var f = ev.target.files && ev.target.files[0]; if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try {
+        var raw = JSON.parse(e.target.result);
+        // Accept either a portfolio export (single {portfolio: {...}}) or a
+        // bare portfolio object, or an array of portfolios.
+        var imported = [];
+        if (Array.isArray(raw)) imported = raw;
+        else if (raw && raw.portfolio) imported = [raw.portfolio];
+        else if (raw && raw.id && Array.isArray(raw.positions)) imported = [raw];
+        else throw new Error('Unrecognised JSON shape.');
+
+        imported.forEach(function(p){
+          // Be defensive: assign a fresh id if it collides, default missing fields.
+          var newId = uuid();
+          portfolios.push({
+            id: newId,
+            name: (p.name || 'Imported') + ' (imp)',
+            note: p.note || '',
+            cash_pln: Number(p.cash_pln) || 0,
+            created_at: p.created_at || new Date().toISOString(),
+            positions: Array.isArray(p.positions) ? p.positions.map(function(x){
+              return { ticker: x.ticker, shares: Number(x.shares) || 0, avg_cost_pln: Number(x.avg_cost_pln) || 0 };
+            }) : [],
+            transactions: Array.isArray(p.transactions) ? p.transactions : [],
+            is_imported: true
+          });
+          selectedId = newId;
+        });
+        saveState(); renderAll();
+        alert('Zaimportowano ' + imported.length + ' portfel(i).');
+      } catch(err) {
+        alert('Import nieudany: ' + (err && err.message || err));
+      }
+      ev.target.value = '';
+    };
+    reader.readAsText(f);
+  });
 
   function renderMain(){
     var p = getPortfolio();
@@ -425,10 +573,10 @@
 
     var html = '';
     html += '<div class="kpi-row">';
-    html += kpi('Wartość portfela', fmtPln(val.total_pln), p.note || '');
-    html += kpi('Gotówka', fmtPln(p.cash_pln), 'PLN');
-    html += kpi('Wartość pozycji', fmtPln(val.positions_value_pln), p.positions.length + ' pozycji');
-    html += kpi('P&L vs start', fmtPln(pnlAbs) + '  ' + fmtPct(pnlPct), 'start: ' + fmtPln(INITIAL_CASH_PLN), pctClass(pnlAbs));
+    html += kpi('Wartość portfela', fmtView(val.total_pln), p.note || '');
+    html += kpi('Gotówka', fmtView(p.cash_pln), 'PLN');
+    html += kpi('Wartość pozycji', fmtView(val.positions_value_pln), p.positions.length + ' pozycji');
+    html += kpi('P&L vs start', fmtView(pnlAbs) + '  ' + fmtPct(pnlPct), 'start: ' + fmtView(INITIAL_CASH_PLN), pctClass(pnlAbs));
     html += '</div>';
 
     html += '<div class="grid">';
@@ -470,9 +618,20 @@
 
     // Bind order form
     var sel = document.getElementById('orderTicker');
+    // Group ticker options by sector (using registry/tickers.json) for clarity.
+    var bySector = {};
     tickerList.forEach(function(t){
-      var o = document.createElement('option'); o.value = t; o.textContent = t;
-      sel.appendChild(o);
+      var info = (registryTickers.find(function(r){ return r.symbol === t; })) || { symbol: t, sector: 'Other', name: t };
+      (bySector[info.sector || 'Other'] = bySector[info.sector || 'Other'] || []).push(info);
+    });
+    Object.keys(bySector).sort().forEach(function(sector){
+      var group = document.createElement('optgroup'); group.label = sector;
+      bySector[sector].forEach(function(info){
+        var o = document.createElement('option'); o.value = info.symbol;
+        o.textContent = info.symbol + (info.name && info.name !== info.symbol ? ' — ' + info.name : '');
+        group.appendChild(o);
+      });
+      sel.appendChild(group);
     });
     if (tickerList[0]) updateQuote(tickerList[0]);
     sel.addEventListener('change', function(){ updateQuote(sel.value); recomputeTotal(); });
@@ -494,7 +653,7 @@
     var pr = priceFor(ticker);
     var q = document.getElementById('orderQuote');
     if (!pr) { q.innerHTML = '<span style="color:var(--color-error)">Brak ceny dla ' + ticker + '</span>'; return; }
-    q.innerHTML = 'Ostatnia cena: <span class="price">' + fmtUsd(pr.usd) + '</span> ≈ <span class="price">' + fmtPln(pr.pln) + '</span> <span style="color:var(--color-text-faint)">(' + (pr.date || '—') + ')</span>';
+    q.innerHTML = 'Ostatnia cena: <span class="price">' + fmtUsd(pr.usd) + '</span> ≈ <span class="price">' + fmtView(pr.pln) + '</span> <span style="color:var(--color-text-faint)">(' + (pr.date || '—') + ')</span>';
   }
 
   function recomputeTotal(){
@@ -503,7 +662,7 @@
     var shares = parseFloat(document.getElementById('orderShares').value);
     var totalEl = document.getElementById('orderTotal');
     if (!pr || !(shares > 0)) { totalEl.textContent = '—'; return; }
-    totalEl.innerHTML = '<span class="price">' + fmtPln(pr.pln * shares) + '</span>';
+    totalEl.innerHTML = '<span class="price">' + fmtView(pr.pln * shares) + '</span>';
   }
 
   function flashError(msg){
@@ -513,15 +672,17 @@
 
   function renderPositionsTable(rows){
     if (!rows.length) return '<div class="empty">Brak otwartych pozycji.</div>';
-    var html = '<table><thead><tr><th>Ticker</th><th>Akcje</th><th>Avg cost</th><th>Cena</th><th>Wartość</th><th>P&L</th><th>P&L %</th></tr></thead><tbody>';
+    var html = '<table><thead><tr><th>Ticker</th><th>Sektor</th><th>Akcje</th><th>Avg cost</th><th>Cena</th><th>Wartość</th><th>P&L</th><th>P&L %</th></tr></thead><tbody>';
     rows.forEach(function(r){
+      var s = sectorOf(r.ticker); var col = sectorColor(s);
       html += '<tr>';
-      html += '<td class="ticker">' + r.ticker + '</td>';
+      html += tickerCell(r.ticker);
+      html += '<td><span class="pill" style="background:' + hexAlpha(col,0.15) + ';color:' + col + ';font-family:var(--font-mono);font-size:10.5px;padding:1px 8px;border-radius:999px;">' + s + '</span></td>';
       html += '<td class="mono">' + r.shares + '</td>';
-      html += '<td class="mono">' + fmtPln(r.avg_cost_pln) + '</td>';
-      html += '<td class="mono">' + (r.current_price_pln != null ? fmtPln(r.current_price_pln) : '—') + '</td>';
-      html += '<td class="mono">' + (r.market_value_pln != null ? fmtPln(r.market_value_pln) : '—') + '</td>';
-      html += '<td class="mono ' + pctClass(r.pnl_abs_pln) + '">' + (r.pnl_abs_pln != null ? fmtPln(r.pnl_abs_pln) : '—') + '</td>';
+      html += '<td class="mono">' + fmtView(r.avg_cost_pln) + '</td>';
+      html += '<td class="mono">' + (r.current_price_pln != null ? fmtView(r.current_price_pln) : '—') + '</td>';
+      html += '<td class="mono">' + (r.market_value_pln != null ? fmtView(r.market_value_pln) : '—') + '</td>';
+      html += '<td class="mono ' + pctClass(r.pnl_abs_pln) + '">' + (r.pnl_abs_pln != null ? fmtView(r.pnl_abs_pln) : '—') + '</td>';
       html += '<td class="mono ' + pctClass(r.pnl_pct) + '">' + (r.pnl_pct != null ? fmtPct(r.pnl_pct) : '—') + '</td>';
       html += '</tr>';
     });
@@ -531,17 +692,20 @@
 
   function renderTransactionsTable(rows){
     if (!rows.length) return '<div class="empty">Brak transakcji.</div>';
-    var html = '<table><thead><tr><th>Data</th><th>Ticker</th><th>Akcja</th><th>Akcje</th><th>Cena (USD)</th><th>Cena (PLN)</th><th>Wartość</th><th>Gotówka po</th></tr></thead><tbody>';
+    var html = '<table><thead><tr><th>Data</th><th>Ticker</th><th>Sektor</th><th>Akcja</th><th>Akcje</th><th>Cena (USD)</th><th>Cena (PLN)</th><th>Wartość</th><th>Gotówka po</th><th>Źródło</th></tr></thead><tbody>';
     rows.forEach(function(r){
+      var s = sectorOf(r.ticker); var col = sectorColor(s);
       html += '<tr>';
       html += '<td class="mono" style="font-size:11px;">' + new Date(r.ts).toLocaleString('pl-PL') + '</td>';
-      html += '<td class="ticker">' + r.ticker + '</td>';
+      html += tickerCell(r.ticker);
+      html += '<td><span class="pill" style="background:' + hexAlpha(col,0.15) + ';color:' + col + ';font-family:var(--font-mono);font-size:10.5px;padding:1px 8px;border-radius:999px;">' + s + '</span></td>';
       html += '<td class="' + (r.action === 'BUY' ? 'tx-buy' : 'tx-sell') + '">' + r.action + '</td>';
       html += '<td class="mono">' + r.shares + '</td>';
       html += '<td class="mono">' + fmtUsd(r.price_usd) + '</td>';
-      html += '<td class="mono">' + fmtPln(r.price_pln) + '</td>';
-      html += '<td class="mono">' + fmtPln(r.value_pln) + '</td>';
-      html += '<td class="mono">' + fmtPln(r.cash_after_pln) + '</td>';
+      html += '<td class="mono">' + fmtView(r.price_pln) + '</td>';
+      html += '<td class="mono">' + fmtView(r.value_pln) + '</td>';
+      html += '<td class="mono">' + fmtView(r.cash_after_pln) + '</td>';
+      html += '<td class="small">' + (r.auto ? '<span class="pill">auto</span>' : '<span class="pill">manual</span>') + '</td>';
       html += '</tr>';
     });
     html += '</tbody></table>';
@@ -574,7 +738,7 @@
     var html = '';
     labels.forEach(function(l, i){
       var pct = total > 0 ? (data[i] / total * 100).toFixed(1) + '%' : '—';
-      html += '<div class="row"><span><span class="swatch" style="background:' + colors[i % colors.length] + '"></span>' + l + '</span><span class="mono">' + fmtPln(data[i]) + ' <span style="color:var(--color-text-muted)">(' + pct + ')</span></span></div>';
+      html += '<div class="row"><span><span class="swatch" style="background:' + colors[i % colors.length] + '"></span>' + l + '</span><span class="mono">' + fmtView(data[i]) + ' <span style="color:var(--color-text-muted)">(' + pct + ')</span></span></div>';
     });
     legend.innerHTML = html;
   }
