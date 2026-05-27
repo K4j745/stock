@@ -530,11 +530,33 @@
     return data.filter(function(d) { return d.date >= cutoffStr; });
   }
 
+  // Defensive: clear every chart container we own. Plotly.newPlot replaces
+  // the container's innerHTML when it draws, but we also reset to a clean
+  // spinner here so a stale render or a re-entrant loadTicker call never
+  // leaves a stray "Loading X..." block visible next to a drawn chart.
+  function resetChartContainers(ticker) {
+    var spinner = '<div class="loading-state"><div class="spinner"></div><div>Loading ' + ticker + '…</div></div>';
+    ['candlestickChart', 'rsiChart', 'macdChart'].forEach(function(id, i){
+      var el = document.getElementById(id);
+      if (!el) return;
+      // Show the spinner only on the first chart so we don't get three of them.
+      el.innerHTML = (i === 0) ? spinner : '';
+      // Drop any Plotly internal state, just in case.
+      if (window.Plotly && Plotly.purge) { try { Plotly.purge(id); } catch(_){} }
+    });
+  }
+
+  function showChartError(msg) {
+    ['rsiChart', 'macdChart'].forEach(function(id){
+      var el = document.getElementById(id); if (el) el.innerHTML = '';
+    });
+    var c = document.getElementById('candlestickChart');
+    if (c) c.innerHTML = '<div class="error-state">' + msg + '</div>';
+  }
+
   function loadTicker(ticker) {
     currentTicker = ticker;
-    document.getElementById('candlestickChart').innerHTML = '<div class="loading-state"><div class="spinner"></div><div>Loading ' + ticker + '...</div></div>';
-    document.getElementById('rsiChart').innerHTML = '';
-    document.getElementById('macdChart').innerHTML = '';
+    resetChartContainers(ticker);
 
     fetch('../data/' + ticker + '_ohlcv.json')
       .then(function(r) {
@@ -542,12 +564,21 @@
         return r.json();
       })
       .then(function(data) {
+        if (!Array.isArray(data) || data.length === 0) {
+          showChartError('No OHLCV records for ' + ticker + '.');
+          currentData = null;
+          return;
+        }
         currentData = data;
-        renderCharts(data);
-        updateInfoPanel(data, ticker);
+        try {
+          renderCharts(data);
+          updateInfoPanel(data, ticker);
+        } catch (e) {
+          showChartError('Chart render error for ' + ticker + ': ' + (e && e.message || e));
+        }
       })
       .catch(function(err) {
-        document.getElementById('candlestickChart').innerHTML = '<div class="error-state">Failed to load data: ' + err.message + '</div>';
+        showChartError('Failed to load ' + ticker + ': ' + (err && err.message || err));
       });
   }
 
