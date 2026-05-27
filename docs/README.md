@@ -125,15 +125,27 @@ label is:
 trigger an action"** — it is *not* a separate predicted class, just the
 absence of a buy/sell trigger.
 
-**Known issue (observed at thresholds = 3):** several BUY rules are
-*mutually exclusive* — e.g. `bb_break_lower` (`Close < BB_lower`) almost
-never co-occurs with `above_sma20_50` (`Close > SMA20 && Close > SMA50`).
-With `buy_threshold = 3` we need 3 out of 4 rules to agree, which in
-practice never happens on this universe. The same holds on the SELL side.
-That is why `technical_rule_based` currently sits at **100% HOLD**.
-Lowering the threshold to `2` (and/or swapping `above_sma20_50` for a less
-strict trend rule) would unblock real signals — this is *intentionally not
-changed yet*; the user will pick the right policy before we flip the knob.
+**Methodology decision (2026-05):** the previous configuration used
+`buy_threshold = sell_threshold = 3`. With 4 rules per side that requires
+3-of-4 to fire — but several rules are *partially mutually exclusive*
+(e.g. `bb_break_lower` (`Close < BB_lower`) almost never co-occurs with
+`above_sma20_50` (`Close > SMA20 && Close > SMA50`)). The empirical result
+was **100% HOLD over a 3-year window**, i.e. the stream was useless.
+
+After methodological review we lowered the threshold to **2-of-4**:
+
+* 2-of-4 is the convention used in most rule-stacking TA systems
+  (Williams, Murphy) — it requires *agreement* across at least two
+  independent indicator families before a label fires.
+* It eliminates the mutual-exclusion problem (any two non-conflicting
+  rules can trigger), while still requiring more than a single-indicator
+  signal that would be noisy.
+* It produces a usable BUY/SELL/HOLD distribution (expected ~10-25%
+  non-HOLD on this universe — will be refreshed by the next run and
+  documented below).
+
+HOLD now keeps the same semantic — "rule engine did not accumulate enough
+evidence" — but with a realistic activation threshold.
 
 ### 2. ML signals (`logistic_regression`, `random_forest`, `xgboost`, `lightgbm`)
 

@@ -459,13 +459,32 @@
 
   var plotlyConfig = { responsive: true, displayModeBar: false };
 
-  // Load tickers + signals
+  // Load tickers + signals + sector palette
+  function hexAlpha(hex, a) {
+    var h = String(hex || '#a371f7').replace('#', '');
+    if (h.length === 3) h = h.split('').map(function(c){ return c+c; }).join('');
+    var r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
   Promise.all([
     fetch('../data/tickers.json').then(function(r) { return r.json(); }),
-    fetch('../data/signals.json').then(function(r) { return r.json(); }).catch(function() { return []; })
+    fetch('../data/signals.json').then(function(r) { return r.json(); }).catch(function() { return []; }),
+    fetch('../data/registry/tickers.json').then(function(r) { return r.json(); }).catch(function() { return null; }),
+    fetch('../data/meta.json').then(function(r) { return r.json(); }).catch(function() { return null; })
   ]).then(function(results) {
     var tickers = results[0];
     results[1].forEach(function(s) { signalsMap[s.ticker] = s; });
+    var registry = results[2] || [];
+    var meta = results[3] || {};
+    var palette = (meta && meta.sector_palette) || {};
+
+    function sectorOf(t) {
+      var info = registry.find(function(r){ return r.symbol === t; });
+      return info && info.sector || 'Other';
+    }
+    function colorOf(t) {
+      return palette[sectorOf(t)] || palette['Other'] || '#388bfd';
+    }
 
     tickerPills.innerHTML = '';
     if (!Array.isArray(tickers) || tickers.length === 0) {
@@ -475,8 +494,12 @@
     }
     tickers.forEach(function(t, i) {
       var btn = document.createElement('button');
+      var col = colorOf(t);
       btn.className = 'ticker-pill' + (i === 0 ? ' active' : '');
-      btn.textContent = t;
+      btn.title = sectorOf(t);
+      // Sector accent — coloured left border + subtle tinted background on the pill.
+      btn.style.cssText = 'border-left:3px solid ' + col + ';';
+      btn.innerHTML = '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:' + col + ';margin-right:6px;vertical-align:middle;"></span>' + t;
       btn.addEventListener('click', function() {
         tickerPills.querySelectorAll('.ticker-pill').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');

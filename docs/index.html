@@ -557,6 +557,19 @@
     </span>
   </div>
 
+  <!-- HOLD-source explainer banner — content depends on selected model -->
+  <div id="holdBanner" style="display:none;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:var(--color-text-muted);">
+    <strong style="color:var(--color-text);">HOLD source:</strong>
+    <span id="holdBannerText">—</span>
+    <a href="signals/" style="color:var(--color-primary);text-decoration:none;margin-left:8px;">Details →</a>
+  </div>
+
+  <!-- Sectors strip (coloured pills) -->
+  <div id="sectorStrip" style="display:none;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:10px 14px;margin-bottom:16px;font-size:12px;">
+    <div style="font-size:11px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Universe by sector</div>
+    <div id="sectorPills" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+  </div>
+
   <div class="main-grid">
     <!-- Table -->
     <div class="card">
@@ -820,6 +833,7 @@
 
   function applyModel(model) {
     currentModel = model;
+    renderHoldBanner(model);
     if (allLatestRecords.length) {
       currentSignals = recordsToLegacyShape(allLatestRecords, model);
       doRender();
@@ -830,17 +844,81 @@
     applyModel(e.target.value);
   });
 
+  var richMeta = null;
+  var registryTickers = [];
+
+  function holdExplanationFor(model, meta) {
+    var ml = meta && meta.ml_thresholds || {};
+    var lbl = meta && meta.label || {};
+    var buy = ml.buy_threshold != null ? ml.buy_threshold : 0.55;
+    var sell = ml.sell_threshold != null ? ml.sell_threshold : 0.45;
+    if (model === 'technical_rule_based') {
+      return 'rule engine did not reach the score threshold (default 2-of-4 rules per side).';
+    }
+    if (model === 'ensemble_majority') {
+      return 'models did not reach quorum — fewer than 2 ML models agreed on BUY/SELL.';
+    }
+    if (model === 'buy_and_hold') {
+      return 'benchmark stream — BUY only on the first session, HOLD on every other day.';
+    }
+    // ML model
+    var lblMode = lbl.mode === 'binary' ? 'binary (P[next-day return > ' + (lbl.threshold || 0.005) + '])' : (lbl.mode || 'binary');
+    return 'model probability inside dead band (' + sell + ' ≤ P(up) ≤ ' + buy + '). Task: ' + lblMode + '.';
+  }
+
+  function renderHoldBanner(model) {
+    var el = document.getElementById('holdBanner');
+    if (!el) return;
+    if (!richMeta) { el.style.display = 'none'; return; }
+    document.getElementById('holdBannerText').textContent = holdExplanationFor(model, richMeta);
+    el.style.display = '';
+  }
+
+  function renderSectorStrip(tickers, meta) {
+    if (!tickers || !tickers.length) return;
+    var palette = (meta && meta.sector_palette) || {};
+    var bySector = {};
+    tickers.forEach(function(t){
+      var s = (t.sector || 'Other');
+      (bySector[s] = bySector[s] || []).push(t);
+    });
+    var host = document.getElementById('sectorPills');
+    host.innerHTML = '';
+    Object.keys(bySector).sort().forEach(function(sector){
+      var color = palette[sector] || palette['Other'] || '#a371f7';
+      var group = document.createElement('div');
+      group.style.cssText = 'display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:' + hexAlpha(color, 0.12) + ';border:1px solid ' + hexAlpha(color, 0.4) + ';';
+      var dot = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';"></span>';
+      var symbols = bySector[sector].map(function(t){ return t.symbol; }).join(', ');
+      group.innerHTML = dot + '<span style="color:' + color + ';font-weight:600;">' + sector + '</span><span style="color:var(--color-text-muted);font-family:var(--font-mono);font-size:11px;">' + symbols + '</span>';
+      host.appendChild(group);
+    });
+    document.getElementById('sectorStrip').style.display = '';
+  }
+
+  function hexAlpha(hex, a) {
+    var h = hex.replace('#', '');
+    if (h.length === 3) h = h.split('').map(function(c){ return c+c; }).join('');
+    var r = parseInt(h.slice(0,2), 16), g = parseInt(h.slice(2,4), 16), b = parseInt(h.slice(4,6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
+
   function loadData() {
     // Prefer the new rich data layout; fall back to the legacy flat signals.json
     // so partial deploys / older browsers still work.
     Promise.all([
       fetch('data/signals/latest.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
       fetch('data/registry/models.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
-      fetch('data/last_updated.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      fetch('data/last_updated.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+      fetch('data/meta.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
+      fetch('data/registry/tickers.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; })
     ]).then(function(results) {
       var latest = results[0];
       var models = results[1];
       var meta = results[2];
+      richMeta = results[3];
+      registryTickers = results[4] || [];
+      renderSectorStrip(registryTickers, richMeta);
 
       if (latest && Array.isArray(latest)) {
         allLatestRecords = latest;
@@ -858,6 +936,7 @@
         if (!availableModels.includes(currentModel)) currentModel = availableModels[0] || 'technical_rule_based';
         sel.value = currentModel;
         currentSignals = recordsToLegacyShape(latest, currentModel);
+        renderHoldBanner(currentModel);
       } else {
         // Legacy fallback
         return fetch('data/signals.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function(legacy){

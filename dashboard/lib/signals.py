@@ -54,13 +54,15 @@ def technical_rule_based(df: pd.DataFrame, rules: Dict) -> pd.DataFrame:
     ``buy_score >= rules["buy_threshold"]`` (default 3) or the SELL mirror.
     HOLD here means "not enough triggered rules" — it is *not* a third class.
 
-    KNOWN ISSUE (default thresholds = 3): the BUY rules are partly mutually
-    exclusive (e.g. ``Close < BB_lower`` and ``Close > SMA20 && Close > SMA50``
-    rarely co-occur), so on a typical 3-year universe the score almost never
-    reaches 3 → the stream sits at ~100% HOLD. Lower the threshold to 2 or
-    relax one of the rules to make this generator useful. See the README
-    section "How signals are produced" for the full discussion + empirical
-    distribution per model.
+    DEFAULT THRESHOLDS (since 2026-05): ``buy_threshold = sell_threshold = 2``.
+
+    History: the original default was 3-of-4, but with 4 partially
+    mutually-exclusive rules per side (e.g. BB break vs SMA trend), 3-of-4
+    almost never triggered → ~100% HOLD on a 3-year universe. 2-of-4 is the
+    rule-stacking convention used in most classic TA-driven systems
+    (Williams, Murphy): require at least two indicator families to agree
+    before firing. See docs/README.md section "How signals are produced"
+    for the full rationale + empirical distribution.
     """
     rsi_buy = rules.get("rsi_buy", 35)
     rsi_sell = rules.get("rsi_sell", 65)

@@ -24,6 +24,8 @@ def git_commit_hash(repo_root: str) -> str:
 
 
 def build_run_metadata(repo_root: str, config: Dict[str, Any], artifact_status: Dict[str, bool]) -> Dict[str, Any]:
+    ml_cfg = config.get("ml_signals", {}) or {}
+    label_cfg = config.get("label", {}) or {}
     return {
         "generated_at_utc": utc_now_iso(),
         "git_commit": git_commit_hash(repo_root),
@@ -32,9 +34,25 @@ def build_run_metadata(repo_root: str, config: Dict[str, Any], artifact_status: 
         "strategy_version": config.get("strategy_version", "unknown"),
         "data_period": config.get("data_period", "unknown"),
         "data_interval": config.get("data_interval", "unknown"),
-        "label_mode": config.get("label", {}).get("mode"),
-        "label_threshold": config.get("label", {}).get("threshold"),
-        "label_version": config.get("label", {}).get("version"),
+        # Label semantics — surfaced so the dashboard can explain HOLD
+        # without the user opening README.
+        "label": {
+            "mode": label_cfg.get("mode"),                # "binary" | "multiclass"
+            "threshold": label_cfg.get("threshold"),
+            "version": label_cfg.get("version"),
+            "is_binary": label_cfg.get("mode") == "binary",
+        },
+        "ml_thresholds": {
+            "buy_threshold": ml_cfg.get("probability_threshold_buy"),
+            "sell_threshold": ml_cfg.get("probability_threshold_sell"),
+            "dead_band": [
+                ml_cfg.get("probability_threshold_sell"),
+                ml_cfg.get("probability_threshold_buy"),
+            ],
+        },
+        "benchmark": config.get("benchmark", "SPY"),
+        "benchmark_tickers": config.get("benchmark_tickers", [config.get("benchmark", "SPY")]),
+        "sector_palette": config.get("sector_palette", {}),
         "n_tickers": len(config.get("tickers", [])),
         "n_portfolios": len(config.get("portfolios", [])),
         "ml_artifacts_present": artifact_status,

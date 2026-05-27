@@ -402,22 +402,6 @@
   var activeFilter = 'all';
   var tickerSet = [];
 
-  var knownPlots = [
-    'confusion_matrix.png', 'feature_importance.png', 'roc_curve.png',
-    'shap_summary.png', 'equity_curve.png', 'drawdown.png',
-    'cumulative_returns.png', 'learning_curve.png',
-    'model_comparison.png'
-  ];
-
-  function tryLoadImage(src) {
-    return new Promise(function(resolve) {
-      var img = new Image();
-      img.onload = function() { resolve(true); };
-      img.onerror = function() { resolve(false); };
-      img.src = src;
-    });
-  }
-
   function formatTitle(filename) {
     return filename.replace('.png', '').replace(/_/g, ' ').replace(/\b\w/g, function(c) {
       return c.toUpperCase();
@@ -459,10 +443,19 @@
 
   async function loadPlots() {
     var tickers = [];
+    var plotsIndex = null;
     try {
       var resp = await fetch('../data/tickers.json');
       if (resp.ok) tickers = await resp.json();
     } catch(e) {}
+    try {
+      // plots_index.json is the *authoritative* list — written by
+      // dashboard/generate.py after copying PNGs from stock_ml/reports/plots/
+      // and reports/plots/ into docs/charts/plots/. No filename probing.
+      var pidx = await fetch('plots_index.json');
+      if (pidx.ok) plotsIndex = await pidx.json();
+    } catch(e) {}
+
     tickerSet = (tickers || []).map(function(t) { return String(t).toUpperCase(); });
 
     // Build filter pills
@@ -487,26 +480,20 @@
       });
     });
 
-    // Build candidate list
-    var candidates = knownPlots.slice();
-    tickers.forEach(function(t) {
-      knownPlots.forEach(function(p) {
-        candidates.push(t.toLowerCase() + '_' + p);
-        candidates.push(t + '_' + p);
-      });
-    });
-
-    var found = [];
-    var checks = candidates.map(function(fname) {
-      return tryLoadImage('plots/' + fname).then(function(exists) {
-        if (exists) found.push(fname);
-      });
-    });
-
-    await Promise.all(checks);
-    found.sort();
-    allPlots = found;
-    renderPlots(found);
+    if (plotsIndex && Array.isArray(plotsIndex.plots)) {
+      allPlots = plotsIndex.plots.slice().sort();
+      renderPlots(allPlots);
+      if (allPlots.length === 0) {
+        var hint = plotsIndex.source_directories_checked
+          ? ('<br><span style="font-size:12px;color:var(--color-text-faint);">Source dirs checked: <code>' + plotsIndex.source_directories_checked.join('</code>, <code>') + '</code></span>')
+          : '';
+        contentEl.innerHTML = '<div class="empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg><h3>No Analysis Charts Available</h3><p>Train ML models and run <code>python -m stock_ml.main plots</code> + <code>python -m stock_ml.main report</code>. PNGs are written to <code>stock_ml/reports/plots/</code>; the dashboard generator copies them into <code>docs/charts/plots/</code> on the next run.' + hint + '</p></div>';
+      }
+    } else {
+      // plots_index.json missing entirely — likely an older deploy. Show
+      // an explicit empty state rather than spinning forever.
+      contentEl.innerHTML = '<div class="empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><h3>Charts index not available</h3><p>Run <code>python dashboard/generate.py</code> to publish <code>plots_index.json</code>.</p></div>';
+    }
   }
 
   loadPlots();
