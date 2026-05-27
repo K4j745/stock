@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-05-27T09:40:15Z",
-  "git_commit": "c7088f59ac1438434fc835ade4666a6cd36da745",
+  "generated_at_utc": "2026-05-27T10:11:13Z",
+  "git_commit": "dfcab6afa72784bbd1b5a822d9188e171824cf8f",
   "schema_version": "2.0",
   "data_version": "2026-05-15",
   "strategy_version": "1.0",
@@ -28,10 +28,13 @@
     "Technology": "#388bfd",
     "Financials": "#3fb950",
     "Energy": "#f0883e",
+    "Healthcare": "#e3b341",
+    "Consumer Staples": "#a371f7",
+    "Utilities": "#58a6ff",
     "Benchmark": "#8b949e",
-    "Other": "#a371f7"
+    "Other": "#d2a8ff"
   },
-  "n_tickers": 4,
+  "n_tickers": 12,
   "n_portfolios": 0,
   "ml_artifacts_present": {
     "logistic_regression": false,
