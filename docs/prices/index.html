@@ -554,16 +554,36 @@
     if (c) c.innerHTML = '<div class="error-state">' + msg + '</div>';
   }
 
+  // Generation epoch lets us cache-bust the per-ticker OHLCV JSON files so
+  // a hard refresh of the deploy is no longer required after a workflow
+  // updates the data. Falls back to Date.now() if last_updated.json wasn't
+  // loaded yet.
+  var cacheTag = String(Date.now());
+  fetch('../data/last_updated.json')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(j){ if (j && j.timestamp) cacheTag = encodeURIComponent(j.timestamp); })
+    .catch(function(){});
+
   function loadTicker(ticker) {
     currentTicker = ticker;
     resetChartContainers(ticker);
 
-    fetch('../data/' + ticker + '_ohlcv.json')
+    // Safety net: if the fetch hangs (network stall / blocked URL),
+    // surface a visible error rather than leaving the spinner up forever.
+    var stillLoading = true;
+    var timeoutId = setTimeout(function(){
+      if (stillLoading) {
+        showChartError('Timed out loading ' + ticker + ' OHLCV after 15s. Try a hard refresh (Ctrl+Shift+R).');
+      }
+    }, 15000);
+
+    fetch('../data/' + ticker + '_ohlcv.json?v=' + cacheTag, { cache: 'no-store' })
       .then(function(r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
       .then(function(data) {
+        stillLoading = false; clearTimeout(timeoutId);
         if (!Array.isArray(data) || data.length === 0) {
           showChartError('No OHLCV records for ' + ticker + '.');
           currentData = null;
@@ -578,6 +598,7 @@
         }
       })
       .catch(function(err) {
+        stillLoading = false; clearTimeout(timeoutId);
         showChartError('Failed to load ' + ticker + ': ' + (err && err.message || err));
       });
   }

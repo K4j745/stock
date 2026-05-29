@@ -109,11 +109,15 @@ def fetch_fx_usd_pln(period: str = "1mo", interval: str = "1d") -> Dict:
 
 def generate_all_signals(reg: registry_mod.Registry, prices: Dict[str, pd.DataFrame],
                           config: Dict) -> Dict[str, Dict[str, pd.DataFrame]]:
-    """For each *non-benchmark* ticker, compute one signal DataFrame per model.
+    """For each ticker, compute the per-model signal DataFrames.
 
-    Benchmark tickers (e.g. SPY) are deliberately excluded — they are only
-    used for Buy-and-Hold comparison in the portfolio tab, never for model
-    training or model-driven signals.
+    Rules:
+      * **non-benchmark** tickers get the *full* model lineup (technical
+        rules + every ML model + ensemble + buy_and_hold).
+      * **benchmark** tickers (e.g. SPY) only get the model-free streams:
+        ``technical_rule_based`` (purely rule-based, no training) and
+        ``buy_and_hold`` (trivial baseline). ML models are NOT trained on
+        the benchmark by design — see docs/README.md.
     """
     tech_rules = config["technical_signals"]
     ml_cfg = config["ml_signals"]
@@ -123,29 +127,31 @@ def generate_all_signals(reg: registry_mod.Registry, prices: Dict[str, pd.DataFr
 
     out: Dict[str, Dict[str, pd.DataFrame]] = {}
     for ticker, df in prices.items():
-        if ticker in benchmark_set:
-            continue  # benchmark — no signals generated
+        is_benchmark = ticker in benchmark_set
         per_model: Dict[str, pd.DataFrame] = {}
 
-        # 1) Technical rule based
+        # 1) Technical rule based — runs for every ticker, including benchmarks.
         per_model["technical_rule_based"] = signals_mod.technical_rule_based(df, tech_rules)
 
-        # 2) ML models (real or proxy)
-        ml_signals_by_model: Dict[str, pd.DataFrame] = {}
-        for model in ml_cfg["models"]:
-            probs, signal_source, model_version = ml_loader.model_probabilities(model, ticker, df, ml_cfg)
-            sigs = signals_mod.from_probabilities(probs.reindex(df.index), p_buy, p_sell)
-            sigs.attrs["signal_source"] = signal_source
-            sigs.attrs["model_version"] = model_version
-            per_model[model] = sigs
-            ml_signals_by_model[model] = sigs
+        # 2) ML models — skipped for benchmark tickers (SPY is not a training
+        #    asset). All other tickers get the full ML lineup.
+        if not is_benchmark:
+            ml_signals_by_model: Dict[str, pd.DataFrame] = {}
+            for model in ml_cfg["models"]:
+                probs, signal_source, model_version = ml_loader.model_probabilities(model, ticker, df, ml_cfg)
+                sigs = signals_mod.from_probabilities(probs.reindex(df.index), p_buy, p_sell)
+                sigs.attrs["signal_source"] = signal_source
+                sigs.attrs["model_version"] = model_version
+                per_model[model] = sigs
+                ml_signals_by_model[model] = sigs
 
-        # 3) Ensemble across ML models
-        per_model["ensemble_majority"] = signals_mod.ensemble_majority(
-            ml_signals_by_model, min_votes=2,
-        )
+            # 3) Ensemble — only meaningful when we have ML models, so also
+            #    skipped for benchmarks.
+            per_model["ensemble_majority"] = signals_mod.ensemble_majority(
+                ml_signals_by_model, min_votes=2,
+            )
 
-        # 4) Buy-and-hold for benchmark portfolio
+        # 4) Buy-and-hold — runs for every ticker (baseline strategy).
         per_model["buy_and_hold"] = signals_mod.buy_and_hold(df)
 
         # Attach a stable signal_id to every (ticker, model, date)

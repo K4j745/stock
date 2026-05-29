@@ -652,13 +652,19 @@
   var currentModel = 'technical_rule_based';
   var availableModels = [];
 
-  // Sector mapping
-  var sectorMap = {
-    JNJ: 'Healthcare', UNH: 'Healthcare', ABT: 'Healthcare',
-    PG: 'Consumer', KO: 'Consumer', WMT: 'Consumer',
-    NEE: 'Utilities', DUK: 'Utilities',
-    SPY: 'Index'
-  };
+  // Sector lookup — driven by docs/data/registry/tickers.json. We keep a
+  // single object so legacy call-sites (sectorMap[ticker]) keep working,
+  // but it's rebuilt from the registry on every loadData(). SPY is tagged
+  // as "Benchmark" so the table colour-codes it consistently.
+  var sectorMap = {};
+  function rebuildSectorMap() {
+    sectorMap = {};
+    registryTickers.forEach(function(t){
+      sectorMap[t.symbol] = t.sector || 'Other';
+    });
+    var benchmarks = (richMeta && richMeta.benchmark_tickers) || ['SPY'];
+    benchmarks.forEach(function(sym){ if (!sectorMap[sym]) sectorMap[sym] = 'Benchmark'; });
+  }
 
   function formatChange(val) {
     var sign = val >= 0 ? '+' : '';
@@ -918,6 +924,7 @@
       var meta = results[2];
       richMeta = results[3];
       registryTickers = results[4] || [];
+      rebuildSectorMap();
       renderSectorStrip(registryTickers, richMeta);
 
       if (latest && Array.isArray(latest)) {

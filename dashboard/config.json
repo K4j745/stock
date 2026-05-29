@@ -10,25 +10,24 @@
     {"symbol": "XOM",  "name": "Exxon Mobil",           "sector": "Energy"},
     {"symbol": "JNJ",  "name": "Johnson & Johnson",     "sector": "Healthcare"},
     {"symbol": "UNH",  "name": "UnitedHealth Group",    "sector": "Healthcare"},
-    {"symbol": "ABT",  "name": "Abbott Laboratories",   "sector": "Healthcare"},
     {"symbol": "PG",   "name": "Procter & Gamble",      "sector": "Consumer Staples"},
     {"symbol": "KO",   "name": "Coca-Cola Co.",         "sector": "Consumer Staples"},
-    {"symbol": "WMT",  "name": "Walmart Inc.",          "sector": "Consumer Staples"},
-    {"symbol": "NEE",  "name": "NextEra Energy",        "sector": "Utilities"},
-    {"symbol": "DUK",  "name": "Duke Energy",           "sector": "Utilities"}
+    {"symbol": "WMT",  "name": "Walmart Inc.",          "sector": "Consumer Discretionary"},
+    {"symbol": "NEE",  "name": "NextEra Energy",        "sector": "Utilities"}
   ],
 
   "benchmark": "SPY",
   "benchmark_tickers": ["SPY"],
   "sector_palette": {
-    "Technology":        "#388bfd",
-    "Financials":        "#3fb950",
-    "Energy":            "#f0883e",
-    "Healthcare":        "#e3b341",
-    "Consumer Staples":  "#a371f7",
-    "Utilities":         "#58a6ff",
-    "Benchmark":         "#8b949e",
-    "Other":             "#d2a8ff"
+    "Technology":              "#388bfd",
+    "Financials":              "#3fb950",
+    "Energy":                  "#f0883e",
+    "Healthcare":              "#e3b341",
+    "Consumer Staples":        "#a371f7",
+    "Consumer Discretionary":  "#d29922",
+    "Utilities":               "#58a6ff",
+    "Benchmark":               "#8b949e",
+    "Other":                   "#d2a8ff"
   },
 
   "data_period": "3y",
