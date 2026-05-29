@@ -30,11 +30,6 @@
     "sector": "Healthcare"
   },
   {
-    "symbol": "ABT",
-    "name": "Abbott Laboratories",
-    "sector": "Healthcare"
-  },
-  {
     "symbol": "PG",
     "name": "Procter & Gamble",
     "sector": "Consumer Staples"
@@ -47,16 +42,11 @@
   {
     "symbol": "WMT",
     "name": "Walmart Inc.",
-    "sector": "Consumer Staples"
+    "sector": "Consumer Discretionary"
   },
   {
     "symbol": "NEE",
     "name": "NextEra Energy",
-    "sector": "Utilities"
-  },
-  {
-    "symbol": "DUK",
-    "name": "Duke Energy",
     "sector": "Utilities"
   }
 ]
