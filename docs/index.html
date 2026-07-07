@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockWatch — Market Overview</title>
+<title>Stock4caster — Market Overview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
     --transition-interactive: 150ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  [data-theme="light"] {
+  [data-theme="light"] { /* base tokens; vaporwave.css retints on top */
     --color-bg: #f6f8fa;
     --color-surface: #ffffff;
     --color-surface-2: #f6f8fa;
@@ -491,6 +491,8 @@
     border-top: 1px solid var(--color-divider);
   }
 </style>
+<link rel="stylesheet" href="assets/vaporwave.css">
+<script defer src="assets/app.js"></script>
 </head>
 <body>
 
@@ -501,17 +503,18 @@
       <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
       <polyline points="16 7 22 7 22 13"/>
     </svg>
-    StockWatch
+    Stock4caster
   </a>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
   <nav>
-    <a href="./" class="active">Overview</a>
-    <a href="prices/">Prices</a>
-    <a href="charts/">Charts</a>
-    <a href="signals/">Signals</a>
-    <a href="portfolio/">Portfolios</a>
+    <a href="./" class="active" data-i18n="nav.overview">Overview</a>
+    <a href="prices/" data-i18n="nav.prices">Prices</a>
+    <a href="charts/" data-i18n="nav.charts">Charts</a>
+    <a href="signals/" data-i18n="nav.signals">Signals</a>
+    <a href="portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+    <a href="methodology/" data-i18n="nav.methodology">Methodology</a>
   </nav>
   <div class="header-right">
     <span class="last-update" id="headerUpdate"></span>
@@ -528,32 +531,33 @@
 
 <!-- Mobile nav -->
 <div class="mobile-nav" id="mobileNav">
-  <a href="./" class="active">Overview</a>
-  <a href="prices/">Prices</a>
-  <a href="charts/">Charts</a>
-  <a href="signals/">Signals</a>
-  <a href="portfolio/">Portfolios</a>
+  <a href="./" class="active" data-i18n="nav.overview">Overview</a>
+  <a href="prices/" data-i18n="nav.prices">Prices</a>
+  <a href="charts/" data-i18n="nav.charts">Charts</a>
+  <a href="signals/" data-i18n="nav.signals">Signals</a>
+  <a href="portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+  <a href="methodology/" data-i18n="nav.methodology">Methodology</a>
 </div>
 
 <div class="container">
   <!-- KPI cards -->
   <div class="kpi-row" id="kpiRow">
-    <div class="kpi-card"><div class="kpi-label">Total Signals</div><div class="kpi-value" id="kpiTotal">--</div></div>
-    <div class="kpi-card"><div class="kpi-label">BUY Signals</div><div class="kpi-value change-pos" id="kpiBuy">--</div></div>
-    <div class="kpi-card"><div class="kpi-label">SELL Signals</div><div class="kpi-value change-neg" id="kpiSell">--</div></div>
-    <div class="kpi-card"><div class="kpi-label">HOLD Signals</div><div class="kpi-value" style="color:var(--color-warning)" id="kpiHold">--</div></div>
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.total">Total Signals</div><div class="kpi-value" id="kpiTotal">--</div></div>
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.buy">BUY Signals</div><div class="kpi-value change-pos" id="kpiBuy">--</div></div>
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.sell">SELL Signals</div><div class="kpi-value change-neg" id="kpiSell">--</div></div>
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.hold">HOLD Signals</div><div class="kpi-value" style="color:var(--color-warning)" id="kpiHold">--</div></div>
   </div>
 
   <div class="refresh-bar" style="gap:12px;flex-wrap:wrap">
     <span id="lastUpdated">Loading...</span>
     <span style="display:flex;align-items:center;gap:8px;">
-      <label style="font-size:12px;color:var(--color-text-muted)">Model:
+      <label style="font-size:12px;color:var(--color-text-muted)"><span data-i18n="label.model">Model:</span>
         <select id="modelSelect" style="margin-left:6px;background:var(--color-surface-2);border:1px solid var(--color-border);color:var(--color-text);border-radius:var(--radius-md);padding:3px 8px;font-size:12px;">
           <option value="technical_rule_based">technical_rule_based</option>
         </select>
       </label>
       <span style="color:var(--color-text-faint)">|</span>
-      <span>Auto-refresh: 60s</span>
+      <span data-i18n="label.autoRefresh">Auto-refresh: 60s</span>
     </span>
   </div>
 
@@ -566,7 +570,7 @@
 
   <!-- Sectors strip (coloured pills) -->
   <div id="sectorStrip" style="display:none;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:10px 14px;margin-bottom:16px;font-size:12px;">
-    <div style="font-size:11px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Universe by sector</div>
+    <div style="font-size:11px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;" data-i18n="card.universeBySector">Universe by sector</div>
     <div id="sectorPills" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
   </div>
 
@@ -574,14 +578,14 @@
     <!-- Table -->
     <div class="card">
       <div class="card-header">
-        <h2>Market Signals</h2>
+        <h2 data-i18n="card.marketSignals">Market Signals</h2>
         <span class="badge" id="signalDate"></span>
       </div>
       <div class="card-body">
         <div class="table-wrapper" id="content">
           <div class="loading-state">
             <div class="spinner"></div>
-            <div>Loading market data...</div>
+            <div data-i18n="label.loading">Loading market data...</div>
           </div>
         </div>
       </div>
@@ -590,7 +594,7 @@
     <!-- Sidebar -->
     <div>
       <div class="sidebar-card">
-        <h3>Signal Summary</h3>
+        <h3 data-i18n="card.signalSummary">Signal Summary</h3>
         <div class="stat-row">
           <span class="stat-label"><span class="stat-dot dot-buy"></span> BUY</span>
           <span class="stat-value change-pos" id="sidebarBuy">--</span>
@@ -605,7 +609,7 @@
         </div>
       </div>
       <div class="sidebar-card" id="sectorSummary">
-        <h3>By Sector</h3>
+        <h3 data-i18n="card.bySector">By Sector</h3>
         <div style="color:var(--color-text-muted);font-size:13px;padding:8px 0;">Loading...</div>
       </div>
     </div>
@@ -613,7 +617,7 @@
 </div>
 
 <footer class="site-footer">
-  StockWatch &mdash; Data provided by Yahoo Finance &mdash; Not financial advice
+  <span data-i18n="footer.index">Data: Yahoo Finance — Not financial advice</span>
 </footer>
 
 <script>
@@ -781,7 +785,8 @@
       if (d.hold) secHtml += '<span style="color:var(--color-warning)">' + d.hold + 'H</span>';
       secHtml += '</span></div>';
     });
-    document.getElementById('sectorSummary').innerHTML = '<h3>By Sector</h3>' + secHtml;
+    var bySectorLabel = (window.S4C ? window.S4C.t('card.bySector') : 'By Sector');
+    document.getElementById('sectorSummary').innerHTML = '<h3>' + bySectorLabel + '</h3>' + secHtml;
   }
 
   function updateTimer() {
