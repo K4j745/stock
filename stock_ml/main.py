@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-Stock ML Pipeline - CLI Runner
+Stock4caster ML Pipeline - CLI Runner
+
+Binary next-day direction (BUY vs SELL) at two decision thresholds
+(0.5% and 1.0%). Pick a threshold with --threshold (default 0.005).
 
 Usage:
-    python main.py train [--ticker TICKER] [--label-version {A,B}] [--refresh] [--tune]
+    python main.py train [--ticker TICKER] [--threshold 0.005|0.01] [--refresh] [--tune]
+    python main.py candle [--ticker TICKER] [--threshold 0.005|0.01] [--model-type xgboost|random_forest]
     python main.py backtest [--ticker TICKER] [--model MODEL] [--label-version {A,B}]
-    python main.py evaluate [--ticker TICKER] [--label-version {A,B}]
+    python main.py evaluate [--ticker TICKER] [--threshold 0.005|0.01]
     python main.py report [--ticker TICKER] [--label-version {A,B}]
     python main.py shap [--ticker TICKER] [--model MODEL] [--label-version {A,B}] [--tuned]
     python main.py plots [--ticker TICKER] [--model MODEL] [--label-version {A,B}]
@@ -18,7 +22,7 @@ import os
 # Ensure the stock_ml directory is on the path so imports work
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from config import TICKERS, DEFAULT_LABEL_MODE, logger
+from config import TICKERS, DEFAULT_LABEL_MODE, LABEL_THRESHOLD, logger
 
 
 def cmd_train(args):
@@ -27,17 +31,35 @@ def cmd_train(args):
     for ticker in tickers:
         logger.info(
             f"=== Training {ticker} | label_mode={args.label_mode} | "
-            f"label_version={args.label_version} ==="
+            f"threshold={args.threshold} | label_version={args.label_version} ==="
         )
-        results = train_all_models(
-            ticker, args.label_version, refresh=args.refresh, label_mode=args.label_mode,
+        train_all_models(
+            ticker,
+            args.label_version,
+            refresh=args.refresh,
+            label_mode=args.label_mode,
+            threshold=args.threshold,
         )
         if args.tune:
             from models.tune import tune_and_retrain
             logger.info(f"=== Tuning {ticker} | label_version={args.label_version} ===")
             tune_and_retrain(ticker, args.label_version, n_trials=args.n_trials)
-        from reports.generate import export_results
-        export_results(results, ticker, args.label_version)
+
+
+def cmd_candle(args):
+    from models.candle_model import train_candle_model
+    tickers = [args.ticker] if args.ticker else TICKERS
+    for ticker in tickers:
+        logger.info(
+            f"=== Candle model {ticker} | threshold={args.threshold} | "
+            f"model_type={args.model_type} ==="
+        )
+        train_candle_model(
+            ticker,
+            threshold=args.threshold,
+            model_type=args.model_type,
+            refresh=args.refresh,
+        )
 
 
 def cmd_backtest(args):
@@ -53,7 +75,12 @@ def cmd_evaluate(args):
     from models.evaluate import evaluate_saved_models
     tickers = [args.ticker] if args.ticker else TICKERS
     for ticker in tickers:
-        evaluate_saved_models(ticker, args.label_version)
+        evaluate_saved_models(
+            ticker,
+            label_mode=args.label_mode,
+            label_version=args.label_version,
+            threshold=args.threshold,
+        )
 
 
 def cmd_report(args):
@@ -83,7 +110,7 @@ def cmd_plots(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Stock ML Pipeline - predict next-day price direction",
+        description="Stock4caster ML Pipeline - predict next-day BUY/SELL direction",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )
@@ -97,6 +124,9 @@ def main():
         p.add_argument("--label-mode", type=str, default=DEFAULT_LABEL_MODE,
                        choices=["binary", "multiclass", "legacy"],
                        help="Label mode (default: binary, threshold=0.5%%)")
+        p.add_argument("--threshold", type=float, default=LABEL_THRESHOLD,
+                       help="Binary decision threshold on next-day return "
+                            "(default: 0.005 = 0.5%%; the study also uses 0.01 = 1.0%%)")
 
     # train
     p_train = subparsers.add_parser("train", help="Train all models and save to disk")
@@ -104,6 +134,15 @@ def main():
     p_train.add_argument("--refresh", action="store_true", help="Re-download data from yfinance")
     p_train.add_argument("--tune", action="store_true", help="Run Optuna hyperparameter tuning after training")
     p_train.add_argument("--n-trials", type=int, default=50, help="Number of Optuna trials (default: 50)")
+
+    # candle
+    p_candle = subparsers.add_parser(
+        "candle", help="Train the candlestick-shape model (candle + base technical features)")
+    add_common(p_candle)
+    p_candle.add_argument("--model-type", type=str, default="xgboost",
+                          choices=["xgboost", "random_forest"],
+                          help="Candle model estimator (default: xgboost)")
+    p_candle.add_argument("--refresh", action="store_true", help="Re-download data from yfinance")
 
     # backtest
     p_bt = subparsers.add_parser("backtest", help="Run portfolio backtest")
@@ -134,6 +173,7 @@ def main():
 
     dispatch = {
         "train": cmd_train,
+        "candle": cmd_candle,
         "backtest": cmd_backtest,
         "evaluate": cmd_evaluate,
         "report": cmd_report,
