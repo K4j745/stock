@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockWatch — ML Charts</title>
+<title>Stock4caster — ML Charts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -311,6 +311,8 @@
     border-top: 1px solid var(--color-divider);
   }
 </style>
+<link rel="stylesheet" href="../assets/vaporwave.css">
+<script defer src="../assets/app.js"></script>
 </head>
 <body>
 
@@ -320,17 +322,18 @@
       <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
       <polyline points="16 7 22 7 22 13"/>
     </svg>
-    StockWatch
+    Stock4caster
   </a>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
   <nav>
-    <a href="../">Overview</a>
-    <a href="../prices/">Prices</a>
-    <a href="./" class="active">Charts</a>
-    <a href="../signals/">Signals</a>
-    <a href="../portfolio/">Portfolios</a>
+    <a href="../" data-i18n="nav.overview">Overview</a>
+    <a href="../prices/" data-i18n="nav.prices">Prices</a>
+    <a href="./" class="active" data-i18n="nav.charts">Charts</a>
+    <a href="../signals/" data-i18n="nav.signals">Signals</a>
+    <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+    <a href="../methodology/" data-i18n="nav.methodology">Methodology</a>
   </nav>
   <div class="header-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -341,17 +344,18 @@
 </header>
 
 <div class="mobile-nav" id="mobileNav">
-  <a href="../">Overview</a>
-  <a href="../prices/">Prices</a>
-  <a href="./" class="active">Charts</a>
-  <a href="../signals/">Signals</a>
-  <a href="../portfolio/">Portfolios</a>
+  <a href="../" data-i18n="nav.overview">Overview</a>
+  <a href="../prices/" data-i18n="nav.prices">Prices</a>
+  <a href="./" class="active" data-i18n="nav.charts">Charts</a>
+  <a href="../signals/" data-i18n="nav.signals">Signals</a>
+  <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+  <a href="../methodology/" data-i18n="nav.methodology">Methodology</a>
 </div>
 
 <div class="container">
   <div class="page-header">
-    <h1>ML Analysis Charts</h1>
-    <p>Model performance, feature importance, and prediction analysis visualizations</p>
+    <h1 data-i18n="h1.charts">ML Analysis Charts</h1>
+    <p data-i18n="sub.charts">Model performance, feature importance, and prediction analysis visualizations</p>
   </div>
 
   <div class="filter-pills" id="filterPills">
@@ -367,7 +371,7 @@
 </div>
 
 <footer class="site-footer">
-  StockWatch &mdash; Charts auto-generated from ML pipeline
+  <span data-i18n="footer.charts">Charts auto-generated from the ML pipeline</span>
 </footer>
 
 <script>

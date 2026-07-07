@@ -18,6 +18,8 @@ from config import (
     WF_STEP,
     WF_MODE,
     DEFAULT_LABEL_MODE,
+    LABEL_THRESHOLD,
+    model_tag,
 )
 from features.pipeline import build_feature_matrix
 from features.validation import get_time_series_folds, count_folds
@@ -63,6 +65,7 @@ def train_all_models(
     label_version: str = "A",
     refresh: bool = False,
     label_mode: str = DEFAULT_LABEL_MODE,
+    threshold: float = LABEL_THRESHOLD,
 ) -> dict:
     """Train all models for a given ticker using rolling walk-forward CV.
 
@@ -72,13 +75,19 @@ def train_all_models(
         3. Evaluate per fold
         4. Retrain on the last walk-forward train slice and save model + scaler
 
+    Saved artifacts are keyed by ``model_tag`` (legacy ``A``/``B`` or a
+    threshold-derived ``bin5``/``bin10`` tag) so both binary thresholds coexist.
+
     Returns:
         Dictionary: {model_name: {fold_metrics: [...], mean_metrics: {...}}}
     """
-    logger.info("Starting training pipeline for %s (label version %s)", ticker, label_version)
+    tag = model_tag(label_mode, label_version, threshold)
+    logger.info("Starting training pipeline for %s (label_mode=%s, tag=%s)", ticker, label_mode, tag)
 
     # 1. Build feature matrix
-    X, y = build_feature_matrix(ticker, label_version, refresh=refresh)
+    X, y = build_feature_matrix(
+        ticker, label_version, refresh=refresh, label_mode=label_mode, threshold=threshold,
+    )
 
     # 2. Walk-forward folds (rolling window by default)
     n_folds = count_folds(len(X), WF_TRAIN_SIZE, WF_TEST_SIZE, WF_STEP)
@@ -130,11 +139,10 @@ def train_all_models(
             fold_metrics.append(metrics)
 
             logger.info(
-                "  %s fold %d/%d: acc=%.4f f1_macro=%.4f bal_acc=%.4f mcc=%.4f",
+                "  %s fold %d/%d: acc=%.4f prec=%.4f rec=%.4f f1=%.4f mcc=%.4f",
                 model_name, fold_idx + 1, len(folds),
-                metrics["accuracy"], metrics["f1_macro"],
-                metrics.get("balanced_accuracy", float("nan")),
-                metrics["mcc"],
+                metrics["accuracy"], metrics["precision"], metrics["recall"],
+                metrics["f1"], metrics["mcc"],
             )
 
         # Compute mean metrics
@@ -149,11 +157,10 @@ def train_all_models(
         }
 
         logger.info(
-            "  %s MEAN: acc=%.4f f1_macro=%.4f bal_acc=%.4f mcc=%.4f",
+            "  %s MEAN: acc=%.4f prec=%.4f rec=%.4f f1=%.4f mcc=%.4f",
             model_name,
-            mean_metrics["accuracy"], mean_metrics["f1_macro"],
-            mean_metrics.get("balanced_accuracy", float("nan")),
-            mean_metrics["mcc"],
+            mean_metrics["accuracy"], mean_metrics["precision"],
+            mean_metrics["recall"], mean_metrics["f1"], mean_metrics["mcc"],
         )
 
     # 4. Train final saved models on the last walk-forward train window
@@ -170,18 +177,18 @@ def train_all_models(
     )
 
     # Save the scaler
-    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
+    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{tag}.joblib")
     joblib.dump(final_scaler, scaler_path)
     logger.info("Saved scaler to %s", scaler_path)
 
     for model_name in models:
         final_model = _clone_model(model_name, label_mode=label_mode)
         final_model.fit(X_train_final_scaled, y_train_final)
-        _save_model(final_model, model_name, ticker, label_version)
+        _save_model(final_model, model_name, ticker, tag)
 
     # 5. Print report and export results
     print_classification_report(results)
-    export_results(results, ticker, label_version)
+    export_results(results, ticker, tag)
 
     logger.info("Training pipeline complete for %s (label version %s)", ticker, label_version)
     return results
@@ -192,16 +199,16 @@ def _clone_model(model_name: str, label_mode: str = DEFAULT_LABEL_MODE):
     return _get_models(label_mode=label_mode)[model_name]
 
 
-def _save_model(model, model_name: str, ticker: str, label_version: str) -> None:
-    """Save a trained model to disk."""
+def _save_model(model, model_name: str, ticker: str, tag: str) -> None:
+    """Save a trained model to disk, keyed by ``tag`` (label version/threshold)."""
     if model_name == "xgboost":
-        path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{label_version}.json")
+        path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{tag}.json")
         model.save_model(path)
     elif model_name == "lightgbm":
-        path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{label_version}.txt")
+        path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{tag}.txt")
         model.booster_.save_model(path)
     else:
-        path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{label_version}.joblib")
+        path = os.path.join(MODEL_DIR, f"{model_name}_{ticker}_{tag}.joblib")
         joblib.dump(model, path)
 
     logger.info("Saved %s model to %s", model_name, path)
