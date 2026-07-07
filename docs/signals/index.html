@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockWatch — Signals Panel</title>
+<title>Stock4caster — Signals Panel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -127,6 +127,8 @@
   .download-row a { font-size: 12px; padding: 6px 12px; background: var(--color-surface-2); border: 1px solid var(--color-border); color: var(--color-text); border-radius: var(--radius-md); text-decoration: none; font-family: var(--font-mono); }
   .download-row a:hover { border-color: var(--color-primary); color: var(--color-primary); }
 </style>
+<link rel="stylesheet" href="../assets/vaporwave.css">
+<script defer src="../assets/app.js"></script>
 </head>
 <body>
 
@@ -136,14 +138,15 @@
       <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
       <polyline points="16 7 22 7 22 13"/>
     </svg>
-    StockWatch
+    Stock4caster
   </a>
   <nav>
-    <a href="../">Overview</a>
-    <a href="../prices/">Prices</a>
-    <a href="../charts/">Charts</a>
-    <a href="../signals/" class="active">Signals</a>
-    <a href="../portfolio/">Portfolios</a>
+    <a href="../" data-i18n="nav.overview">Overview</a>
+    <a href="../prices/" data-i18n="nav.prices">Prices</a>
+    <a href="../charts/" data-i18n="nav.charts">Charts</a>
+    <a href="../signals/" class="active" data-i18n="nav.signals">Signals</a>
+    <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+    <a href="../methodology/" data-i18n="nav.methodology">Methodology</a>
   </nav>
   <div class="header-right">
     <span class="last-update" id="headerUpdate"></span>
@@ -152,8 +155,8 @@
 </header>
 
 <div class="container">
-  <h1>Signals Panel</h1>
-  <div class="subtitle">Compare BUY / SELL / HOLD calls across technical and ML models. Filter by ticker, model, signal type, date, or portfolio.</div>
+  <h1 data-i18n="h1.signals">Signals Panel</h1>
+  <div class="subtitle" data-i18n="sub.signals">Compare BUY / SELL / HOLD calls across technical and ML models. Filter by ticker, model, signal type, date, or portfolio.</div>
 
   <div class="filters">
     <div class="filter-group"><label>Ticker</label><select id="filterTicker"><option value="">All tickers</option></select></div>
@@ -526,5 +529,9 @@
   load();
 })();
 </script>
+
+<footer class="site-footer">
+  <span data-i18n="footer.signals">Signals panel — Not financial advice</span>
+</footer>
 </body>
 </html>

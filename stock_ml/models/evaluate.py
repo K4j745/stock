@@ -14,12 +14,15 @@ logger = logging.getLogger("stock_ml")
 
 
 def evaluate_model(y_true, y_pred, y_prob=None) -> dict:
-    """Compute classification metrics.
+    """Compute binary classification metrics.
+
+    In binary mode the positive class is BUY (label = 1), so precision/recall/f1
+    are reported for the BUY class; the negative class is SELL (label = 0).
 
     Args:
         y_true: Ground truth labels.
         y_pred: Predicted labels.
-        y_prob: Predicted probabilities for the positive class (optional).
+        y_prob: Predicted probabilities for the positive (BUY) class (optional).
 
     Returns:
         Dictionary with accuracy, precision, recall, f1, roc_auc, mcc.
@@ -72,22 +75,40 @@ def print_classification_report(results: dict) -> None:
         logger.info("=" * 60)
 
 
-def evaluate_saved_models(ticker: str, label_version: str = "A"):
+def evaluate_saved_models(
+    ticker: str,
+    label_mode: str = None,
+    label_version: str = "A",
+    threshold: float = None,
+):
     """
     Load saved models, run evaluation on test split (last 20%), print metrics.
+
+    Artifacts are keyed by ``model_tag`` so the two binary thresholds
+    (``bin5`` = 0.5%, ``bin10`` = 1.0%) and the legacy A/B versions each map to
+    their own saved model/scaler files.
     """
     import os
     import joblib
     import pandas as pd
     from features.pipeline import build_feature_matrix
-    from config import MODEL_DIR
+    from config import MODEL_DIR, DEFAULT_LABEL_MODE, LABEL_THRESHOLD, model_tag
 
-    X, y = build_feature_matrix(ticker, label_version)
+    if label_mode is None:
+        label_mode = DEFAULT_LABEL_MODE
+    if threshold is None:
+        threshold = LABEL_THRESHOLD
+
+    tag = model_tag(label_mode, label_version, threshold)
+
+    X, y = build_feature_matrix(
+        ticker, label_version=label_version, label_mode=label_mode, threshold=threshold,
+    )
     split_idx = int(len(X) * 0.8)
     X_test = X.iloc[split_idx:]
     y_test = y.iloc[split_idx:]
 
-    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
+    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{tag}.joblib")
     if not os.path.exists(scaler_path):
         logger.error(f"Scaler not found: {scaler_path}")
         return
@@ -107,7 +128,7 @@ def evaluate_saved_models(ticker: str, label_version: str = "A"):
 
     all_results = {}
     for model_name, file_prefix, ext in model_configs:
-        model_path = os.path.join(MODEL_DIR, f"{file_prefix}_{ticker}_{label_version}{ext}")
+        model_path = os.path.join(MODEL_DIR, f"{file_prefix}_{ticker}_{tag}{ext}")
         if not os.path.exists(model_path):
             logger.warning(f"Model not found: {model_path}, skipping")
             continue
