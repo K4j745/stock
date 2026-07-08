@@ -22,7 +22,7 @@
       "nav.charts": "Wykresy",
       "nav.signals": "Sygnały",
       "nav.portfolios": "Portfele",
-      "nav.methodology": "Metodologia",
+      "nav.methodology": "Instrukcja",
 
       "kpi.total": "Wszystkie sygnały",
       "kpi.buy": "Sygnały BUY",
@@ -33,6 +33,11 @@
       "card.signalSummary": "Podsumowanie sygnałów",
       "card.bySector": "Wg sektora",
       "card.universeBySector": "Uniwersum wg sektora",
+      "card.heatmap": "Mapa ciepła rynku",
+      "card.movers": "Dzienni liderzy zmian",
+      "heat.legend": "Zmiana dzienna (%)",
+      "heat.up": "Wzrost",
+      "heat.down": "Spadek",
 
       "label.model": "Model:",
       "label.autoRefresh": "Auto-odświeżanie: 60s",
@@ -50,7 +55,7 @@
       "footer.charts": "Wykresy generowane automatycznie z pipeline'u ML",
       "footer.signals": "Panel sygnałów — To nie jest porada inwestycyjna",
       "footer.portfolio": "Symulator wirtualny — To nie jest porada inwestycyjna",
-      "footer.methodology": "Metodologia projektu — praca inżynierska",
+      "footer.methodology": "Instrukcja i metodologia projektu — praca inżynierska",
 
       "lang.aria": "Przełącz język (polski / angielski)"
     },
@@ -60,7 +65,7 @@
       "nav.charts": "Charts",
       "nav.signals": "Signals",
       "nav.portfolios": "Portfolios",
-      "nav.methodology": "Methodology",
+      "nav.methodology": "Instructions",
 
       "kpi.total": "Total Signals",
       "kpi.buy": "BUY Signals",
@@ -71,6 +76,11 @@
       "card.signalSummary": "Signal Summary",
       "card.bySector": "By Sector",
       "card.universeBySector": "Universe by sector",
+      "card.heatmap": "Market Heatmap",
+      "card.movers": "Daily Movers",
+      "heat.legend": "Daily change (%)",
+      "heat.up": "Up",
+      "heat.down": "Down",
 
       "label.model": "Model:",
       "label.autoRefresh": "Auto-refresh: 60s",
@@ -88,7 +98,7 @@
       "footer.charts": "Charts auto-generated from the ML pipeline",
       "footer.signals": "Signals panel — Not financial advice",
       "footer.portfolio": "Virtual simulator — Not financial advice",
-      "footer.methodology": "Project methodology — engineering thesis",
+      "footer.methodology": "Project guide & methodology — engineering thesis",
 
       "lang.aria": "Switch language (Polish / English)"
     }
