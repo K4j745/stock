@@ -41,7 +41,7 @@
     --transition-interactive: 150ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  [data-theme="light"] { /* base tokens; vaporwave.css retints on top */
+  [data-theme="light"] { /* base tokens; cyberpunk.css retints on top */
     --color-bg: #f6f8fa;
     --color-surface: #ffffff;
     --color-surface-2: #f6f8fa;
@@ -481,6 +481,56 @@
     font-size: 13px;
   }
 
+  /* Overview visualisations: market heatmap + daily movers */
+  .viz-row {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 900px) { .viz-row { grid-template-columns: 1fr; } }
+
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+    gap: 8px;
+  }
+  .heat-tile {
+    position: relative;
+    border-radius: var(--radius-md);
+    padding: 9px 10px 8px;
+    min-height: 68px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: transform var(--transition-interactive), box-shadow var(--transition-interactive);
+  }
+  .heat-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .heat-tile .ht-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .heat-tile .ht-ticker { font-family: var(--font-mono); font-weight: 700; font-size: 13px; letter-spacing: 0.03em; }
+  .heat-tile .ht-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .heat-tile .ht-change { font-family: var(--font-mono); font-weight: 600; font-size: 15px; margin-top: 4px; }
+  .heat-tile .ht-price { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-muted); }
+  .heat-legend {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 14px; font-size: 11px; color: var(--color-text-muted);
+    font-family: var(--font-mono); flex-wrap: wrap;
+  }
+  .heat-scale { flex: 1; min-width: 120px; height: 8px; border-radius: 4px;
+    background: linear-gradient(90deg, var(--color-error), var(--color-surface-2), var(--color-success)); }
+
+  /* Daily movers — diverging horizontal bars */
+  .movers { display: flex; flex-direction: column; gap: 7px; }
+  .mv-row { display: grid; grid-template-columns: 50px 1fr 60px; align-items: center; gap: 8px; }
+  .mv-ticker { font-family: var(--font-mono); font-weight: 600; font-size: 12px; color: var(--color-text); }
+  .mv-track { position: relative; height: 16px; background: var(--color-surface-2); border-radius: 4px; overflow: hidden; }
+  .mv-mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--color-border); }
+  .mv-bar { position: absolute; top: 2px; bottom: 2px; border-radius: 3px; }
+  .mv-val { text-align: right; font-family: var(--font-mono); font-weight: 600; font-size: 12px; }
+
   /* Footer */
   .site-footer {
     text-align: center;
@@ -491,7 +541,7 @@
     border-top: 1px solid var(--color-divider);
   }
 </style>
-<link rel="stylesheet" href="assets/vaporwave.css">
+<link rel="stylesheet" href="assets/cyberpunk.css">
 <script defer src="assets/app.js"></script>
 </head>
 <body>
@@ -514,7 +564,7 @@
     <a href="charts/" data-i18n="nav.charts">Charts</a>
     <a href="signals/" data-i18n="nav.signals">Signals</a>
     <a href="portfolio/" data-i18n="nav.portfolios">Portfolios</a>
-    <a href="methodology/" data-i18n="nav.methodology">Methodology</a>
+    <a href="methodology/" data-i18n="nav.methodology">Instructions</a>
   </nav>
   <div class="header-right">
     <span class="last-update" id="headerUpdate"></span>
@@ -536,7 +586,7 @@
   <a href="charts/" data-i18n="nav.charts">Charts</a>
   <a href="signals/" data-i18n="nav.signals">Signals</a>
   <a href="portfolio/" data-i18n="nav.portfolios">Portfolios</a>
-  <a href="methodology/" data-i18n="nav.methodology">Methodology</a>
+  <a href="methodology/" data-i18n="nav.methodology">Instructions</a>
 </div>
 
 <div class="container">
@@ -572,6 +622,33 @@
   <div id="sectorStrip" style="display:none;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:10px 14px;margin-bottom:16px;font-size:12px;">
     <div style="font-size:11px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;" data-i18n="card.universeBySector">Universe by sector</div>
     <div id="sectorPills" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+  </div>
+
+  <!-- Market heatmap + daily movers -->
+  <div class="viz-row" id="vizRow" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2 data-i18n="card.heatmap">Market Heatmap</h2>
+        <span class="badge" id="heatmapCount"></span>
+      </div>
+      <div class="card-body">
+        <div id="heatmap" class="heatmap"></div>
+        <div class="heat-legend">
+          <span data-i18n="heat.down">Down</span>
+          <span class="heat-scale"></span>
+          <span data-i18n="heat.up">Up</span>
+          <span style="margin-left:auto" data-i18n="heat.legend">Daily change (%)</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2 data-i18n="card.movers">Daily Movers</h2>
+      </div>
+      <div class="card-body">
+        <div id="movers" class="movers"></div>
+      </div>
+    </div>
   </div>
 
   <div class="main-grid">
@@ -799,10 +876,72 @@
     document.getElementById('headerUpdate').textContent = 'Updated ' + txt;
   }
 
+  // Market heatmap — one colour-scaled tile per ticker, sorted best→worst.
+  // Tile tint uses color-mix over the surface token so it tracks the active
+  // theme automatically (no getComputedStyle, no re-render on theme toggle).
+  function renderHeatmap(signals) {
+    var host = document.getElementById('heatmap');
+    var row = document.getElementById('vizRow');
+    if (!host || !row) return;
+    if (!signals || !signals.length) { row.style.display = 'none'; return; }
+    row.style.display = '';
+    var countEl = document.getElementById('heatmapCount');
+    if (countEl) countEl.textContent = signals.length + ' tickers';
+    var palette = (richMeta && richMeta.sector_palette) || {};
+    var CAP = 4; // % daily move that maps to peak colour intensity
+    var sorted = signals.slice().sort(function(a, b) { return (b.change_pct || 0) - (a.change_pct || 0); });
+    var html = '';
+    sorted.forEach(function(s) {
+      var v = s.change_pct || 0;
+      var mag = Math.min(Math.abs(v) / CAP, 1);
+      var mix = Math.round(16 + 39 * mag); // 16%..55% over surface — keeps text readable
+      var base = v >= 0 ? '--color-success' : '--color-error';
+      var bg = 'color-mix(in srgb, var(' + base + ') ' + mix + '%, var(--color-surface))';
+      var sector = sectorMap[s.ticker] || 'Other';
+      var dot = palette[sector] || palette['Other'] || 'var(--color-text-faint)';
+      var sign = v >= 0 ? '+' : '';
+      var arrow = v >= 0 ? '▲' : '▼';
+      var price = (s.price != null) ? '$' + s.price.toFixed(2) : '--';
+      html += '<div class="heat-tile" style="background:' + bg + '" title="' + s.ticker + ' · ' + sector + '">';
+      html += '<div class="ht-top"><span class="ht-ticker">' + s.ticker + '</span>';
+      html += '<span class="ht-dot" style="background:' + dot + '"></span></div>';
+      html += '<div class="ht-change">' + arrow + ' ' + sign + v.toFixed(2) + '%</div>';
+      html += '<div class="ht-price">' + price + '</div>';
+      html += '</div>';
+    });
+    host.innerHTML = html;
+  }
+
+  // Daily movers — diverging horizontal bars, ranked by change %.
+  function renderMovers(signals) {
+    var host = document.getElementById('movers');
+    if (!host) return;
+    if (!signals || !signals.length) { host.innerHTML = ''; return; }
+    var sorted = signals.slice().sort(function(a, b) { return (b.change_pct || 0) - (a.change_pct || 0); });
+    var maxAbs = sorted.reduce(function(m, s) { return Math.max(m, Math.abs(s.change_pct || 0)); }, 0) || 1;
+    var html = '';
+    sorted.forEach(function(s) {
+      var v = s.change_pct || 0;
+      var w = (Math.abs(v) / maxAbs) * 50; // each side spans up to half the track
+      var pos = v >= 0 ? ('left:50%;width:' + w + '%') : ('left:' + (50 - w) + '%;width:' + w + '%');
+      var color = v >= 0 ? 'var(--color-success)' : 'var(--color-error)';
+      var cls = v >= 0 ? 'change-pos' : 'change-neg';
+      var sign = v >= 0 ? '+' : '';
+      html += '<div class="mv-row">';
+      html += '<span class="mv-ticker">' + s.ticker + '</span>';
+      html += '<div class="mv-track"><span class="mv-mid"></span><span class="mv-bar" style="' + pos + ';background:' + color + '"></span></div>';
+      html += '<span class="mv-val ' + cls + '">' + sign + v.toFixed(2) + '%</span>';
+      html += '</div>';
+    });
+    host.innerHTML = html;
+  }
+
   function doRender() {
     var sorted = sortSignals(currentSignals);
     contentEl.innerHTML = renderTable(sorted);
     updateKPIs(currentSignals);
+    renderHeatmap(currentSignals);
+    renderMovers(currentSignals);
 
     // Bind sort
     contentEl.querySelectorAll('th[data-col]').forEach(function(th) {
