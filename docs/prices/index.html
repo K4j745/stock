@@ -341,7 +341,7 @@
     border-top: 1px solid var(--color-divider);
   }
 </style>
-<link rel="stylesheet" href="../assets/vaporwave.css">
+<link rel="stylesheet" href="../assets/cyberpunk.css">
 <script defer src="../assets/app.js"></script>
 </head>
 <body>
@@ -452,11 +452,11 @@
   function getPlotlyTheme() {
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     return {
-      paper_bgcolor: isDark ? '#161b22' : '#ffffff',
-      plot_bgcolor: isDark ? '#0d1117' : '#f6f8fa',
-      font: { family: 'Inter, system-ui, sans-serif', color: isDark ? '#8b949e' : '#656d76', size: 11 },
-      xaxis: { gridcolor: isDark ? '#21262d' : '#eaeef2', linecolor: isDark ? '#30363d' : '#d0d7de', rangeslider: { visible: false } },
-      yaxis: { gridcolor: isDark ? '#21262d' : '#eaeef2', linecolor: isDark ? '#30363d' : '#d0d7de' },
+      paper_bgcolor: isDark ? '#12121a' : '#ffffff',
+      plot_bgcolor: isDark ? '#0a0a0f' : '#eef0f4',
+      font: { family: 'JetBrains Mono, Share Tech Mono, monospace', color: isDark ? '#9a9ab5' : '#4a4f5e', size: 11 },
+      xaxis: { gridcolor: isDark ? '#22222e' : '#e3e7ee', linecolor: isDark ? '#2a2a3a' : '#c2c8d4', rangeslider: { visible: false } },
+      yaxis: { gridcolor: isDark ? '#22222e' : '#e3e7ee', linecolor: isDark ? '#2a2a3a' : '#c2c8d4' },
       margin: { l: 50, r: 16, t: 36, b: 40 }
     };
   }
@@ -670,6 +670,17 @@
       document.getElementById('macdChart').innerHTML = '';
       return;
     }
+    // Plotly.newPlot draws its graph into the container but does NOT remove a
+    // pre-existing spinner node we injected in resetChartContainers(). That
+    // stray "Loading X…" block ends up wedged inside #candlestickChart, right
+    // above the RSI panel, and reads to the user as "the second chart won't
+    // load". Strip any leftover loading/empty placeholders before drawing.
+    ['candlestickChart', 'rsiChart', 'macdChart'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.querySelectorAll('.loading-state, .empty-state').forEach(function(n) { n.remove(); });
+    });
+
     var dates = data.map(function(d) { return d.date; });
     var opens = data.map(function(d) { return d.open; });
     var highs = data.map(function(d) { return d.high; });
@@ -678,12 +689,12 @@
 
     var theme = getPlotlyTheme();
 
-    // Candlestick
+    // Candlestick — cyberpunk: neon green up / neon red down.
     var candleTrace = {
       x: dates, open: opens, high: highs, low: lows, close: closes,
       type: 'candlestick',
-      increasing: { line: { color: '#3fb950' }, fillcolor: '#3fb950' },
-      decreasing: { line: { color: '#f85149' }, fillcolor: '#f85149' }
+      increasing: { line: { color: '#00ff88' }, fillcolor: '#00ff88' },
+      decreasing: { line: { color: '#ff3366' }, fillcolor: '#ff3366' }
     };
 
     var sma20 = data.map(function(d) { return d.sma20; });
@@ -692,10 +703,10 @@
     var bbLower = data.map(function(d) { return d.bb_lower; });
 
     var traces = [candleTrace];
-    traces.push({ x: dates, y: sma20, type: 'scatter', mode: 'lines', line: { color: '#e3b341', width: 1 }, name: 'SMA 20' });
-    traces.push({ x: dates, y: sma50, type: 'scatter', mode: 'lines', line: { color: '#f0883e', width: 1 }, name: 'SMA 50' });
-    traces.push({ x: dates, y: bbUpper, type: 'scatter', mode: 'lines', line: { color: '#484f58', width: 1, dash: 'dash' }, name: 'BB Upper' });
-    traces.push({ x: dates, y: bbLower, type: 'scatter', mode: 'lines', line: { color: '#484f58', width: 1, dash: 'dash' }, name: 'BB Lower' });
+    traces.push({ x: dates, y: sma20, type: 'scatter', mode: 'lines', line: { color: '#00d4ff', width: 1 }, name: 'SMA 20' });
+    traces.push({ x: dates, y: sma50, type: 'scatter', mode: 'lines', line: { color: '#ff00ff', width: 1 }, name: 'SMA 50' });
+    traces.push({ x: dates, y: bbUpper, type: 'scatter', mode: 'lines', line: { color: '#64647e', width: 1, dash: 'dash' }, name: 'BB Upper' });
+    traces.push({ x: dates, y: bbLower, type: 'scatter', mode: 'lines', line: { color: '#64647e', width: 1, dash: 'dash' }, name: 'BB Lower' });
 
     var candleLayout = Object.assign({}, theme, {
       title: { text: currentTicker + ' \u2014 Price', font: { color: theme.font.color, size: 13, family: 'Inter' } },
@@ -708,9 +719,9 @@
     // RSI
     var rsiVals = data.map(function(d) { return d.rsi; });
     var rsiTraces = [
-      { x: dates, y: rsiVals, type: 'scatter', mode: 'lines', line: { color: '#388bfd', width: 1.5 }, name: 'RSI', fill: 'tozeroy', fillcolor: 'rgba(56,139,253,0.05)' },
-      { x: [dates[0], dates[dates.length - 1]], y: [70, 70], type: 'scatter', mode: 'lines', line: { color: '#f85149', width: 1, dash: 'dash' }, showlegend: false },
-      { x: [dates[0], dates[dates.length - 1]], y: [30, 30], type: 'scatter', mode: 'lines', line: { color: '#3fb950', width: 1, dash: 'dash' }, showlegend: false }
+      { x: dates, y: rsiVals, type: 'scatter', mode: 'lines', line: { color: '#00d4ff', width: 1.5 }, name: 'RSI', fill: 'tozeroy', fillcolor: 'rgba(0,212,255,0.06)' },
+      { x: [dates[0], dates[dates.length - 1]], y: [70, 70], type: 'scatter', mode: 'lines', line: { color: '#ff3366', width: 1, dash: 'dash' }, showlegend: false },
+      { x: [dates[0], dates[dates.length - 1]], y: [30, 30], type: 'scatter', mode: 'lines', line: { color: '#00ff88', width: 1, dash: 'dash' }, showlegend: false }
     ];
     var rsiLayout = Object.assign({}, theme, {
       title: { text: 'RSI (14)', font: { color: theme.font.color, size: 12, family: 'Inter' } },
@@ -723,12 +734,12 @@
     var macdVals = data.map(function(d) { return d.macd; });
     var macdSig = data.map(function(d) { return d.macd_signal; });
     var macdHist = data.map(function(d) { return d.macd_hist; });
-    var histColors = macdHist.map(function(v) { return v >= 0 ? '#3fb950' : '#f85149'; });
+    var histColors = macdHist.map(function(v) { return v >= 0 ? '#00ff88' : '#ff3366'; });
 
     var macdTraces = [
       { x: dates, y: macdHist, type: 'bar', marker: { color: histColors }, name: 'Histogram', opacity: 0.6 },
-      { x: dates, y: macdVals, type: 'scatter', mode: 'lines', line: { color: '#388bfd', width: 1.5 }, name: 'MACD' },
-      { x: dates, y: macdSig, type: 'scatter', mode: 'lines', line: { color: '#f0883e', width: 1 }, name: 'Signal' }
+      { x: dates, y: macdVals, type: 'scatter', mode: 'lines', line: { color: '#00d4ff', width: 1.5 }, name: 'MACD' },
+      { x: dates, y: macdSig, type: 'scatter', mode: 'lines', line: { color: '#ff00ff', width: 1 }, name: 'Signal' }
     ];
     var macdLayout = Object.assign({}, theme, {
       title: { text: 'MACD', font: { color: theme.font.color, size: 12, family: 'Inter' } },
