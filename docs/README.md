@@ -29,7 +29,7 @@ python dashboard/generate.py
 
 - **Home** (`index.html`) — overview, KPI strip, latest signal per ticker for the selected model, portfolio strip.
 - **Prices** (`prices/`) — interactive candlestick + indicators.
-- **Charts** (`charts/`) — ML pipeline plots if available (SHAP, feature importance, ROC, …).
+- **Charts** (`charts/`) — ML pipeline plots if available (equity curves, confusion matrices, feature importance, model comparison, SHAP).
 - **Signals** (`signals/`) — full multi-model signals panel: filters, agreement matrix, latest-per-pair view, downloadable CSVs.
 - **Portfolios** (`portfolio/`) — per-portfolio detail (equity curve, transactions, positions, trade metrics) and side-by-side compare.
 
@@ -65,7 +65,7 @@ portfolios/
   <PORTFOLIO_ID>/
     summary.json                portfolio meta + metrics + benchmark metrics
     transactions.json           rich transaction records (audit trail)
-    decisions.json              full decision stream (HOLDs included)
+    decisions.json              full decision stream (incl. buy_and_hold carry days)
     equity_curve.json           daily portfolio value + drawdown
     positions.json              final open positions
     metrics.json                performance + trade metrics
@@ -85,15 +85,25 @@ exports/
 * **New ticker** → add it to `tickers` in `dashboard/config.json`. Generator
   will fetch it from yfinance; UI picks it up automatically from `tickers.json`.
 * **New model** → add its name to `ml_signals.models` in `config.json`. If you
-  have trained artifacts in `stock_ml/models/saved/`, they're used; otherwise
-  a deterministic *probability proxy* (see `dashboard/lib/signals.py`) is used.
+  have trained artifacts in `stock_ml/models/saved/` (keyed by the `bin5` tag,
+  e.g. `xgboost_AAPL_bin5.json` + `scaler_AAPL_bin5.joblib`), they're used;
+  otherwise a deterministic *probability proxy* (see `dashboard/lib/signals.py`)
+  is used and tagged `signal_source = "<model>_proxy"`.
 
-## How signals are produced (BUY / SELL / HOLD) — and how HOLD is defined
+## How signals are produced (binary BUY / SELL)
+
+Since **2026-07** every predictive stream is a **strictly binary classifier**:
+each (ticker, day) is labelled either **BUY** or **SELL** — there is no HOLD
+class. HOLD survives in exactly one place: the `buy_and_hold` benchmark, where
+it marks the *carry* days between the single entry and the end of the window.
+This matches the ML task itself (`label_mode = "binary"`, the model predicts
+`P(next-day return > 0.5%)`), so the dashboard label space and the training
+label space are now identical.
 
 This dashboard exposes **multiple parallel signal streams**, one per model
 declared in `dashboard/config.json`. They all use the same OHLCV input, but
-the decision rule that converts indicators / probabilities into a label is
-different per model.
+the decision rule that converts indicators / probabilities into a label
+differs per model.
 
 ### 1. `technical_rule_based` — score-based rule signal
 
@@ -114,113 +124,71 @@ day and every ticker we score four BUY rules and four SELL rules independently:
 | `bb_break_upper` | `Close > BB_upper` |
 | `below_sma20_50` | `Close < SMA20` *and* `Close < SMA50` |
 
-Each rule contributes `+1` to its side's score (max 4 per side). The final
-label is:
+Each rule contributes `+1` to its side's score (max 4 per side). The binary
+label is decided by the **net score** (`buy_score − sell_score`):
 
-- `BUY` if `buy_score >= buy_threshold` (default **3**),
-- `SELL` if `sell_score >= sell_threshold` (default **3**),
-- `HOLD` otherwise.
+- `BUY`  if `net > 0`,
+- `SELL` if `net < 0`,
+- on a **tie** (`net == 0`, including the common "no rule fired" case) a
+  **trend tie-break** decides: `Close > SMA50 ⇒ BUY`, otherwise `SELL`.
 
-`HOLD` here means **"the rule engine didn't accumulate enough evidence to
-trigger an action"** — it is *not* a separate predicted class, just the
-absence of a buy/sell trigger.
+There is no HOLD dead-zone: every day is a concrete BUY or SELL. The
+`buy_threshold` / `sell_threshold` config values are retained only for the
+`threshold_used` audit field and no longer gate a HOLD band.
 
-**Methodology decision (2026-05):** the previous configuration used
-`buy_threshold = sell_threshold = 3`. With 4 rules per side that requires
-3-of-4 to fire — but several rules are *partially mutually exclusive*
-(e.g. `bb_break_lower` (`Close < BB_lower`) almost never co-occurs with
-`above_sma20_50` (`Close > SMA20 && Close > SMA50`)). The empirical result
-was **100% HOLD over a 3-year window**, i.e. the stream was useless.
-
-After methodological review we lowered the threshold to **2-of-4**:
-
-* 2-of-4 is the convention used in most rule-stacking TA systems
-  (Williams, Murphy) — it requires *agreement* across at least two
-  independent indicator families before a label fires.
-* It eliminates the mutual-exclusion problem (any two non-conflicting
-  rules can trigger), while still requiring more than a single-indicator
-  signal that would be noisy.
-* It produces a usable BUY/SELL/HOLD distribution (expected ~10-25%
-  non-HOLD on this universe — will be refreshed by the next run and
-  documented below).
-
-HOLD now keeps the same semantic — "rule engine did not accumulate enough
-evidence" — but with a realistic activation threshold.
-
-### 2. ML signals (`logistic_regression`, `random_forest`, `xgboost`, `lightgbm`)
+### 2. ML signals (`logistic_regression`, `random_forest`, `xgboost`, `lightgbm`, `candle`)
 
 Each ML model emits a **`probability_up`** ∈ `[0, 1]` per (ticker, day) — the
 probability that the next-day return exceeds the binary label threshold
-(`config.label.threshold = 0.005`). The signal mapping is:
+(`config.label.threshold = 0.005`). The mapping is a **single decision
+threshold** (`probability_threshold_buy`, default **0.5**):
 
-- `BUY` if `probability_up >= probability_threshold_buy` (default **0.55**),
-- `SELL` if `probability_up <= probability_threshold_sell` (default **0.45**),
-- `HOLD` for `probability_up` strictly between the two thresholds.
+- `BUY`  if `probability_up >= 0.5`,
+- `SELL` otherwise.
 
-`HOLD` for ML here means **"the model's confidence is in the dead band
-0.45–0.55"** — i.e. the model has *no clear opinion*. It is **not** a third
-output class; the underlying task is binary (`label_mode = "binary"`).
+No dead band, no HOLD — the underlying task is binary (`label_mode = "binary"`).
+
+`candle` is the **candlestick-shape model** (`stock_ml/models/candle_model.py`):
+it augments the base technical features with explicit candle-geometry features
+(body/– wick fractions, engulfing, doji, …) and is trained/saved exactly like
+the other models but under the `candle_*_bin5` artifact prefix.
 
 Probabilities have two possible sources:
 
 1. **Real model output** — when trained artifacts exist in
    `stock_ml/models/saved/` and the scaler exposes `feature_names_in_`,
-   `dashboard/lib/ml_loader.py` runs real inference.
+   `dashboard/lib/ml_loader.py` runs real inference. To do so it recomputes the
+   **stock_ml** feature frame from OHLCV (columns `RSI_14`, `SMA_20`,
+   `MACD_hist`, …) so the names match the trained scaler exactly — the
+   dashboard's own indicator names (`RSI`, `SMA20`, …) differ, which is why a
+   naive load would silently fall back to a proxy. Real signals are tagged
+   `signal_source = "<model>"` and `model_version = "stock_ml-artifact"`.
 2. **Probability proxy** — otherwise we fall back to deterministic mappings
    from indicators (logistic-style for LR, step-wise for RF, momentum-biased
-   for XGBoost, mean-reversion-biased for LightGBM). These mappings are
-   intentionally simple and reproducible. The dashboard *always* tags such
-   signals with `signal_source = "<model>_proxy"` so you can tell real ML
-   from a proxy at a glance.
+   for XGBoost, mean-reversion-biased for LightGBM, candle-geometry for
+   `candle`). These mappings are intentionally simple and reproducible. The
+   dashboard *always* tags such signals with `signal_source = "<model>_proxy"`
+   so you can tell real ML from a proxy at a glance.
 
 ### 3. `ensemble_majority`
 
-Aggregates the four ML models. Emits `BUY` only when **≥ 2 ML models** vote
-BUY *and zero models vote SELL* (and vice versa). Anything else is `HOLD`.
-
-So here `HOLD` means **"models disagree, or fewer than two agree"** — it is
-explicitly a *disagreement* signal.
+Aggregates the ML models. Each model casts a BUY or SELL vote; the ensemble
+takes the **majority side**. On a tie it falls back to the mean predicted
+`probability_up` (`>= 0.5 ⇒ BUY`, else `SELL`). The result is always a
+concrete binary BUY / SELL — `min_votes` is kept only for the `threshold_used`
+audit field and no longer produces a HOLD "no quorum" outcome.
 
 ### 4. `buy_and_hold`
 
-Trivial baseline: `BUY` on the first available bar, `HOLD` on every other
-bar, no `SELL` ever.
+Trivial baseline and the **only** stream that still emits HOLD: `BUY` on the
+first available bar, `HOLD` on every other bar (the position is simply carried),
+no `SELL` ever. This is the "hold" concept the thesis keeps — a passive
+buy-and-hold benchmark — as opposed to HOLD as a per-day predicted class.
 
-### Empirical distribution on the current dataset
+### Signal distribution
 
-Counted on `docs/data/signals/history.json` (12 tickers × 3y, n ≈ 9 789 rows
-per model):
-
-| model                     |   BUY  |  SELL  |  HOLD  |
-|---------------------------|:------:|:------:|:------:|
-| `technical_rule_based`    |   0.0% |   0.0% | 100.0% |
-| `logistic_regression`     |  24.5% |  40.1% |  35.4% |
-| `random_forest`           |  37.4% |  37.0% |  25.6% |
-| `xgboost`                 |  40.3% |  45.9% |  13.8% |
-| `lightgbm`                |  28.1% |  44.3% |  27.6% |
-| `ensemble_majority`       |   9.6% |  18.0% |  72.3% |
-| `buy_and_hold`            |   0.1% |   0.0% |  99.9% |
-
-Reads:
-
-- **Technical**: broken by design — too strict, see "Known issue" above.
-- **LR**: most balanced ML stream; meaningful HOLD bucket because logistic
-  output is smooth and frequently sits near 0.5.
-- **RF / XGB / LGBM**: more decisive — XGBoost in particular almost never
-  hits the dead band, so its HOLD share is the smallest (14%).
-- **Ensemble**: dominated by HOLD (72%) because requiring ≥ 2 agreeing votes
-  *and* zero opposing votes is a strict gate. This is expected — the
-  ensemble exists to filter out single-model overconfidence.
-- **Buy & Hold**: by construction, exactly one BUY per ticker, the rest is
-  HOLD.
-
-### Is this distribution "correct"?
-
-- ML streams (LR/RF/XGB/LGBM) — distribution shapes are reasonable for the
-  fall-back proxy implementations (real trained models will shift these).
-- Ensemble — expected behaviour given the rule.
-- Buy & Hold — expected.
-- **Technical rule based — broken**. It should produce 5–15% non-HOLD
-  signals on a realistic universe; 0% indicates the threshold is too high
-  relative to the rule set. Action item: lower `buy_threshold` /
-  `sell_threshold` to 2, or relax one of the rules, after consultation.
+Because the predictive streams are binary, every model now partitions each
+ticker's history into BUY vs SELL only; `buy_and_hold` is ~1 BUY + carry HOLD
+per ticker. The exact per-model BUY/SELL split for the current dataset is
+regenerated on every run and published to `docs/data/signals/history.json`
+and the per-model summaries under `docs/data/models/<MODEL>/summary.json`.

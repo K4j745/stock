@@ -52,13 +52,17 @@
       "logistic_regression",
       "random_forest",
       "xgboost",
-      "lightgbm"
+      "lightgbm",
+      "candle"
     ],
-    "probability_threshold_buy": 0.55,
-    "probability_threshold_sell": 0.45,
+    "label_version": "bin5",
+    "candle_threshold": 0.005,
+    "probability_threshold_buy": 0.5,
+    "probability_threshold_sell": 0.5,
     "models_dir": "stock_ml/models/saved",
     "reports_dir": "stock_ml/reports",
-    "use_proxy_when_artifacts_missing": true
+    "use_proxy_when_artifacts_missing": true,
+    "_binary_note": "Signals are strictly binary (BUY/SELL) since 2026-07. The 0.45-0.55 HOLD dead-band was removed: a single 0.5 decision threshold is used. label_version bin5 = binary label with 0.5% next-day return threshold; loads real stock_ml artifacts when present."
   },
 
   "portfolios": []

@@ -3,7 +3,7 @@
 Each generator takes a DataFrame with OHLCV + indicators attached (see
 ``indicators.compute``) and returns a DataFrame with the columns:
 
-    signal        — "BUY" / "SELL" / "HOLD"
+    signal        — "BUY" / "SELL"  (binary; buy_and_hold benchmark also emits "HOLD" carry)
     score         — integer score for technical, count of triggered rules
     probability_up — probability of an up move tomorrow (0..1), where applicable
     confidence    — abs(probability - 0.5) * 2, or score / max_score for technical
@@ -48,26 +48,24 @@ TECH_RULE_NAMES = [
 
 
 def technical_rule_based(df: pd.DataFrame, rules: Dict) -> pd.DataFrame:
-    """Score-based BUY/SELL/HOLD from RSI / MACD / Bollinger / SMA.
+    """Binary BUY/SELL from RSI / MACD / Bollinger / SMA.
 
-    Each side has four rules (max score = 4). The signal fires when
-    ``buy_score >= rules["buy_threshold"]`` (default 3) or the SELL mirror.
-    HOLD here means "not enough triggered rules" — it is *not* a third class.
+    Each side has four rules (max score = 4). The signal is decided by the
+    *net score* (``buy_score - sell_score``):
 
-    DEFAULT THRESHOLDS (since 2026-05): ``buy_threshold = sell_threshold = 2``.
+        BUY  if buy_score > sell_score
+        SELL if sell_score > buy_score
+        tie  → trend tie-break (Close > SMA50 ⇒ BUY else SELL)
 
-    History: the original default was 3-of-4, but with 4 partially
-    mutually-exclusive rules per side (e.g. BB break vs SMA trend), 3-of-4
-    almost never triggered → ~100% HOLD on a 3-year universe. 2-of-4 is the
-    rule-stacking convention used in most classic TA-driven systems
-    (Williams, Murphy): require at least two indicator families to agree
-    before firing. See docs/README.md section "How signals are produced"
-    for the full rationale + empirical distribution.
+    This is a **binary classifier** (BUY/SELL only) — there is no HOLD class.
+    The ``buy_threshold`` / ``sell_threshold`` config values are kept only for
+    backward-compatible ``threshold_used`` reporting; they no longer gate a
+    HOLD dead-zone. See docs/README.md "How signals are produced".
     """
     rsi_buy = rules.get("rsi_buy", 35)
     rsi_sell = rules.get("rsi_sell", 65)
-    buy_thr = rules.get("buy_threshold", 3)
-    sell_thr = rules.get("sell_threshold", 3)
+    buy_thr = rules.get("buy_threshold", 2)
+    sell_thr = rules.get("sell_threshold", 2)
 
     out = pd.DataFrame(index=df.index)
     buy_score = pd.Series(0, index=df.index, dtype=int)
@@ -107,9 +105,14 @@ def technical_rule_based(df: pd.DataFrame, rules: Dict) -> pd.DataFrame:
     triggered_buy = triggered_buy.where(~sma_up.fillna(False), triggered_buy + "above_sma20_50;")
     triggered_sell = triggered_sell.where(~sma_dn.fillna(False), triggered_sell + "below_sma20_50;")
 
+    # Binary decision on the net score, with a trend tie-break so every day
+    # gets a concrete BUY or SELL (no HOLD class).
+    net = buy_score - sell_score
+    trend_up = (df["Close"] > df["SMA50"]).fillna(True)
     signal = np.where(
-        buy_score >= buy_thr, "BUY",
-        np.where(sell_score >= sell_thr, "SELL", "HOLD"),
+        net > 0, "BUY",
+        np.where(net < 0, "SELL",
+                 np.where(trend_up, "BUY", "SELL")),
     )
     score = np.where(signal == "SELL", sell_score, buy_score)
 
@@ -119,11 +122,11 @@ def technical_rule_based(df: pd.DataFrame, rules: Dict) -> pd.DataFrame:
     # Probability of "up" — derived heuristically: BUY => high, SELL => low
     prob_up = np.where(
         signal == "BUY", 0.5 + confidence * 0.4,
-        np.where(signal == "SELL", 0.5 - confidence * 0.4, 0.5),
+        0.5 - confidence * 0.4,
     )
 
-    triggered = np.where(signal == "BUY", triggered_buy,
-                         np.where(signal == "SELL", triggered_sell, ""))
+    triggered = np.where(signal == "BUY", triggered_buy, triggered_sell)
+    triggered = np.where(triggered == "", np.where(signal == "BUY", "trend_tiebreak_up", "trend_tiebreak_down"), triggered)
 
     out["signal"] = signal
     out["score"] = score
@@ -139,20 +142,20 @@ def technical_rule_based(df: pd.DataFrame, rules: Dict) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 def from_probabilities(prob_up: pd.Series, buy_threshold: float, sell_threshold: float) -> pd.DataFrame:
-    """Convert a probability-of-up series into BUY/SELL/HOLD signals.
+    """Convert a probability-of-up series into **binary** BUY/SELL signals.
 
     Used by every ML model. Binary task (``label_mode = binary``): the model
-    predicts P(next-day return > LABEL_THRESHOLD). The mapping is:
+    predicts P(next-day return > LABEL_THRESHOLD). The mapping is a single
+    decision threshold (``buy_threshold``, default 0.5):
 
-        BUY  if probability_up >= buy_threshold   (default 0.55)
-        SELL if probability_up <= sell_threshold  (default 0.45)
-        HOLD otherwise                            (the 0.45–0.55 dead band)
+        BUY  if probability_up >= buy_threshold
+        SELL otherwise
 
-    For ML signals **HOLD == "model unsure"** (probability in the dead band),
-    *not* a separately predicted class. See README "How signals are produced".
+    There is no HOLD dead-band any more — the classifier is strictly binary.
+    ``sell_threshold`` is accepted for signature compatibility but ignored.
+    See README "How signals are produced".
     """
-    sig = np.where(prob_up >= buy_threshold, "BUY",
-                   np.where(prob_up <= sell_threshold, "SELL", "HOLD"))
+    sig = np.where(prob_up >= buy_threshold, "BUY", "SELL")
     confidence = np.abs(prob_up - 0.5) * 2.0
     return pd.DataFrame({
         "signal": sig,
@@ -161,7 +164,7 @@ def from_probabilities(prob_up: pd.Series, buy_threshold: float, sell_threshold:
         "confidence": np.round(confidence.astype(float), 4),
         "threshold_used": buy_threshold,
         "triggered_rules": np.where(sig == "BUY", "prob_above_buy_threshold",
-                                    np.where(sig == "SELL", "prob_below_sell_threshold", "no_threshold_crossed")),
+                                    "prob_below_buy_threshold"),
     }, index=prob_up.index)
 
 
@@ -219,11 +222,39 @@ def proxy_lightgbm(df: pd.DataFrame) -> pd.Series:
     return _sigmoid(z).clip(0.02, 0.98)
 
 
+def proxy_candle(df: pd.DataFrame) -> pd.Series:
+    """Candle-shape proxy — bullish when the close sits near the session high
+    with a positive (green) body.
+
+    This is the deterministic stand-in for the trained candlestick model
+    (``stock_ml.models.candle_model``). It reads *only* the raw OHLC of each
+    day, mirroring the intuition the real model learns from candle geometry:
+
+        close_position — where Close falls inside the day's [Low, High] range
+                         (0 = closed on the low, 1 = closed on the high)
+        body_fraction  — signed body size (Close - Open) / range
+                         (>0 green candle, <0 red candle)
+
+    Both are combined through a sigmoid so the output is a smooth P(up) in
+    (0, 1), reproducible and free of any future leak.
+    """
+    hi = df["High"]
+    lo = df["Low"]
+    op = df["Open"]
+    cl = df["Close"]
+    rng = (hi - lo).replace(0, np.nan)
+    close_pos = ((cl - lo) / rng).fillna(0.5)
+    body_frac = ((cl - op) / rng).fillna(0.0)
+    z = 2.0 * (close_pos - 0.5) + 1.5 * body_frac
+    return _sigmoid(z).clip(0.02, 0.98)
+
+
 PROXY_FUNCTIONS = {
     "logistic_regression": proxy_logistic,
     "random_forest": proxy_random_forest,
     "xgboost": proxy_xgboost,
     "lightgbm": proxy_lightgbm,
+    "candle": proxy_candle,
 }
 
 
@@ -252,36 +283,43 @@ def buy_and_hold(df: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 def ensemble_majority(per_model_signals: Dict[str, pd.DataFrame], min_votes: int = 2) -> pd.DataFrame:
-    """Compute a consensus signal across the supplied per-model DataFrames.
+    """Compute a **binary** consensus signal across the per-model DataFrames.
 
-    BUY requires ``min_votes`` ML models voting BUY *and zero* SELL votes
-    (and the mirror for SELL). Anything else is HOLD. Here HOLD means
-    "models disagree, or fewer than ``min_votes`` agree" — i.e. it is an
-    explicit *disagreement* label, not a model's individual decision.
+    Each model casts a BUY or SELL vote. The ensemble picks whichever side
+    has more votes; on a tie it falls back to the mean predicted
+    ``probability_up`` (>= 0.5 ⇒ BUY else SELL). There is no HOLD class —
+    the consensus is always a concrete BUY or SELL.
+
+    ``min_votes`` is retained for signature compatibility and reported in
+    ``threshold_used`` but no longer creates a HOLD dead-zone.
     """
     if not per_model_signals:
         raise ValueError("ensemble_majority needs at least one model")
     idx = next(iter(per_model_signals.values())).index
     buy = pd.Series(0, index=idx)
     sell = pd.Series(0, index=idx)
+    prob_sum = pd.Series(0.0, index=idx)
     for sigdf in per_model_signals.values():
         buy = buy + (sigdf["signal"].reindex(idx) == "BUY").astype(int)
         sell = sell + (sigdf["signal"].reindex(idx) == "SELL").astype(int)
+        prob_sum = prob_sum + sigdf["probability_up"].reindex(idx).fillna(0.5).astype(float)
     n_models = len(per_model_signals)
+    mean_prob = prob_sum / max(n_models, 1)
     signal = np.where(
-        (buy >= min_votes) & (sell == 0), "BUY",
-        np.where((sell >= min_votes) & (buy == 0), "SELL", "HOLD"),
+        buy > sell, "BUY",
+        np.where(sell > buy, "SELL",
+                 np.where(mean_prob >= 0.5, "BUY", "SELL")),
     )
     score = np.where(signal == "SELL", sell, buy)
-    confidence = np.clip(score / max(n_models, 1), 0, 1)
+    confidence = np.clip(np.abs(buy - sell) / max(n_models, 1), 0, 1)
     prob_up = np.where(signal == "BUY", 0.5 + confidence * 0.4,
-                       np.where(signal == "SELL", 0.5 - confidence * 0.4, 0.5))
+                       0.5 - confidence * 0.4)
     return pd.DataFrame({
         "signal": signal,
         "score": score,
         "probability_up": np.round(prob_up.astype(float), 4),
         "confidence": np.round(confidence.astype(float), 4),
         "threshold_used": min_votes,
-        "triggered_rules": np.where(signal == "BUY", f"majority_buy>={min_votes}",
-                                    np.where(signal == "SELL", f"majority_sell>={min_votes}", "no_majority")),
+        "triggered_rules": np.where(signal == "BUY", "majority_buy",
+                                    np.where(score == sell, "majority_sell", "prob_tiebreak")),
     }, index=idx)
