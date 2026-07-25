@@ -25,6 +25,11 @@
     "description": "Gradient boosted trees (LightGBM)."
   },
   {
+    "name": "candle",
+    "family": "other",
+    "description": "candle"
+  },
+  {
     "name": "ensemble_majority",
     "family": "ml",
     "description": "Majority vote across ML models."

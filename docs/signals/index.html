@@ -156,12 +156,12 @@
 
 <div class="container">
   <h1 data-i18n="h1.signals">Signals Panel</h1>
-  <div class="subtitle" data-i18n="sub.signals">Compare BUY / SELL / HOLD calls across technical and ML models. Filter by ticker, model, signal type, date, or portfolio.</div>
+  <div class="subtitle" data-i18n="sub.signals">Compare binary BUY / SELL calls across technical and ML models. Filter by ticker, model, signal type, date, or portfolio.</div>
 
   <div class="filters">
     <div class="filter-group"><label>Ticker</label><select id="filterTicker"><option value="">All tickers</option></select></div>
     <div class="filter-group"><label>Model</label><select id="filterModel"><option value="">All models</option></select></div>
-    <div class="filter-group"><label>Signal</label><select id="filterSignal"><option value="">All</option><option>BUY</option><option>SELL</option><option>HOLD</option></select></div>
+    <div class="filter-group"><label>Signal</label><select id="filterSignal"><option value="">All</option><option>BUY</option><option>SELL</option><option>HOLD</option></select><span style="font-size:10px;color:var(--color-text-faint);display:block;margin-top:2px;">HOLD = buy&amp;hold benchmark carry only</span></div>
     <div class="filter-group" id="filterPortfolioGroup" style="display:none"><label>Portfolio</label><select id="filterPortfolio"><option value="">All / any</option></select></div>
     <div class="filter-group"><label>Date from</label><input type="date" id="filterDateFrom"></div>
     <div class="filter-group"><label>Date to</label><input type="date" id="filterDateTo"></div>

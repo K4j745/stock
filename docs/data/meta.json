@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-07-24T18:22:22Z",
-  "git_commit": "28ffc616f32e3cf420080bd9a7e14b52bc7cbb93",
+  "generated_at_utc": "2026-07-24T17:36:05Z",
+  "git_commit": "c6622dec8a11f3fac08a8f089e30f1352350f2d8",
   "schema_version": "2.0",
   "data_version": "2026-05-15",
   "strategy_version": "1.0",
@@ -13,11 +13,11 @@
     "is_binary": true
   },
   "ml_thresholds": {
-    "buy_threshold": 0.55,
-    "sell_threshold": 0.45,
+    "buy_threshold": 0.5,
+    "sell_threshold": 0.5,
     "dead_band": [
-      0.45,
-      0.55
+      0.5,
+      0.5
     ]
   },
   "benchmark": "SPY",
@@ -38,11 +38,12 @@
   "n_tickers": 10,
   "n_portfolios": 0,
   "ml_artifacts_present": {
-    "logistic_regression": false,
-    "random_forest": false,
-    "xgboost": false,
-    "lightgbm": false
+    "logistic_regression": true,
+    "random_forest": true,
+    "xgboost": true,
+    "lightgbm": true,
+    "candle": true
   },
-  "ml_artifacts_any_real": false,
+  "ml_artifacts_any_real": true,
   "source": "dashboard/generate.py"
 }

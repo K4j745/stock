@@ -296,7 +296,7 @@ def build_model_summaries(reg: registry_mod.Registry, signal_records: List[Dict]
 # Plumbing
 # ---------------------------------------------------------------------------
 
-_ML_MODELS = {"logistic_regression", "random_forest", "xgboost", "lightgbm"}
+_ML_MODELS = {"logistic_regression", "random_forest", "xgboost", "lightgbm", "candle"}
 
 
 def _classify_signal_reason(model_name: str, row) -> str:
@@ -304,17 +304,16 @@ def _classify_signal_reason(model_name: str, row) -> str:
 
     The reason answers "why this label?" — distinct from the *source*
     (which is the model name) and the *triggered rules* (which is the raw
-    trace). This makes the HOLD bucket transparent in the UI.
+    trace).
+
+    Classification is **binary** (BUY/SELL) for every predictive stream, so
+    there is no HOLD dead-band any more. The only stream that still emits
+    HOLD is ``buy_and_hold`` (the benchmark carry between entry and exit).
 
     Codes:
-      * ``rule_triggered``         — technical_rule_based fired (BUY/SELL)
-      * ``rule_threshold_not_met`` — technical_rule_based at HOLD
-      * ``model_prediction``       — ML model picked BUY or SELL above the
-                                     0.45/0.55 dead band
-      * ``low_confidence``         — ML model probability inside dead band
-                                     (HOLD = "model unsure")
+      * ``rule_triggered``         — technical_rule_based fired BUY/SELL
+      * ``model_prediction``       — ML model (incl. candle) picked BUY/SELL
       * ``majority_vote``          — ensemble_majority decided BUY/SELL
-      * ``model_disagreement``     — ensemble_majority at HOLD (no quorum)
       * ``buy_and_hold_entry`` / ``buy_and_hold_carry`` — benchmark stream
     """
     sig = str(row.get("signal", "HOLD"))
