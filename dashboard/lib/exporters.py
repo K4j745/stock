@@ -11,8 +11,8 @@ Layout produced::
         signals/
             latest.json
             history.json
-            by_ticker/{TICKER}.json
-            by_model/{MODEL}.json
+            by_ticker/{TICKER}.json   # optional (write_splits=True); not published
+            by_model/{MODEL}.json     # optional (write_splits=True); not published
         tickers/{TICKER}/
             ohlcv.json
             signals.json
@@ -145,11 +145,24 @@ def _ohlcv_records(df) -> List[Dict[str, Any]]:
 # Signals
 # ---------------------------------------------------------------------------
 
-def write_signals_bundle(out_dir: str, signal_records: List[Dict[str, Any]]) -> None:
+def write_signals_bundle(
+    out_dir: str,
+    signal_records: List[Dict[str, Any]],
+    write_splits: bool = False,
+) -> None:
     """Write the rich signals dataset to the new ``signals/`` subtree.
 
     Also writes a legacy ``signals.json`` containing the latest technical
     signal per ticker so docs/index.html keeps working unmodified.
+
+    ``write_splits`` controls the per-ticker/per-model breakouts
+    (``by_ticker/*.json`` and ``by_model/*.json``). These are *not* fetched by
+    any published page — the frontend reads only ``latest.json``, ``history.json``
+    and the CSV export — so they are disabled by default. Emitting them added
+    ~165 MB of redundant JSON to every commit, bloating the repo and turning the
+    daily data-refresh into a recurring merge-conflict source. Anyone needing the
+    splits can pass ``write_splits=True`` locally; they are reconstructable from
+    ``history.json`` with a one-line group-by.
     """
     base = os.path.join(out_dir, "signals")
     audit.write_json(os.path.join(base, "history.json"), signal_records)
@@ -163,16 +176,17 @@ def write_signals_bundle(out_dir: str, signal_records: List[Dict[str, Any]]) -> 
             latest[key] = rec
     audit.write_json(os.path.join(base, "latest.json"), list(latest.values()))
 
-    # group by ticker / model
-    by_ticker: Dict[str, List[Dict[str, Any]]] = {}
-    by_model: Dict[str, List[Dict[str, Any]]] = {}
-    for rec in signal_records:
-        by_ticker.setdefault(rec["ticker"], []).append(rec)
-        by_model.setdefault(rec["model_name"], []).append(rec)
-    for tk, recs in by_ticker.items():
-        audit.write_json(os.path.join(base, "by_ticker", f"{tk}.json"), recs)
-    for m, recs in by_model.items():
-        audit.write_json(os.path.join(base, "by_model", f"{m}.json"), recs)
+    # Optional per-ticker / per-model breakouts (off by default — see docstring).
+    if write_splits:
+        by_ticker: Dict[str, List[Dict[str, Any]]] = {}
+        by_model: Dict[str, List[Dict[str, Any]]] = {}
+        for rec in signal_records:
+            by_ticker.setdefault(rec["ticker"], []).append(rec)
+            by_model.setdefault(rec["model_name"], []).append(rec)
+        for tk, recs in by_ticker.items():
+            audit.write_json(os.path.join(base, "by_ticker", f"{tk}.json"), recs)
+        for m, recs in by_model.items():
+            audit.write_json(os.path.join(base, "by_model", f"{m}.json"), recs)
 
     # legacy signals.json (latest technical signal per ticker, in the old shape)
     legacy = []
