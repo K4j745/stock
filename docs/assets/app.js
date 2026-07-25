@@ -27,7 +27,7 @@
       "kpi.total": "Wszystkie sygnały",
       "kpi.buy": "Sygnały BUY",
       "kpi.sell": "Sygnały SELL",
-      "kpi.hold": "Sygnały HOLD",
+      "kpi.buyRatio": "Udział BUY",
 
       "card.marketSignals": "Sygnały rynkowe",
       "card.signalSummary": "Podsumowanie sygnałów",
@@ -46,7 +46,7 @@
       "h1.charts": "Wykresy analizy ML",
       "sub.charts": "Skuteczność modeli, ważność cech i wizualizacje predykcji",
       "h1.signals": "Panel sygnałów",
-      "sub.signals": "Porównaj decyzje BUY / SELL / HOLD dla modeli technicznych i ML. Filtruj wg tickera, modelu, typu sygnału, daty lub portfela.",
+      "sub.signals": "Porównaj binarne decyzje BUY / SELL dla modeli technicznych i ML. Filtruj wg tickera, modelu, typu sygnału, daty lub portfela.",
       "h1.portfolio": "Symulator portfela",
       "sub.portfolio": "Handluj wirtualnie po cenach zamknięcia z ostatniej sesji. Portfele są przechowywane wyłącznie w Twojej przeglądarce — bez serwera i bez połączeń sieciowych poza wczytaniem lokalnych plików JSON.",
 
@@ -70,7 +70,7 @@
       "kpi.total": "Total Signals",
       "kpi.buy": "BUY Signals",
       "kpi.sell": "SELL Signals",
-      "kpi.hold": "HOLD Signals",
+      "kpi.buyRatio": "BUY Share",
 
       "card.marketSignals": "Market Signals",
       "card.signalSummary": "Signal Summary",
@@ -89,7 +89,7 @@
       "h1.charts": "ML Analysis Charts",
       "sub.charts": "Model performance, feature importance, and prediction analysis visualizations",
       "h1.signals": "Signals Panel",
-      "sub.signals": "Compare BUY / SELL / HOLD calls across technical and ML models. Filter by ticker, model, signal type, date, or portfolio.",
+      "sub.signals": "Compare binary BUY / SELL calls across technical and ML models. Filter by ticker, model, signal type, date, or portfolio.",
       "h1.portfolio": "Portfolio Simulator",
       "sub.portfolio": "Trade virtually using last-session close prices from this project. Portfolios are stored in your browser only — no server, no network calls beyond loading the local JSON files.",
 

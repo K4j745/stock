@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import logging
 import os
+import sys
 from typing import Dict, Optional, Tuple
 
 import pandas as pd
@@ -20,6 +21,66 @@ import pandas as pd
 from . import signals as sig_module
 
 logger = logging.getLogger("dashboard.ml")
+
+# Repo root → the ``stock_ml`` package lives at <repo>/stock_ml. We add it to
+# sys.path lazily so the dashboard can (optionally) reuse the *exact* feature
+# engineering the models were trained on. This is what lets real artifacts
+# load instead of silently falling back to proxies: the training features are
+# named RSI_14 / SMA_20 / … whereas the dashboard's own indicators use
+# RSI / SMA20 / …, so we must recompute with stock_ml's own builder.
+_LIB_DIR = os.path.dirname(os.path.abspath(__file__))
+_REPO_ROOT = os.path.dirname(os.path.dirname(_LIB_DIR))
+_STOCK_ML_DIR = os.path.join(_REPO_ROOT, "stock_ml")
+
+_OHLCV = ["Open", "High", "Low", "Close", "Volume"]
+
+
+def _ensure_stock_ml_on_path() -> bool:
+    if not os.path.isdir(_STOCK_ML_DIR):
+        return False
+    if _STOCK_ML_DIR not in sys.path:
+        sys.path.insert(0, _STOCK_ML_DIR)
+    return True
+
+
+def _stock_ml_features(ticker: str, df: pd.DataFrame) -> Optional[pd.DataFrame]:
+    """Recompute the stock_ml training feature frame from an OHLCV DataFrame.
+
+    Returns the full indicator frame (columns named exactly as the trained
+    scalers expect) or ``None`` if stock_ml is unavailable / inputs are bad.
+    """
+    if not all(c in df.columns for c in _OHLCV):
+        return None
+    if not _ensure_stock_ml_on_path():
+        return None
+    try:
+        from data.preprocess import clean_data  # type: ignore
+        from features.indicators import add_technical_indicators  # type: ignore
+    except Exception as exc:  # pragma: no cover
+        logger.info("stock_ml feature builder unavailable: %s", exc)
+        return None
+    try:
+        clean = clean_data(df[_OHLCV].copy())
+        return add_technical_indicators(clean, ticker=ticker)
+    except Exception as exc:  # pragma: no cover
+        logger.info("stock_ml feature build failed for %s: %s", ticker, exc)
+        return None
+
+
+def _candle_real_probabilities(ticker: str, df: pd.DataFrame, threshold: float) -> Optional[pd.Series]:
+    """Load the trained candle model (if present) and return P(up)."""
+    if not _ensure_stock_ml_on_path():
+        return None
+    try:
+        from models.candle_model import predict_candle_proba  # type: ignore
+    except Exception as exc:  # pragma: no cover
+        logger.info("candle model import failed: %s", exc)
+        return None
+    try:
+        return predict_candle_proba(ticker, df[_OHLCV].copy(), threshold=threshold, model_type="xgboost")
+    except Exception as exc:  # pragma: no cover
+        logger.warning("candle inference failed for %s: %s", ticker, exc)
+        return None
 
 
 def _model_path(models_dir: str, model_name: str, ticker: str, label_version: str = "A") -> Optional[str]:
@@ -60,19 +121,26 @@ def _load_real_probabilities(model_name: str, ticker: str, df_indicators: pd.Dat
         return None
 
     # The real models expect the same feature columns that stock_ml.features
-    # produced. To stay loosely coupled we only attempt the call if the
-    # scaler exposes a feature_names_in_ attribute (sklearn ≥ 1.0).
+    # produced (RSI_14, SMA_20, …). To stay loosely coupled we only attempt the
+    # call if the scaler exposes a feature_names_in_ attribute (sklearn ≥ 1.0).
     feature_names = getattr(scaler, "feature_names_in_", None)
     if feature_names is None:
         logger.info("Scaler for %s missing feature_names_in_; skipping real model use.", ticker)
         return None
 
-    missing = [f for f in feature_names if f not in df_indicators.columns]
+    # Rebuild the training feature frame from OHLCV so the column names match
+    # exactly (the dashboard's own indicator names differ from stock_ml's).
+    feats = _stock_ml_features(ticker, df_indicators)
+    if feats is None or feats.empty:
+        logger.info("Could not rebuild stock_ml features for %s; skipping real model use.", ticker)
+        return None
+
+    missing = [f for f in feature_names if f not in feats.columns]
     if missing:
         logger.info("Skipping real %s for %s (missing features: %s)", model_name, ticker, missing[:3])
         return None
 
-    X = df_indicators[list(feature_names)].dropna()
+    X = feats[list(feature_names)].dropna()
     if X.empty:
         return None
     X_scaled = scaler.transform(X)
@@ -107,6 +175,15 @@ def model_probabilities(model_name: str, ticker: str, df_indicators: pd.DataFram
     ``signal_source`` is one of ``"<model_name>"`` (real) or
     ``"<model_name>_proxy"`` (deterministic stand-in).
     """
+    # The candle model has its own artifact layout + feature engineering, so it
+    # is loaded through the dedicated stock_ml entry point.
+    if model_name == "candle":
+        threshold = float(ml_cfg.get("candle_threshold", 0.005))
+        real = _candle_real_probabilities(ticker, df_indicators, threshold)
+        if real is not None and not real.empty:
+            return real, model_name, "stock_ml-artifact"
+        return sig_module.proxy_candle(df_indicators), f"{model_name}_proxy", "proxy-1.0"
+
     if ml_cfg.get("use_proxy_when_artifacts_missing", True):
         real = _load_real_probabilities(model_name, ticker, df_indicators, ml_cfg)
         if real is not None and not real.empty:

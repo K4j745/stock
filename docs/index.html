@@ -490,10 +490,14 @@
   }
   @media (max-width: 900px) { .viz-row { grid-template-columns: 1fr; } }
 
+  /* Extra breathing room inside the heatmap + daily-movers cards. */
+  .viz-row > .card > .card-body { padding: 20px 22px 22px; }
+
   .heatmap {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
     gap: 8px;
+    padding: 4px 2px 2px;
   }
   .heat-tile {
     position: relative;
@@ -523,7 +527,7 @@
     background: linear-gradient(90deg, var(--color-error), var(--color-surface-2), var(--color-success)); }
 
   /* Daily movers — diverging horizontal bars */
-  .movers { display: flex; flex-direction: column; gap: 7px; }
+  .movers { display: flex; flex-direction: column; gap: 9px; padding: 4px 2px; }
   .mv-row { display: grid; grid-template-columns: 50px 1fr 60px; align-items: center; gap: 8px; }
   .mv-ticker { font-family: var(--font-mono); font-weight: 600; font-size: 12px; color: var(--color-text); }
   .mv-track { position: relative; height: 16px; background: var(--color-surface-2); border-radius: 4px; overflow: hidden; }
@@ -595,7 +599,7 @@
     <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.total">Total Signals</div><div class="kpi-value" id="kpiTotal">--</div></div>
     <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.buy">BUY Signals</div><div class="kpi-value change-pos" id="kpiBuy">--</div></div>
     <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.sell">SELL Signals</div><div class="kpi-value change-neg" id="kpiSell">--</div></div>
-    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.hold">HOLD Signals</div><div class="kpi-value" style="color:var(--color-warning)" id="kpiHold">--</div></div>
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.buyRatio">BUY Share</div><div class="kpi-value" id="kpiBuyRatio">--</div></div>
   </div>
 
   <div class="refresh-bar" style="gap:12px;flex-wrap:wrap">
@@ -609,13 +613,6 @@
       <span style="color:var(--color-text-faint)">|</span>
       <span data-i18n="label.autoRefresh">Auto-refresh: 60s</span>
     </span>
-  </div>
-
-  <!-- HOLD-source explainer banner — content depends on selected model -->
-  <div id="holdBanner" style="display:none;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:var(--color-text-muted);">
-    <strong style="color:var(--color-text);">HOLD source:</strong>
-    <span id="holdBannerText">—</span>
-    <a href="signals/" style="color:var(--color-primary);text-decoration:none;margin-left:8px;">Details →</a>
   </div>
 
   <!-- Sectors strip (coloured pills) -->
@@ -679,10 +676,6 @@
         <div class="stat-row">
           <span class="stat-label"><span class="stat-dot dot-sell"></span> SELL</span>
           <span class="stat-value change-neg" id="sidebarSell">--</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label"><span class="stat-dot dot-hold"></span> HOLD</span>
-          <span class="stat-value" style="color:var(--color-warning)" id="sidebarHold">--</span>
         </div>
       </div>
       <div class="sidebar-card" id="sectorSummary">
@@ -829,28 +822,31 @@
   }
 
   function updateKPIs(signals) {
+    // Binary classifier: only BUY / SELL. (buy_and_hold benchmark may still
+    // carry a HOLD position; those are bucketed into `hold` but no longer
+    // surfaced as a headline KPI.)
     var buy = 0, sell = 0, hold = 0;
     signals.forEach(function(s) {
       if (s.signal === 'BUY') buy++;
       else if (s.signal === 'SELL') sell++;
       else hold++;
     });
+    var decided = buy + sell;
     document.getElementById('kpiTotal').textContent = signals.length;
     document.getElementById('kpiBuy').textContent = buy;
     document.getElementById('kpiSell').textContent = sell;
-    document.getElementById('kpiHold').textContent = hold;
+    document.getElementById('kpiBuyRatio').textContent =
+      decided > 0 ? Math.round((buy / decided) * 100) + '%' : '--';
     document.getElementById('sidebarBuy').textContent = buy;
     document.getElementById('sidebarSell').textContent = sell;
-    document.getElementById('sidebarHold').textContent = hold;
 
     // Sector summary
     var sectors = {};
     signals.forEach(function(s) {
       var sec = sectorMap[s.ticker] || 'Other';
-      if (!sectors[sec]) sectors[sec] = { buy: 0, sell: 0, hold: 0 };
+      if (!sectors[sec]) sectors[sec] = { buy: 0, sell: 0 };
       if (s.signal === 'BUY') sectors[sec].buy++;
       else if (s.signal === 'SELL') sectors[sec].sell++;
-      else sectors[sec].hold++;
     });
     var secHtml = '';
     Object.keys(sectors).forEach(function(sec) {
@@ -859,7 +855,6 @@
       secHtml += '<span style="font-size:12px;font-family:var(--font-mono)">';
       if (d.buy) secHtml += '<span class="change-pos">' + d.buy + 'B</span> ';
       if (d.sell) secHtml += '<span class="change-neg">' + d.sell + 'S</span> ';
-      if (d.hold) secHtml += '<span style="color:var(--color-warning)">' + d.hold + 'H</span>';
       secHtml += '</span></div>';
     });
     var bySectorLabel = (window.S4C ? window.S4C.t('card.bySector') : 'By Sector');
@@ -983,7 +978,6 @@
 
   function applyModel(model) {
     currentModel = model;
-    renderHoldBanner(model);
     if (allLatestRecords.length) {
       currentSignals = recordsToLegacyShape(allLatestRecords, model);
       doRender();
@@ -996,33 +990,6 @@
 
   var richMeta = null;
   var registryTickers = [];
-
-  function holdExplanationFor(model, meta) {
-    var ml = meta && meta.ml_thresholds || {};
-    var lbl = meta && meta.label || {};
-    var buy = ml.buy_threshold != null ? ml.buy_threshold : 0.55;
-    var sell = ml.sell_threshold != null ? ml.sell_threshold : 0.45;
-    if (model === 'technical_rule_based') {
-      return 'rule engine did not reach the score threshold (default 2-of-4 rules per side).';
-    }
-    if (model === 'ensemble_majority') {
-      return 'models did not reach quorum — fewer than 2 ML models agreed on BUY/SELL.';
-    }
-    if (model === 'buy_and_hold') {
-      return 'benchmark stream — BUY only on the first session, HOLD on every other day.';
-    }
-    // ML model
-    var lblMode = lbl.mode === 'binary' ? 'binary (P[next-day return > ' + (lbl.threshold || 0.005) + '])' : (lbl.mode || 'binary');
-    return 'model probability inside dead band (' + sell + ' ≤ P(up) ≤ ' + buy + '). Task: ' + lblMode + '.';
-  }
-
-  function renderHoldBanner(model) {
-    var el = document.getElementById('holdBanner');
-    if (!el) return;
-    if (!richMeta) { el.style.display = 'none'; return; }
-    document.getElementById('holdBannerText').textContent = holdExplanationFor(model, richMeta);
-    el.style.display = '';
-  }
 
   function renderSectorStrip(tickers, meta) {
     if (!tickers || !tickers.length) return;
@@ -1087,7 +1054,6 @@
         if (!availableModels.includes(currentModel)) currentModel = availableModels[0] || 'technical_rule_based';
         sel.value = currentModel;
         currentSignals = recordsToLegacyShape(latest, currentModel);
-        renderHoldBanner(currentModel);
       } else {
         // Legacy fallback
         return fetch('data/signals.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function(legacy){

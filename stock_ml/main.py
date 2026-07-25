@@ -22,7 +22,7 @@ import os
 # Ensure the stock_ml directory is on the path so imports work
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from config import TICKERS, DEFAULT_LABEL_MODE, LABEL_THRESHOLD, logger
+from config import TICKERS, DEFAULT_LABEL_MODE, LABEL_THRESHOLD, model_tag, logger
 
 
 def cmd_train(args):
@@ -85,9 +85,12 @@ def cmd_evaluate(args):
 
 def cmd_report(args):
     from reports.plots import plot_model_comparison
+    # Resolve the on-disk artifact tag (e.g. binary @ 0.5% -> "bin5") so plots
+    # load the models that ``train`` actually saved, not the legacy A/B naming.
+    tag = model_tag(args.label_mode, args.label_version, args.threshold)
     tickers = [args.ticker] if args.ticker else TICKERS
     for ticker in tickers:
-        plot_model_comparison(ticker, args.label_version)
+        plot_model_comparison(ticker, tag)
 
 
 def cmd_shap(args):
@@ -100,12 +103,15 @@ def cmd_shap(args):
 
 def cmd_plots(args):
     from reports.plots import plot_equity_curve, plot_confusion_matrix, plot_feature_importance
+    # Resolve the on-disk artifact tag (e.g. binary @ 0.5% -> "bin5") so plots
+    # load the models that ``train`` actually saved, not the legacy A/B naming.
+    tag = model_tag(args.label_mode, args.label_version, args.threshold)
     tickers = [args.ticker] if args.ticker else TICKERS
     model = args.model or "xgboost"
     for ticker in tickers:
-        plot_equity_curve(ticker, model, args.label_version)
-        plot_confusion_matrix(ticker, model, args.label_version)
-        plot_feature_importance(ticker, model, args.label_version)
+        plot_equity_curve(ticker, model, tag)
+        plot_confusion_matrix(ticker, model, tag)
+        plot_feature_importance(ticker, model, tag)
 
 
 def main():
