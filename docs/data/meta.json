@@ -38,12 +38,12 @@
   "n_tickers": 10,
   "n_portfolios": 0,
   "ml_artifacts_present": {
-    "logistic_regression": true,
-    "random_forest": true,
-    "xgboost": true,
-    "lightgbm": true,
-    "candle": true
+    "logistic_regression": false,
+    "random_forest": false,
+    "xgboost": false,
+    "lightgbm": false,
+    "candle": false
   },
-  "ml_artifacts_any_real": true,
+  "ml_artifacts_any_real": false,
   "source": "dashboard/generate.py"
 }
