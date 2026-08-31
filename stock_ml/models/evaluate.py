@@ -85,7 +85,7 @@ def evaluate_saved_models(
     Load saved models, run evaluation on test split (last 20%), print metrics.
 
     Artifacts are keyed by ``model_tag`` so the two binary thresholds
-    (``bin5`` = 0.5%, ``bin10`` = 1.0%) and the legacy A/B versions each map to
+    (``bin2`` = 0.2%, ``bin5`` = 0.5%, ``bin10`` = 1.0%) and the legacy A/B versions each map to
     their own saved model/scaler files.
     """
     import os
