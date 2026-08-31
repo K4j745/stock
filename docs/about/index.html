@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.plot.ly https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>Stock4caster — O stronie / About</title>
+<meta name="description" content="Stock4caster — informacje o projekcie: autor, uczelnia, pochodzenie danych, licencja źródeł oraz zastrzeżenie prawne. Praca inżynierska, Uniwersytet Przyrodniczy w Poznaniu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/page.css">
+<link rel="stylesheet" href="../assets/cyberpunk.css">
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../" class="logo">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+      <polyline points="16 7 22 7 22 13"/>
+    </svg>
+    Stock4caster
+  </a>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <nav>
+    <a href="../" data-i18n="nav.overview">Overview</a>
+    <a href="../prices/" data-i18n="nav.prices">Prices</a>
+    <a href="../charts/" data-i18n="nav.charts">Charts</a>
+    <a href="../signals/" data-i18n="nav.signals">Signals</a>
+    <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+    <a href="../methodology/" data-i18n="nav.methodology">Instructions</a>
+    <a href="./" class="active" data-i18n="nav.about">About</a>
+  </nav>
+  <div class="header-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sun"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="../" data-i18n="nav.overview">Overview</a>
+  <a href="../prices/" data-i18n="nav.prices">Prices</a>
+  <a href="../charts/" data-i18n="nav.charts">Charts</a>
+  <a href="../signals/" data-i18n="nav.signals">Signals</a>
+  <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+  <a href="../methodology/" data-i18n="nav.methodology">Instructions</a>
+  <a href="./" class="active" data-i18n="nav.about">About</a>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="eyebrow">Stock4caster</div>
+    <h1 data-i18n="nav.about">O stronie</h1>
+    <p>
+      <span data-lang="pl" class="lang-active">Informacje o projekcie, autorze i uczelni, pochodzeniu danych oraz licencjach obowiązujących przy ich wykorzystaniu.</span>
+      <span data-lang="en">Information about the project, its author and university, the provenance of the data and the licences governing its use.</span>
+    </p>
+  </div>
+
+  <!-- ==================== POLISH ==================== -->
+  <div class="prose" data-lang="pl" id="content-pl">
+
+    <section>
+      <h2><span class="num">1</span> O projekcie</h2>
+      <div class="card">
+        <p><strong>Praca została wykonana w ramach pracy inżynierskiej pt. „Prognozowanie krótkoterminowych zmian cen akcji giełdowych z wykorzystaniem metod uczenia maszynowego oraz symulacja strategii inwestycyjnej” na Uniwersytecie Przyrodniczym w Poznaniu. Autor: Kajetan Kaczyński.</strong></p>
+        <p><strong>Stock4caster</strong> to statyczny serwis prezentujący wyniki pipeline'u uczenia maszynowego, który dla wybranego uniwersum spółek generuje dzienne sygnały decyzyjne <span class="pill pill-buy">BUY</span> / <span class="pill pill-sell">SELL</span>. Serwis nie posiada back-endu ani bazy danych — wszystkie dane są wyliczane offline i publikowane jako statyczne pliki JSON na GitHub Pages.</p>
+        <p>Szczegółowy opis metodyki, doboru spółek, cech i walidacji czasowej znajduje się na podstronie <a href="../methodology/">Instrukcja</a>.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">2</span> Autor i uczelnia</h2>
+      <table class="data">
+        <tbody>
+          <tr><td><strong>Autor</strong></td><td>Kajetan Kaczyński</td></tr>
+          <tr><td><strong>Tytuł pracy</strong></td><td>Prognozowanie krótkoterminowych zmian cen akcji giełdowych z wykorzystaniem metod uczenia maszynowego oraz symulacja strategii inwestycyjnej</td></tr>
+          <tr><td><strong>Rodzaj pracy</strong></td><td>Praca inżynierska</td></tr>
+          <tr><td><strong>Uczelnia</strong></td><td>Uniwersytet Przyrodniczy w Poznaniu</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2><span class="num">3</span> Pochodzenie danych</h2>
+      <table class="data">
+        <thead><tr><th>Element</th><th>Wartość</th></tr></thead>
+        <tbody>
+          <tr><td>Dostawca danych</td><td>Yahoo Finance</td></tr>
+          <tr><td>Metoda pozyskania</td><td>biblioteka open source <code>yfinance</code> (nieoficjalna, niepowiązana z Yahoo Inc.)</td></tr>
+          <tr><td>Zakres danych</td><td>notowania dzienne OHLCV (otwarcie, maksimum, minimum, zamknięcie, wolumen)</td></tr>
+          <tr><td>Interwał</td><td class="mono">1d</td></tr>
+          <tr><td>Uniwersum</td><td>10 spółek amerykańskich + <code>SPY</code> jako benchmark</td></tr>
+          <tr><td>Kopia lokalna</td><td>pliki CSV w repozytorium (<code>stock_ml/data/historical/</code>) — archiwum zapewniające odtwarzalność i pracę offline</td></tr>
+          <tr><td>Dane pochodne</td><td>sygnały, metryki modeli, wyniki backtestów i wykresy PNG — wytworzone w ramach tej pracy</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        Dane rynkowe są <strong>opóźnione</strong> i mają charakter poglądowy. Serwis odświeżany jest automatycznie po zamknięciu sesji; w razie niedostępności źródła zewnętrznego prezentowana jest ostatnia zarchiwizowana kopia lokalna.
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">4</span> Licencja i warunki korzystania z danych</h2>
+      <div class="card">
+        <p>Dane rynkowe prezentowane w serwisie Stock4caster pochodzą z serwisu Yahoo Finance i zostały pobrane przy użyciu otwartoźródłowej biblioteki <code>yfinance</code> (licencja Apache 2.0), która nie jest oficjalnym API Yahoo i nie jest z Yahoo Inc. powiązana. Projekt ma charakter wyłącznie naukowo-dydaktyczny — powstał jako część pracy inżynierskiej i nie jest w żaden sposób komercjalizowany.</p>
+        <p>Prezentowane sygnały, prognozy i wyniki backtestów służą wyłącznie celom badawczym i poglądowym; <strong>nie stanowią rekomendacji ani doradztwa inwestycyjnego</strong>, a wyniki historyczne nie są gwarancją wyników przyszłych. Yahoo i Yahoo! Finance są znakami towarowymi Yahoo Inc.; niniejszy serwis nie jest przez tę spółkę wspierany ani zatwierdzony.</p>
+        <p>Szczegółowe omówienie zasad i licencji obowiązujących przy pozyskiwaniu oraz udostępnianiu danych — wraz z analizą ryzyka redystrybucji i wykazem alternatywnych źródeł — zawiera dokument <a href="../LICENSING.md">LICENSING.md</a>.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">5</span> Zastrzeżenie</h2>
+      <div class="callout">
+        Serwis ma charakter <strong>edukacyjny i badawczy</strong>. Nie stanowi rekomendacji inwestycyjnej w rozumieniu obowiązujących przepisów, nie jest doradztwem inwestycyjnym ani ofertą kupna lub sprzedaży jakichkolwiek instrumentów finansowych. Autor nie ponosi odpowiedzialności za decyzje podjęte na podstawie prezentowanych treści.
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">6</span> Technologie</h2>
+      <ul>
+        <li><strong>Pipeline ML</strong> — Python: <code>pandas</code>, <code>scikit-learn</code>, <code>XGBoost</code>, <code>LightGBM</code>, <code>SHAP</code>;</li>
+        <li><strong>Pozyskanie danych</strong> — <code>yfinance</code> + lokalne archiwum CSV;</li>
+        <li><strong>Generator artefaktów</strong> — skrypt <code>dashboard/generate.py</code> produkujący statyczne pliki JSON;</li>
+        <li><strong>Front-end</strong> — statyczny HTML/CSS/JavaScript bez frameworków, hostowany na GitHub Pages;</li>
+        <li><strong>Automatyzacja</strong> — GitHub Actions (cykliczne odświeżanie danych i archiwizacja).</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- ==================== ENGLISH ==================== -->
+  <div class="prose" data-lang="en" id="content-en">
+
+    <section>
+      <h2><span class="num">1</span> About the project</h2>
+      <div class="card">
+        <p><strong>This work was carried out as part of the engineering thesis “Forecasting short-term stock price changes using machine learning methods and investment strategy simulation” at Poznań University of Life Sciences. Author: Kajetan Kaczyński.</strong></p>
+        <p><strong>Stock4caster</strong> is a static site presenting the results of a machine-learning pipeline that produces daily <span class="pill pill-buy">BUY</span> / <span class="pill pill-sell">SELL</span> decisions for a selected universe of companies. The site has no back-end and no database — everything is computed offline and published as static JSON files on GitHub Pages.</p>
+        <p>A detailed description of the methodology, ticker selection, features and temporal validation is available on the <a href="../methodology/">Instructions</a> page.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">2</span> Author and university</h2>
+      <table class="data">
+        <tbody>
+          <tr><td><strong>Author</strong></td><td>Kajetan Kaczyński</td></tr>
+          <tr><td><strong>Thesis title</strong></td><td>Forecasting short-term stock price changes using machine learning methods and investment strategy simulation</td></tr>
+          <tr><td><strong>Type of work</strong></td><td>Engineering thesis</td></tr>
+          <tr><td><strong>University</strong></td><td>Poznań University of Life Sciences</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2><span class="num">3</span> Data provenance</h2>
+      <table class="data">
+        <thead><tr><th>Item</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Data provider</td><td>Yahoo Finance</td></tr>
+          <tr><td>Retrieval method</td><td>open-source <code>yfinance</code> library (unofficial, not affiliated with Yahoo Inc.)</td></tr>
+          <tr><td>Data scope</td><td>daily OHLCV quotes (open, high, low, close, volume)</td></tr>
+          <tr><td>Interval</td><td class="mono">1d</td></tr>
+          <tr><td>Universe</td><td>10 US companies + <code>SPY</code> as a benchmark</td></tr>
+          <tr><td>Local copy</td><td>CSV files in the repository (<code>stock_ml/data/historical/</code>) — an archive providing reproducibility and offline operation</td></tr>
+          <tr><td>Derived data</td><td>signals, model metrics, backtest results and PNG charts — produced as part of this thesis</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        Market data is <strong>delayed</strong> and provided for illustrative purposes. The site refreshes automatically after the session close; if the external source is unavailable, the most recent local archive copy is shown instead.
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">4</span> Licence and terms of data use</h2>
+      <div class="card">
+        <p>The market data presented on Stock4caster is sourced from Yahoo Finance and retrieved using the open-source <code>yfinance</code> library (Apache 2.0 licence), which is not an official Yahoo API and is not affiliated with Yahoo Inc. This project is strictly academic and educational — it was created as part of an engineering thesis and is not commercialised in any way.</p>
+        <p>The signals, forecasts and backtest results shown here are for research and illustrative purposes only; <strong>they do not constitute investment advice or a recommendation</strong>, and past performance is no guarantee of future results. Yahoo and Yahoo! Finance are trademarks of Yahoo Inc.; this site is neither endorsed by nor affiliated with that company.</p>
+        <p>A detailed discussion of the terms and licences governing the acquisition and redistribution of the underlying data — including a redistribution risk assessment and a list of alternative sources — is available in <a href="../LICENSING.md">LICENSING.md</a>.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">5</span> Disclaimer</h2>
+      <div class="callout">
+        This site is <strong>educational and research-oriented</strong>. It does not constitute an investment recommendation within the meaning of applicable regulations, is not investment advice, and is not an offer to buy or sell any financial instrument. The author accepts no liability for decisions made on the basis of the content presented here.
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">6</span> Technology</h2>
+      <ul>
+        <li><strong>ML pipeline</strong> — Python: <code>pandas</code>, <code>scikit-learn</code>, <code>XGBoost</code>, <code>LightGBM</code>, <code>SHAP</code>;</li>
+        <li><strong>Data acquisition</strong> — <code>yfinance</code> plus a local CSV archive;</li>
+        <li><strong>Artifact generator</strong> — the <code>dashboard/generate.py</code> script producing static JSON files;</li>
+        <li><strong>Front-end</strong> — static HTML/CSS/JavaScript with no frameworks, hosted on GitHub Pages;</li>
+        <li><strong>Automation</strong> — GitHub Actions (scheduled data refresh and archiving).</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <div class="copyright-block">
+    <span data-lang="pl" class="lang-active">
+      © 2025 Kajetan Kaczyński — <strong>Praca inżynierska</strong><br>
+      Uniwersytet Przyrodniczy w Poznaniu<br>
+      Wszelkie prawa zastrzeżone.
+    </span>
+    <span data-lang="en">
+      © 2025 Kajetan Kaczyński — <strong>Engineering thesis</strong><br>
+      Poznań University of Life Sciences<br>
+      All rights reserved.
+    </span>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <span data-i18n="footer.about">About the project — engineering thesis</span>
+</footer>
+
+<script>
+(function() {
+  // --- Theme (mirrors the other pages; localStorage key kept as 'stockwatch-theme') ---
+  var saved = localStorage.getItem('stockwatch-theme');
+  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+  updateThemeIcon(theme);
+
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('stockwatch-theme', next);
+    updateThemeIcon(next);
+  });
+
+  function updateThemeIcon(t) {
+    document.querySelector('.icon-sun').style.display = t === 'dark' ? 'block' : 'none';
+    document.querySelector('.icon-moon').style.display = t === 'light' ? 'block' : 'none';
+  }
+
+  document.getElementById('hamburgerBtn').addEventListener('click', function() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  });
+
+  // --- Bilingual content: show only the blocks matching the active language ---
+  function currentLang() {
+    var l = localStorage.getItem('stock4caster-lang') || 'pl';
+    return (l === 'pl' || l === 'en') ? l : 'pl';
+  }
+  function applyLang(lang) {
+    document.querySelectorAll('[data-lang]').forEach(function(el) {
+      el.classList.toggle('lang-active', el.getAttribute('data-lang') === lang);
+    });
+  }
+  applyLang(currentLang());
+  document.addEventListener('s4c:langchange', function(e) {
+    applyLang((e.detail && e.detail.lang) || currentLang());
+  });
+})();
+</script>
+
+</body>
+</html>

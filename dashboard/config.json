@@ -35,8 +35,8 @@
 
   "label": {
     "mode": "binary",
-    "threshold": 0.005,
-    "version": "binary-2026-05"
+    "threshold": 0.002,
+    "version": "binary-2026-08"
   },
 
   "technical_signals": {
@@ -55,14 +55,14 @@
       "lightgbm",
       "candle"
     ],
-    "label_version": "bin5",
-    "candle_threshold": 0.005,
+    "label_version": "bin2",
+    "candle_threshold": 0.002,
     "probability_threshold_buy": 0.5,
     "probability_threshold_sell": 0.5,
     "models_dir": "stock_ml/models/saved",
     "reports_dir": "stock_ml/reports",
     "use_proxy_when_artifacts_missing": true,
-    "_binary_note": "Signals are strictly binary (BUY/SELL) since 2026-07. The 0.45-0.55 HOLD dead-band was removed: a single 0.5 decision threshold is used. label_version bin5 = binary label with 0.5% next-day return threshold; loads real stock_ml artifacts when present."
+    "_binary_note": "Signals are strictly binary (BUY/SELL) since 2026-07. The 0.45-0.55 HOLD dead-band was removed: a single 0.5 decision threshold is used. label_version bin2 = binary label with a 0.2% next-day return threshold (supervisor's 'version B', adopted 2026-08 in place of the earlier bin5/0.5%); loads real stock_ml artifacts when present."
   },
 
   "portfolios": []

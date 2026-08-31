@@ -49,6 +49,14 @@ jobs:
             echo "No trained models in stock_ml/models/saved/ — skipping plot generation."
           fi
 
+      # Continuously extend the committed OHLCV archive. A short window is
+      # enough because the downloader merges into the existing CSVs; the
+      # archive is what dashboard/lib/data_fetcher.py falls back to when the
+      # yfinance feed is unreachable.
+      - name: Archive historical prices
+        continue-on-error: true
+        run: python stock_ml/data/download_historical.py --start "$(date -u -d '90 days ago' '+%Y-%m-%d')"
+
       - name: Generate dashboard data
         run: python dashboard/generate.py
 
@@ -56,7 +64,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/
+          git add docs/ stock_ml/data/historical/
           if git diff --staged --quiet; then
             echo "No data changes — skipping commit."
           else

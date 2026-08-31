@@ -1,0 +1,242 @@
+@startuml uml_sequence
+' ---------------------------------------------------------------------------
+' Diagram sekwencji - Stock4caster
+' Scenariusz: cykliczna aktualizacja dashboardu (GitHub Actions) oraz
+' pozniejsze wejscie uzytkownika na opublikowana strone.
+' Praca inzynierska: "Prognozowanie krotkoterminowych zmian cen akcji
+' gieldowych z wykorzystaniem metod uczenia maszynowego oraz symulacja
+' strategii inwestycyjnej"
+' Autor: Kajetan Kaczynski, Uniwersytet Przyrodniczy w Poznaniu
+' ---------------------------------------------------------------------------
+' Render:  plantuml -tsvg docs/engineering/uml_sequence.puml
+' ---------------------------------------------------------------------------
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam sequence {
+  ArrowColor #37474F
+  LifeLineBorderColor #90A4AE
+  LifeLineBackgroundColor #ECEFF1
+  ParticipantBorderColor #546E7A
+  ParticipantBackgroundColor #ECEFF1
+  ActorBorderColor #546E7A
+  BoxBorderColor #B0BEC5
+  BoxFontColor #37474F
+}
+
+title Diagram sekwencji - cykliczna aktualizacja dashboardu i odczyt danych przez uzytkownika
+
+actor "Harmonogram CI\n(GitHub Actions)" as CI
+actor "Uzytkownik strony" as User
+
+box "Generator dashboardu (katalog dashboard/)" #FAFAFA
+  participant "generate.py" as GEN
+  participant "config_loader" as CFG
+  participant "data_fetcher" as FETCH
+  participant "indicators" as IND
+  participant "ml_loader" as MLL
+  participant "signals" as SIG
+  participant "exporters" as EXP
+  participant "audit" as AUD
+end box
+
+participant "yfinance\n(Yahoo Finance)" as YF << system zewnetrzny >>
+database "stock_ml/models/saved\n(artefakty ML)" as ART
+database "docs/data/*.json\n(artefakty statyczne)" as DOCS
+participant "Repozytorium Git\n(GitHub Pages)" as REPO
+participant "Przegladarka\n(HTML + JS)" as BR
+
+' =====================  FAZA 1: uruchomienie zadania CI  =====================
+== Faza 1: uruchomienie zadania cyklicznego (cron pn-pt 17:00 UTC) ==
+
+CI -> GEN : uruchom python dashboard/generate.py
+activate GEN
+
+GEN -> CFG : load_config("dashboard/config.json")
+activate CFG
+CFG --> GEN : konfiguracja (tickery, modele,\nlabel_version=bin2, progi, portfele)
+deactivate CFG
+
+' =====================  FAZA 2: pobranie danych rynkowych  ==================
+== Faza 2: pobranie danych rynkowych ==
+
+loop dla kazdego tickera z konfiguracji
+  GEN -> FETCH : fetch_prices(ticker, period)
+  activate FETCH
+
+  FETCH -> FETCH : sprawdz cache w pamieci procesu
+  FETCH -> YF : yfinance.download(ticker)
+  activate YF
+  YF --> FETCH : ramka OHLCV lub pusty wynik
+  deactivate YF
+
+  alt pobranie zakonczone powodzeniem
+    FETCH --> GEN : DataFrame OHLCV
+  else brak biblioteki / blad sieci / pusty wynik
+    FETCH -> FETCH : zaloguj ostrzezenie
+    FETCH --> GEN : None (ticker pominiety)
+  end
+  deactivate FETCH
+end
+
+alt zaden ticker nie zostal pobrany
+  GEN -> CI : log ERROR "No prices downloaded - aborting"
+  GEN --> CI : przerwanie zadania (brak commita)
+  note right of GEN
+    Zabezpieczenie przed nadpisaniem
+    poprawnych danych pustym zestawem.
+    Poprzednia wersja docs/data pozostaje
+    opublikowana.
+  end note
+end
+
+' =====================  FAZA 3: cechy i modele  ============================
+== Faza 3: wyznaczenie cech i prawdopodobienstw modeli ==
+
+loop dla kazdego pobranego tickera
+  GEN -> IND : add_indicators(df)
+  activate IND
+  IND --> GEN : df + SMA/EMA/MACD/RSI/BB/ATR/OBV...
+  deactivate IND
+
+  GEN -> MLL : model_probabilities(ticker, model_name, df)
+  activate MLL
+
+  MLL -> ART : wczytaj model + scaler (tag bin2)
+  activate ART
+  ART --> MLL : artefakt lub brak pliku
+  deactivate ART
+
+  alt artefakty obecne i zgodne z zestawem cech
+    MLL -> MLL : odtworz macierz cech stock_ml,\nskaluj, predict_proba
+    MLL --> GEN : (prawdopodobienstwa, source="model",\nmodel_version=<tag>)
+  else brak artefaktow lub niezgodnosc cech
+    MLL -> MLL : deterministyczna funkcja proxy\n(PROXY_FUNCTIONS)
+    MLL --> GEN : (prawdopodobienstwa, source="proxy",\nmodel_version="proxy-1.0")
+    note right of MLL
+      Zejscie awaryjne wlaczone flaga
+      use_proxy_when_artifacts_missing.
+      Artefakty ML nie sa wersjonowane w Git,
+      wiec w CI ta galaz jest domyslna.
+    end note
+  end
+  deactivate MLL
+
+  GEN -> SIG : technical_rule_based(df)
+  activate SIG
+  SIG --> GEN : sygnaly regulowe BUY/SELL
+  deactivate SIG
+
+  GEN -> SIG : from_probabilities(p), buy_and_hold(df)
+  activate SIG
+  SIG --> GEN : sygnaly modelowe i benchmark
+  deactivate SIG
+
+  GEN -> SIG : ensemble_majority(sygnaly, min_votes=2)
+  activate SIG
+  SIG --> GEN : sygnal zespolowy
+  deactivate SIG
+end
+
+GEN -> FETCH : fetch_fx("USDPLN=X")
+activate FETCH
+FETCH -> YF : yfinance.download("USDPLN=X")
+activate YF
+YF --> FETCH : kurs lub brak danych
+deactivate YF
+alt kurs pobrany
+  FETCH --> GEN : kurs USD/PLN
+else brak danych
+  FETCH --> GEN : wartosc zapasowa 4.0
+end
+deactivate FETCH
+
+' =====================  FAZA 4: eksport artefaktow  ========================
+== Faza 4: eksport artefaktow statycznych ==
+
+GEN -> EXP : write_signals_bundle(...), write_price_series(...),\nwrite_registry(...), write_global_exports(...)
+activate EXP
+EXP -> DOCS : zapis signals/latest.json, signals/history.json,\n{TICKER}_ohlcv.json, registry/*.json, fx.json, CSV
+activate DOCS
+DOCS --> EXP : potwierdzenie zapisu
+deactivate DOCS
+EXP --> GEN : lista wygenerowanych plikow
+deactivate EXP
+
+GEN -> AUD : build_run_metadata(...)
+activate AUD
+AUD -> DOCS : zapis meta.json, last_updated.json\n(commit, wersje bibliotek, ml_artifacts_present)
+AUD --> GEN : metadane przebiegu
+deactivate AUD
+
+GEN --> CI : kod wyjscia 0
+deactivate GEN
+
+' =====================  FAZA 5: publikacja  ================================
+== Faza 5: publikacja ==
+
+alt wykryto zmiany w katalogu docs/
+  CI -> REPO : git add docs/ && git commit && git push
+  activate REPO
+  REPO --> CI : nowa wersja opublikowana na GitHub Pages
+  deactivate REPO
+else brak zmian
+  CI -> CI : pominiecie commita
+end
+
+' =====================  FAZA 6: odczyt przez uzytkownika  ==================
+== Faza 6: wejscie uzytkownika na strone ==
+
+User -> BR : otwarcie adresu GitHub Pages
+activate BR
+
+BR -> REPO : GET index.html, assets/app.js, assets/style.css
+activate REPO
+REPO --> BR : pliki statyczne
+deactivate REPO
+
+BR -> BR : odczyt localStorage\n(jezyk PL/EN, motyw, waluta, portfele)
+
+par rownolegle zadania o dane
+  BR -> DOCS : GET data/signals/latest.json
+  activate DOCS
+  DOCS --> BR : najnowsze sygnaly
+  deactivate DOCS
+also
+  BR -> DOCS : GET data/registry/*.json, data/fx.json
+  activate DOCS
+  DOCS --> BR : slowniki tickerow, modeli, kurs walutowy
+  deactivate DOCS
+also
+  BR -> DOCS : GET data/meta.json, data/last_updated.json
+  activate DOCS
+  DOCS --> BR : metadane przebiegu
+  deactivate DOCS
+end
+
+alt odpowiedz HTTP 200
+  BR -> BR : render KPI, mapy ciepla, tabeli sygnalow
+  BR --> User : panel z aktualnymi sygnalami
+else blad pobrania pliku (404 / brak sieci)
+  BR -> DOCS : GET data/signals.json (format zapasowy)
+  activate DOCS
+  DOCS --> BR : starszy format lub blad
+  deactivate DOCS
+  BR --> User : komunikat o braku danych
+end
+
+opt uzytkownik przechodzi do symulacji portfela
+  User -> BR : dodanie transakcji kupna / sprzedazy
+  BR -> BR : przeliczenie pozycji i zapis w localStorage
+  BR --> User : zaktualizowana wycena portfela
+  note right of BR
+    Brak back-endu i bazy danych -
+    dane portfela nie opuszczaja przegladarki.
+  end note
+end
+
+deactivate BR
+
+@enduml

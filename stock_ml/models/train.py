@@ -76,7 +76,7 @@ def train_all_models(
         4. Retrain on the last walk-forward train slice and save model + scaler
 
     Saved artifacts are keyed by ``model_tag`` (legacy ``A``/``B`` or a
-    threshold-derived ``bin5``/``bin10`` tag) so both binary thresholds coexist.
+    threshold-derived ``bin2``/``bin5``/``bin10`` tag) so the thresholds coexist.
 
     Returns:
         Dictionary: {model_name: {fold_metrics: [...], mean_metrics: {...}}}
