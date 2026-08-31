@@ -1,0 +1,170 @@
+@startuml uml_use_case
+' ---------------------------------------------------------------------------
+' Diagram przypadkow uzycia - Stock4caster
+' Praca inzynierska: "Prognozowanie krotkoterminowych zmian cen akcji
+' gieldowych z wykorzystaniem metod uczenia maszynowego oraz symulacja
+' strategii inwestycyjnej"
+' Autor: Kajetan Kaczynski, Uniwersytet Przyrodniczy w Poznaniu
+' ---------------------------------------------------------------------------
+' Render:  plantuml -tsvg docs/engineering/uml_use_case.puml
+' ---------------------------------------------------------------------------
+
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam ArrowColor #37474F
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #ECEFF1
+  BorderColor #546E7A
+  ArrowColor #37474F
+}
+skinparam rectangle {
+  BackgroundColor #FAFAFA
+  BorderColor #90A4AE
+}
+
+title Diagram przypadkow uzycia - system Stock4caster
+
+' --- Aktorzy -----------------------------------------------------------------
+actor "Uzytkownik strony\n(odwiedzajacy)" as Uzytkownik
+actor "Autor / Badacz\n(uruchamia pipeline lokalnie)" as Badacz
+actor "Harmonogram CI\n(GitHub Actions)" as CI << aktor systemowy >>
+actor "Yahoo Finance\n(biblioteka yfinance)" as YF << system zewnetrzny >>
+
+' --- Granica 1: statyczny serwis WWW -----------------------------------------
+rectangle "Serwis WWW (GitHub Pages, pliki statyczne)" as WWW {
+  usecase "UC-01\nPrzegladanie panelu\nsygnalow BUY/SELL" as UC01
+  usecase "UC-02\nFiltrowanie sygnalow\n(ticker, model, data, typ)" as UC02
+  usecase "UC-03\nPobranie eksportu CSV" as UC03
+  usecase "UC-04\nPrzegladanie wykresow cen\n(swiece, RSI, MACD)" as UC04
+  usecase "UC-05\nPrzegladanie wykresow\nanalizy ML (PNG)" as UC05
+  usecase "UC-06\nSymulacja portfela\n(kupno / sprzedaz)" as UC06
+  usecase "UC-07\nZapis stanu portfela\nw localStorage" as UC07
+  usecase "UC-08\nEksport / import\nportfela (JSON)" as UC08
+  usecase "UC-09\nPrzelaczenie waluty\nUSD / PLN" as UC09
+  usecase "UC-10\nZmiana jezyka\nPL / EN" as UC10
+  usecase "UC-11\nZmiana motywu\njasny / ciemny" as UC11
+  usecase "UC-12\nLektura instrukcji\ni metodologii projektu" as UC12
+  usecase "UC-13\nWczytanie artefaktow\nJSON z docs/data" as UC13
+  usecase "UC-14\nPodglad metadanych\n(data aktualizacji, wersja danych)" as UC14
+  usecase "UC-15\nPrzegladanie rynku\n(KPI, mapa ciepla, liderzy)" as UC15
+}
+
+' --- Granica 2: pipeline ML uruchamiany lokalnie ------------------------------
+rectangle "Pipeline ML (stock_ml, uruchamiany offline)" as ML {
+  usecase "UC-20\nPobranie danych OHLCV" as UC20
+  usecase "UC-21\nArchiwizacja historii\ndo CSV w repozytorium" as UC21
+  usecase "UC-22\nBudowa macierzy cech\n(wskazniki + cechy swiecowe)" as UC22
+  usecase "UC-23\nTrening modeli\n(LR, RF, XGBoost, LightGBM)" as UC23
+  usecase "UC-24\nWalidacja walk-forward\n(okno kroczace 252/21/21)" as UC24
+  usecase "UC-25\nStrojenie hiperparametrow\n(Optuna)" as UC25
+  usecase "UC-26\nTrening modelu swiecowego" as UC26
+  usecase "UC-27\nEwaluacja zapisanych modeli" as UC27
+  usecase "UC-28\nBacktest strategii\n(vs buy & hold, vs SPY)" as UC28
+  usecase "UC-29\nGenerowanie wykresow\ni raportow CSV/JSON" as UC29
+  usecase "UC-30\nAnaliza SHAP\n(waznosc cech)" as UC30
+}
+
+' --- Granica 3: generator dashboardu i publikacja -----------------------------
+rectangle "Generator dashboardu i publikacja (dashboard/, CI)" as GEN {
+  usecase "UC-40\nGenerowanie artefaktow\nstatycznych (docs/data)" as UC40
+  usecase "UC-41\nWczytanie artefaktow ML\n(stock_ml/models/saved)" as UC41
+  usecase "UC-42\nZejscie do proxy\nprzy braku artefaktow" as UC42
+  usecase "UC-43\nWyznaczenie sygnalow\n(reguly, ML, ensemble, buy & hold)" as UC43
+  usecase "UC-44\nCykliczna aktualizacja\ndanych (cron pn-pt 17:00 UTC)" as UC44
+  usecase "UC-45\nPublikacja dashboardu\n(commit + push docs/)" as UC45
+  usecase "UC-46\nPobranie kursu USD/PLN" as UC46
+}
+
+' --- Powiazania aktorow: uzytkownik strony ------------------------------------
+Uzytkownik --> UC15
+Uzytkownik --> UC01
+Uzytkownik --> UC04
+Uzytkownik --> UC05
+Uzytkownik --> UC06
+Uzytkownik --> UC10
+Uzytkownik --> UC11
+Uzytkownik --> UC12
+Uzytkownik --> UC14
+
+' --- Powiazania aktorow: badacz ------------------------------------------------
+Badacz --> UC20
+Badacz --> UC21
+Badacz --> UC23
+Badacz --> UC26
+Badacz --> UC27
+Badacz --> UC28
+Badacz --> UC29
+Badacz --> UC30
+Badacz --> UC40
+
+' --- Powiazania aktorow: CI i system zewnetrzny --------------------------------
+CI --> UC44
+UC20 --> YF
+UC40 --> YF
+UC46 --> YF
+
+' --- Relacje <<include>> -------------------------------------------------------
+UC15 ..> UC13 : <<include>>
+UC01 ..> UC13 : <<include>>
+UC04 ..> UC13 : <<include>>
+UC05 ..> UC13 : <<include>>
+UC06 ..> UC13 : <<include>>
+UC06 ..> UC07 : <<include>>
+UC14 ..> UC13 : <<include>>
+
+UC23 ..> UC22 : <<include>>
+UC23 ..> UC24 : <<include>>
+UC26 ..> UC22 : <<include>>
+UC22 ..> UC20 : <<include>>
+UC27 ..> UC22 : <<include>>
+UC28 ..> UC22 : <<include>>
+UC30 ..> UC22 : <<include>>
+
+UC40 ..> UC43 : <<include>>
+UC40 ..> UC41 : <<include>>
+UC40 ..> UC46 : <<include>>
+UC43 ..> UC41 : <<include>>
+UC44 ..> UC40 : <<include>>
+UC44 ..> UC45 : <<include>>
+
+' --- Relacje <<extend>> --------------------------------------------------------
+UC02 ..> UC01 : <<extend>>
+UC03 ..> UC01 : <<extend>>
+UC08 ..> UC06 : <<extend>>
+UC09 ..> UC06 : <<extend>>
+UC25 ..> UC23 : <<extend>>
+UC42 ..> UC41 : <<extend>>
+UC21 ..> UC20 : <<extend>>
+
+' --- Notatki -------------------------------------------------------------------
+note right of UC42
+  Warunek rozszerzenia:
+  brak plikow modelu / skalera
+  lub niezgodnosc zestawu cech.
+  Flaga konfiguracyjna:
+  use_proxy_when_artifacts_missing
+end note
+
+note bottom of UC07
+  Dane portfela nie opuszczaja przegladarki -
+  brak back-endu, brak bazy danych,
+  brak kont uzytkownikow.
+end note
+
+note bottom of UC13
+  Wylacznie zadania HTTP GET po pliki
+  statyczne JSON/CSV wygenerowane
+  wczesniej przez dashboard/generate.py.
+end note
+
+note top of UC23
+  Artefakty zapisywane lokalnie w
+  stock_ml/models/saved/ (katalog objety
+  .gitignore) - modele nie sa trenowane w CI.
+end note
+
+@enduml

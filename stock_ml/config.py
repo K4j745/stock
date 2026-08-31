@@ -50,17 +50,19 @@ DATA_INTERVAL = "1d"
 
 # --- Label params ---
 # Binary classification: BUY (1) if next-day return > threshold, else SELL (0).
-# The project studies TWO decision thresholds so the thesis can compare a
-# permissive vs. a strict "worth buying" bar:
-#   T1 = 0.5% (primary / default) — captures any meaningful up move.
-#   T2 = 1.0% (strong)            — only clearly strong up moves count as BUY.
-LABEL_THRESHOLD = 0.005         # T1: 0.5% - primary binary threshold (default)
-LABEL_THRESHOLD_STRONG = 0.010  # T2: 1.0% - strict "strong move" threshold
-LABEL_THRESHOLD_B = 0.002       # legacy version B threshold (kept for compat)
+# The primary threshold is 0.2% ("version B"): it filters out the very small
+# moves that are indistinguishable from noise/spread, while still leaving a
+# workable class balance. 0.5% and 1.0% are kept as stricter comparison points
+# for the results chapter.
+LABEL_THRESHOLD = 0.002         # T1: 0.2% - primary binary threshold (default)
+LABEL_THRESHOLD_MID = 0.005     # T2: 0.5% - comparison threshold
+LABEL_THRESHOLD_STRONG = 0.010  # T3: 1.0% - strict "strong move" threshold
+LABEL_THRESHOLD_B = LABEL_THRESHOLD  # "version B" == the primary threshold
 
-# Named thresholds for the two-threshold study (used by the CLI/dashboard).
+# Named thresholds for the threshold study (used by the CLI/dashboard).
 BINARY_THRESHOLDS = {
-    "t05": LABEL_THRESHOLD,         # 0.5%
+    "t02": LABEL_THRESHOLD,         # 0.2% (primary)
+    "t05": LABEL_THRESHOLD_MID,     # 0.5%
     "t10": LABEL_THRESHOLD_STRONG,  # 1.0%
 }
 
@@ -75,7 +77,7 @@ def model_tag(label_mode: str, label_version: str, threshold: float = LABEL_THRE
     """Filename tag used to key saved models/scalers on disk.
 
     Legacy mode keeps the ``A``/``B`` version letter; binary/multiclass modes
-    derive a stable tag from the threshold (e.g. 0.5% -> ``bin5``, 1.0% ->
+    derive a stable tag from the threshold (e.g. 0.2% -> ``bin2``, 1.0% ->
     ``bin10``) so both thresholds can coexist as separate artifacts.
     """
     if label_mode == "legacy":

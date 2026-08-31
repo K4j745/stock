@@ -3,302 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.plot.ly https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <title>Stock4caster — Instrukcja / Instructions</title>
 <meta name="description" content="Stock4caster — instrukcja i metodologia projektu inżynierskiego: dobór spółek, klasyfikacja binarna BUY/SELL, cechy techniczne i świecowe, walidacja walk-forward, obsługa dashboardu.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root, [data-theme="dark"] {
-    --color-bg: #0d1117;
-    --color-surface: #161b22;
-    --color-surface-2: #1c2128;
-    --color-surface-offset: #21262d;
-    --color-border: #30363d;
-    --color-divider: #21262d;
-    --color-text: #e6edf3;
-    --color-text-muted: #8b949e;
-    --color-text-faint: #484f58;
-    --color-primary: #388bfd;
-    --color-primary-hover: #58a6ff;
-    --color-primary-highlight: #1f3358;
-    --color-success: #3fb950;
-    --color-success-muted: #1a3a24;
-    --color-error: #f85149;
-    --color-error-muted: #3d1a1a;
-    --color-warning: #e3b341;
-    --color-warning-muted: #3a2f12;
-    --font-display: 'Inter', system-ui, sans-serif;
-    --font-body: 'Inter', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-    --radius-sm: 0.375rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-    --transition-interactive: 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  [data-theme="light"] {
-    --color-bg: #f6f8fa;
-    --color-surface: #ffffff;
-    --color-surface-2: #f6f8fa;
-    --color-surface-offset: #f0f3f6;
-    --color-border: #d0d7de;
-    --color-divider: #eaeef2;
-    --color-text: #1f2328;
-    --color-text-muted: #656d76;
-    --color-text-faint: #adb5bd;
-    --color-primary: #0969da;
-    --color-primary-hover: #0550ae;
-    --color-primary-highlight: #dbeafe;
-    --color-success: #1a7f37;
-    --color-success-muted: #d4f8df;
-    --color-error: #cf222e;
-    --color-error-muted: #fde8e8;
-    --color-warning: #9a6700;
-    --color-warning-muted: #fff8c5;
-  }
-
-  body {
-    background: var(--color-bg);
-    color: var(--color-text);
-    font-family: var(--font-body);
-    font-size: 14px;
-    line-height: 1.5;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* Header */
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    height: 56px;
-    background: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    backdrop-filter: blur(12px);
-  }
-  .site-header .logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: var(--color-text);
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-  .site-header .logo svg { color: var(--color-primary); }
-  .site-header nav { display: flex; gap: 4px; margin: 0 auto; }
-  .site-header nav a {
-    color: var(--color-text-muted);
-    text-decoration: none;
-    padding: 6px 16px;
-    border-radius: var(--radius-md);
-    font-size: 14px;
-    font-weight: 500;
-    transition: color var(--transition-interactive), background var(--transition-interactive);
-  }
-  .site-header nav a:hover { color: var(--color-text); background: var(--color-surface-offset); }
-  .site-header nav a.active { color: var(--color-text); background: var(--color-surface-2); }
-  .header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  .theme-toggle {
-    background: none;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-muted);
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color var(--transition-interactive), border-color var(--transition-interactive);
-  }
-  .theme-toggle:hover { color: var(--color-text); border-color: var(--color-text-muted); }
-  .hamburger {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    padding: 4px;
-  }
-  .mobile-nav {
-    display: none;
-    position: fixed;
-    top: 56px;
-    left: 0;
-    right: 0;
-    background: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    padding: 8px 16px;
-    z-index: 99;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .mobile-nav.open { display: flex; }
-  .mobile-nav a {
-    color: var(--color-text-muted);
-    text-decoration: none;
-    padding: 10px 16px;
-    border-radius: var(--radius-md);
-    font-size: 14px;
-    font-weight: 500;
-  }
-  .mobile-nav a.active { color: var(--color-text); background: var(--color-surface-2); }
-  @media (max-width: 768px) {
-    .site-header nav { display: none; }
-    .hamburger { display: block; }
-  }
-
-  /* Container */
-  .container { max-width: 920px; margin: 0 auto; padding: 32px 24px 8px; }
-
-  /* Page header */
-  .page-header { margin-bottom: 28px; }
-  .page-header .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-primary);
-    margin-bottom: 8px;
-  }
-  .page-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
-  .page-header p { color: var(--color-text-muted); font-size: 15px; max-width: 68ch; }
-
-  /* Prose / sections */
-  .prose section { margin-bottom: 30px; }
-  .prose h2 {
-    font-size: 19px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--color-divider);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .prose h2 .num {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--color-primary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 1px 7px;
-  }
-  .prose h3 { font-size: 15px; font-weight: 600; margin: 16px 0 8px; }
-  .prose p { color: var(--color-text); margin-bottom: 12px; max-width: 74ch; }
-  .prose ul, .prose ol { margin: 0 0 12px 20px; }
-  .prose li { margin-bottom: 6px; max-width: 72ch; }
-  .prose strong { font-weight: 700; }
-  .prose code {
-    font-family: var(--font-mono);
-    font-size: 0.86em;
-    background: var(--color-surface-offset);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 1px 6px;
-  }
-  .prose a { color: var(--color-primary); text-decoration: none; }
-  .prose a:hover { text-decoration: underline; }
-
-  .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 18px 20px;
-    box-shadow: var(--shadow-sm);
-  }
-  .card + .card { margin-top: 14px; }
-
-  .callout {
-    border-left: 3px solid var(--color-primary);
-    background: var(--color-surface-2);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
-    margin: 12px 0;
-    font-size: 13.5px;
-    color: var(--color-text-muted);
-  }
-
-  table.data {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 8px 0 16px;
-    font-size: 13px;
-  }
-  table.data thead th {
-    text-align: left;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    border-bottom: 1px solid var(--color-border);
-    padding: 8px 10px;
-  }
-  table.data tbody td {
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--color-divider);
-    vertical-align: top;
-  }
-  table.data tbody tr:hover td { background: var(--color-surface-offset); }
-  table.data td.mono, table.data td .mono {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    color: var(--color-primary);
-  }
-
-  .pill {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    padding: 2px 9px;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-  }
-  .pill-buy { color: var(--color-success); border-color: var(--color-success); }
-  .pill-sell { color: var(--color-error); border-color: var(--color-error); }
-
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
-
-  .copyright-block {
-    margin: 36px 0 8px;
-    padding: 18px 20px;
-    text-align: center;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-surface);
-    color: var(--color-text-muted);
-    font-size: 13px;
-    line-height: 1.7;
-  }
-  .copyright-block strong { color: var(--color-text); }
-
-  [data-lang] { display: none; }
-  [data-lang].lang-active { display: block; }
-
-  .site-footer {
-    text-align: center;
-    padding: 24px 0;
-    color: var(--color-text-faint);
-    font-size: 12px;
-    margin-top: 24px;
-    border-top: 1px solid var(--color-divider);
-  }
-</style>
+<link rel="stylesheet" href="../assets/page.css">
 <link rel="stylesheet" href="../assets/cyberpunk.css">
 <script defer src="../assets/app.js"></script>
 </head>
@@ -322,6 +33,7 @@
     <a href="../signals/" data-i18n="nav.signals">Signals</a>
     <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
     <a href="./" class="active" data-i18n="nav.methodology">Instructions</a>
+    <a href="../about/" data-i18n="nav.about">About</a>
   </nav>
   <div class="header-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -338,6 +50,7 @@
   <a href="../signals/" data-i18n="nav.signals">Signals</a>
   <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
   <a href="./" class="active" data-i18n="nav.methodology">Instructions</a>
+  <a href="../about/" data-i18n="nav.about">About</a>
 </div>
 
 <div class="container">
@@ -362,14 +75,14 @@
         <ul>
           <li>zbudowanie powtarzalnego pipeline'u ML: pobranie danych → cechy → etykiety → trening → ewaluacja → backtest;</li>
           <li>porównanie kilku rodzin modeli (regresja logistyczna, lasy losowe, gradient boosting) na tym samym zbiorze;</li>
-          <li>zbadanie wpływu <strong>progu decyzyjnego</strong> (0,5% vs 1,0%) na jakość i liczbę sygnałów;</li>
+          <li>zbadanie wpływu <strong>progu decyzyjnego</strong> (0,2% jako próg podstawowy, 0,5% i 1,0% jako warianty porównawcze) na jakość i liczbę sygnałów;</li>
           <li>udostępnienie wyników w postaci statycznego, interaktywnego dashboardu (GitHub Pages, bez back-endu).</li>
         </ul>
       </div>
     </section>
 
     <section>
-      <h2><span class="num">2</span> Dobór spółek</h2>
+      <h2 id="sec-tickers-pl"><span class="num">2</span> Dobór spółek</h2>
       <p>Uniwersum obejmuje <strong>10 spółek</strong> notowanych na rynku amerykańskim, dobranych tak, aby były zróżnicowane sektorowo i jednocześnie spełniały wymogi jakości danych. Indeks <code>SPY</code> pełni wyłącznie rolę <strong>benchmarku</strong> w backteście (strategia kup-i-trzymaj) — nigdy nie jest wejściem treningowym.</p>
       <h3>Kryteria doboru</h3>
       <ul>
@@ -393,6 +106,28 @@
           <tr><td class="mono">SPY</td><td>Indeks szeroki (ETF)</td><td>tylko benchmark</td></tr>
         </tbody>
       </table>
+
+      <h3>Uzasadnienie wyboru poszczególnych spółek</h3>
+      <p>Uniwersum nie jest listą „największych spółek” — każda pozycja wnosi <strong>inny czynnik ryzyka</strong> lub inny profil zmienności. W dwóch sektorach celowo umieszczono po dwie (ochrona zdrowia) lub trzy (dobra podstawowe) spółki, aby sprawdzić, czy model uczy się mechanizmu wspólnego dla sektora, czy specyfiki pojedynczej firmy.</p>
+      <table class="data">
+        <thead><tr><th>Ticker</th><th>Spółka</th><th>Dlaczego znalazła się w uniwersum</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">AAPL</td><td>Apple Inc.</td><td>Najwyższa kapitalizacja i jeden z najwyższych wolumenów na rynku — wzorcowy przypadek płynności. Zmienność napędzana cyklem produktowym daje wyraźne, powtarzalne ruchy dzienne.</td></tr>
+          <tr><td class="mono">MSFT</td><td>Microsoft Corp.</td><td>Ten sam sektor co AAPL, ale odmienny model biznesowy (oprogramowanie i chmura, przychody abonamentowe). Pozwala sprawdzić, czy model rozróżnia dwie firmy technologiczne o różnej cykliczności.</td></tr>
+          <tr><td class="mono">JPM</td><td>JPMorgan Chase</td><td>Największy bank w USA. Kurs reaguje na stopy procentowe i cykl kredytowy — czynnik ryzyka zupełnie inny niż w technologii.</td></tr>
+          <tr><td class="mono">XOM</td><td>Exxon Mobil</td><td>Sektor energetyczny, kurs silnie powiązany z ceną ropy, czyli ze zmienną makroekonomiczną zewnętrzną wobec rynku akcji. Test zachowania modelu na szeregu o innej dynamice.</td></tr>
+          <tr><td class="mono">JNJ</td><td>Johnson &amp; Johnson</td><td>Klasyczna spółka defensywna o niskiej becie i długiej historii dywidend. Niska zmienność sprawdza, jak model radzi sobie przy słabym stosunku sygnału do szumu.</td></tr>
+          <tr><td class="mono">UNH</td><td>UnitedHealth Group</td><td>Ten sam sektor co JNJ, ale ubezpieczenia zdrowotne: wyraźnie wyższa zmienność i wrażliwość na zmiany regulacyjne. Świadomy kontrast wewnątrz jednego sektora.</td></tr>
+          <tr><td class="mono">PG</td><td>Procter &amp; Gamble</td><td>Wzorcowy przedstawiciel dóbr podstawowych — stabilny popyt niezależny od cyklu koniunkturalnego.</td></tr>
+          <tr><td class="mono">WMT</td><td>Walmart Inc.</td><td>Handel detaliczny: wrażliwość na konsumpcję gospodarstw domowych i inflację, przy zachowaniu defensywnego charakteru sektora.</td></tr>
+          <tr><td class="mono">KO</td><td>The Coca-Cola Co.</td><td>Bardzo stabilny szereg cenowy z globalną ekspozycją walutową. Trzecia spółka w sektorze pozwala odróżnić efekt sektorowy od efektu pojedynczej firmy.</td></tr>
+          <tr><td class="mono">NEE</td><td>NextEra Energy</td><td>Usługi komunalne — sektor najsilniej reagujący na stopy procentowe i najniżej skorelowany z technologią. Domyka dywersyfikację uniwersum.</td></tr>
+          <tr><td class="mono">SPY</td><td>SPDR S&amp;P 500 ETF</td><td>ETF odwzorowujący indeks S&amp;P 500. Pełni <strong>wyłącznie</strong> rolę benchmarku kup-i-trzymaj w backteście — nigdy nie jest wejściem treningowym ani przedmiotem predykcji.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        Wszystkie spółki notowane są na rynku amerykańskim i w tej samej strefie czasowej, więc dzienne świece są ze sobą porównywalne i nie występuje problem rozjeżdżających się kalendarzy sesyjnych.
+      </div>
     </section>
 
     <section>
@@ -405,16 +140,17 @@
       </div>
       <p>Klasą pozytywną jest <strong>BUY</strong> — to na niej skupia się raportowanie metryk (precyzja, czułość, F1), ponieważ odpowiada realnej decyzji „warto kupić".</p>
 
-      <h3>Dwa progi decyzyjne</h3>
-      <p>Praca bada <strong>dwa progi</strong>, aby porównać bar permisywny i restrykcyjny:</p>
+      <h3>Próg decyzyjny</h3>
+      <p>Progiem <strong>podstawowym</strong> jest <strong>0,2%</strong> (wariant „B”). Odcina on ruchy tak małe, że są nieodróżnialne od szumu i spreadu, a jednocześnie zachowuje sensowny balans klas — przy progu bliskim zeru model uczyłby się przede wszystkim mikrodrgań ceny. Dwa wyższe progi zachowano jako punkty porównawcze do rozdziału wyników:</p>
       <table class="data">
         <thead><tr><th>Próg</th><th>Wartość</th><th>Tag</th><th>Interpretacja</th></tr></thead>
         <tbody>
-          <tr><td>T1 (domyślny)</td><td class="mono">0,5%</td><td class="mono">bin5</td><td>każdy istotny ruch w górę liczy się jako BUY</td></tr>
-          <tr><td>T2 (silny)</td><td class="mono">1,0%</td><td class="mono">bin10</td><td>tylko wyraźnie silne ruchy w górę liczą się jako BUY</td></tr>
+          <tr><td>T1 (podstawowy)</td><td class="mono">0,2%</td><td class="mono">bin2</td><td>ruch przekraczający szum i koszty transakcyjne liczy się jako BUY</td></tr>
+          <tr><td>T2 (porównawczy)</td><td class="mono">0,5%</td><td class="mono">bin5</td><td>każdy istotny ruch w górę liczy się jako BUY</td></tr>
+          <tr><td>T3 (silny)</td><td class="mono">1,0%</td><td class="mono">bin10</td><td>tylko wyraźnie silne ruchy w górę liczą się jako BUY</td></tr>
         </tbody>
       </table>
-      <p>Wyższy próg daje mniej sygnałów BUY, ale potencjalnie „mocniejszych"; niższy próg jest bardziej czuły. Oba warianty są trenowane i zapisywane jako osobne artefakty.</p>
+      <p>Wyższy próg daje mniej sygnałów BUY, ale potencjalnie „mocniejszych”; niższy próg jest bardziej czuły. Każdy wariant jest trenowany i zapisywany jako <strong>osobny artefakt</strong>, dzięki czemu wyniki można porównywać bez ponownego uczenia. Dashboard prezentuje domyślnie wariant <code>bin2</code>.</p>
 
       <h3>Modele</h3>
       <ul>
@@ -483,7 +219,9 @@
     <section>
       <h2><span class="num">6</span> Źródło danych</h2>
       <p>Dane cenowe (OHLCV) pochodzą z <strong>Yahoo Finance</strong>, pobierane biblioteką <code>yfinance</code> — interwał dzienny (<code>1d</code>), od <code>2011-04-01</code>. Aby wyniki pracy były <strong>powtarzalne</strong> nawet jeśli dane u dostawcy się zmienią lub znikną, surowa historia jest zapisywana jako kopia CSV w katalogu <code>stock_ml/data/historical/</code> (pliki <code>{TICKER}_historical.csv</code>) i wersjonowana w repozytorium.</p>
+      <p>Kopia lokalna pełni jednocześnie rolę <strong>trybu offline</strong>: jeśli zewnętrzne źródło jest niedostępne, pipeline korzysta z zarchiwizowanych plików CSV zamiast przerywać działanie.</p>
       <div class="callout"><strong>Zastrzeżenie:</strong> dane mają charakter edukacyjny. Dashboard nie stanowi porady inwestycyjnej.</div>
+      <p>Zasady licencyjne obowiązujące przy pobieraniu i udostępnianiu tych danych opisano na podstronie <a href="../about/">O stronie</a> oraz szczegółowo w dokumencie <a href="../LICENSING.md">LICENSING.md</a>.</p>
     </section>
 
     <section>
@@ -497,6 +235,56 @@
         <li><strong>Język</strong> — przełącznik <strong>PL / EN</strong> w prawym górnym rogu; motyw jasny/ciemny obok niego.</li>
       </ul>
       <p>Sygnały są kodowane kolorem: <span class="pill pill-buy">BUY</span> (neonowa zieleń) oraz <span class="pill pill-sell">SELL</span> (neonowa magenta).</p>
+    </section>
+
+    <section>
+      <h2><span class="num">8</span> Pomoc techniczna (FAQ)</h2>
+
+      <h3>Pytania ogólne</h3>
+      <div class="card">
+        <p><strong>Czym właściwie jest ten serwis?</strong><br>
+        To statyczna strona prezentująca wyniki pipeline'u uczenia maszynowego zbudowanego w ramach pracy inżynierskiej. Nie ma tu back-endu, bazy danych ani konta użytkownika — wszystkie dane są policzone wcześniej i opublikowane jako pliki JSON.</p>
+        <p><strong>Czy sygnały BUY / SELL to porada inwestycyjna?</strong><br>
+        Nie. Serwis ma charakter wyłącznie edukacyjny i badawczy. Prezentowane sygnały nie są rekomendacją ani doradztwem inwestycyjnym, a wyniki historyczne nie gwarantują wyników przyszłych. Szczegóły na podstronie <a href="../about/">O stronie</a>.</p>
+        <p><strong>Dlaczego wybrano akurat te spółki?</strong><br>
+        Uzasadnienie wyboru — kryteria oraz powód obecności każdej spółki z osobna — znajduje się w sekcji <a href="#sec-tickers-pl">2 „Dobór spółek”</a> powyżej.</p>
+        <p><strong>Jak często dane są aktualizowane?</strong><br>
+        Automatycznie po zamknięciu sesji w dni robocze. Data ostatniej aktualizacji jest widoczna na stronie <strong>Przegląd</strong>. Jeśli źródło zewnętrzne jest chwilowo niedostępne, prezentowana jest ostatnia zarchiwizowana kopia lokalna.</p>
+        <p><strong>Czy mogę wykorzystać te dane u siebie?</strong><br>
+        Dane pochodne (sygnały, metryki, wykresy) powstały w ramach tej pracy. Surowe notowania pochodzą z Yahoo Finance i podlegają regulaminowi tego serwisu — omówienie znajduje się w dokumencie <a href="../LICENSING.md">LICENSING.md</a>.</p>
+      </div>
+
+      <h3>Interpretacja sygnałów</h3>
+      <div class="card">
+        <p><strong>Skąd biorą się sygnały?</strong><br>
+        Z kilku niezależnych strumieni: modeli ML (regresja logistyczna, Random Forest, XGBoost, LightGBM), modelu świecowego, reguły technicznej opartej na wskaźnikach oraz głosowania większościowego. Osobno prezentowany jest pasywny benchmark kup-i-trzymaj.</p>
+        <p><strong>Co oznacza „Candle Signal”?</strong><br>
+        To predykcja osobnego modelu uczonego głównie na <strong>geometrii świecy</strong> — długości korpusu i cieni, położeniu zamknięcia w zakresie dnia oraz podstawowych formacjach. Pozwala porównać wartość informacyjną kształtu świecy z klasycznymi wskaźnikami technicznymi.</p>
+        <p><strong>Dlaczego dwa modele dają sprzeczne sygnały dla tej samej spółki?</strong><br>
+        To normalne i zamierzone. Każdy model inaczej waży cechy, więc rozbieżność jest informacją samą w sobie — mówi, że sygnał jest niepewny. Strumień <strong>ensemble</strong> rozstrzyga takie przypadki większością głosów.</p>
+        <p><strong>Co oznacza próg 0,2%?</strong><br>
+        Etykieta BUY jest przypisywana tylko wtedy, gdy zwrot następnego dnia przekracza 0,2%. Ruchy mniejsze są traktowane jako szum i trafiają do klasy SELL. Progi 0,5% i 1,0% są liczone jako warianty porównawcze.</p>
+        <p><strong>Co oznacza etykieta <code>proxy</code> przy sygnale?</strong><br>
+        Że dla danej spółki nie był dostępny wytrenowany artefakt modelu i sygnał policzono uproszczoną regułą zastępczą. Sygnały oznaczone jako <code>proxy</code> <strong>nie są</strong> predykcją modelu ML i nie powinny być tak interpretowane.</p>
+        <p><strong>Dlaczego wyniki backtestu są lepsze niż realne byłyby na rynku?</strong><br>
+        Backtest zakłada wykonanie po cenie zamknięcia i nie modeluje pełnych kosztów transakcyjnych, poślizgu ani wpływu zlecenia na rynek. Służy porównaniu modeli między sobą, a nie prognozie realnego zysku.</p>
+      </div>
+
+      <h3>Problemy techniczne</h3>
+      <div class="card">
+        <p><strong>Strona się ładuje, ale tabele i wykresy są puste.</strong><br>
+        Najczęściej to stara wersja plików w pamięci podręcznej przeglądarki. Wykonaj twarde odświeżenie: <code>Ctrl</code>+<code>F5</code> (Windows/Linux) lub <code>Cmd</code>+<code>Shift</code>+<code>R</code> (macOS). Serwis wymaga włączonego JavaScriptu.</p>
+        <p><strong>Wykresy cen nie renderują się.</strong><br>
+        Wykresy korzystają z biblioteki Plotly.js ładowanej z sieci CDN. Jeśli blokuje ją rozszerzenie przeglądarki, firewall lub tryb offline, wykresy się nie pojawią — pozostałe podstrony działają normalnie.</p>
+        <p><strong>Na podstronie „Wykresy” brakuje niektórych obrazów.</strong><br>
+        Wykresy PNG powstają w pipelinie ML i są kopiowane do serwisu przy każdej publikacji. Brak obrazu oznacza, że dany wariant modelu nie został jeszcze przeliczony dla tej spółki.</p>
+        <p><strong>Czy moje portfele są gdzieś wysyłane?</strong><br>
+        Nie. Symulator zapisuje portfele wyłącznie w pamięci lokalnej przeglądarki (<code>localStorage</code>). Nie ma serwera, nie ma żadnej transmisji danych. Wyczyszczenie danych witryny usuwa portfele bezpowrotnie.</p>
+        <p><strong>Jak zmienić język lub motyw?</strong><br>
+        Przełącznik <strong>PL / EN</strong> oraz przycisk motywu jasny/ciemny znajdują się w prawym górnym rogu każdej podstrony. Wybór jest zapamiętywany w przeglądarce.</p>
+        <p><strong>Serwis nie działa poprawnie na telefonie.</strong><br>
+        Układ jest responsywny, ale tabele z wieloma kolumnami wymagają przewijania w poziomie. Menu na wąskich ekranach ukryte jest pod przyciskiem hamburgera.</p>
+      </div>
     </section>
 
   </div>
@@ -513,14 +301,14 @@
         <ul>
           <li>build a reproducible ML pipeline: data download → features → labels → training → evaluation → backtest;</li>
           <li>compare several model families (logistic regression, random forests, gradient boosting) on the same dataset;</li>
-          <li>study the effect of the <strong>decision threshold</strong> (0.5% vs 1.0%) on signal quality and count;</li>
+          <li>study the effect of the <strong>decision threshold</strong> (0.2% as the primary threshold, 0.5% and 1.0% as comparison variants) on signal quality and count;</li>
           <li>publish the results as a static, interactive dashboard (GitHub Pages, no back-end).</li>
         </ul>
       </div>
     </section>
 
     <section>
-      <h2><span class="num">2</span> Ticker selection</h2>
+      <h2 id="sec-tickers-en"><span class="num">2</span> Ticker selection</h2>
       <p>The universe covers <strong>10 US-listed stocks</strong>, chosen to be sector-diverse while meeting data-quality requirements. The <code>SPY</code> index serves only as a <strong>benchmark</strong> in the backtest (buy-and-hold strategy) — it is never a training input.</p>
       <h3>Selection criteria</h3>
       <ul>
@@ -544,6 +332,28 @@
           <tr><td class="mono">SPY</td><td>Broad index (ETF)</td><td>benchmark only</td></tr>
         </tbody>
       </table>
+
+      <h3>Why each individual company was chosen</h3>
+      <p>The universe is not a list of “the biggest companies” — every entry contributes a <strong>different risk factor</strong> or volatility profile. Two sectors deliberately contain two (healthcare) or three (consumer staples) companies, to test whether the model learns a sector-wide mechanism or the quirks of one particular firm.</p>
+      <table class="data">
+        <thead><tr><th>Ticker</th><th>Company</th><th>Why it is in the universe</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">AAPL</td><td>Apple Inc.</td><td>The largest market capitalisation and one of the highest trading volumes on the market — a textbook liquidity case. Volatility driven by the product cycle produces clear, recurring daily moves.</td></tr>
+          <tr><td class="mono">MSFT</td><td>Microsoft Corp.</td><td>Same sector as AAPL but a different business model (software and cloud, subscription revenue). Tests whether the model can distinguish two technology firms with different cyclicality.</td></tr>
+          <tr><td class="mono">JPM</td><td>JPMorgan Chase</td><td>The largest US bank. Its price responds to interest rates and the credit cycle — a risk factor entirely different from technology.</td></tr>
+          <tr><td class="mono">XOM</td><td>Exxon Mobil</td><td>Energy sector, price tightly coupled to crude oil, i.e. a macroeconomic variable external to the equity market. Tests model behaviour on a series with different dynamics.</td></tr>
+          <tr><td class="mono">JNJ</td><td>Johnson &amp; Johnson</td><td>A classic defensive, low-beta stock with a long dividend history. Its low volatility tests how the model copes with a weak signal-to-noise ratio.</td></tr>
+          <tr><td class="mono">UNH</td><td>UnitedHealth Group</td><td>Same sector as JNJ but health insurance: markedly higher volatility and sensitivity to regulatory change. A deliberate contrast within one sector.</td></tr>
+          <tr><td class="mono">PG</td><td>Procter &amp; Gamble</td><td>The archetypal consumer-staples name — stable demand independent of the business cycle.</td></tr>
+          <tr><td class="mono">WMT</td><td>Walmart Inc.</td><td>Retail: sensitive to household consumption and inflation while retaining the defensive character of the sector.</td></tr>
+          <tr><td class="mono">KO</td><td>The Coca-Cola Co.</td><td>A very stable price series with global currency exposure. A third company in the sector makes it possible to separate the sector effect from a single-firm effect.</td></tr>
+          <tr><td class="mono">NEE</td><td>NextEra Energy</td><td>Utilities — the sector most sensitive to interest rates and least correlated with technology. Completes the diversification of the universe.</td></tr>
+          <tr><td class="mono">SPY</td><td>SPDR S&amp;P 500 ETF</td><td>An ETF tracking the S&amp;P 500. It serves <strong>only</strong> as the buy-and-hold benchmark in the backtest — it is never a training input and is never predicted.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        All companies are US-listed and share one trading calendar and time zone, so their daily candles are directly comparable and there is no misaligned-session problem.
+      </div>
     </section>
 
     <section>
@@ -556,16 +366,17 @@
       </div>
       <p>The positive class is <strong>BUY</strong> — metrics (precision, recall, F1) are reported for it, since it corresponds to the real "worth buying" decision.</p>
 
-      <h3>Two decision thresholds</h3>
-      <p>The thesis studies <strong>two thresholds</strong> to compare a permissive vs a strict bar:</p>
+      <h3>Decision threshold</h3>
+      <p>The <strong>primary</strong> threshold is <strong>0.2%</strong> (“version B”). It filters out moves so small that they are indistinguishable from noise and the spread, while still leaving a workable class balance — with a threshold close to zero the model would mostly learn price micro-jitter. Two higher thresholds are kept as comparison points for the results chapter:</p>
       <table class="data">
         <thead><tr><th>Threshold</th><th>Value</th><th>Tag</th><th>Interpretation</th></tr></thead>
         <tbody>
-          <tr><td>T1 (default)</td><td class="mono">0.5%</td><td class="mono">bin5</td><td>any meaningful up move counts as BUY</td></tr>
-          <tr><td>T2 (strong)</td><td class="mono">1.0%</td><td class="mono">bin10</td><td>only clearly strong up moves count as BUY</td></tr>
+          <tr><td>T1 (primary)</td><td class="mono">0.2%</td><td class="mono">bin2</td><td>a move exceeding noise and transaction costs counts as BUY</td></tr>
+          <tr><td>T2 (comparison)</td><td class="mono">0.5%</td><td class="mono">bin5</td><td>any meaningful up move counts as BUY</td></tr>
+          <tr><td>T3 (strong)</td><td class="mono">1.0%</td><td class="mono">bin10</td><td>only clearly strong up moves count as BUY</td></tr>
         </tbody>
       </table>
-      <p>A higher threshold yields fewer but potentially "stronger" BUY signals; a lower threshold is more sensitive. Both variants are trained and saved as separate artifacts.</p>
+      <p>A higher threshold yields fewer but potentially “stronger” BUY signals; a lower threshold is more sensitive. Each variant is trained and saved as a <strong>separate artifact</strong>, so results can be compared without retraining. The dashboard shows the <code>bin2</code> variant by default.</p>
 
       <h3>Models</h3>
       <ul>
@@ -634,7 +445,9 @@
     <section>
       <h2><span class="num">6</span> Data source</h2>
       <p>Price data (OHLCV) comes from <strong>Yahoo Finance</strong>, downloaded with the <code>yfinance</code> library — daily interval (<code>1d</code>), from <code>2011-04-01</code>. To keep the thesis results <strong>reproducible</strong> even if the provider's data changes or disappears, the raw history is saved as a CSV backup under <code>stock_ml/data/historical/</code> (files <code>{TICKER}_historical.csv</code>) and versioned in the repository.</p>
+      <p>The local copy doubles as an <strong>offline mode</strong>: if the external source is unavailable, the pipeline falls back to the archived CSV files instead of failing.</p>
       <div class="callout"><strong>Disclaimer:</strong> the data is for educational purposes. The dashboard is not financial advice.</div>
+      <p>The licensing terms governing the download and redistribution of this data are summarised on the <a href="../about/">About</a> page and discussed in detail in <a href="../LICENSING.md">LICENSING.md</a>.</p>
     </section>
 
     <section>
@@ -648,6 +461,56 @@
         <li><strong>Language</strong> — the <strong>PL / EN</strong> switch is in the top-right corner; the light/dark theme toggle sits next to it.</li>
       </ul>
       <p>Signals are color-coded: <span class="pill pill-buy">BUY</span> (neon green) and <span class="pill pill-sell">SELL</span> (neon magenta).</p>
+    </section>
+
+    <section>
+      <h2><span class="num">8</span> Technical help (FAQ)</h2>
+
+      <h3>General questions</h3>
+      <div class="card">
+        <p><strong>What exactly is this site?</strong><br>
+        A static page presenting the results of a machine-learning pipeline built for an engineering thesis. There is no back-end, no database and no user account — all data is computed in advance and published as JSON files.</p>
+        <p><strong>Are the BUY / SELL signals investment advice?</strong><br>
+        No. The site is strictly educational and research-oriented. The signals are not a recommendation or investment advice, and past results do not guarantee future performance. See the <a href="../about/">About</a> page for details.</p>
+        <p><strong>Why were these particular companies chosen?</strong><br>
+        The selection criteria and the reason each individual company is included are given in section <a href="#sec-tickers-en">2 “Ticker selection”</a> above.</p>
+        <p><strong>How often is the data updated?</strong><br>
+        Automatically after the session close on business days. The last update timestamp is shown on the <strong>Overview</strong> page. If the external source is temporarily unavailable, the most recent local archive copy is displayed instead.</p>
+        <p><strong>Can I reuse this data in my own work?</strong><br>
+        The derived data (signals, metrics, charts) was produced as part of this thesis. The raw quotes come from Yahoo Finance and are subject to that service's terms — this is discussed in <a href="../LICENSING.md">LICENSING.md</a>.</p>
+      </div>
+
+      <h3>Interpreting the signals</h3>
+      <div class="card">
+        <p><strong>Where do the signals come from?</strong><br>
+        From several independent streams: ML models (logistic regression, Random Forest, XGBoost, LightGBM), the candlestick model, a technical rule based on indicators, and a majority vote. The passive buy-and-hold benchmark is shown separately.</p>
+        <p><strong>What does “Candle Signal” mean?</strong><br>
+        It is the prediction of a separate model trained mainly on <strong>candle geometry</strong> — body and shadow lengths, the position of the close within the daily range, and basic formations. It lets you compare the information value of candle shape against classical technical indicators.</p>
+        <p><strong>Why do two models disagree on the same stock?</strong><br>
+        That is normal and intentional. Each model weights features differently, so a disagreement is information in itself — it says the signal is uncertain. The <strong>ensemble</strong> stream resolves such cases by majority vote.</p>
+        <p><strong>What does the 0.2% threshold mean?</strong><br>
+        A BUY label is assigned only when the next-day return exceeds 0.2%. Smaller moves are treated as noise and fall into the SELL class. The 0.5% and 1.0% thresholds are computed as comparison variants.</p>
+        <p><strong>What does the <code>proxy</code> tag on a signal mean?</strong><br>
+        That no trained model artifact was available for that stock, so the signal was computed with a simplified fallback rule. Signals tagged <code>proxy</code> are <strong>not</strong> ML model predictions and should not be read as such.</p>
+        <p><strong>Why do the backtest results look better than real-world trading would?</strong><br>
+        The backtest assumes execution at the closing price and does not model full transaction costs, slippage or market impact. It is meant for comparing models against each other, not for forecasting real profit.</p>
+      </div>
+
+      <h3>Technical problems</h3>
+      <div class="card">
+        <p><strong>The page loads but the tables and charts are empty.</strong><br>
+        Usually an outdated version of the files in your browser cache. Do a hard refresh: <code>Ctrl</code>+<code>F5</code> (Windows/Linux) or <code>Cmd</code>+<code>Shift</code>+<code>R</code> (macOS). The site requires JavaScript to be enabled.</p>
+        <p><strong>The price charts do not render.</strong><br>
+        The charts use the Plotly.js library loaded from a CDN. If a browser extension, firewall or offline mode blocks it, the charts will not appear — the other pages keep working normally.</p>
+        <p><strong>Some images are missing on the “Charts” page.</strong><br>
+        The PNG charts are produced by the ML pipeline and copied into the site on every publish. A missing image means that model variant has not yet been computed for that stock.</p>
+        <p><strong>Are my portfolios sent anywhere?</strong><br>
+        No. The simulator stores portfolios exclusively in your browser's local storage (<code>localStorage</code>). There is no server and no data transmission. Clearing site data deletes the portfolios irreversibly.</p>
+        <p><strong>How do I change the language or theme?</strong><br>
+        The <strong>PL / EN</strong> switch and the light/dark theme button are in the top-right corner of every page. Your choice is remembered in the browser.</p>
+        <p><strong>The site does not work well on my phone.</strong><br>
+        The layout is responsive, but wide tables require horizontal scrolling. On narrow screens the navigation is hidden behind the hamburger button.</p>
+      </div>
     </section>
 
   </div>

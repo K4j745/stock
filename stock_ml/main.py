@@ -3,13 +3,14 @@
 Stock4caster ML Pipeline - CLI Runner
 
 Binary next-day direction (BUY vs SELL) at two decision thresholds
-(0.5% and 1.0%). Pick a threshold with --threshold (default 0.005).
+(0.2% primary, plus 0.5% and 1.0% for comparison). Pick one with
+--threshold (default 0.002).
 
 Usage:
-    python main.py train [--ticker TICKER] [--threshold 0.005|0.01] [--refresh] [--tune]
-    python main.py candle [--ticker TICKER] [--threshold 0.005|0.01] [--model-type xgboost|random_forest]
+    python main.py train [--ticker TICKER] [--threshold 0.002|0.005|0.01] [--refresh] [--tune]
+    python main.py candle [--ticker TICKER] [--threshold 0.002|0.005|0.01] [--model-type xgboost|random_forest]
     python main.py backtest [--ticker TICKER] [--model MODEL] [--label-version {A,B}]
-    python main.py evaluate [--ticker TICKER] [--threshold 0.005|0.01]
+    python main.py evaluate [--ticker TICKER] [--threshold 0.002|0.005|0.01]
     python main.py report [--ticker TICKER] [--label-version {A,B}]
     python main.py shap [--ticker TICKER] [--model MODEL] [--label-version {A,B}] [--tuned]
     python main.py plots [--ticker TICKER] [--model MODEL] [--label-version {A,B}]
@@ -85,7 +86,7 @@ def cmd_evaluate(args):
 
 def cmd_report(args):
     from reports.plots import plot_model_comparison
-    # Resolve the on-disk artifact tag (e.g. binary @ 0.5% -> "bin5") so plots
+    # Resolve the on-disk artifact tag (e.g. binary @ 0.2% -> "bin2") so plots
     # load the models that ``train`` actually saved, not the legacy A/B naming.
     tag = model_tag(args.label_mode, args.label_version, args.threshold)
     tickers = [args.ticker] if args.ticker else TICKERS
@@ -95,15 +96,19 @@ def cmd_report(args):
 
 def cmd_shap(args):
     from reports.shap_analysis import run_shap_analysis
+    # Resolve the on-disk artifact tag (e.g. binary @ 0.2% -> "bin2") so SHAP
+    # loads the models that ``train`` actually saved, not the legacy A/B naming.
+    tag = model_tag(args.label_mode, args.label_version, args.threshold)
     tickers = [args.ticker] if args.ticker else TICKERS
     model = args.model or "xgboost"
     for ticker in tickers:
-        run_shap_analysis(ticker, model, args.label_version, tuned=args.tuned)
+        run_shap_analysis(ticker, model, tag, tuned=args.tuned,
+                          label_mode=args.label_mode, threshold=args.threshold)
 
 
 def cmd_plots(args):
     from reports.plots import plot_equity_curve, plot_confusion_matrix, plot_feature_importance
-    # Resolve the on-disk artifact tag (e.g. binary @ 0.5% -> "bin5") so plots
+    # Resolve the on-disk artifact tag (e.g. binary @ 0.2% -> "bin2") so plots
     # load the models that ``train`` actually saved, not the legacy A/B naming.
     tag = model_tag(args.label_mode, args.label_version, args.threshold)
     tickers = [args.ticker] if args.ticker else TICKERS
@@ -129,10 +134,10 @@ def main():
                        help="Legacy label version (only used when --label-mode=legacy)")
         p.add_argument("--label-mode", type=str, default=DEFAULT_LABEL_MODE,
                        choices=["binary", "multiclass", "legacy"],
-                       help="Label mode (default: binary, threshold=0.5%%)")
+                       help="Label mode (default: binary, threshold=0.2%%)")
         p.add_argument("--threshold", type=float, default=LABEL_THRESHOLD,
                        help="Binary decision threshold on next-day return "
-                            "(default: 0.005 = 0.5%%; the study also uses 0.01 = 1.0%%)")
+                            "(default: 0.002 = 0.2%%; the study also uses 0.005 and 0.01)")
 
     # train
     p_train = subparsers.add_parser("train", help="Train all models and save to disk")
