@@ -23,6 +23,7 @@
       "nav.signals": "Sygnały",
       "nav.portfolios": "Portfele",
       "nav.methodology": "Instrukcja",
+      "nav.about": "O stronie",
 
       "kpi.total": "Wszystkie sygnały",
       "kpi.buy": "Sygnały BUY",
@@ -56,6 +57,7 @@
       "footer.signals": "Panel sygnałów — To nie jest porada inwestycyjna",
       "footer.portfolio": "Symulator wirtualny — To nie jest porada inwestycyjna",
       "footer.methodology": "Instrukcja i metodologia projektu — praca inżynierska",
+      "footer.about": "O projekcie — praca inżynierska",
 
       "lang.aria": "Przełącz język (polski / angielski)"
     },
@@ -66,6 +68,7 @@
       "nav.signals": "Signals",
       "nav.portfolios": "Portfolios",
       "nav.methodology": "Instructions",
+      "nav.about": "About",
 
       "kpi.total": "Total Signals",
       "kpi.buy": "BUY Signals",
@@ -99,6 +102,7 @@
       "footer.signals": "Signals panel — Not financial advice",
       "footer.portfolio": "Virtual simulator — Not financial advice",
       "footer.methodology": "Project guide & methodology — engineering thesis",
+      "footer.about": "About the project — engineering thesis",
 
       "lang.aria": "Switch language (Polish / English)"
     }

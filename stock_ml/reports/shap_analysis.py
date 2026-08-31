@@ -10,7 +10,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from config import MODEL_DIR, REPORTS_DIR, RANDOM_STATE
+from config import MODEL_DIR, REPORTS_DIR, RANDOM_STATE, DEFAULT_LABEL_MODE, LABEL_THRESHOLD
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,9 @@ os.makedirs(PLOTS_DIR, exist_ok=True)
 
 
 def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: str = "A",
-                      tuned: bool = False, n_samples: int = 500):
+                      tuned: bool = False, n_samples: int = 500,
+                      label_mode: str = DEFAULT_LABEL_MODE,
+                      threshold: float = LABEL_THRESHOLD):
     """
     Generate SHAP plots for a trained model.
 
@@ -29,7 +31,10 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
     - shap_waterfall_{ticker}_{model}_{label_version}.png
 
     Args:
+        label_version: artifact tag on disk (e.g. "bin2" for binary @ 0.2%).
         n_samples: Number of samples to use for SHAP (subsample for speed)
+        label_mode / threshold: passed through so the SHAP feature matrix is
+            built with the same labels the model was trained on.
     """
     import shap
     import joblib
@@ -39,7 +44,7 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
     suffix = "_tuned" if tuned else ""
     logger.info(f"Running SHAP analysis: {ticker} | {model_name}{suffix} | label_version={label_version}")
 
-    X, y = build_feature_matrix(ticker, label_version)
+    X, y = build_feature_matrix(ticker, label_version, label_mode=label_mode, threshold=threshold)
 
     # Use last portion for SHAP (more representative of recent behavior)
     X_sample = X.iloc[-n_samples:] if len(X) > n_samples else X

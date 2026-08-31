@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-07-24T17:36:05Z",
-  "git_commit": "c6622dec8a11f3fac08a8f089e30f1352350f2d8",
+  "generated_at_utc": "2026-08-31T19:40:07Z",
+  "git_commit": "2f54a2321415df2d32ade149eaa1eec19c3571cd",
   "schema_version": "2.0",
   "data_version": "2026-05-15",
   "strategy_version": "1.0",
@@ -8,8 +8,8 @@
   "data_interval": "1d",
   "label": {
     "mode": "binary",
-    "threshold": 0.005,
-    "version": "binary-2026-05",
+    "threshold": 0.002,
+    "version": "binary-2026-08",
     "is_binary": true
   },
   "ml_thresholds": {
