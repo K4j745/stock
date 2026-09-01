@@ -1,4 +1,4 @@
-# Stock4caster — Stock Price Direction Prediction
+# StocKK Forecast — Stock Price Direction Prediction
 
 A modular ML system that predicts the **next-day price direction** of a stock as a
 **binary decision — BUY vs SELL** — from technical indicators and candlestick-shape
