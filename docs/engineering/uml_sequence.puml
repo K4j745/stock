@@ -1,6 +1,6 @@
 @startuml uml_sequence
 ' ---------------------------------------------------------------------------
-' Diagram sekwencji - Stock4caster
+' Diagram sekwencji - StocKK Forecast
 ' Scenariusz: cykliczna aktualizacja dashboardu (GitHub Actions) oraz
 ' pozniejsze wejscie uzytkownika na opublikowana strone.
 ' Praca inzynierska: "Prognozowanie krotkoterminowych zmian cen akcji

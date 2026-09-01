@@ -1,6 +1,6 @@
 @startuml uml_components
 ' ---------------------------------------------------------------------------
-' Diagram komponentow - Stock4caster
+' Diagram komponentow - StocKK Forecast
 ' Praca inzynierska: "Prognozowanie krotkoterminowych zmian cen akcji
 ' gieldowych z wykorzystaniem metod uczenia maszynowego oraz symulacja
 ' strategii inwestycyjnej"
@@ -31,7 +31,7 @@ skinparam interface {
   BorderColor #546E7A
 }
 
-title Diagram komponentow - system Stock4caster
+title Diagram komponentow - system StocKK Forecast
 
 ' --- Warstwa 1: zrodlo danych zewnetrznych ----------------------------------
 package "Warstwa danych zewnetrznych" as L1 {

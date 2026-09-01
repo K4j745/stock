@@ -1,4 +1,4 @@
-# Dokumentacja inżynierska systemu Stock4caster
+# Dokumentacja inżynierska systemu StocKK Forecast
 
 Katalog `docs/engineering/` zawiera dokumentację projektową powstałą na potrzeby rozdziału
 „Inżynieria oprogramowania" pracy inżynierskiej *Prognozowanie krótkoterminowych zmian cen akcji
@@ -28,7 +28,7 @@ do szybkiego podglądu w przeglądarce.
 
 ## Krótka charakterystyka systemu
 
-Stock4caster składa się z trzech niezależnie uruchamianych części:
+StocKK Forecast składa się z trzech niezależnie uruchamianych części:
 
 1. **Pipeline uczenia maszynowego (`stock_ml/`)** — uruchamiany lokalnie przez autora, pobiera
    notowania z Yahoo Finance, buduje macierz cech (ok. 30 wskaźników technicznych oraz cechy

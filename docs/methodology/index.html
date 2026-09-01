@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.plot.ly https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
-<title>Stock4caster — Instrukcja / Instructions</title>
-<meta name="description" content="Stock4caster — instrukcja i metodologia projektu inżynierskiego: dobór spółek, klasyfikacja binarna BUY/SELL, cechy techniczne i świecowe, walidacja walk-forward, obsługa dashboardu.">
+<title>StocKK Forecast — Instrukcja / Instructions</title>
+<meta name="description" content="StocKK Forecast — instrukcja i metodologia projektu inżynierskiego: dobór spółek, klasyfikacja binarna BUY/SELL, cechy techniczne i świecowe, walidacja walk-forward, obsługa dashboardu.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
       <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
       <polyline points="16 7 22 7 22 13"/>
     </svg>
-    Stock4caster
+    StocKK Forecast
   </a>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -55,7 +55,7 @@
 
 <div class="container">
   <div class="page-header">
-    <div class="eyebrow">Stock4caster</div>
+    <div class="eyebrow">StocKK Forecast</div>
     <h1 data-i18n="nav.methodology">Instrukcja</h1>
     <p>
       <span data-lang="pl" class="lang-active">Opis projektu, dobór spółek, metodyka uczenia maszynowego i walidacja czasowa — praca inżynierska.</span>
@@ -69,7 +69,7 @@
     <section>
       <h2><span class="num">1</span> O projekcie</h2>
       <div class="card">
-        <p><strong>Stock4caster</strong> to projekt zrealizowany w ramach pracy inżynierskiej. Łączy klasyczne wskaźniki analizy technicznej z modelami uczenia maszynowego, aby dla wybranego uniwersum spółek generować dzienne sygnały decyzyjne <span class="pill pill-buy">BUY</span> / <span class="pill pill-sell">SELL</span>.</p>
+        <p><strong>StocKK Forecast</strong> to projekt zrealizowany w ramach pracy inżynierskiej. Łączy klasyczne wskaźniki analizy technicznej z modelami uczenia maszynowego, aby dla wybranego uniwersum spółek generować dzienne sygnały decyzyjne <span class="pill pill-buy">BUY</span> / <span class="pill pill-sell">SELL</span>.</p>
         <p><strong>Cel pracy:</strong> zbadanie, czy nadzorowane modele klasyfikacji binarnej, uczone na cechach technicznych i świecowych, są w stanie przewidzieć kierunek ruchu ceny w następnej sesji lepiej niż strategia odniesienia (kup i trzymaj benchmark SPY), przy zachowaniu poprawnej metodyki walidacji szeregów czasowych.</p>
         <p><strong>Cele szczegółowe:</strong></p>
         <ul>
@@ -295,7 +295,7 @@
     <section>
       <h2><span class="num">1</span> About the project</h2>
       <div class="card">
-        <p><strong>Stock4caster</strong> is a project built as part of an engineering (BSc) thesis. It combines classical technical-analysis indicators with machine-learning models to generate daily <span class="pill pill-buy">BUY</span> / <span class="pill pill-sell">SELL</span> decision signals for a chosen universe of stocks.</p>
+        <p><strong>StocKK Forecast</strong> is a project built as part of an engineering (BSc) thesis. It combines classical technical-analysis indicators with machine-learning models to generate daily <span class="pill pill-buy">BUY</span> / <span class="pill pill-sell">SELL</span> decision signals for a chosen universe of stocks.</p>
         <p><strong>Thesis goal:</strong> to investigate whether supervised binary-classification models, trained on technical and candlestick features, can predict the direction of the next session's price move better than a reference strategy (buy-and-hold of the SPY benchmark), while following a correct time-series validation methodology.</p>
         <p><strong>Detailed objectives:</strong></p>
         <ul>
@@ -563,7 +563,7 @@
   // Read the shared key directly so the correct language shows before app.js runs;
   // then stay in sync via the 's4c:langchange' event app.js dispatches.
   function currentLang() {
-    var l = localStorage.getItem('stock4caster-lang') || 'pl';
+    var l = localStorage.getItem('stockk-forecast-lang') || 'pl';
     return (l === 'pl' || l === 'en') ? l : 'pl';
   }
   function applyLang(lang) {
