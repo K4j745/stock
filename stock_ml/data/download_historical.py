@@ -1,6 +1,6 @@
 """Historical OHLCV backup downloader.
 
-Downloads the full daily history for every ticker in the Stock4caster universe
+Downloads the full daily history for every ticker in the StocKK Forecast universe
 (plus the SPY benchmark) and writes one committed CSV per ticker into
 ``data/historical/``. Unlike ``data/download.py`` (which caches into the
 gitignored ``data/raw/`` for training), these CSVs are **committed to the repo**

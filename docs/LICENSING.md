@@ -1,4 +1,4 @@
-# Zasady i licencje wykorzystania danych źródłowych w projekcie „Stock4caster”
+# Zasady i licencje wykorzystania danych źródłowych w projekcie „StocKK Forecast”
 
 > **Zastrzeżenie.** Niniejszy dokument ma charakter informacyjny i porządkujący na potrzeby
 > pracy inżynierskiej. **Nie stanowi porady prawnej.** Zawarte tu oceny są opinią autora
@@ -218,7 +218,7 @@ Autor niniejszej pracy oświadcza, że:
    realizowanej na Uniwersytecie Przyrodniczym w Poznaniu — do trenowania, walidacji i
    ewaluacji modeli uczenia maszynowego oraz do prezentacji wyników tych eksperymentów.
 
-2. **Brak jakiejkolwiek komercjalizacji.** Projekt „Stock4caster” nie jest i nie będzie
+2. **Brak jakiejkolwiek komercjalizacji.** Projekt „StocKK Forecast” nie jest i nie będzie
    przedmiotem sprzedaży, odpłatnego udostępniania, subskrypcji ani innej formy monetyzacji.
    Dashboard nie zawiera reklam, mechanizmów płatności ani zbierania danych użytkowników.
    Kod i wyniki udostępniane są nieodpłatnie w celach edukacyjnych.
@@ -537,7 +537,7 @@ Data dostępu do wszystkich źródeł: **26 sierpnia 2026 r.**
 
 ### Wersja polska
 
-Dane rynkowe prezentowane w serwisie Stock4caster pochodzą z serwisu Yahoo Finance i zostały
+Dane rynkowe prezentowane w serwisie StocKK Forecast pochodzą z serwisu Yahoo Finance i zostały
 pobrane przy użyciu otwartoźródłowej biblioteki `yfinance` (licencja Apache 2.0), która nie
 jest oficjalnym API Yahoo i nie jest z Yahoo Inc. powiązana. Projekt ma charakter wyłącznie
 naukowo-dydaktyczny — powstał jako część pracy inżynierskiej i nie jest w żaden sposób
@@ -550,7 +550,7 @@ dokument [LICENSING.md](LICENSING.md).
 
 ### English version
 
-The market data presented on Stock4caster is sourced from Yahoo Finance and retrieved using
+The market data presented on StocKK Forecast is sourced from Yahoo Finance and retrieved using
 the open-source `yfinance` library (Apache 2.0 licence), which is not an official Yahoo API
 and is not affiliated with Yahoo Inc. This project is strictly academic and educational — it
 was created as part of an engineering thesis and is not commercialised in any way. The

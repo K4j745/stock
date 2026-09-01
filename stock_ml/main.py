@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Stock4caster ML Pipeline - CLI Runner
+StocKK Forecast ML Pipeline - CLI Runner
 
 Binary next-day direction (BUY vs SELL) at two decision thresholds
 (0.2% primary, plus 0.5% and 1.0% for comparison). Pick one with
@@ -121,7 +121,7 @@ def cmd_plots(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Stock4caster ML Pipeline - predict next-day BUY/SELL direction",
+        description="StocKK Forecast ML Pipeline - predict next-day BUY/SELL direction",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )

@@ -1,7 +1,7 @@
 /* ============================================================================
-   Stock4caster — shared front-end chrome: PL/EN i18n + copyright footer.
+   StocKK Forecast — shared front-end chrome: PL/EN i18n + copyright footer.
    Default language is Polish (thesis language). The choice is persisted in
-   localStorage under 'stock4caster-lang'. Static UI is translated via
+   localStorage under 'stockk-forecast-lang'. Static UI is translated via
    [data-i18n] / [data-i18n-html] / [data-i18n-attr] attributes; a small
    window.S4C API lets the per-page inline scripts translate the few strings
    they render dynamically.
@@ -9,7 +9,7 @@
 (function () {
   "use strict";
 
-  var LANG_KEY = "stock4caster-lang";
+  var LANG_KEY = "stockk-forecast-lang";
   var DEFAULT_LANG = "pl";
   var COPYRIGHT =
     "© 2025 Kajetan Kaczyński — Praca inżynierska / " +
