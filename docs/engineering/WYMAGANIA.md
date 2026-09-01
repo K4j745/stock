@@ -1,6 +1,6 @@
 # Inżynieria oprogramowania
 
-Rozdział opisuje proces wytwórczy systemu Stock4caster oraz specyfikację wymagań, jakie postawiono
+Rozdział opisuje proces wytwórczy systemu StocKK Forecast oraz specyfikację wymagań, jakie postawiono
 przed jego trzema podsystemami: pipeline'em uczenia maszynowego, generatorem artefaktów danych
 oraz statycznym serwisem WWW. Wymagania zostały spisane na podstawie analizy zaimplementowanego
 kodu, a przypisany im status realizacji odzwierciedla rzeczywisty stan repozytorium, nie zaś

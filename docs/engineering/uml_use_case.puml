@@ -1,6 +1,6 @@
 @startuml uml_use_case
 ' ---------------------------------------------------------------------------
-' Diagram przypadkow uzycia - Stock4caster
+' Diagram przypadkow uzycia - StocKK Forecast
 ' Praca inzynierska: "Prognozowanie krotkoterminowych zmian cen akcji
 ' gieldowych z wykorzystaniem metod uczenia maszynowego oraz symulacja
 ' strategii inwestycyjnej"
@@ -26,7 +26,7 @@ skinparam rectangle {
   BorderColor #90A4AE
 }
 
-title Diagram przypadkow uzycia - system Stock4caster
+title Diagram przypadkow uzycia - system StocKK Forecast
 
 ' --- Aktorzy -----------------------------------------------------------------
 actor "Uzytkownik strony\n(odwiedzajacy)" as Uzytkownik
