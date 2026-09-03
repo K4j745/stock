@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-09-02T19:39:53Z",
-  "git_commit": "51d1df1a828828bc6f85530c77ebea67d07db87f",
+  "generated_at_utc": "2026-09-03T19:05:08Z",
+  "git_commit": "c94f04d4dc71b43753eb4a51d3a7358071572589",
   "schema_version": "2.0",
   "data_version": "2026-05-15",
   "strategy_version": "1.0",
@@ -36,14 +36,14 @@
     "Other": "#d2a8ff"
   },
   "n_tickers": 10,
-  "n_portfolios": 0,
+  "n_portfolios": 9,
   "ml_artifacts_present": {
-    "logistic_regression": false,
-    "random_forest": false,
-    "xgboost": false,
-    "lightgbm": false,
-    "candle": false
+    "logistic_regression": true,
+    "random_forest": true,
+    "xgboost": true,
+    "lightgbm": true,
+    "candle": true
   },
-  "ml_artifacts_any_real": false,
+  "ml_artifacts_any_real": true,
   "source": "dashboard/generate.py"
 }
