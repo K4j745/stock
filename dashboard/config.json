@@ -65,5 +65,114 @@
     "_binary_note": "Signals are strictly binary (BUY/SELL) since 2026-07. The 0.45-0.55 HOLD dead-band was removed: a single 0.5 decision threshold is used. label_version bin2 = binary label with a 0.2% next-day return threshold (supervisor's 'version B', adopted 2026-08 in place of the earlier bin5/0.5%); loads real stock_ml artifacts when present."
   },
 
-  "portfolios": []
+  "portfolios": [
+    {
+      "id": "spy_bh",
+      "name": "SPY — kup i trzymaj",
+      "description": "Kupno samego indeksu SPY 500. Odniesienie rynkowe.",
+      "note": "ŹRÓDŁO SYGNAŁU: buy_and_hold (kup i trzymaj). START: portfel kupuje 10 akcji SPY po cenie otwarcia pierwszej sesji (pozycja zalążkowa, akcja SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał. buy_and_hold emituje BUY w dniu 0 (dokupienie 1 akcji), a potem wyłącznie HOLD — brak sygnałów SELL, więc portfel po prostu trzyma pozycję do końca okresu. ROLA: dolna granica odniesienia — 'ile dałby sam rynek bez handlowania'. Benchmark SPY liczony automatycznie.",
+      "tickers": ["SPY"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "buy_and_hold",
+      "rules": { "max_positions": 1, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "bh_koszyk",
+      "name": "Koszyk 10 — kup i trzymaj",
+      "description": "Kup i trzymaj równoważony koszyk 10 spółek. Baseline pasywny.",
+      "note": "ŹRÓDŁO SYGNAŁU: buy_and_hold (kup i trzymaj) dla każdej z 10 spółek. START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe, akcje SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał. buy_and_hold emituje BUY w dniu 0 (dokupienie 1 akcji na spółkę), potem wyłącznie HOLD — brak SELL, więc koszyk jest trzymany biernie. ROLA: baseline pasywny — 'czy warto handlować zamiast trzymać te same spółki'. Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "buy_and_hold",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "reguly_tech",
+      "name": "Reguły techniczne (bez ML)",
+      "description": "Klasyczna analiza techniczna. Baseline bez uczenia maszynowego.",
+      "note": "ŹRÓDŁO SYGNAŁU: technical_rule_based — klasyczne reguły analizy technicznej (MA/MACD/RSI/Bollinger), bez uczenia maszynowego. START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał — przy BUY dokupuje 1 akcję (o ile starcza gotówki), przy SELL sprzedaje 1 akcję (o ile jest co sprzedać). ROLA: baseline bez ML — dowód, czy modele ML wnoszą wartość ponad proste reguły. Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "technical_rule_based",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "lr",
+      "name": "Regresja logistyczna",
+      "description": "Portfel sterowany modelem logistic_regression.",
+      "note": "ŹRÓDŁO SYGNAŁU: model logistic_regression (regresja logistyczna). START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał — BUY dokupuje 1 akcję, SELL sprzedaje 1 akcję, w zależności od binarnej predykcji modelu (próg 0.5, etykieta bin2 = zwrot następnego dnia > 0,2%). ROLA: monitoring pojedynczego modelu ML. Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "logistic_regression",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "rf",
+      "name": "Las losowy",
+      "description": "Portfel sterowany modelem random_forest.",
+      "note": "ŹRÓDŁO SYGNAŁU: model random_forest (las losowy). START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał — BUY dokupuje 1 akcję, SELL sprzedaje 1 akcję, w zależności od binarnej predykcji modelu (próg 0.5, etykieta bin2 = zwrot następnego dnia > 0,2%). ROLA: monitoring pojedynczego modelu ML. Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "random_forest",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "xgb",
+      "name": "XGBoost",
+      "description": "Portfel sterowany modelem xgboost.",
+      "note": "ŹRÓDŁO SYGNAŁU: model xgboost (gradient boosting). START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał — BUY dokupuje 1 akcję, SELL sprzedaje 1 akcję, w zależności od binarnej predykcji modelu (próg 0.5, etykieta bin2 = zwrot następnego dnia > 0,2%). ROLA: monitoring pojedynczego modelu ML (zwykle najsilniejszy kandydat). Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "xgboost",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "lgbm",
+      "name": "LightGBM",
+      "description": "Portfel sterowany modelem lightgbm.",
+      "note": "ŹRÓDŁO SYGNAŁU: model lightgbm (gradient boosting). START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał — BUY dokupuje 1 akcję, SELL sprzedaje 1 akcję, w zależności od binarnej predykcji modelu (próg 0.5, etykieta bin2 = zwrot następnego dnia > 0,2%). ROLA: monitoring pojedynczego modelu ML. Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "lightgbm",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "candle",
+      "name": "Model świecowy",
+      "description": "Portfel sterowany modelem świecowym (candle).",
+      "note": "ŹRÓDŁO SYGNAŁU: model candle (oparty na cechach świecowych OHLC). START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał — BUY dokupuje 1 akcję, SELL sprzedaje 1 akcję, w zależności od binarnej predykcji modelu (próg 0.5, etykieta bin2 = zwrot następnego dnia > 0,2%). ROLA: monitoring modelu świecowego. Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "candle",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "ensemble",
+      "name": "Zespół (głosowanie większościowe)",
+      "description": "Sygnał wykonywany gdy min. 2 modele głosują zgodnie.",
+      "note": "ŹRÓDŁO SYGNAŁU: ensemble_majority — sygnał wykonywany, gdy co najmniej 2 modele głosują zgodnie (agregacja większościowa). START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał — BUY dokupuje 1 akcję, SELL sprzedaje 1 akcję, gdy większość modeli zgadza się co do kierunku. ROLA: test hipotezy, że agregacja modeli jest stabilniejsza niż pojedynczy model. Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "ensemble_majority",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    }
+  ]
 }
