@@ -1,0 +1,86 @@
+[
+  {
+    "ticker": "XOM",
+    "shares": 52.0,
+    "avg_cost": 128.4917,
+    "last_price": 163.015,
+    "market_value": 8476.78,
+    "unrealised_pnl_abs": 1795.21,
+    "unrealised_pnl_pct": 0.268681,
+    "entry_date": "2026-09-03",
+    "entry_price": 164.42999267578125,
+    "last_signal_id": "S-XOM-lightgbm-20260903-f58638"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 182.0,
+    "avg_cost": 187.1738,
+    "last_price": 278.4,
+    "market_value": 50668.8,
+    "unrealised_pnl_abs": 16603.17,
+    "unrealised_pnl_pct": 0.487388,
+    "entry_date": "2026-08-26",
+    "entry_price": 271.9700012207031,
+    "last_signal_id": "S-JNJ-lightgbm-20260826-de8c3d"
+  },
+  {
+    "ticker": "UNH",
+    "shares": 66.0,
+    "avg_cost": 374.3158,
+    "last_price": 399.94,
+    "market_value": 26396.04,
+    "unrealised_pnl_abs": 1691.19,
+    "unrealised_pnl_pct": 0.068456,
+    "entry_date": "2026-08-31",
+    "entry_price": 393.5199890136719,
+    "last_signal_id": "S-UNH-lightgbm-20260831-5821eb"
+  },
+  {
+    "ticker": "PG",
+    "shares": 53.0,
+    "avg_cost": 150.5943,
+    "last_price": 147.3495,
+    "market_value": 7809.52,
+    "unrealised_pnl_abs": -171.98,
+    "unrealised_pnl_pct": -0.021547,
+    "entry_date": "2026-09-01",
+    "entry_price": 145.75999450683594,
+    "last_signal_id": "S-PG-lightgbm-20260901-bbd043"
+  },
+  {
+    "ticker": "KO",
+    "shares": 157.0,
+    "avg_cost": 73.9478,
+    "last_price": 89.0,
+    "market_value": 13973.0,
+    "unrealised_pnl_abs": 2363.19,
+    "unrealised_pnl_pct": 0.203551,
+    "entry_date": "2026-09-03",
+    "entry_price": 88.11000061035156,
+    "last_signal_id": "S-KO-lightgbm-20260903-dd2cdc"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 133.0,
+    "avg_cost": 94.3468,
+    "last_price": 108.685,
+    "market_value": 14455.1,
+    "unrealised_pnl_abs": 1906.98,
+    "unrealised_pnl_pct": 0.151974,
+    "entry_date": "2026-09-03",
+    "entry_price": 106.44999694824219,
+    "last_signal_id": "S-WMT-lightgbm-20260903-d70939"
+  },
+  {
+    "ticker": "NEE",
+    "shares": 230.0,
+    "avg_cost": 77.834,
+    "last_price": 83.985,
+    "market_value": 19316.55,
+    "unrealised_pnl_abs": 1414.72,
+    "unrealised_pnl_pct": 0.079027,
+    "entry_date": "2026-09-03",
+    "entry_price": 83.54000091552734,
+    "last_signal_id": "S-NEE-lightgbm-20260903-09b66c"
+  }
+]

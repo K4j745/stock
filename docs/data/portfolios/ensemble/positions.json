@@ -1,0 +1,86 @@
+[
+  {
+    "ticker": "XOM",
+    "shares": 114.0,
+    "avg_cost": 131.4202,
+    "last_price": 163.015,
+    "market_value": 18583.71,
+    "unrealised_pnl_abs": 3601.8,
+    "unrealised_pnl_pct": 0.24041,
+    "entry_date": "2026-08-28",
+    "entry_price": 156.60000610351562,
+    "last_signal_id": "S-XOM-ensemble_majority-20260828-cd097a"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 194.0,
+    "avg_cost": 198.1335,
+    "last_price": 278.4,
+    "market_value": 54009.6,
+    "unrealised_pnl_abs": 15571.71,
+    "unrealised_pnl_pct": 0.405113,
+    "entry_date": "2026-08-28",
+    "entry_price": 265.7799987792969,
+    "last_signal_id": "S-JNJ-ensemble_majority-20260828-e8a6e5"
+  },
+  {
+    "ticker": "UNH",
+    "shares": 55.0,
+    "avg_cost": 363.3086,
+    "last_price": 399.94,
+    "market_value": 21996.7,
+    "unrealised_pnl_abs": 2014.73,
+    "unrealised_pnl_pct": 0.100827,
+    "entry_date": "2026-08-28",
+    "entry_price": 396.4200134277344,
+    "last_signal_id": "S-UNH-ensemble_majority-20260828-2dd78c"
+  },
+  {
+    "ticker": "PG",
+    "shares": 31.0,
+    "avg_cost": 149.1131,
+    "last_price": 147.3495,
+    "market_value": 4567.83,
+    "unrealised_pnl_abs": -54.67,
+    "unrealised_pnl_pct": -0.011827,
+    "entry_date": "2026-09-01",
+    "entry_price": 145.75999450683594,
+    "last_signal_id": "S-PG-ensemble_majority-20260901-b6e57d"
+  },
+  {
+    "ticker": "KO",
+    "shares": 231.0,
+    "avg_cost": 72.4502,
+    "last_price": 89.0,
+    "market_value": 20559.0,
+    "unrealised_pnl_abs": 3823.0,
+    "unrealised_pnl_pct": 0.228429,
+    "entry_date": "2026-09-03",
+    "entry_price": 88.11000061035156,
+    "last_signal_id": "S-KO-ensemble_majority-20260903-0201d2"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 198.0,
+    "avg_cost": 91.3659,
+    "last_price": 108.685,
+    "market_value": 21519.63,
+    "unrealised_pnl_abs": 3429.17,
+    "unrealised_pnl_pct": 0.189557,
+    "entry_date": "2026-09-03",
+    "entry_price": 106.44999694824219,
+    "last_signal_id": "S-WMT-ensemble_majority-20260903-ee048b"
+  },
+  {
+    "ticker": "NEE",
+    "shares": 133.0,
+    "avg_cost": 80.3149,
+    "last_price": 83.985,
+    "market_value": 11170.01,
+    "unrealised_pnl_abs": 488.12,
+    "unrealised_pnl_pct": 0.045696,
+    "entry_date": "2026-09-03",
+    "entry_price": 83.54000091552734,
+    "last_signal_id": "S-NEE-ensemble_majority-20260903-9ab982"
+  }
+]
