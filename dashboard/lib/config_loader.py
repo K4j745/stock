@@ -134,14 +134,37 @@ def _default_portfolios(tickers: List[str]) -> List[Dict[str, Any]]:
 def _normalise_portfolio(p: Dict[str, Any]) -> Dict[str, Any]:
     if "id" not in p or "tickers" not in p:
         raise ConfigError(f"Portfolio missing id or tickers: {p}")
+    rules = dict(p.get("rules", {}) or {})
+
+    # Normalise the optional trading-mechanics rules so the engine always
+    # receives well-typed values (they are all opt-in; defaults preserve the
+    # legacy all-in/all-out behaviour).
+    if "seed_shares" in rules:
+        try:
+            rules["seed_shares"] = max(0, int(rules["seed_shares"]))
+        except (TypeError, ValueError):
+            raise ConfigError(f"Portfolio {p['id']}: seed_shares must be an integer")
+    trade_mode = str(rules.get("trade_mode", "all_in"))
+    if trade_mode not in ("all_in", "incremental"):
+        raise ConfigError(
+            f"Portfolio {p['id']}: trade_mode must be 'all_in' or 'incremental', got {trade_mode!r}"
+        )
+    rules["trade_mode"] = trade_mode
+    if "trade_size" in rules:
+        try:
+            rules["trade_size"] = max(1, int(rules["trade_size"]))
+        except (TypeError, ValueError):
+            raise ConfigError(f"Portfolio {p['id']}: trade_size must be an integer")
+
     return {
         "id": p["id"],
         "name": p.get("name", p["id"]),
         "description": p.get("description", ""),
+        "note": p.get("note", ""),
         "tickers": list(p["tickers"]),
         "weights": p.get("weights", "equal"),
         "initial_capital": float(p.get("initial_capital", 100000)),
         "signal_source": p.get("signal_source", "technical_rule_based"),
-        "rules": p.get("rules", {}),
+        "rules": rules,
         "benchmark": p.get("benchmark", "SPY"),
     }

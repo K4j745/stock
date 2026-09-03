@@ -1,0 +1,110 @@
+[
+  {
+    "ticker": "AAPL",
+    "shares": 8.0,
+    "avg_cost": 317.0352,
+    "last_price": 328.21,
+    "market_value": 2625.68,
+    "unrealised_pnl_abs": 89.4,
+    "unrealised_pnl_pct": 0.035248,
+    "entry_date": "2026-09-03",
+    "entry_price": 324.94769287109375,
+    "last_signal_id": "S-AAPL-technical_rule_based-20260903-5dd809"
+  },
+  {
+    "ticker": "MSFT",
+    "shares": 10.0,
+    "avg_cost": 490.9909,
+    "last_price": 510.12,
+    "market_value": 5101.2,
+    "unrealised_pnl_abs": 191.29,
+    "unrealised_pnl_pct": 0.03896,
+    "entry_date": "2026-08-25",
+    "entry_price": 485.44000244140625,
+    "last_signal_id": "S-MSFT-technical_rule_based-20260825-084b42"
+  },
+  {
+    "ticker": "JPM",
+    "shares": 176.0,
+    "avg_cost": 259.5611,
+    "last_price": 362.0,
+    "market_value": 63712.0,
+    "unrealised_pnl_abs": 18029.24,
+    "unrealised_pnl_pct": 0.394662,
+    "entry_date": "2026-08-28",
+    "entry_price": 355.6700134277344,
+    "last_signal_id": "S-JPM-technical_rule_based-20260828-24e9c6"
+  },
+  {
+    "ticker": "XOM",
+    "shares": 75.0,
+    "avg_cost": 137.5033,
+    "last_price": 162.24,
+    "market_value": 12168.0,
+    "unrealised_pnl_abs": 1855.25,
+    "unrealised_pnl_pct": 0.179899,
+    "entry_date": "2026-09-02",
+    "entry_price": 163.92999267578125,
+    "last_signal_id": "S-XOM-technical_rule_based-20260902-64e1c9"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 72.0,
+    "avg_cost": 222.6017,
+    "last_price": 278.47,
+    "market_value": 20049.84,
+    "unrealised_pnl_abs": 4022.52,
+    "unrealised_pnl_pct": 0.250979,
+    "entry_date": "2026-08-03",
+    "entry_price": 254.97000122070312,
+    "last_signal_id": "S-JNJ-technical_rule_based-20260803-d20320"
+  },
+  {
+    "ticker": "UNH",
+    "shares": 12.0,
+    "avg_cost": 372.4633,
+    "last_price": 400.95,
+    "market_value": 4811.4,
+    "unrealised_pnl_abs": 341.84,
+    "unrealised_pnl_pct": 0.076482,
+    "entry_date": "2026-07-30",
+    "entry_price": 415.19000244140625,
+    "last_signal_id": "S-UNH-technical_rule_based-20260730-95041f"
+  },
+  {
+    "ticker": "PG",
+    "shares": 2.0,
+    "avg_cost": 147.05,
+    "last_price": 146.88,
+    "market_value": 293.76,
+    "unrealised_pnl_abs": -0.34,
+    "unrealised_pnl_pct": -0.001156,
+    "entry_date": "2026-09-03",
+    "entry_price": 147.67999267578125,
+    "last_signal_id": "S-PG-technical_rule_based-20260903-358e9a"
+  },
+  {
+    "ticker": "KO",
+    "shares": 139.0,
+    "avg_cost": 75.9838,
+    "last_price": 88.84,
+    "market_value": 12348.76,
+    "unrealised_pnl_abs": 1787.01,
+    "unrealised_pnl_pct": 0.169196,
+    "entry_date": "2026-09-03",
+    "entry_price": 88.11000061035156,
+    "last_signal_id": "S-KO-technical_rule_based-20260903-d99430"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 173.0,
+    "avg_cost": 94.0016,
+    "last_price": 108.42,
+    "market_value": 18756.66,
+    "unrealised_pnl_abs": 2494.39,
+    "unrealised_pnl_pct": 0.153385,
+    "entry_date": "2026-08-21",
+    "entry_price": 103.69000244140625,
+    "last_signal_id": "S-WMT-technical_rule_based-20260821-073e69"
+  }
+]
