@@ -3,10 +3,10 @@
   "portfolio_name": "LightGBM",
   "description": "Portfel sterowany modelem lightgbm.",
   "initial_capital": 100000.0,
-  "final_value": 141118.82,
+  "final_value": 141092.22,
   "cash": 23.020488739013672,
   "metadata": {
-    "generated_at_utc": "2026-09-03T19:08:58Z",
+    "generated_at_utc": "2026-09-03T20:13:32Z",
     "data_version": "2026-05-15",
     "strategy_version": "1.0",
     "signal_source": "lightgbm",
@@ -29,12 +29,12 @@
     "label_version": "binary-2026-08"
   },
   "metrics": {
-    "total_return": 0.410752,
-    "cagr": 0.12223,
-    "volatility_annualised": 0.136205,
-    "sharpe_ratio": 0.897398,
+    "total_return": 0.410486,
+    "cagr": 0.122159,
+    "volatility_annualised": 0.136201,
+    "sharpe_ratio": 0.896902,
     "max_drawdown": -0.187395,
-    "calmar_ratio": 0.652258,
+    "calmar_ratio": 0.65188,
     "n_observations": 752,
     "trade_n_trades": 2262,
     "trade_n_wins": 1639,
@@ -47,12 +47,12 @@
     "trade_expectancy": 6.761683
   },
   "benchmark_metrics": {
-    "total_return": 0.722042,
-    "cagr": 0.199775,
-    "volatility_annualised": 0.153511,
-    "sharpe_ratio": 1.301369,
+    "total_return": 0.721018,
+    "cagr": 0.199536,
+    "volatility_annualised": 0.153498,
+    "sharpe_ratio": 1.299922,
     "max_drawdown": -0.189989,
-    "calmar_ratio": 1.051507,
+    "calmar_ratio": 1.050249,
     "n_observations": 752
   }
 }
