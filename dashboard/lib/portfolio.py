@@ -113,6 +113,20 @@ def run_portfolio_backtest(
 
     signal_source = portfolio_cfg.get("signal_source", "technical_rule_based")
     rules = portfolio_cfg.get("rules", {}) or {}
+    note = portfolio_cfg.get("note", "")
+
+    # Trading mechanics (all optional; defaults reproduce the legacy behaviour):
+    #   seed_shares  — buy this many shares of every ticker on its first trading
+    #                  day (a "starter" position), regardless of signal.
+    #   trade_mode   — "all_in" (legacy: enter full slot on BUY, exit fully on
+    #                  SELL) or "incremental" (buy/sell ``trade_size`` shares on
+    #                  each BUY/SELL signal, accumulating or trimming gradually).
+    #   trade_size   — shares per BUY/SELL in incremental mode.
+    seed_shares = int(rules.get("seed_shares", 0) or 0)
+    trade_mode = str(rules.get("trade_mode", "all_in"))
+    trade_size = int(rules.get("trade_size", 1) or 1)
+    if trade_size < 1:
+        trade_size = 1
 
     # Determine the calendar — union of all ticker indices, then sort.
     all_dates = sorted(set().union(*(prices_by_ticker[t].index for t in tickers)))
@@ -132,6 +146,58 @@ def run_portfolio_backtest(
     trade_pnls: List[float] = []
 
     generated_at = _utc_now_iso()
+
+    # --- Optional seeding: buy a starter position of ``seed_shares`` for every
+    #     ticker on its first available trading day (at that day's open). Each
+    #     seed purchase is recorded as a SEED decision/transaction so the audit
+    #     trail stays complete and the seed is analysable like any other trade.
+    if seed_shares > 0:
+        for t in tickers:
+            df = prices_by_ticker[t]
+            if df.empty:
+                continue
+            first_day = df.index[0]
+            row = df.loc[first_day]
+            price = float(row["Open"]) if pd.notna(row.get("Open")) else float(row.get("Close") or 0)
+            if price <= 0:
+                continue
+            qty = float(seed_shares)
+            if qty * price > cash:  # cap by available cash
+                qty = math_floor(cash / price)
+            if qty <= 0:
+                continue
+            cash_before = cash
+            cash -= qty * price
+            pos = positions[t]
+            pos.shares += qty
+            pos.cost_basis = price
+            pos.entry_date = first_day.strftime("%Y-%m-%d")
+            pos.entry_price = price
+            sig_id = f"S-{t}-seed-{first_day.strftime('%Y%m%d')}"
+            pos.last_signal_id = sig_id
+            tx_id = f"T-{pid}-{_short_uuid()}"
+            decision_id = f"D-{pid}-{_short_uuid()}"
+            r1, r5, r20 = _forward_returns(df, first_day)
+            seed_rec = _build_decision_record(
+                portfolio_cfg=portfolio_cfg, ticker=t, day=first_day,
+                model_name="seed", sig_row={"signal": "SEED", "triggered_rules": "seed_position"},
+                sig_id=sig_id, decision_id=decision_id, action="SEED",
+                execution_price=price, prev_close=_previous_close(df, first_day),
+                row=row, quantity=qty, shares_before=0.0, shares_after=pos.shares,
+                cash_before=cash_before, cash_after=cash,
+                pos_val_before=0.0, pos_val_after=pos.shares * price,
+                portfolio_value_before=cash_before,
+                portfolio_value_after=cash + pos.shares * price,
+                weight_target=target_weight, weight_actual=0, weight_before=0,
+                trade_pnl_abs=None, trade_pnl_pct=None, holding_period_days=None,
+                reason="seed_position", transaction_id=tx_id,
+                generated_at=generated_at,
+                data_version=data_version, strategy_version=strategy_version,
+                label_mode=label_mode, label_version=label_version,
+                r1=r1, r5=r5, r20=r20,
+            )
+            decisions.append(seed_rec)
+            transactions.append(seed_rec)
 
     for d in all_dates:
         # 1) Mark-to-market: portfolio value at *open* of day d using prev close
@@ -177,17 +243,33 @@ def run_portfolio_backtest(
 
             sig = str(sig_row["signal"])
             # Apply portfolio rules to decide whether the signal turns into a trade
-            if sig == "BUY" and shares_before == 0 and cash > 0:
-                # Compute target $ allocation; cap by available cash
-                target_dollars = portfolio_value_before * target_weight if portfolio_value_before > 0 else cash * target_weight
-                target_dollars = min(target_dollars, cash)
-                if target_dollars >= execution_price > 0:
-                    quantity = math_floor(target_dollars / execution_price)
-                    if quantity > 0:
+            if trade_mode == "incremental":
+                # Buy/sell a fixed number of shares (``trade_size``) per signal so
+                # the position accumulates or trims gradually rather than all-in.
+                if sig == "BUY" and cash > 0 and execution_price > 0:
+                    affordable = math_floor(cash / execution_price)
+                    qty = min(float(trade_size), affordable)
+                    if qty > 0:
+                        quantity = qty
                         action = "BUY"
-            elif sig == "SELL" and shares_before > 0:
-                action = "SELL"
-                quantity = shares_before
+                elif sig == "SELL" and shares_before > 0:
+                    quantity = min(float(trade_size), shares_before)
+                    if quantity > 0:
+                        action = "SELL"
+            else:
+                # all_in / all_out (legacy default): enter the full slot on BUY,
+                # exit the whole position on SELL.
+                if sig == "BUY" and shares_before == 0 and cash > 0:
+                    # Compute target $ allocation; cap by available cash
+                    target_dollars = portfolio_value_before * target_weight if portfolio_value_before > 0 else cash * target_weight
+                    target_dollars = min(target_dollars, cash)
+                    if target_dollars >= execution_price > 0:
+                        quantity = math_floor(target_dollars / execution_price)
+                        if quantity > 0:
+                            action = "BUY"
+                elif sig == "SELL" and shares_before > 0:
+                    action = "SELL"
+                    quantity = shares_before
 
             # Apply the trade if any
             trade_pnl_abs = None
@@ -209,7 +291,7 @@ def run_portfolio_backtest(
             elif action == "SELL" and quantity > 0:
                 proceeds = quantity * execution_price
                 cash += proceeds
-                # realised pnl
+                # realised pnl (on the shares actually sold)
                 trade_pnl_abs = (execution_price - pos.cost_basis) * quantity
                 trade_pnl_pct = (execution_price / pos.cost_basis - 1) if pos.cost_basis > 0 else None
                 if pos.entry_date:
@@ -219,10 +301,15 @@ def run_portfolio_backtest(
                     except Exception:
                         holding_period_days = None
                 trade_pnls.append(float(trade_pnl_abs) if trade_pnl_abs is not None else 0.0)
-                pos.shares = 0
-                pos.cost_basis = 0
-                pos.entry_date = None
-                pos.entry_price = None
+                # Partial sell: reduce the position; only reset cost basis/entry
+                # metadata once the position is fully closed. In all_out mode the
+                # quantity equals the whole position, so this liquidates fully.
+                pos.shares -= quantity
+                if pos.shares <= 0:
+                    pos.shares = 0
+                    pos.cost_basis = 0
+                    pos.entry_date = None
+                    pos.entry_price = None
                 tx_id = f"T-{pid}-{_short_uuid()}"
 
             # post-trade snapshot
@@ -318,6 +405,10 @@ def run_portfolio_backtest(
         "data_version": data_version,
         "strategy_version": strategy_version,
         "signal_source": signal_source,
+        "note": note,
+        "seed_shares": seed_shares,
+        "trade_mode": trade_mode,
+        "trade_size": trade_size,
         "rules": rules,
         "n_decisions": len(decisions),
         "n_transactions": len(transactions),
