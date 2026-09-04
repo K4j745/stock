@@ -1,29 +1,29 @@
 {
   "performance": {
-    "total_return": 0.412179,
-    "cagr": 0.12261,
-    "volatility_annualised": 0.094035,
-    "sharpe_ratio": 1.303883,
+    "total_return": 0.402698,
+    "cagr": 0.11991,
+    "volatility_annualised": 0.094064,
+    "sharpe_ratio": 1.274773,
     "max_drawdown": -0.081746,
-    "calmar_ratio": 1.499895,
-    "n_observations": 752,
-    "trade_n_trades": 3091,
-    "trade_n_wins": 2181,
+    "calmar_ratio": 1.466869,
+    "n_observations": 753,
+    "trade_n_trades": 3094,
+    "trade_n_wins": 2184,
     "trade_n_losses": 910,
-    "trade_win_rate": 0.705597,
-    "trade_avg_trade_pnl": 10.818849,
-    "trade_avg_win": 19.733595,
+    "trade_win_rate": 0.705882,
+    "trade_avg_trade_pnl": 10.856863,
+    "trade_avg_win": 19.775203,
     "trade_avg_loss": -10.547151,
-    "trade_profit_factor": 4.484203,
-    "trade_expectancy": 10.818849
+    "trade_profit_factor": 4.499839,
+    "trade_expectancy": 10.856863
   },
   "benchmark": {
-    "total_return": 0.721062,
-    "cagr": 0.199546,
-    "volatility_annualised": 0.153499,
-    "sharpe_ratio": 1.299985,
+    "total_return": 0.713538,
+    "cagr": 0.197499,
+    "volatility_annualised": 0.153425,
+    "sharpe_ratio": 1.287265,
     "max_drawdown": -0.189989,
-    "calmar_ratio": 1.050303,
-    "n_observations": 752
+    "calmar_ratio": 1.039529,
+    "n_observations": 753
   }
 }
