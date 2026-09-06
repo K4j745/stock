@@ -1,0 +1,74 @@
+name: Update Dashboard Data
+
+on:
+  schedule:
+    - cron: '0 17 * * 1-5'  # Mon-Fri 17:00 UTC (after US market close)
+  workflow_dispatch:
+    inputs:
+      force_refresh:
+        description: 'Force refresh all data'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'dashboard/requirements.txt'
+
+      - name: Install dependencies
+        run: pip install -r dashboard/requirements.txt
+
+      # Try to (re)generate ML analysis plots from the stock_ml/ pipeline so
+      # they end up in stock_ml/reports/plots/ — generate.py will then copy
+      # them into docs/charts/plots/. We DO NOT retrain models here; we only
+      # run the plot helpers, which need pre-existing trained artifacts in
+      # stock_ml/models/saved/. If those aren't committed (default case),
+      # the step fails harmlessly and the dashboard simply shows the empty
+      # state on the Charts tab.
+      - name: Generate ML plots (best effort)
+        continue-on-error: true
+        run: |
+          if [ -f stock_ml/requirements.txt ]; then
+            pip install -r stock_ml/requirements.txt
+          fi
+          if [ -d stock_ml/models/saved ] && [ -n "$(ls -A stock_ml/models/saved 2>/dev/null)" ]; then
+            python -m stock_ml.main report  || true
+            python -m stock_ml.main plots   || true
+          else
+            echo "No trained models in stock_ml/models/saved/ — skipping plot generation."
+          fi
+
+      # Continuously extend the committed OHLCV archive. A short window is
+      # enough because the downloader merges into the existing CSVs; the
+      # archive is what dashboard/lib/data_fetcher.py falls back to when the
+      # yfinance feed is unreachable.
+      - name: Archive historical prices
+        continue-on-error: true
+        run: python stock_ml/data/download_historical.py --start "$(date -u -d '90 days ago' '+%Y-%m-%d')"
+
+      - name: Generate dashboard data
+        run: python dashboard/generate.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/ stock_ml/data/historical/
+          if git diff --staged --quiet; then
+            echo "No data changes — skipping commit."
+          else
+            DATA_VER=$(python -c "import json,sys; print(json.load(open('docs/data/meta.json')).get('data_version','?'))" 2>/dev/null || echo "?")
+            git commit -m "chore: update dashboard data [$(date -u '+%Y-%m-%d %H:%M UTC')] data_version=${DATA_VER}"
+            git push
+          fi

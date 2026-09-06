@@ -1,0 +1,10 @@
+[
+  "technical_rule_based",
+  "logistic_regression",
+  "random_forest",
+  "xgboost",
+  "lightgbm",
+  "candle",
+  "ensemble_majority",
+  "buy_and_hold"
+]
