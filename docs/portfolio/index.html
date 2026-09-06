@@ -983,7 +983,13 @@
     var meta = (s.metadata) || {};
     var host = document.getElementById('autoDetail');
 
-    var retVsSpy = (row.total_return != null && bm.total_return != null) ? (row.total_return - bm.total_return) : null;
+    // Compare against the actual SPY buy-and-hold portfolio shown in the table
+    // (fully invested at start), so the number matches the visible spy_bh row.
+    // Fall back to benchmark_metrics only if spy_bh is missing from the index.
+    var spyRow = summary.find(function(p){ return p.portfolio_id === 'spy_bh'; });
+    var spyRet = (spyRow && spyRow.total_return != null) ? spyRow.total_return
+                 : (bm.total_return != null ? bm.total_return : null);
+    var retVsSpy = (row.total_return != null && spyRet != null) ? (row.total_return - spyRet) : null;
 
     var html = '';
     html += '<div class="auto-detail-head"><h3>' + esc(row.portfolio_name || id) + '</h3>' +
@@ -999,7 +1005,7 @@
     html += '<div class="kpi-row">';
     html += kpi('Wartość końcowa', fmtUsd2(row.final_value), 'start: ' + fmtUsd(row.initial_capital));
     html += kpi('Stopa zwrotu', fmtPct(row.total_return), 'CAGR: ' + fmtPct(m.cagr), pctClass(row.total_return));
-    html += kpi('vs SPY (kup i trzymaj)', retVsSpy != null ? fmtPct(retVsSpy) : '—', 'SPY: ' + fmtPct(bm.total_return), pctClass(retVsSpy));
+    html += kpi('vs SPY (kup i trzymaj)', retVsSpy != null ? fmtPct(retVsSpy) : '—', 'SPY: ' + fmtPct(spyRet), pctClass(retVsSpy));
     html += kpi('Sharpe', fmtNum(row.sharpe, 2), 'benchmark: ' + fmtNum(bm.sharpe_ratio, 2));
     html += kpi('Max drawdown', fmtPct(row.max_drawdown), 'benchmark: ' + fmtPct(bm.max_drawdown), 'neg');
     html += kpi('Win rate', m.trade_win_rate != null ? (m.trade_win_rate * 100).toFixed(1) + '%' : '—', (m.trade_n_trades != null ? m.trade_n_trades + ' domkniętych transakcji' : ''));
