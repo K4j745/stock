@@ -122,6 +122,36 @@
   .legend-list .row { display: flex; justify-content: space-between; padding: 4px 0; }
   .legend-list .row + .row { border-top: 1px solid var(--color-divider); }
   .legend-list .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
+
+  /* Section headers (separate auto vs manual) */
+  .section-head { margin: 8px 0 14px; }
+  .section-head h2 { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+  .section-head .section-desc { font-size: 12.5px; color: var(--color-text-muted); max-width: 900px; line-height: 1.55; }
+  .divider-h { height: 1px; background: var(--color-border); margin: 32px 0 24px; }
+  .auto-section { margin-bottom: 8px; }
+
+  /* Auto comparison table */
+  .cmp-wrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); }
+  table.cmp { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.cmp thead th { text-align: right; padding: 10px 12px; font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--color-divider); white-space: nowrap; }
+  table.cmp thead th:first-child, table.cmp thead th.left { text-align: left; }
+  table.cmp td { padding: 9px 12px; border-bottom: 1px solid var(--color-divider); text-align: right; white-space: nowrap; }
+  table.cmp td.left { text-align: left; }
+  table.cmp tbody tr { cursor: pointer; transition: background var(--transition); }
+  table.cmp tbody tr:hover { background: var(--color-surface-offset); }
+  table.cmp tbody tr.active { background: var(--color-primary-highlight); }
+  table.cmp tbody tr.active td:first-child { box-shadow: inset 3px 0 0 var(--color-primary); }
+  table.cmp .pf-name { font-weight: 600; color: var(--color-text); }
+  table.cmp .pf-src { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-muted); }
+  table.cmp td.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  table.cmp .badge-role { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 999px; background: var(--color-surface-offset); color: var(--color-text-muted); margin-left: 6px; }
+  .best-val { color: var(--color-success); font-weight: 600; }
+
+  .auto-detail-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 20px 0 10px; }
+  .auto-detail-head h3 { font-size: 15px; font-weight: 600; }
+  .auto-detail-head .src { font-family: var(--font-mono); font-size: 11.5px; color: var(--color-text-muted); }
+  .note-box { background: var(--color-surface-2); border: 1px solid var(--color-border); border-left: 3px solid var(--color-primary); border-radius: var(--radius-md); padding: 10px 14px; font-size: 12px; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 16px; }
+  .eq-wrap { position: relative; height: 320px; padding: 8px 12px 4px; }
 </style>
 <link rel="stylesheet" href="../assets/cyberpunk.css">
 <script defer src="../assets/app.js"></script>
@@ -163,13 +193,33 @@
 <div class="container">
   <h1 data-i18n="h1.portfolio">Portfolio Simulator</h1>
   <div class="subtitle" data-i18n="sub.portfolio">Trade virtually using last-session close prices from this project. Portfolios are stored in your browser only — no server, no network calls beyond loading the local JSON files.</div>
-  <div class="note" id="fxNote">FX rate loading…</div>
 
-  <div class="pf-bar" id="pfBar"></div>
+  <!-- ============ AUTOMATIC MONITORING PORTFOLIOS (read-only, backend-generated) ============ -->
+  <section class="auto-section">
+    <div class="section-head">
+      <h2>Portfele automatyczne (monitorujące)</h2>
+      <p class="section-desc">Dziewięć portfeli symulowanych automatycznie przez backend (<code>dashboard/generate.py</code>) na pełnej historii. Wszystkie mają identyczne warunki (kapitał 100&nbsp;000&nbsp;USD, koszyk 10 spółek, start 10 akcji każdej spółki, handel przyrostowy ±1 akcja na sygnał) — różnią się <strong>wyłącznie źródłem sygnału</strong>. Kliknij wiersz, aby zobaczyć szczegóły: krzywą kapitału, metryki i bieżące pozycje. Wartości w USD.</p>
+    </div>
+    <div id="autoCompare"><div class="empty">Ładowanie portfeli automatycznych…</div></div>
+    <div id="autoDetail"></div>
+  </section>
 
-  <div id="mainArea">
-    <div class="empty">Loading…</div>
-  </div>
+  <div class="divider-h"></div>
+
+  <!-- ============ MANUAL SIMULATOR (browser-local, localStorage) ============ -->
+  <section>
+    <div class="section-head">
+      <h2>Twój symulator ręczny</h2>
+      <p class="section-desc">Handluj wirtualnie po cenach zamknięcia z ostatniej sesji. Te portfele są zapisywane wyłącznie w Twojej przeglądarce (localStorage) — nie trafiają na serwer.</p>
+    </div>
+    <div class="note" id="fxNote">FX rate loading…</div>
+
+    <div class="pf-bar" id="pfBar"></div>
+
+    <div id="mainArea">
+      <div class="empty">Loading…</div>
+    </div>
+  </section>
 </div>
 
 <input id="importFile" type="file" accept="application/json,.json" style="display:none">
@@ -821,6 +871,241 @@
     renderAll();
   }).catch(function(err){
     document.getElementById('mainArea').innerHTML = '<div class="empty" style="color:var(--color-error)">Nie udało się załadować danych projektu: ' + (err && err.message || err) + '</div>';
+  });
+})();
+</script>
+
+<script>
+// ============================================================================
+// Automatic monitoring portfolios — read-only viewer.
+// Loads the backend-generated artifacts from docs/data/portfolios/ and renders
+// a comparison table + a detail view (equity curve, KPIs, current positions).
+// Fully self-contained IIFE, decoupled from the manual (localStorage) simulator.
+// ============================================================================
+(function(){
+  var BASE = '../data/portfolios/';
+  var summary = [];         // index.json rows
+  var selectedId = null;
+  var eqChart = null;
+  var detailCache = {};     // id -> { summary, equity, positions }
+
+  function fetchJson(url){ return fetch(url).then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + url); return r.json(); }); }
+  function fmtUsd(v){ if (v == null || isNaN(v)) return '—'; return '$' + Number(v).toLocaleString('en-US', { maximumFractionDigits: 0 }); }
+  function fmtUsd2(v){ if (v == null || isNaN(v)) return '—'; return '$' + Number(v).toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }); }
+  function fmtPct(v){ if (v == null || isNaN(v)) return '—'; var s = (v >= 0 ? '+' : ''); return s + (v * 100).toFixed(2) + '%'; }
+  function fmtNum(v, d){ if (v == null || isNaN(v)) return '—'; return Number(v).toFixed(d == null ? 2 : d); }
+  function pctClass(v){ if (v == null || isNaN(v)) return ''; return v >= 0 ? 'pos' : 'neg'; }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  // Short human role tag derived from portfolio id.
+  var ROLE = {
+    spy_bh: 'benchmark', bh_koszyk: 'baseline', reguly_tech: 'bez ML',
+    lr: 'model ML', rf: 'model ML', xgb: 'model ML', lgbm: 'model ML',
+    candle: 'model', ensemble: 'zespół'
+  };
+
+  function renderCompare(){
+    var host = document.getElementById('autoCompare');
+    if (!summary.length) { host.innerHTML = '<div class="empty">Brak danych portfeli automatycznych. Uruchom <code>python dashboard/generate.py</code>.</div>'; return; }
+
+    // Best value / return / sharpe for highlighting.
+    var bestVal = Math.max.apply(null, summary.map(function(p){ return p.final_value || -Infinity; }));
+    var bestRet = Math.max.apply(null, summary.map(function(p){ return p.total_return == null ? -Infinity : p.total_return; }));
+    var bestSharpe = Math.max.apply(null, summary.map(function(p){ return p.sharpe == null ? -Infinity : p.sharpe; }));
+
+    var html = '<div class="cmp-wrap"><table class="cmp"><thead><tr>' +
+      '<th class="left">Portfel</th>' +
+      '<th class="left">Źródło sygnału</th>' +
+      '<th>Wartość końcowa</th>' +
+      '<th>Zwrot</th>' +
+      '<th>Sharpe</th>' +
+      '<th>Max DD</th>' +
+      '<th>Transakcje</th>' +
+      '</tr></thead><tbody>';
+
+    summary.forEach(function(p){
+      var role = ROLE[p.portfolio_id] ? '<span class="badge-role">' + esc(ROLE[p.portfolio_id]) + '</span>' : '';
+      var valCls = (p.final_value === bestVal) ? 'mono best-val' : 'mono';
+      var retCls = (p.total_return === bestRet) ? 'mono best-val' : ('mono ' + pctClass(p.total_return));
+      var shCls = (p.sharpe === bestSharpe) ? 'mono best-val' : 'mono';
+      html += '<tr data-id="' + esc(p.portfolio_id) + '"' + (p.portfolio_id === selectedId ? ' class="active"' : '') + '>' +
+        '<td class="left"><span class="pf-name">' + esc(p.portfolio_name) + '</span>' + role + '</td>' +
+        '<td class="left pf-src">' + esc(p.signal_source) + '</td>' +
+        '<td class="' + valCls + '">' + fmtUsd(p.final_value) + '</td>' +
+        '<td class="' + retCls + '">' + fmtPct(p.total_return) + '</td>' +
+        '<td class="' + shCls + '">' + fmtNum(p.sharpe, 2) + '</td>' +
+        '<td class="mono neg">' + fmtPct(p.max_drawdown) + '</td>' +
+        '<td class="mono">' + (p.n_transactions != null ? Number(p.n_transactions).toLocaleString('pl-PL') : '—') + '</td>' +
+        '</tr>';
+    });
+    html += '</tbody></table></div>';
+    host.innerHTML = html;
+
+    host.querySelectorAll('tbody tr').forEach(function(tr){
+      tr.addEventListener('click', function(){ selectPortfolio(tr.getAttribute('data-id')); });
+    });
+  }
+
+  function selectPortfolio(id){
+    selectedId = id;
+    renderCompare();
+    var host = document.getElementById('autoDetail');
+    host.innerHTML = '<div class="empty">Ładowanie szczegółów…</div>';
+
+    var loader = detailCache[id]
+      ? Promise.resolve(detailCache[id])
+      : Promise.all([
+          fetchJson(BASE + id + '/summary.json').catch(function(){ return null; }),
+          fetchJson(BASE + id + '/equity_curve.json').catch(function(){ return []; }),
+          fetchJson(BASE + id + '/positions.json').catch(function(){ return []; })
+        ]).then(function(res){
+          var d = { summary: res[0], equity: res[1] || [], positions: res[2] || [] };
+          detailCache[id] = d; return d;
+        });
+
+    loader.then(function(d){
+      if (selectedId !== id) return; // user clicked another row while loading
+      renderDetail(id, d);
+    }).catch(function(err){
+      host.innerHTML = '<div class="empty" style="color:var(--color-error)">Nie udało się załadować szczegółów: ' + esc(err && err.message || err) + '</div>';
+    });
+  }
+
+  function kpi(label, value, sub, klass){
+    return '<div class="kpi"><div class="label">' + label + '</div><div class="value ' + (klass || '') + '">' + value + '</div><div class="sub">' + (sub || '') + '</div></div>';
+  }
+
+  function renderDetail(id, d){
+    var row = summary.find(function(p){ return p.portfolio_id === id; }) || {};
+    var s = d.summary || {};
+    var m = (s.metrics) || {};
+    var bm = (s.benchmark_metrics) || {};
+    var meta = (s.metadata) || {};
+    var host = document.getElementById('autoDetail');
+
+    var retVsSpy = (row.total_return != null && bm.total_return != null) ? (row.total_return - bm.total_return) : null;
+
+    var html = '';
+    html += '<div class="auto-detail-head"><h3>' + esc(row.portfolio_name || id) + '</h3>' +
+            '<span class="src">źródło: ' + esc(row.signal_source || '—') +
+            ' · okres: ' + esc(meta.first_date || '—') + ' → ' + esc(meta.last_date || '—') +
+            ' · etykieta: ' + esc(meta.label_version || meta.label_mode || '—') + '</span></div>';
+
+    if (row.note || row.description) {
+      html += '<div class="note-box">' + esc(row.note || row.description) + '</div>';
+    }
+
+    // KPI row
+    html += '<div class="kpi-row">';
+    html += kpi('Wartość końcowa', fmtUsd2(row.final_value), 'start: ' + fmtUsd(row.initial_capital));
+    html += kpi('Stopa zwrotu', fmtPct(row.total_return), 'CAGR: ' + fmtPct(m.cagr), pctClass(row.total_return));
+    html += kpi('vs SPY (kup i trzymaj)', retVsSpy != null ? fmtPct(retVsSpy) : '—', 'SPY: ' + fmtPct(bm.total_return), pctClass(retVsSpy));
+    html += kpi('Sharpe', fmtNum(row.sharpe, 2), 'benchmark: ' + fmtNum(bm.sharpe_ratio, 2));
+    html += kpi('Max drawdown', fmtPct(row.max_drawdown), 'benchmark: ' + fmtPct(bm.max_drawdown), 'neg');
+    html += kpi('Win rate', m.trade_win_rate != null ? (m.trade_win_rate * 100).toFixed(1) + '%' : '—', (m.trade_n_trades != null ? m.trade_n_trades + ' domkniętych transakcji' : ''));
+    html += kpi('Transakcje', row.n_transactions != null ? Number(row.n_transactions).toLocaleString('pl-PL') : '—', (row.n_decisions != null ? Number(row.n_decisions).toLocaleString('pl-PL') + ' decyzji' : ''));
+    html += kpi('Profit factor', fmtNum(m.trade_profit_factor, 2), 'expectancy: ' + (m.trade_expectancy != null ? fmtUsd2(m.trade_expectancy) : '—'));
+    html += '</div>';
+
+    // Equity curve card
+    html += '<div class="card"><div class="card-header"><h2>Krzywa kapitału</h2>' +
+            '<span style="font-size:11px;color:var(--color-text-muted);font-family:var(--font-mono)">' + (d.equity.length) + ' sesji · USD</span></div>' +
+            '<div class="eq-wrap"><canvas id="eqCanvas"></canvas></div></div>';
+
+    // Positions card
+    html += '<div class="card"><div class="card-header"><h2>Bieżące pozycje</h2>' +
+            '<span style="font-size:11px;color:var(--color-text-muted);font-family:var(--font-mono)">' + d.positions.length + '</span></div>' +
+            '<div class="table-wrapper">' + renderPositions(d.positions) + '</div></div>';
+
+    host.innerHTML = html;
+    drawEquity(d.equity, row.portfolio_name || id);
+  }
+
+  function renderPositions(rows){
+    if (!rows || !rows.length) return '<div class="empty">Brak otwartych pozycji (portfel w gotówce).</div>';
+    // Sort by market value desc.
+    var sorted = rows.slice().sort(function(a, b){ return (b.market_value || 0) - (a.market_value || 0); });
+    var html = '<table><thead><tr><th>Ticker</th><th>Akcje</th><th>Śr. koszt</th><th>Cena</th><th>Wartość</th><th>Zysk/strata</th><th>%</th><th>Wejście</th></tr></thead><tbody>';
+    sorted.forEach(function(r){
+      html += '<tr>';
+      html += '<td class="ticker">' + esc(r.ticker) + '</td>';
+      html += '<td class="mono">' + fmtNum(r.shares, 0) + '</td>';
+      html += '<td class="mono">' + fmtUsd2(r.avg_cost) + '</td>';
+      html += '<td class="mono">' + fmtUsd2(r.last_price) + '</td>';
+      html += '<td class="mono">' + fmtUsd2(r.market_value) + '</td>';
+      html += '<td class="mono ' + pctClass(r.unrealised_pnl_abs) + '">' + fmtUsd2(r.unrealised_pnl_abs) + '</td>';
+      html += '<td class="mono ' + pctClass(r.unrealised_pnl_pct) + '">' + fmtPct(r.unrealised_pnl_pct) + '</td>';
+      html += '<td class="mono" style="font-size:11px;color:var(--color-text-muted)">' + esc(r.entry_date || '—') + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    return html;
+  }
+
+  function drawEquity(equity, label){
+    var canvas = document.getElementById('eqCanvas'); if (!canvas) return;
+    if (eqChart) { try { eqChart.destroy(); } catch(_){} eqChart = null; }
+    if (!equity || !equity.length) return;
+
+    // Downsample to ~400 points max for a smooth, light chart.
+    var step = Math.max(1, Math.ceil(equity.length / 400));
+    var labels = [], data = [];
+    for (var i = 0; i < equity.length; i += step) {
+      labels.push(equity[i].date);
+      data.push(equity[i].portfolio_value);
+    }
+    // Always include the last point.
+    var last = equity[equity.length - 1];
+    if (labels[labels.length - 1] !== last.date) { labels.push(last.date); data.push(last.portfolio_value); }
+
+    var css = getComputedStyle(document.documentElement);
+    var accent = (css.getPropertyValue('--color-primary') || '#388bfd').trim();
+    var grid = (css.getPropertyValue('--color-divider') || '#21262d').trim();
+    var muted = (css.getPropertyValue('--color-text-muted') || '#8b949e').trim();
+    var start = data.length ? data[0] : 0;
+
+    eqChart = new Chart(canvas, {
+      type: 'line',
+      data: { labels: labels, datasets: [{
+        label: label, data: data, borderColor: accent, borderWidth: 1.5,
+        pointRadius: 0, tension: 0.1, fill: true,
+        backgroundColor: 'rgba(56,139,253,0.08)'
+      }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: function(ctx){
+            var v = ctx.parsed.y;
+            var chg = start > 0 ? ((v / start - 1) * 100).toFixed(2) : '0';
+            return '$' + Number(v).toLocaleString('en-US', { maximumFractionDigits: 0 }) + '  (' + (chg >= 0 ? '+' : '') + chg + '%)';
+          } } }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: muted, maxTicksLimit: 8, maxRotation: 0, font: { size: 10 } } },
+          y: { grid: { color: grid }, ticks: { color: muted, font: { size: 10 }, callback: function(v){ return '$' + (v / 1000).toFixed(0) + 'k'; } } }
+        }
+      }
+    });
+  }
+
+  // Re-theme the equity chart when the user toggles light/dark.
+  var themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) themeBtn.addEventListener('click', function(){
+    if (selectedId && detailCache[selectedId]) {
+      var row = summary.find(function(p){ return p.portfolio_id === selectedId; }) || {};
+      drawEquity(detailCache[selectedId].equity, row.portfolio_name || selectedId);
+    }
+  });
+
+  // Bootstrap
+  fetchJson(BASE + 'index.json').then(function(rows){
+    summary = Array.isArray(rows) ? rows : [];
+    renderCompare();
+    if (summary.length) selectPortfolio(summary[0].portfolio_id);
+  }).catch(function(err){
+    document.getElementById('autoCompare').innerHTML = '<div class="empty" style="color:var(--color-error)">Nie udało się załadować portfeli automatycznych: ' + esc(err && err.message || err) + '</div>';
   });
 })();
 </script>
