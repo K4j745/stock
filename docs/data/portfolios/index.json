@@ -2,36 +2,36 @@
   {
     "portfolio_id": "spy_bh",
     "portfolio_name": "SPY \u2014 kup i trzymaj",
-    "description": "Kupno samego indeksu SPY 500. Odniesienie rynkowe.",
-    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: buy_and_hold (kup i trzymaj). START: portfel kupuje 10 akcji SPY po cenie otwarcia pierwszej sesji (pozycja zal\u0105\u017ckowa, akcja SEED). REGU\u0141A HANDLU: tryb incremental, 1 akcja na sygna\u0142. buy_and_hold emituje BUY w dniu 0 (dokupienie 1 akcji), a potem wy\u0142\u0105cznie HOLD \u2014 brak sygna\u0142\u00f3w SELL, wi\u0119c portfel po prostu trzyma pozycj\u0119 do ko\u0144ca okresu. ROLA: dolna granica odniesienia \u2014 'ile da\u0142by sam rynek bez handlowania'. Benchmark SPY liczony automatycznie.",
+    "description": "Kupno samego indeksu SPY 500 za ca\u0142y kapita\u0142. Odniesienie rynkowe.",
+    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: buy_and_hold (kup i trzymaj). START: portfel inwestuje CA\u0141Y kapita\u0142 100 000 USD w SPY po cenie otwarcia pierwszej sesji (tryb all_in, target_weight = 100%). buy_and_hold emituje BUY w dniu 0, a potem wy\u0142\u0105cznie HOLD \u2014 brak sygna\u0142\u00f3w SELL, wi\u0119c portfel trzyma pe\u0142n\u0105 pozycj\u0119 do ko\u0144ca okresu. ROLA: dolna granica odniesienia \u2014 'ile da\u0142by sam rynek, gdyby zainwestowa\u0107 ca\u0142y kapita\u0142 i nic nie robi\u0107'. Wynik tego portfela pokrywa si\u0119 z benchmarkiem SPY liczonym automatycznie.",
     "signal_source": "buy_and_hold",
-    "seed_shares": 10,
-    "trade_mode": "incremental",
+    "seed_shares": 0,
+    "trade_mode": "all_in",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 103514.06,
-    "total_return": 0.03531,
-    "sharpe": 1.218859,
-    "max_drawdown": -0.012585,
-    "n_decisions": 755,
-    "n_transactions": 2
+    "final_value": 170600.66,
+    "total_return": 0.711643,
+    "sharpe": 1.288458,
+    "max_drawdown": -0.189445,
+    "n_decisions": 754,
+    "n_transactions": 1
   },
   {
     "portfolio_id": "bh_koszyk",
     "portfolio_name": "Koszyk 10 \u2014 kup i trzymaj",
-    "description": "Kup i trzymaj r\u00f3wnowa\u017cony koszyk 10 sp\u00f3\u0142ek. Baseline pasywny.",
-    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: buy_and_hold (kup i trzymaj) dla ka\u017cdej z 10 sp\u00f3\u0142ek. START: portfel kupuje po 10 akcji ka\u017cdego tickera po cenie otwarcia pierwszej sesji (pozycje zal\u0105\u017ckowe, akcje SEED). REGU\u0141A HANDLU: tryb incremental, 1 akcja na sygna\u0142. buy_and_hold emituje BUY w dniu 0 (dokupienie 1 akcji na sp\u00f3\u0142k\u0119), potem wy\u0142\u0105cznie HOLD \u2014 brak SELL, wi\u0119c koszyk jest trzymany biernie. ROLA: baseline pasywny \u2014 'czy warto handlowa\u0107 zamiast trzyma\u0107 te same sp\u00f3\u0142ki'. Benchmark SPY liczony automatycznie.",
+    "description": "Kup i trzymaj r\u00f3wnowa\u017cony koszyk 10 sp\u00f3\u0142ek za ca\u0142y kapita\u0142. Baseline pasywny.",
+    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: buy_and_hold (kup i trzymaj) dla ka\u017cdej z 10 sp\u00f3\u0142ek. START: portfel inwestuje CA\u0141Y kapita\u0142 100 000 USD, po r\u00f3wno (target_weight = 10% na sp\u00f3\u0142k\u0119) po cenie otwarcia pierwszej sesji (tryb all_in). buy_and_hold emituje BUY w dniu 0, potem wy\u0142\u0105cznie HOLD \u2014 brak SELL, wi\u0119c koszyk jest trzymany biernie z pe\u0142nym zaanga\u017cowaniem kapita\u0142u. ROLA: baseline pasywny \u2014 'czy warto handlowa\u0107 zamiast trzyma\u0107 te same sp\u00f3\u0142ki za ca\u0142y kapita\u0142'. Benchmark SPY liczony automatycznie.",
     "signal_source": "buy_and_hold",
-    "seed_shares": 10,
-    "trade_mode": "incremental",
+    "seed_shares": 0,
+    "trade_mode": "all_in",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 107527.41,
-    "total_return": 0.074868,
-    "sharpe": 0.88935,
-    "max_drawdown": -0.036815,
-    "n_decisions": 7550,
-    "n_transactions": 20
+    "final_value": 152387.66,
+    "total_return": 0.527787,
+    "sharpe": 1.388756,
+    "max_drawdown": -0.125791,
+    "n_decisions": 7540,
+    "n_transactions": 10
   },
   {
     "portfolio_id": "reguly_tech",
@@ -60,12 +60,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 140307.29,
-    "total_return": 0.402543,
-    "sharpe": 1.274294,
-    "max_drawdown": -0.081746,
+    "final_value": 130608.58,
+    "total_return": 0.305682,
+    "sharpe": 0.75865,
+    "max_drawdown": -0.166165,
     "n_decisions": 7550,
-    "n_transactions": 6419
+    "n_transactions": 849
   },
   {
     "portfolio_id": "rf",
@@ -77,12 +77,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 116972.64,
-    "total_return": 0.169365,
-    "sharpe": 0.496193,
-    "max_drawdown": -0.141696,
+    "final_value": 168584.24,
+    "total_return": 0.685322,
+    "sharpe": 1.596855,
+    "max_drawdown": -0.121855,
     "n_decisions": 7550,
-    "n_transactions": 7038
+    "n_transactions": 5134
   },
   {
     "portfolio_id": "xgb",
@@ -94,12 +94,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 126649.66,
-    "total_return": 0.266018,
-    "sharpe": 1.01909,
-    "max_drawdown": -0.121182,
+    "final_value": 127468.42,
+    "total_return": 0.27429,
+    "sharpe": 0.461248,
+    "max_drawdown": -0.309215,
     "n_decisions": 7550,
-    "n_transactions": 7228
+    "n_transactions": 5379
   },
   {
     "portfolio_id": "lgbm",
@@ -111,12 +111,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 136920.83,
-    "total_return": 0.368785,
-    "sharpe": 1.264226,
-    "max_drawdown": -0.12279,
+    "final_value": 139645.72,
+    "total_return": 0.396026,
+    "sharpe": 0.866983,
+    "max_drawdown": -0.187395,
     "n_decisions": 7550,
-    "n_transactions": 5827
+    "n_transactions": 5311
   },
   {
     "portfolio_id": "candle",
@@ -128,12 +128,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 136747.95,
-    "total_return": 0.366817,
-    "sharpe": 0.955897,
-    "max_drawdown": -0.144286,
+    "final_value": 141049.4,
+    "total_return": 0.410058,
+    "sharpe": 1.48062,
+    "max_drawdown": -0.082434,
     "n_decisions": 7550,
-    "n_transactions": 7449
+    "n_transactions": 6614
   },
   {
     "portfolio_id": "ensemble",
@@ -145,11 +145,11 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 134513.96,
-    "total_return": 0.344488,
-    "sharpe": 1.21899,
-    "max_drawdown": -0.07768,
+    "final_value": 150611.66,
+    "total_return": 0.505651,
+    "sharpe": 1.130839,
+    "max_drawdown": -0.145086,
     "n_decisions": 7550,
-    "n_transactions": 6656
+    "n_transactions": 5040
   }
 ]

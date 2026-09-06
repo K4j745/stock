@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-06T17:40:22Z",
+  "generated_at_utc": "2026-09-06T17:18:14Z",
   "plots": [
     "confusion_matrix_AAPL_xgboost_bin2.png",
     "confusion_matrix_AAPL_xgboost_bin5.png",
@@ -144,7 +144,7 @@
   ],
   "count": 140,
   "source_directories_checked": [
-    "stock_ml/reports/plots",
-    "reports/plots"
+    "stock_ml\\reports\\plots",
+    "reports\\plots"
   ]
 }

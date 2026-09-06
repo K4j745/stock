@@ -69,25 +69,25 @@
     {
       "id": "spy_bh",
       "name": "SPY — kup i trzymaj",
-      "description": "Kupno samego indeksu SPY 500. Odniesienie rynkowe.",
-      "note": "ŹRÓDŁO SYGNAŁU: buy_and_hold (kup i trzymaj). START: portfel kupuje 10 akcji SPY po cenie otwarcia pierwszej sesji (pozycja zalążkowa, akcja SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał. buy_and_hold emituje BUY w dniu 0 (dokupienie 1 akcji), a potem wyłącznie HOLD — brak sygnałów SELL, więc portfel po prostu trzyma pozycję do końca okresu. ROLA: dolna granica odniesienia — 'ile dałby sam rynek bez handlowania'. Benchmark SPY liczony automatycznie.",
+      "description": "Kupno samego indeksu SPY 500 za cały kapitał. Odniesienie rynkowe.",
+      "note": "ŹRÓDŁO SYGNAŁU: buy_and_hold (kup i trzymaj). START: portfel inwestuje CAŁY kapitał 100 000 USD w SPY po cenie otwarcia pierwszej sesji (tryb all_in, target_weight = 100%). buy_and_hold emituje BUY w dniu 0, a potem wyłącznie HOLD — brak sygnałów SELL, więc portfel trzyma pełną pozycję do końca okresu. ROLA: dolna granica odniesienia — 'ile dałby sam rynek, gdyby zainwestować cały kapitał i nic nie robić'. Wynik tego portfela pokrywa się z benchmarkiem SPY liczonym automatycznie.",
       "tickers": ["SPY"],
       "weights": "equal",
       "initial_capital": 100000,
       "signal_source": "buy_and_hold",
-      "rules": { "max_positions": 1, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "rules": { "max_positions": 1, "rebalance": "on_signal", "trade_mode": "all_in" },
       "benchmark": "SPY"
     },
     {
       "id": "bh_koszyk",
       "name": "Koszyk 10 — kup i trzymaj",
-      "description": "Kup i trzymaj równoważony koszyk 10 spółek. Baseline pasywny.",
-      "note": "ŹRÓDŁO SYGNAŁU: buy_and_hold (kup i trzymaj) dla każdej z 10 spółek. START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe, akcje SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał. buy_and_hold emituje BUY w dniu 0 (dokupienie 1 akcji na spółkę), potem wyłącznie HOLD — brak SELL, więc koszyk jest trzymany biernie. ROLA: baseline pasywny — 'czy warto handlować zamiast trzymać te same spółki'. Benchmark SPY liczony automatycznie.",
+      "description": "Kup i trzymaj równoważony koszyk 10 spółek za cały kapitał. Baseline pasywny.",
+      "note": "ŹRÓDŁO SYGNAŁU: buy_and_hold (kup i trzymaj) dla każdej z 10 spółek. START: portfel inwestuje CAŁY kapitał 100 000 USD, po równo (target_weight = 10% na spółkę) po cenie otwarcia pierwszej sesji (tryb all_in). buy_and_hold emituje BUY w dniu 0, potem wyłącznie HOLD — brak SELL, więc koszyk jest trzymany biernie z pełnym zaangażowaniem kapitału. ROLA: baseline pasywny — 'czy warto handlować zamiast trzymać te same spółki za cały kapitał'. Benchmark SPY liczony automatycznie.",
       "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
       "weights": "equal",
       "initial_capital": 100000,
       "signal_source": "buy_and_hold",
-      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "trade_mode": "all_in" },
       "benchmark": "SPY"
     },
     {
