@@ -3,10 +3,10 @@
   "portfolio_name": "LightGBM",
   "description": "Portfel sterowany modelem lightgbm.",
   "initial_capital": 100000.0,
-  "final_value": 136922.66,
-  "cash": 58595.9299697876,
+  "final_value": 136920.83,
+  "cash": 58595.92997741699,
   "metadata": {
-    "generated_at_utc": "2026-09-04T19:22:32Z",
+    "generated_at_utc": "2026-09-06T17:41:01Z",
     "data_version": "2026-05-15",
     "strategy_version": "1.0",
     "signal_source": "lightgbm",
@@ -29,30 +29,30 @@
     "label_version": "binary-2026-08"
   },
   "metrics": {
-    "total_return": 0.368804,
-    "cagr": 0.11078,
+    "total_return": 0.368785,
+    "cagr": 0.110775,
     "volatility_annualised": 0.087623,
-    "sharpe_ratio": 1.264288,
+    "sharpe_ratio": 1.264226,
     "max_drawdown": -0.12279,
-    "calmar_ratio": 0.902196,
+    "calmar_ratio": 0.902155,
     "n_observations": 753,
     "trade_n_trades": 2790,
     "trade_n_wins": 2295,
     "trade_n_losses": 485,
     "trade_win_rate": 0.822581,
-    "trade_avg_trade_pnl": 11.294084,
-    "trade_avg_win": 15.204067,
+    "trade_avg_trade_pnl": 11.294086,
+    "trade_avg_win": 15.204069,
     "trade_avg_loss": -6.974925,
-    "trade_profit_factor": 10.314809,
-    "trade_expectancy": 11.269084
+    "trade_profit_factor": 10.31481,
+    "trade_expectancy": 11.269086
   },
   "benchmark_metrics": {
-    "total_return": 0.713538,
-    "cagr": 0.197499,
-    "volatility_annualised": 0.153425,
-    "sharpe_ratio": 1.287265,
+    "total_return": 0.714429,
+    "cagr": 0.197707,
+    "volatility_annualised": 0.15342,
+    "sharpe_ratio": 1.288668,
     "max_drawdown": -0.189989,
-    "calmar_ratio": 1.039529,
+    "calmar_ratio": 1.040625,
     "n_observations": 753
   }
 }

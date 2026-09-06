@@ -3,10 +3,10 @@
   "portfolio_name": "Zesp\u00f3\u0142 (g\u0142osowanie wi\u0119kszo\u015bciowe)",
   "description": "Sygna\u0142 wykonywany gdy min. 2 modele g\u0142osuj\u0105 zgodnie.",
   "initial_capital": 100000.0,
-  "final_value": 134528.88,
-  "cash": 76375.31955718994,
+  "final_value": 134513.96,
+  "cash": 76375.31954956055,
   "metadata": {
-    "generated_at_utc": "2026-09-04T19:22:42Z",
+    "generated_at_utc": "2026-09-06T17:41:15Z",
     "data_version": "2026-05-15",
     "strategy_version": "1.0",
     "signal_source": "ensemble_majority",
@@ -29,30 +29,30 @@
     "label_version": "binary-2026-08"
   },
   "metrics": {
-    "total_return": 0.344637,
-    "cagr": 0.104178,
-    "volatility_annualised": 0.085426,
-    "sharpe_ratio": 1.219509,
+    "total_return": 0.344488,
+    "cagr": 0.104137,
+    "volatility_annualised": 0.085429,
+    "sharpe_ratio": 1.21899,
     "max_drawdown": -0.07768,
-    "calmar_ratio": 1.341117,
+    "calmar_ratio": 1.340589,
     "n_observations": 753,
     "trade_n_trades": 3239,
     "trade_n_wins": 2209,
     "trade_n_losses": 1023,
     "trade_win_rate": 0.682001,
-    "trade_avg_trade_pnl": 8.85719,
-    "trade_avg_win": 18.043499,
+    "trade_avg_trade_pnl": 8.857192,
+    "trade_avg_win": 18.043501,
     "trade_avg_loss": -10.918524,
     "trade_profit_factor": 3.568428,
-    "trade_expectancy": 8.833594
+    "trade_expectancy": 8.833595
   },
   "benchmark_metrics": {
-    "total_return": 0.713538,
-    "cagr": 0.197499,
-    "volatility_annualised": 0.153425,
-    "sharpe_ratio": 1.287265,
+    "total_return": 0.714429,
+    "cagr": 0.197707,
+    "volatility_annualised": 0.15342,
+    "sharpe_ratio": 1.288668,
     "max_drawdown": -0.189989,
-    "calmar_ratio": 1.039529,
+    "calmar_ratio": 1.040625,
     "n_observations": 753
   }
 }
