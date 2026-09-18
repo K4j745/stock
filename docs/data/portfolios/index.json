@@ -9,11 +9,11 @@
     "trade_mode": "all_in",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 171921.26,
-    "total_return": 0.716972,
-    "sharpe": 1.297696,
+    "final_value": 171509.5,
+    "total_return": 0.71286,
+    "sharpe": 1.29033,
     "max_drawdown": -0.189558,
-    "n_decisions": 753,
+    "n_decisions": 754,
     "n_transactions": 1
   },
   {
@@ -26,11 +26,11 @@
     "trade_mode": "all_in",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 151763.7,
-    "total_return": 0.517036,
-    "sharpe": 1.362653,
+    "final_value": 151563.01,
+    "total_return": 0.51503,
+    "sharpe": 1.356914,
     "max_drawdown": -0.126796,
-    "n_decisions": 7530,
+    "n_decisions": 7540,
     "n_transactions": 10
   },
   {
@@ -43,12 +43,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 136355.18,
-    "total_return": 0.36346,
-    "sharpe": 0.89044,
+    "final_value": 136234.81,
+    "total_return": 0.362256,
+    "sharpe": 0.887097,
     "max_drawdown": -0.167591,
-    "n_decisions": 7540,
-    "n_transactions": 5622
+    "n_decisions": 7550,
+    "n_transactions": 5629
   },
   {
     "portfolio_id": "lr",
@@ -60,12 +60,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 138233.72,
-    "total_return": 0.382223,
-    "sharpe": 1.202922,
+    "final_value": 138026.01,
+    "total_return": 0.380146,
+    "sharpe": 1.196063,
     "max_drawdown": -0.082993,
-    "n_decisions": 7540,
-    "n_transactions": 6308
+    "n_decisions": 7550,
+    "n_transactions": 6315
   },
   {
     "portfolio_id": "rf",
@@ -77,12 +77,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 115571.45,
-    "total_return": 0.155636,
-    "sharpe": 0.463362,
+    "final_value": 115406.4,
+    "total_return": 0.153986,
+    "sharpe": 0.458333,
     "max_drawdown": -0.140426,
-    "n_decisions": 7540,
-    "n_transactions": 7069
+    "n_decisions": 7550,
+    "n_transactions": 7078
   },
   {
     "portfolio_id": "xgb",
@@ -94,12 +94,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 125051.15,
-    "total_return": 0.250408,
-    "sharpe": 0.943872,
+    "final_value": 124865.21,
+    "total_return": 0.248549,
+    "sharpe": 0.936615,
     "max_drawdown": -0.123386,
-    "n_decisions": 7540,
-    "n_transactions": 7119
+    "n_decisions": 7550,
+    "n_transactions": 7128
   },
   {
     "portfolio_id": "lgbm",
@@ -111,12 +111,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 135473.71,
-    "total_return": 0.354646,
-    "sharpe": 1.212722,
+    "final_value": 135299.63,
+    "total_return": 0.352905,
+    "sharpe": 1.20636,
     "max_drawdown": -0.123207,
-    "n_decisions": 7540,
-    "n_transactions": 5761
+    "n_decisions": 7550,
+    "n_transactions": 5769
   },
   {
     "portfolio_id": "candle",
@@ -128,12 +128,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 136410.14,
-    "total_return": 0.363887,
-    "sharpe": 0.960963,
+    "final_value": 136272.76,
+    "total_return": 0.362513,
+    "sharpe": 0.956948,
     "max_drawdown": -0.141505,
-    "n_decisions": 7540,
-    "n_transactions": 7446
+    "n_decisions": 7550,
+    "n_transactions": 7456
   },
   {
     "portfolio_id": "ensemble",
@@ -145,11 +145,11 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 132944.27,
-    "total_return": 0.329234,
-    "sharpe": 1.162128,
+    "final_value": 132804.88,
+    "total_return": 0.32784,
+    "sharpe": 1.156745,
     "max_drawdown": -0.077902,
-    "n_decisions": 7540,
-    "n_transactions": 6546
+    "n_decisions": 7550,
+    "n_transactions": 6554
   }
 ]
