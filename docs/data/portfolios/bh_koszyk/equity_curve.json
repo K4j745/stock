@@ -1,0 +1,6034 @@
+[
+  {
+    "date": "2023-09-18",
+    "portfolio_value": 100039.61,
+    "cash": 883.43,
+    "invested": 99156.18,
+    "peak": 100039.61,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2023-09-19",
+    "portfolio_value": 99779.24,
+    "cash": 883.43,
+    "invested": 98895.81,
+    "peak": 100039.61,
+    "drawdown": -0.002603
+  },
+  {
+    "date": "2023-09-20",
+    "portfolio_value": 99527.57,
+    "cash": 883.43,
+    "invested": 98644.13,
+    "peak": 100039.61,
+    "drawdown": -0.005118
+  },
+  {
+    "date": "2023-09-21",
+    "portfolio_value": 98865.39,
+    "cash": 883.43,
+    "invested": 97981.96,
+    "peak": 100039.61,
+    "drawdown": -0.011738
+  },
+  {
+    "date": "2023-09-22",
+    "portfolio_value": 98902.34,
+    "cash": 883.43,
+    "invested": 98018.9,
+    "peak": 100039.61,
+    "drawdown": -0.011368
+  },
+  {
+    "date": "2023-09-25",
+    "portfolio_value": 99065.58,
+    "cash": 883.43,
+    "invested": 98182.14,
+    "peak": 100039.61,
+    "drawdown": -0.009736
+  },
+  {
+    "date": "2023-09-26",
+    "portfolio_value": 97904.05,
+    "cash": 883.43,
+    "invested": 97020.61,
+    "peak": 100039.61,
+    "drawdown": -0.021347
+  },
+  {
+    "date": "2023-09-27",
+    "portfolio_value": 97012.16,
+    "cash": 883.43,
+    "invested": 96128.72,
+    "peak": 100039.61,
+    "drawdown": -0.030263
+  },
+  {
+    "date": "2023-09-28",
+    "portfolio_value": 96768.88,
+    "cash": 883.43,
+    "invested": 95885.44,
+    "peak": 100039.61,
+    "drawdown": -0.032694
+  },
+  {
+    "date": "2023-09-29",
+    "portfolio_value": 96211.96,
+    "cash": 883.43,
+    "invested": 95328.52,
+    "peak": 100039.61,
+    "drawdown": -0.038261
+  },
+  {
+    "date": "2023-10-02",
+    "portfolio_value": 95593.33,
+    "cash": 883.43,
+    "invested": 94709.89,
+    "peak": 100039.61,
+    "drawdown": -0.044445
+  },
+  {
+    "date": "2023-10-03",
+    "portfolio_value": 95067.08,
+    "cash": 883.43,
+    "invested": 94183.64,
+    "peak": 100039.61,
+    "drawdown": -0.049706
+  },
+  {
+    "date": "2023-10-04",
+    "portfolio_value": 94874.46,
+    "cash": 883.43,
+    "invested": 93991.02,
+    "peak": 100039.61,
+    "drawdown": -0.051631
+  },
+  {
+    "date": "2023-10-05",
+    "portfolio_value": 94041.45,
+    "cash": 883.43,
+    "invested": 93158.01,
+    "peak": 100039.61,
+    "drawdown": -0.059958
+  },
+  {
+    "date": "2023-10-06",
+    "portfolio_value": 94719.58,
+    "cash": 883.43,
+    "invested": 93836.14,
+    "peak": 100039.61,
+    "drawdown": -0.053179
+  },
+  {
+    "date": "2023-10-09",
+    "portfolio_value": 95006.5,
+    "cash": 883.43,
+    "invested": 94123.06,
+    "peak": 100039.61,
+    "drawdown": -0.050311
+  },
+  {
+    "date": "2023-10-10",
+    "portfolio_value": 95615.78,
+    "cash": 883.43,
+    "invested": 94732.35,
+    "peak": 100039.61,
+    "drawdown": -0.044221
+  },
+  {
+    "date": "2023-10-11",
+    "portfolio_value": 95530.82,
+    "cash": 883.43,
+    "invested": 94647.39,
+    "peak": 100039.61,
+    "drawdown": -0.04507
+  },
+  {
+    "date": "2023-10-12",
+    "portfolio_value": 95387.91,
+    "cash": 883.43,
+    "invested": 94504.48,
+    "peak": 100039.61,
+    "drawdown": -0.046499
+  },
+  {
+    "date": "2023-10-13",
+    "portfolio_value": 96296.38,
+    "cash": 883.43,
+    "invested": 95412.95,
+    "peak": 100039.61,
+    "drawdown": -0.037417
+  },
+  {
+    "date": "2023-10-16",
+    "portfolio_value": 96696.2,
+    "cash": 883.43,
+    "invested": 95812.77,
+    "peak": 100039.61,
+    "drawdown": -0.033421
+  },
+  {
+    "date": "2023-10-17",
+    "portfolio_value": 96680.93,
+    "cash": 883.43,
+    "invested": 95797.49,
+    "peak": 100039.61,
+    "drawdown": -0.033574
+  },
+  {
+    "date": "2023-10-18",
+    "portfolio_value": 96466.64,
+    "cash": 883.43,
+    "invested": 95583.2,
+    "peak": 100039.61,
+    "drawdown": -0.035716
+  },
+  {
+    "date": "2023-10-19",
+    "portfolio_value": 96100.17,
+    "cash": 883.43,
+    "invested": 95216.74,
+    "peak": 100039.61,
+    "drawdown": -0.039379
+  },
+  {
+    "date": "2023-10-20",
+    "portfolio_value": 95284.75,
+    "cash": 883.43,
+    "invested": 94401.31,
+    "peak": 100039.61,
+    "drawdown": -0.04753
+  },
+  {
+    "date": "2023-10-23",
+    "portfolio_value": 94889.17,
+    "cash": 883.43,
+    "invested": 94005.74,
+    "peak": 100039.61,
+    "drawdown": -0.051484
+  },
+  {
+    "date": "2023-10-24",
+    "portfolio_value": 95968.46,
+    "cash": 883.43,
+    "invested": 95085.02,
+    "peak": 100039.61,
+    "drawdown": -0.040695
+  },
+  {
+    "date": "2023-10-25",
+    "portfolio_value": 96523.9,
+    "cash": 883.43,
+    "invested": 95640.47,
+    "peak": 100039.61,
+    "drawdown": -0.035143
+  },
+  {
+    "date": "2023-10-26",
+    "portfolio_value": 95642.15,
+    "cash": 883.43,
+    "invested": 94758.72,
+    "peak": 100039.61,
+    "drawdown": -0.043957
+  },
+  {
+    "date": "2023-10-27",
+    "portfolio_value": 94487.8,
+    "cash": 883.43,
+    "invested": 93604.37,
+    "peak": 100039.61,
+    "drawdown": -0.055496
+  },
+  {
+    "date": "2023-10-30",
+    "portfolio_value": 95708.86,
+    "cash": 883.43,
+    "invested": 94825.43,
+    "peak": 100039.61,
+    "drawdown": -0.04329
+  },
+  {
+    "date": "2023-10-31",
+    "portfolio_value": 96349.3,
+    "cash": 883.43,
+    "invested": 95465.87,
+    "peak": 100039.61,
+    "drawdown": -0.036888
+  },
+  {
+    "date": "2023-11-01",
+    "portfolio_value": 96755.51,
+    "cash": 883.43,
+    "invested": 95872.07,
+    "peak": 100039.61,
+    "drawdown": -0.032828
+  },
+  {
+    "date": "2023-11-02",
+    "portfolio_value": 98153.82,
+    "cash": 883.43,
+    "invested": 97270.39,
+    "peak": 100039.61,
+    "drawdown": -0.01885
+  },
+  {
+    "date": "2023-11-03",
+    "portfolio_value": 97915.11,
+    "cash": 883.43,
+    "invested": 97031.67,
+    "peak": 100039.61,
+    "drawdown": -0.021237
+  },
+  {
+    "date": "2023-11-06",
+    "portfolio_value": 98213.95,
+    "cash": 883.43,
+    "invested": 97330.51,
+    "peak": 100039.61,
+    "drawdown": -0.018249
+  },
+  {
+    "date": "2023-11-07",
+    "portfolio_value": 98348.13,
+    "cash": 883.43,
+    "invested": 97464.69,
+    "peak": 100039.61,
+    "drawdown": -0.016908
+  },
+  {
+    "date": "2023-11-08",
+    "portfolio_value": 98097.67,
+    "cash": 883.43,
+    "invested": 97214.23,
+    "peak": 100039.61,
+    "drawdown": -0.019412
+  },
+  {
+    "date": "2023-11-09",
+    "portfolio_value": 97357.54,
+    "cash": 883.43,
+    "invested": 96474.11,
+    "peak": 100039.61,
+    "drawdown": -0.02681
+  },
+  {
+    "date": "2023-11-10",
+    "portfolio_value": 98371.52,
+    "cash": 883.43,
+    "invested": 97488.08,
+    "peak": 100039.61,
+    "drawdown": -0.016674
+  },
+  {
+    "date": "2023-11-13",
+    "portfolio_value": 98392.61,
+    "cash": 883.43,
+    "invested": 97509.18,
+    "peak": 100039.61,
+    "drawdown": -0.016463
+  },
+  {
+    "date": "2023-11-14",
+    "portfolio_value": 99187.16,
+    "cash": 883.43,
+    "invested": 98303.73,
+    "peak": 100039.61,
+    "drawdown": -0.008521
+  },
+  {
+    "date": "2023-11-15",
+    "portfolio_value": 99286.76,
+    "cash": 883.43,
+    "invested": 98403.33,
+    "peak": 100039.61,
+    "drawdown": -0.007526
+  },
+  {
+    "date": "2023-11-16",
+    "portfolio_value": 98885.39,
+    "cash": 883.43,
+    "invested": 98001.96,
+    "peak": 100039.61,
+    "drawdown": -0.011538
+  },
+  {
+    "date": "2023-11-17",
+    "portfolio_value": 98885.52,
+    "cash": 883.43,
+    "invested": 98002.09,
+    "peak": 100039.61,
+    "drawdown": -0.011536
+  },
+  {
+    "date": "2023-11-20",
+    "portfolio_value": 99153.19,
+    "cash": 883.43,
+    "invested": 98269.75,
+    "peak": 100039.61,
+    "drawdown": -0.008861
+  },
+  {
+    "date": "2023-11-21",
+    "portfolio_value": 99308.39,
+    "cash": 883.43,
+    "invested": 98424.96,
+    "peak": 100039.61,
+    "drawdown": -0.007309
+  },
+  {
+    "date": "2023-11-22",
+    "portfolio_value": 99551.46,
+    "cash": 883.43,
+    "invested": 98668.02,
+    "peak": 100039.61,
+    "drawdown": -0.00488
+  },
+  {
+    "date": "2023-11-24",
+    "portfolio_value": 99839.53,
+    "cash": 883.43,
+    "invested": 98956.1,
+    "peak": 100039.61,
+    "drawdown": -0.002
+  },
+  {
+    "date": "2023-11-27",
+    "portfolio_value": 99664.48,
+    "cash": 883.43,
+    "invested": 98781.04,
+    "peak": 100039.61,
+    "drawdown": -0.00375
+  },
+  {
+    "date": "2023-11-28",
+    "portfolio_value": 100085.23,
+    "cash": 883.43,
+    "invested": 99201.79,
+    "peak": 100085.23,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2023-11-29",
+    "portfolio_value": 99489.24,
+    "cash": 883.43,
+    "invested": 98605.8,
+    "peak": 100085.23,
+    "drawdown": -0.005955
+  },
+  {
+    "date": "2023-11-30",
+    "portfolio_value": 100377.96,
+    "cash": 883.43,
+    "invested": 99494.52,
+    "peak": 100377.96,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2023-12-01",
+    "portfolio_value": 100494.25,
+    "cash": 883.43,
+    "invested": 99610.81,
+    "peak": 100494.25,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2023-12-04",
+    "portfolio_value": 100188.77,
+    "cash": 883.43,
+    "invested": 99305.34,
+    "peak": 100494.25,
+    "drawdown": -0.00304
+  },
+  {
+    "date": "2023-12-05",
+    "portfolio_value": 100061.82,
+    "cash": 883.43,
+    "invested": 99178.39,
+    "peak": 100494.25,
+    "drawdown": -0.004303
+  },
+  {
+    "date": "2023-12-06",
+    "portfolio_value": 99697.79,
+    "cash": 883.43,
+    "invested": 98814.35,
+    "peak": 100494.25,
+    "drawdown": -0.007925
+  },
+  {
+    "date": "2023-12-07",
+    "portfolio_value": 99613.25,
+    "cash": 883.43,
+    "invested": 98729.82,
+    "peak": 100494.25,
+    "drawdown": -0.008767
+  },
+  {
+    "date": "2023-12-08",
+    "portfolio_value": 99746.9,
+    "cash": 883.43,
+    "invested": 98863.46,
+    "peak": 100494.25,
+    "drawdown": -0.007437
+  },
+  {
+    "date": "2023-12-11",
+    "portfolio_value": 99620.71,
+    "cash": 883.43,
+    "invested": 98737.28,
+    "peak": 100494.25,
+    "drawdown": -0.008692
+  },
+  {
+    "date": "2023-12-12",
+    "portfolio_value": 99854.66,
+    "cash": 883.43,
+    "invested": 98971.23,
+    "peak": 100494.25,
+    "drawdown": -0.006364
+  },
+  {
+    "date": "2023-12-13",
+    "portfolio_value": 101109.63,
+    "cash": 883.43,
+    "invested": 100226.2,
+    "peak": 101109.63,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2023-12-14",
+    "portfolio_value": 100578.86,
+    "cash": 883.43,
+    "invested": 99695.43,
+    "peak": 101109.63,
+    "drawdown": -0.005249
+  },
+  {
+    "date": "2023-12-15",
+    "portfolio_value": 100279.69,
+    "cash": 883.43,
+    "invested": 99396.26,
+    "peak": 101109.63,
+    "drawdown": -0.008208
+  },
+  {
+    "date": "2023-12-18",
+    "portfolio_value": 100576.11,
+    "cash": 883.43,
+    "invested": 99692.67,
+    "peak": 101109.63,
+    "drawdown": -0.005277
+  },
+  {
+    "date": "2023-12-19",
+    "portfolio_value": 101011.81,
+    "cash": 883.43,
+    "invested": 100128.38,
+    "peak": 101109.63,
+    "drawdown": -0.000967
+  },
+  {
+    "date": "2023-12-20",
+    "portfolio_value": 99468.42,
+    "cash": 883.43,
+    "invested": 98584.98,
+    "peak": 101109.63,
+    "drawdown": -0.016232
+  },
+  {
+    "date": "2023-12-21",
+    "portfolio_value": 99944.22,
+    "cash": 883.43,
+    "invested": 99060.79,
+    "peak": 101109.63,
+    "drawdown": -0.011526
+  },
+  {
+    "date": "2023-12-22",
+    "portfolio_value": 100225.99,
+    "cash": 883.43,
+    "invested": 99342.55,
+    "peak": 101109.63,
+    "drawdown": -0.008739
+  },
+  {
+    "date": "2023-12-26",
+    "portfolio_value": 100455.01,
+    "cash": 883.43,
+    "invested": 99571.57,
+    "peak": 101109.63,
+    "drawdown": -0.006474
+  },
+  {
+    "date": "2023-12-27",
+    "portfolio_value": 100714.1,
+    "cash": 883.43,
+    "invested": 99830.66,
+    "peak": 101109.63,
+    "drawdown": -0.003912
+  },
+  {
+    "date": "2023-12-28",
+    "portfolio_value": 100796.81,
+    "cash": 883.43,
+    "invested": 99913.38,
+    "peak": 101109.63,
+    "drawdown": -0.003094
+  },
+  {
+    "date": "2023-12-29",
+    "portfolio_value": 100817.77,
+    "cash": 883.43,
+    "invested": 99934.34,
+    "peak": 101109.63,
+    "drawdown": -0.002887
+  },
+  {
+    "date": "2024-01-02",
+    "portfolio_value": 101579.95,
+    "cash": 883.43,
+    "invested": 100696.51,
+    "peak": 101579.95,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-01-03",
+    "portfolio_value": 101659.65,
+    "cash": 883.43,
+    "invested": 100776.21,
+    "peak": 101659.65,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-01-04",
+    "portfolio_value": 101321.19,
+    "cash": 883.43,
+    "invested": 100437.75,
+    "peak": 101659.65,
+    "drawdown": -0.003329
+  },
+  {
+    "date": "2024-01-05",
+    "portfolio_value": 101110.98,
+    "cash": 883.43,
+    "invested": 100227.54,
+    "peak": 101659.65,
+    "drawdown": -0.005397
+  },
+  {
+    "date": "2024-01-08",
+    "portfolio_value": 101781.75,
+    "cash": 883.43,
+    "invested": 100898.31,
+    "peak": 101781.75,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-01-09",
+    "portfolio_value": 101589.43,
+    "cash": 883.43,
+    "invested": 100706.0,
+    "peak": 101781.75,
+    "drawdown": -0.00189
+  },
+  {
+    "date": "2024-01-10",
+    "portfolio_value": 102033.12,
+    "cash": 883.43,
+    "invested": 101149.69,
+    "peak": 102033.12,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-01-11",
+    "portfolio_value": 101734.54,
+    "cash": 883.43,
+    "invested": 100851.11,
+    "peak": 102033.12,
+    "drawdown": -0.002926
+  },
+  {
+    "date": "2024-01-12",
+    "portfolio_value": 101770.17,
+    "cash": 883.43,
+    "invested": 100886.74,
+    "peak": 102033.12,
+    "drawdown": -0.002577
+  },
+  {
+    "date": "2024-01-16",
+    "portfolio_value": 101081.79,
+    "cash": 883.43,
+    "invested": 100198.36,
+    "peak": 102033.12,
+    "drawdown": -0.009324
+  },
+  {
+    "date": "2024-01-17",
+    "portfolio_value": 100656.14,
+    "cash": 883.43,
+    "invested": 99772.71,
+    "peak": 102033.12,
+    "drawdown": -0.013495
+  },
+  {
+    "date": "2024-01-18",
+    "portfolio_value": 100959.52,
+    "cash": 883.43,
+    "invested": 100076.09,
+    "peak": 102033.12,
+    "drawdown": -0.010522
+  },
+  {
+    "date": "2024-01-19",
+    "portfolio_value": 101045.09,
+    "cash": 883.43,
+    "invested": 100161.65,
+    "peak": 102033.12,
+    "drawdown": -0.009683
+  },
+  {
+    "date": "2024-01-22",
+    "portfolio_value": 101238.1,
+    "cash": 883.43,
+    "invested": 100354.67,
+    "peak": 102033.12,
+    "drawdown": -0.007792
+  },
+  {
+    "date": "2024-01-23",
+    "portfolio_value": 101829.56,
+    "cash": 883.43,
+    "invested": 100946.12,
+    "peak": 102033.12,
+    "drawdown": -0.001995
+  },
+  {
+    "date": "2024-01-24",
+    "portfolio_value": 101574.54,
+    "cash": 883.43,
+    "invested": 100691.11,
+    "peak": 102033.12,
+    "drawdown": -0.004494
+  },
+  {
+    "date": "2024-01-25",
+    "portfolio_value": 102193.5,
+    "cash": 883.43,
+    "invested": 101310.07,
+    "peak": 102193.5,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-01-26",
+    "portfolio_value": 102518.03,
+    "cash": 883.43,
+    "invested": 101634.59,
+    "peak": 102518.03,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-01-29",
+    "portfolio_value": 102980.51,
+    "cash": 883.43,
+    "invested": 102097.08,
+    "peak": 102980.51,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-01-30",
+    "portfolio_value": 103174.44,
+    "cash": 883.43,
+    "invested": 102291.0,
+    "peak": 103174.44,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-01-31",
+    "portfolio_value": 102301.66,
+    "cash": 883.43,
+    "invested": 101418.23,
+    "peak": 103174.44,
+    "drawdown": -0.008459
+  },
+  {
+    "date": "2024-02-01",
+    "portfolio_value": 103157.45,
+    "cash": 883.43,
+    "invested": 102274.02,
+    "peak": 103174.44,
+    "drawdown": -0.000165
+  },
+  {
+    "date": "2024-02-02",
+    "portfolio_value": 103009.44,
+    "cash": 883.43,
+    "invested": 102126.01,
+    "peak": 103174.44,
+    "drawdown": -0.001599
+  },
+  {
+    "date": "2024-02-05",
+    "portfolio_value": 102249.28,
+    "cash": 883.43,
+    "invested": 101365.84,
+    "peak": 103174.44,
+    "drawdown": -0.008967
+  },
+  {
+    "date": "2024-02-06",
+    "portfolio_value": 102865.22,
+    "cash": 883.43,
+    "invested": 101981.79,
+    "peak": 103174.44,
+    "drawdown": -0.002997
+  },
+  {
+    "date": "2024-02-07",
+    "portfolio_value": 103331.76,
+    "cash": 883.43,
+    "invested": 102448.33,
+    "peak": 103331.76,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-02-08",
+    "portfolio_value": 103224.79,
+    "cash": 883.43,
+    "invested": 102341.35,
+    "peak": 103331.76,
+    "drawdown": -0.001035
+  },
+  {
+    "date": "2024-02-09",
+    "portfolio_value": 103171.37,
+    "cash": 883.43,
+    "invested": 102287.93,
+    "peak": 103331.76,
+    "drawdown": -0.001552
+  },
+  {
+    "date": "2024-02-12",
+    "portfolio_value": 103350.39,
+    "cash": 883.43,
+    "invested": 102466.95,
+    "peak": 103350.39,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-02-13",
+    "portfolio_value": 102088.15,
+    "cash": 883.43,
+    "invested": 101204.72,
+    "peak": 103350.39,
+    "drawdown": -0.012213
+  },
+  {
+    "date": "2024-02-14",
+    "portfolio_value": 102192.93,
+    "cash": 883.43,
+    "invested": 101309.5,
+    "peak": 103350.39,
+    "drawdown": -0.011199
+  },
+  {
+    "date": "2024-02-15",
+    "portfolio_value": 103135.3,
+    "cash": 883.43,
+    "invested": 102251.87,
+    "peak": 103350.39,
+    "drawdown": -0.002081
+  },
+  {
+    "date": "2024-02-16",
+    "portfolio_value": 102907.45,
+    "cash": 883.43,
+    "invested": 102024.01,
+    "peak": 103350.39,
+    "drawdown": -0.004286
+  },
+  {
+    "date": "2024-02-20",
+    "portfolio_value": 103423.14,
+    "cash": 883.43,
+    "invested": 102539.71,
+    "peak": 103423.14,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-02-21",
+    "portfolio_value": 103926.36,
+    "cash": 883.43,
+    "invested": 103042.93,
+    "peak": 103926.36,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-02-22",
+    "portfolio_value": 104697.72,
+    "cash": 883.43,
+    "invested": 103814.29,
+    "peak": 104697.72,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-02-23",
+    "portfolio_value": 104701.58,
+    "cash": 883.43,
+    "invested": 103818.15,
+    "peak": 104701.58,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-02-26",
+    "portfolio_value": 104255.7,
+    "cash": 883.43,
+    "invested": 103372.27,
+    "peak": 104701.58,
+    "drawdown": -0.004259
+  },
+  {
+    "date": "2024-02-27",
+    "portfolio_value": 104032.25,
+    "cash": 883.43,
+    "invested": 103148.82,
+    "peak": 104701.58,
+    "drawdown": -0.006393
+  },
+  {
+    "date": "2024-02-28",
+    "portfolio_value": 103779.01,
+    "cash": 883.43,
+    "invested": 102895.57,
+    "peak": 104701.58,
+    "drawdown": -0.008811
+  },
+  {
+    "date": "2024-02-29",
+    "portfolio_value": 103646.21,
+    "cash": 883.43,
+    "invested": 102762.77,
+    "peak": 104701.58,
+    "drawdown": -0.01008
+  },
+  {
+    "date": "2024-03-01",
+    "portfolio_value": 103605.47,
+    "cash": 883.43,
+    "invested": 102722.04,
+    "peak": 104701.58,
+    "drawdown": -0.010469
+  },
+  {
+    "date": "2024-03-04",
+    "portfolio_value": 103164.84,
+    "cash": 883.43,
+    "invested": 102281.41,
+    "peak": 104701.58,
+    "drawdown": -0.014677
+  },
+  {
+    "date": "2024-03-05",
+    "portfolio_value": 102717.28,
+    "cash": 883.43,
+    "invested": 101833.84,
+    "peak": 104701.58,
+    "drawdown": -0.018952
+  },
+  {
+    "date": "2024-03-06",
+    "portfolio_value": 102893.22,
+    "cash": 883.43,
+    "invested": 102009.79,
+    "peak": 104701.58,
+    "drawdown": -0.017272
+  },
+  {
+    "date": "2024-03-07",
+    "portfolio_value": 103247.17,
+    "cash": 883.43,
+    "invested": 102363.74,
+    "peak": 104701.58,
+    "drawdown": -0.013891
+  },
+  {
+    "date": "2024-03-08",
+    "portfolio_value": 103540.21,
+    "cash": 883.43,
+    "invested": 102656.77,
+    "peak": 104701.58,
+    "drawdown": -0.011092
+  },
+  {
+    "date": "2024-03-11",
+    "portfolio_value": 104324.94,
+    "cash": 883.43,
+    "invested": 103441.51,
+    "peak": 104701.58,
+    "drawdown": -0.003597
+  },
+  {
+    "date": "2024-03-12",
+    "portfolio_value": 104916.22,
+    "cash": 883.43,
+    "invested": 104032.79,
+    "peak": 104916.22,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-03-13",
+    "portfolio_value": 105325.43,
+    "cash": 883.43,
+    "invested": 104441.99,
+    "peak": 105325.43,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-03-14",
+    "portfolio_value": 105369.73,
+    "cash": 883.43,
+    "invested": 104486.29,
+    "peak": 105369.73,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-03-15",
+    "portfolio_value": 105099.23,
+    "cash": 883.43,
+    "invested": 104215.79,
+    "peak": 105369.73,
+    "drawdown": -0.002567
+  },
+  {
+    "date": "2024-03-18",
+    "portfolio_value": 105349.41,
+    "cash": 883.43,
+    "invested": 104465.97,
+    "peak": 105369.73,
+    "drawdown": -0.000193
+  },
+  {
+    "date": "2024-03-19",
+    "portfolio_value": 106057.17,
+    "cash": 883.43,
+    "invested": 105173.74,
+    "peak": 106057.17,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-03-20",
+    "portfolio_value": 106772.94,
+    "cash": 883.43,
+    "invested": 105889.5,
+    "peak": 106772.94,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-03-21",
+    "portfolio_value": 106520.45,
+    "cash": 883.43,
+    "invested": 105637.02,
+    "peak": 106772.94,
+    "drawdown": -0.002365
+  },
+  {
+    "date": "2024-03-22",
+    "portfolio_value": 106270.89,
+    "cash": 883.43,
+    "invested": 105387.46,
+    "peak": 106772.94,
+    "drawdown": -0.004702
+  },
+  {
+    "date": "2024-03-25",
+    "portfolio_value": 105864.2,
+    "cash": 883.43,
+    "invested": 104980.76,
+    "peak": 106772.94,
+    "drawdown": -0.008511
+  },
+  {
+    "date": "2024-03-26",
+    "portfolio_value": 105779.17,
+    "cash": 883.43,
+    "invested": 104895.74,
+    "peak": 106772.94,
+    "drawdown": -0.009307
+  },
+  {
+    "date": "2024-03-27",
+    "portfolio_value": 107074.34,
+    "cash": 883.43,
+    "invested": 106190.9,
+    "peak": 107074.34,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-03-28",
+    "portfolio_value": 107076.85,
+    "cash": 883.43,
+    "invested": 106193.42,
+    "peak": 107076.85,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-04-01",
+    "portfolio_value": 106658.11,
+    "cash": 883.43,
+    "invested": 105774.67,
+    "peak": 107076.85,
+    "drawdown": -0.003911
+  },
+  {
+    "date": "2024-04-02",
+    "portfolio_value": 105735.43,
+    "cash": 883.43,
+    "invested": 104851.99,
+    "peak": 107076.85,
+    "drawdown": -0.012528
+  },
+  {
+    "date": "2024-04-03",
+    "portfolio_value": 105198.96,
+    "cash": 883.43,
+    "invested": 104315.53,
+    "peak": 107076.85,
+    "drawdown": -0.017538
+  },
+  {
+    "date": "2024-04-04",
+    "portfolio_value": 104786.85,
+    "cash": 883.43,
+    "invested": 103903.42,
+    "peak": 107076.85,
+    "drawdown": -0.021387
+  },
+  {
+    "date": "2024-04-05",
+    "portfolio_value": 105526.62,
+    "cash": 883.43,
+    "invested": 104643.19,
+    "peak": 107076.85,
+    "drawdown": -0.014478
+  },
+  {
+    "date": "2024-04-08",
+    "portfolio_value": 105431.89,
+    "cash": 883.43,
+    "invested": 104548.46,
+    "peak": 107076.85,
+    "drawdown": -0.015362
+  },
+  {
+    "date": "2024-04-09",
+    "portfolio_value": 105826.75,
+    "cash": 883.43,
+    "invested": 104943.32,
+    "peak": 107076.85,
+    "drawdown": -0.011675
+  },
+  {
+    "date": "2024-04-10",
+    "portfolio_value": 105135.49,
+    "cash": 883.43,
+    "invested": 104252.06,
+    "peak": 107076.85,
+    "drawdown": -0.018131
+  },
+  {
+    "date": "2024-04-11",
+    "portfolio_value": 105218.16,
+    "cash": 883.43,
+    "invested": 104334.73,
+    "peak": 107076.85,
+    "drawdown": -0.017358
+  },
+  {
+    "date": "2024-04-12",
+    "portfolio_value": 103745.69,
+    "cash": 883.43,
+    "invested": 102862.26,
+    "peak": 107076.85,
+    "drawdown": -0.03111
+  },
+  {
+    "date": "2024-04-15",
+    "portfolio_value": 103260.18,
+    "cash": 883.43,
+    "invested": 102376.75,
+    "peak": 107076.85,
+    "drawdown": -0.035644
+  },
+  {
+    "date": "2024-04-16",
+    "portfolio_value": 103002.12,
+    "cash": 883.43,
+    "invested": 102118.68,
+    "peak": 107076.85,
+    "drawdown": -0.038054
+  },
+  {
+    "date": "2024-04-17",
+    "portfolio_value": 103421.33,
+    "cash": 883.43,
+    "invested": 102537.89,
+    "peak": 107076.85,
+    "drawdown": -0.034139
+  },
+  {
+    "date": "2024-04-18",
+    "portfolio_value": 103603.31,
+    "cash": 883.43,
+    "invested": 102719.88,
+    "peak": 107076.85,
+    "drawdown": -0.03244
+  },
+  {
+    "date": "2024-04-19",
+    "portfolio_value": 104408.7,
+    "cash": 883.43,
+    "invested": 103525.27,
+    "peak": 107076.85,
+    "drawdown": -0.024918
+  },
+  {
+    "date": "2024-04-22",
+    "portfolio_value": 105162.85,
+    "cash": 883.43,
+    "invested": 104279.42,
+    "peak": 107076.85,
+    "drawdown": -0.017875
+  },
+  {
+    "date": "2024-04-23",
+    "portfolio_value": 105584.08,
+    "cash": 883.43,
+    "invested": 104700.65,
+    "peak": 107076.85,
+    "drawdown": -0.013941
+  },
+  {
+    "date": "2024-04-24",
+    "portfolio_value": 106192.83,
+    "cash": 883.43,
+    "invested": 105309.4,
+    "peak": 107076.85,
+    "drawdown": -0.008256
+  },
+  {
+    "date": "2024-04-25",
+    "portfolio_value": 106151.74,
+    "cash": 883.43,
+    "invested": 105268.3,
+    "peak": 107076.85,
+    "drawdown": -0.00864
+  },
+  {
+    "date": "2024-04-26",
+    "portfolio_value": 105825.31,
+    "cash": 883.43,
+    "invested": 104941.88,
+    "peak": 107076.85,
+    "drawdown": -0.011688
+  },
+  {
+    "date": "2024-04-29",
+    "portfolio_value": 106279.42,
+    "cash": 883.43,
+    "invested": 105395.98,
+    "peak": 107076.85,
+    "drawdown": -0.007447
+  },
+  {
+    "date": "2024-04-30",
+    "portfolio_value": 105076.92,
+    "cash": 883.43,
+    "invested": 104193.49,
+    "peak": 107076.85,
+    "drawdown": -0.018678
+  },
+  {
+    "date": "2024-05-01",
+    "portfolio_value": 105602.49,
+    "cash": 883.43,
+    "invested": 104719.06,
+    "peak": 107076.85,
+    "drawdown": -0.013769
+  },
+  {
+    "date": "2024-05-02",
+    "portfolio_value": 106232.96,
+    "cash": 883.43,
+    "invested": 105349.53,
+    "peak": 107076.85,
+    "drawdown": -0.007881
+  },
+  {
+    "date": "2024-05-03",
+    "portfolio_value": 107207.38,
+    "cash": 883.43,
+    "invested": 106323.94,
+    "peak": 107207.38,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-06",
+    "portfolio_value": 107680.08,
+    "cash": 883.43,
+    "invested": 106796.64,
+    "peak": 107680.08,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-07",
+    "portfolio_value": 108035.72,
+    "cash": 883.43,
+    "invested": 107152.29,
+    "peak": 108035.72,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-08",
+    "portfolio_value": 108477.05,
+    "cash": 883.43,
+    "invested": 107593.62,
+    "peak": 108477.05,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-09",
+    "portfolio_value": 109426.41,
+    "cash": 883.43,
+    "invested": 108542.97,
+    "peak": 109426.41,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-10",
+    "portfolio_value": 109587.37,
+    "cash": 883.43,
+    "invested": 108703.93,
+    "peak": 109587.37,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-13",
+    "portfolio_value": 109883.35,
+    "cash": 883.43,
+    "invested": 108999.92,
+    "peak": 109883.35,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-14",
+    "portfolio_value": 110183.47,
+    "cash": 883.43,
+    "invested": 109300.04,
+    "peak": 110183.47,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-15",
+    "portfolio_value": 111061.0,
+    "cash": 883.43,
+    "invested": 110177.57,
+    "peak": 111061.0,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-16",
+    "portfolio_value": 111928.45,
+    "cash": 883.43,
+    "invested": 111045.01,
+    "peak": 111928.45,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-17",
+    "portfolio_value": 112307.89,
+    "cash": 883.43,
+    "invested": 111424.46,
+    "peak": 112307.89,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-05-20",
+    "portfolio_value": 111256.54,
+    "cash": 883.43,
+    "invested": 110373.11,
+    "peak": 112307.89,
+    "drawdown": -0.009361
+  },
+  {
+    "date": "2024-05-21",
+    "portfolio_value": 112217.94,
+    "cash": 883.43,
+    "invested": 111334.5,
+    "peak": 112307.89,
+    "drawdown": -0.000801
+  },
+  {
+    "date": "2024-05-22",
+    "portfolio_value": 111900.24,
+    "cash": 883.43,
+    "invested": 111016.81,
+    "peak": 112307.89,
+    "drawdown": -0.00363
+  },
+  {
+    "date": "2024-05-23",
+    "portfolio_value": 110462.12,
+    "cash": 883.43,
+    "invested": 109578.69,
+    "peak": 112307.89,
+    "drawdown": -0.016435
+  },
+  {
+    "date": "2024-05-24",
+    "portfolio_value": 110896.68,
+    "cash": 883.43,
+    "invested": 110013.25,
+    "peak": 112307.89,
+    "drawdown": -0.012566
+  },
+  {
+    "date": "2024-05-28",
+    "portfolio_value": 110594.07,
+    "cash": 883.43,
+    "invested": 109710.63,
+    "peak": 112307.89,
+    "drawdown": -0.01526
+  },
+  {
+    "date": "2024-05-29",
+    "portfolio_value": 109743.97,
+    "cash": 883.43,
+    "invested": 108860.54,
+    "peak": 112307.89,
+    "drawdown": -0.022829
+  },
+  {
+    "date": "2024-05-30",
+    "portfolio_value": 109786.6,
+    "cash": 883.43,
+    "invested": 108903.17,
+    "peak": 112307.89,
+    "drawdown": -0.02245
+  },
+  {
+    "date": "2024-05-31",
+    "portfolio_value": 111426.65,
+    "cash": 883.43,
+    "invested": 110543.22,
+    "peak": 112307.89,
+    "drawdown": -0.007847
+  },
+  {
+    "date": "2024-06-03",
+    "portfolio_value": 110974.59,
+    "cash": 883.43,
+    "invested": 110091.16,
+    "peak": 112307.89,
+    "drawdown": -0.011872
+  },
+  {
+    "date": "2024-06-04",
+    "portfolio_value": 111289.67,
+    "cash": 883.43,
+    "invested": 110406.24,
+    "peak": 112307.89,
+    "drawdown": -0.009066
+  },
+  {
+    "date": "2024-06-05",
+    "portfolio_value": 111374.71,
+    "cash": 883.43,
+    "invested": 110491.28,
+    "peak": 112307.89,
+    "drawdown": -0.008309
+  },
+  {
+    "date": "2024-06-06",
+    "portfolio_value": 111519.03,
+    "cash": 883.43,
+    "invested": 110635.6,
+    "peak": 112307.89,
+    "drawdown": -0.007024
+  },
+  {
+    "date": "2024-06-07",
+    "portfolio_value": 110996.92,
+    "cash": 883.43,
+    "invested": 110113.49,
+    "peak": 112307.89,
+    "drawdown": -0.011673
+  },
+  {
+    "date": "2024-06-10",
+    "portfolio_value": 111390.11,
+    "cash": 883.43,
+    "invested": 110506.67,
+    "peak": 112307.89,
+    "drawdown": -0.008172
+  },
+  {
+    "date": "2024-06-11",
+    "portfolio_value": 111239.04,
+    "cash": 883.43,
+    "invested": 110355.61,
+    "peak": 112307.89,
+    "drawdown": -0.009517
+  },
+  {
+    "date": "2024-06-12",
+    "portfolio_value": 110973.12,
+    "cash": 883.43,
+    "invested": 110089.69,
+    "peak": 112307.89,
+    "drawdown": -0.011885
+  },
+  {
+    "date": "2024-06-13",
+    "portfolio_value": 111510.36,
+    "cash": 883.43,
+    "invested": 110626.93,
+    "peak": 112307.89,
+    "drawdown": -0.007101
+  },
+  {
+    "date": "2024-06-14",
+    "portfolio_value": 111362.42,
+    "cash": 883.43,
+    "invested": 110478.99,
+    "peak": 112307.89,
+    "drawdown": -0.008419
+  },
+  {
+    "date": "2024-06-17",
+    "portfolio_value": 111675.89,
+    "cash": 883.43,
+    "invested": 110792.46,
+    "peak": 112307.89,
+    "drawdown": -0.005627
+  },
+  {
+    "date": "2024-06-18",
+    "portfolio_value": 111353.02,
+    "cash": 883.43,
+    "invested": 110469.59,
+    "peak": 112307.89,
+    "drawdown": -0.008502
+  },
+  {
+    "date": "2024-06-20",
+    "portfolio_value": 111820.64,
+    "cash": 883.43,
+    "invested": 110937.21,
+    "peak": 112307.89,
+    "drawdown": -0.004339
+  },
+  {
+    "date": "2024-06-21",
+    "portfolio_value": 111770.68,
+    "cash": 883.43,
+    "invested": 110887.24,
+    "peak": 112307.89,
+    "drawdown": -0.004783
+  },
+  {
+    "date": "2024-06-24",
+    "portfolio_value": 112916.2,
+    "cash": 883.43,
+    "invested": 112032.76,
+    "peak": 112916.2,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-06-25",
+    "portfolio_value": 112292.01,
+    "cash": 883.43,
+    "invested": 111408.57,
+    "peak": 112916.2,
+    "drawdown": -0.005528
+  },
+  {
+    "date": "2024-06-26",
+    "portfolio_value": 112780.55,
+    "cash": 883.43,
+    "invested": 111897.11,
+    "peak": 112916.2,
+    "drawdown": -0.001201
+  },
+  {
+    "date": "2024-06-27",
+    "portfolio_value": 112891.78,
+    "cash": 883.43,
+    "invested": 112008.35,
+    "peak": 112916.2,
+    "drawdown": -0.000216
+  },
+  {
+    "date": "2024-06-28",
+    "portfolio_value": 112617.58,
+    "cash": 883.43,
+    "invested": 111734.15,
+    "peak": 112916.2,
+    "drawdown": -0.002645
+  },
+  {
+    "date": "2024-07-01",
+    "portfolio_value": 112801.03,
+    "cash": 883.43,
+    "invested": 111917.59,
+    "peak": 112916.2,
+    "drawdown": -0.00102
+  },
+  {
+    "date": "2024-07-02",
+    "portfolio_value": 113524.78,
+    "cash": 883.43,
+    "invested": 112641.35,
+    "peak": 113524.78,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-07-03",
+    "portfolio_value": 113747.97,
+    "cash": 883.43,
+    "invested": 112864.53,
+    "peak": 113747.97,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-07-05",
+    "portfolio_value": 114378.62,
+    "cash": 883.43,
+    "invested": 113495.19,
+    "peak": 114378.62,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-07-08",
+    "portfolio_value": 114195.43,
+    "cash": 883.43,
+    "invested": 113312.0,
+    "peak": 114378.62,
+    "drawdown": -0.001602
+  },
+  {
+    "date": "2024-07-09",
+    "portfolio_value": 114193.2,
+    "cash": 883.43,
+    "invested": 113309.76,
+    "peak": 114378.62,
+    "drawdown": -0.001621
+  },
+  {
+    "date": "2024-07-10",
+    "portfolio_value": 115354.53,
+    "cash": 883.43,
+    "invested": 114471.09,
+    "peak": 115354.53,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-07-11",
+    "portfolio_value": 114995.51,
+    "cash": 883.43,
+    "invested": 114112.08,
+    "peak": 115354.53,
+    "drawdown": -0.003112
+  },
+  {
+    "date": "2024-07-12",
+    "portfolio_value": 115373.5,
+    "cash": 883.43,
+    "invested": 114490.07,
+    "peak": 115373.5,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-07-15",
+    "portfolio_value": 115305.18,
+    "cash": 883.43,
+    "invested": 114421.75,
+    "peak": 115373.5,
+    "drawdown": -0.000592
+  },
+  {
+    "date": "2024-07-16",
+    "portfolio_value": 116786.82,
+    "cash": 883.43,
+    "invested": 115903.39,
+    "peak": 116786.82,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-07-17",
+    "portfolio_value": 117821.22,
+    "cash": 883.43,
+    "invested": 116937.79,
+    "peak": 117821.22,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-07-18",
+    "portfolio_value": 116856.92,
+    "cash": 883.43,
+    "invested": 115973.49,
+    "peak": 117821.22,
+    "drawdown": -0.008184
+  },
+  {
+    "date": "2024-07-19",
+    "portfolio_value": 116517.82,
+    "cash": 883.43,
+    "invested": 115634.38,
+    "peak": 117821.22,
+    "drawdown": -0.011063
+  },
+  {
+    "date": "2024-07-22",
+    "portfolio_value": 116467.44,
+    "cash": 883.43,
+    "invested": 115584.01,
+    "peak": 117821.22,
+    "drawdown": -0.01149
+  },
+  {
+    "date": "2024-07-23",
+    "portfolio_value": 116099.86,
+    "cash": 883.43,
+    "invested": 115216.42,
+    "peak": 117821.22,
+    "drawdown": -0.01461
+  },
+  {
+    "date": "2024-07-24",
+    "portfolio_value": 116323.1,
+    "cash": 883.43,
+    "invested": 115439.67,
+    "peak": 117821.22,
+    "drawdown": -0.012715
+  },
+  {
+    "date": "2024-07-25",
+    "portfolio_value": 115947.03,
+    "cash": 883.43,
+    "invested": 115063.6,
+    "peak": 117821.22,
+    "drawdown": -0.015907
+  },
+  {
+    "date": "2024-07-26",
+    "portfolio_value": 117057.17,
+    "cash": 883.43,
+    "invested": 116173.73,
+    "peak": 117821.22,
+    "drawdown": -0.006485
+  },
+  {
+    "date": "2024-07-29",
+    "portfolio_value": 116729.81,
+    "cash": 883.43,
+    "invested": 115846.37,
+    "peak": 117821.22,
+    "drawdown": -0.009263
+  },
+  {
+    "date": "2024-07-30",
+    "portfolio_value": 117006.69,
+    "cash": 883.43,
+    "invested": 116123.25,
+    "peak": 117821.22,
+    "drawdown": -0.006913
+  },
+  {
+    "date": "2024-07-31",
+    "portfolio_value": 116697.16,
+    "cash": 883.43,
+    "invested": 115813.73,
+    "peak": 117821.22,
+    "drawdown": -0.00954
+  },
+  {
+    "date": "2024-08-01",
+    "portfolio_value": 117122.33,
+    "cash": 883.43,
+    "invested": 116238.9,
+    "peak": 117821.22,
+    "drawdown": -0.005932
+  },
+  {
+    "date": "2024-08-02",
+    "portfolio_value": 117290.21,
+    "cash": 883.43,
+    "invested": 116406.78,
+    "peak": 117821.22,
+    "drawdown": -0.004507
+  },
+  {
+    "date": "2024-08-05",
+    "portfolio_value": 114395.27,
+    "cash": 883.43,
+    "invested": 113511.84,
+    "peak": 117821.22,
+    "drawdown": -0.029078
+  },
+  {
+    "date": "2024-08-06",
+    "portfolio_value": 114618.85,
+    "cash": 883.43,
+    "invested": 113735.42,
+    "peak": 117821.22,
+    "drawdown": -0.02718
+  },
+  {
+    "date": "2024-08-07",
+    "portfolio_value": 114940.57,
+    "cash": 883.43,
+    "invested": 114057.14,
+    "peak": 117821.22,
+    "drawdown": -0.024449
+  },
+  {
+    "date": "2024-08-08",
+    "portfolio_value": 116015.05,
+    "cash": 883.43,
+    "invested": 115131.61,
+    "peak": 117821.22,
+    "drawdown": -0.01533
+  },
+  {
+    "date": "2024-08-09",
+    "portfolio_value": 116363.46,
+    "cash": 883.43,
+    "invested": 115480.03,
+    "peak": 117821.22,
+    "drawdown": -0.012373
+  },
+  {
+    "date": "2024-08-12",
+    "portfolio_value": 116411.2,
+    "cash": 883.43,
+    "invested": 115527.77,
+    "peak": 117821.22,
+    "drawdown": -0.011967
+  },
+  {
+    "date": "2024-08-13",
+    "portfolio_value": 117000.26,
+    "cash": 883.43,
+    "invested": 116116.83,
+    "peak": 117821.22,
+    "drawdown": -0.006968
+  },
+  {
+    "date": "2024-08-14",
+    "portfolio_value": 117669.6,
+    "cash": 883.43,
+    "invested": 116786.16,
+    "peak": 117821.22,
+    "drawdown": -0.001287
+  },
+  {
+    "date": "2024-08-15",
+    "portfolio_value": 118759.14,
+    "cash": 883.43,
+    "invested": 117875.7,
+    "peak": 118759.14,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-08-16",
+    "portfolio_value": 119157.63,
+    "cash": 883.43,
+    "invested": 118274.2,
+    "peak": 119157.63,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-08-19",
+    "portfolio_value": 119568.64,
+    "cash": 883.43,
+    "invested": 118685.2,
+    "peak": 119568.64,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-08-20",
+    "portfolio_value": 119664.88,
+    "cash": 883.43,
+    "invested": 118781.44,
+    "peak": 119664.88,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-08-21",
+    "portfolio_value": 119847.87,
+    "cash": 883.43,
+    "invested": 118964.44,
+    "peak": 119847.87,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-08-22",
+    "portfolio_value": 119680.94,
+    "cash": 883.43,
+    "invested": 118797.51,
+    "peak": 119847.87,
+    "drawdown": -0.001393
+  },
+  {
+    "date": "2024-08-23",
+    "portfolio_value": 120465.14,
+    "cash": 883.43,
+    "invested": 119581.7,
+    "peak": 120465.14,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-08-26",
+    "portfolio_value": 121194.4,
+    "cash": 883.43,
+    "invested": 120310.97,
+    "peak": 121194.4,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-08-27",
+    "portfolio_value": 121039.23,
+    "cash": 883.43,
+    "invested": 120155.8,
+    "peak": 121194.4,
+    "drawdown": -0.00128
+  },
+  {
+    "date": "2024-08-28",
+    "portfolio_value": 120907.27,
+    "cash": 883.43,
+    "invested": 120023.84,
+    "peak": 121194.4,
+    "drawdown": -0.002369
+  },
+  {
+    "date": "2024-08-29",
+    "portfolio_value": 121711.13,
+    "cash": 883.43,
+    "invested": 120827.7,
+    "peak": 121711.13,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-08-30",
+    "portfolio_value": 122402.81,
+    "cash": 883.43,
+    "invested": 121519.37,
+    "peak": 122402.81,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-09-03",
+    "portfolio_value": 121748.96,
+    "cash": 883.43,
+    "invested": 120865.52,
+    "peak": 122402.81,
+    "drawdown": -0.005342
+  },
+  {
+    "date": "2024-09-04",
+    "portfolio_value": 121753.0,
+    "cash": 883.43,
+    "invested": 120869.57,
+    "peak": 122402.81,
+    "drawdown": -0.005309
+  },
+  {
+    "date": "2024-09-05",
+    "portfolio_value": 120889.16,
+    "cash": 883.43,
+    "invested": 120005.72,
+    "peak": 122402.81,
+    "drawdown": -0.012366
+  },
+  {
+    "date": "2024-09-06",
+    "portfolio_value": 120093.78,
+    "cash": 883.43,
+    "invested": 119210.34,
+    "peak": 122402.81,
+    "drawdown": -0.018864
+  },
+  {
+    "date": "2024-09-09",
+    "portfolio_value": 121247.79,
+    "cash": 883.43,
+    "invested": 120364.36,
+    "peak": 122402.81,
+    "drawdown": -0.009436
+  },
+  {
+    "date": "2024-09-10",
+    "portfolio_value": 120980.68,
+    "cash": 883.43,
+    "invested": 120097.24,
+    "peak": 122402.81,
+    "drawdown": -0.011618
+  },
+  {
+    "date": "2024-09-11",
+    "portfolio_value": 120906.09,
+    "cash": 883.43,
+    "invested": 120022.66,
+    "peak": 122402.81,
+    "drawdown": -0.012228
+  },
+  {
+    "date": "2024-09-12",
+    "portfolio_value": 121230.21,
+    "cash": 883.43,
+    "invested": 120346.77,
+    "peak": 122402.81,
+    "drawdown": -0.00958
+  },
+  {
+    "date": "2024-09-13",
+    "portfolio_value": 121748.54,
+    "cash": 883.43,
+    "invested": 120865.1,
+    "peak": 122402.81,
+    "drawdown": -0.005345
+  },
+  {
+    "date": "2024-09-16",
+    "portfolio_value": 122093.0,
+    "cash": 883.43,
+    "invested": 121209.56,
+    "peak": 122402.81,
+    "drawdown": -0.002531
+  },
+  {
+    "date": "2024-09-17",
+    "portfolio_value": 121785.47,
+    "cash": 883.43,
+    "invested": 120902.03,
+    "peak": 122402.81,
+    "drawdown": -0.005044
+  },
+  {
+    "date": "2024-09-18",
+    "portfolio_value": 121634.27,
+    "cash": 883.43,
+    "invested": 120750.84,
+    "peak": 122402.81,
+    "drawdown": -0.006279
+  },
+  {
+    "date": "2024-09-19",
+    "portfolio_value": 121678.97,
+    "cash": 883.43,
+    "invested": 120795.53,
+    "peak": 122402.81,
+    "drawdown": -0.005914
+  },
+  {
+    "date": "2024-09-20",
+    "portfolio_value": 122036.75,
+    "cash": 883.43,
+    "invested": 121153.32,
+    "peak": 122402.81,
+    "drawdown": -0.002991
+  },
+  {
+    "date": "2024-09-23",
+    "portfolio_value": 122515.56,
+    "cash": 883.43,
+    "invested": 121632.12,
+    "peak": 122515.56,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-09-24",
+    "portfolio_value": 122310.53,
+    "cash": 883.43,
+    "invested": 121427.09,
+    "peak": 122515.56,
+    "drawdown": -0.001674
+  },
+  {
+    "date": "2024-09-25",
+    "portfolio_value": 122083.17,
+    "cash": 883.43,
+    "invested": 121199.74,
+    "peak": 122515.56,
+    "drawdown": -0.003529
+  },
+  {
+    "date": "2024-09-26",
+    "portfolio_value": 121561.49,
+    "cash": 883.43,
+    "invested": 120678.05,
+    "peak": 122515.56,
+    "drawdown": -0.007787
+  },
+  {
+    "date": "2024-09-27",
+    "portfolio_value": 122144.21,
+    "cash": 883.43,
+    "invested": 121260.78,
+    "peak": 122515.56,
+    "drawdown": -0.003031
+  },
+  {
+    "date": "2024-09-30",
+    "portfolio_value": 122909.08,
+    "cash": 883.43,
+    "invested": 122025.65,
+    "peak": 122909.08,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-10-01",
+    "portfolio_value": 122348.98,
+    "cash": 883.43,
+    "invested": 121465.55,
+    "peak": 122909.08,
+    "drawdown": -0.004557
+  },
+  {
+    "date": "2024-10-02",
+    "portfolio_value": 122234.42,
+    "cash": 883.43,
+    "invested": 121350.99,
+    "peak": 122909.08,
+    "drawdown": -0.005489
+  },
+  {
+    "date": "2024-10-03",
+    "portfolio_value": 121819.99,
+    "cash": 883.43,
+    "invested": 120936.56,
+    "peak": 122909.08,
+    "drawdown": -0.008861
+  },
+  {
+    "date": "2024-10-04",
+    "portfolio_value": 122196.91,
+    "cash": 883.43,
+    "invested": 121313.47,
+    "peak": 122909.08,
+    "drawdown": -0.005794
+  },
+  {
+    "date": "2024-10-07",
+    "portfolio_value": 120379.21,
+    "cash": 883.43,
+    "invested": 119495.78,
+    "peak": 122909.08,
+    "drawdown": -0.020583
+  },
+  {
+    "date": "2024-10-08",
+    "portfolio_value": 120675.12,
+    "cash": 883.43,
+    "invested": 119791.68,
+    "peak": 122909.08,
+    "drawdown": -0.018176
+  },
+  {
+    "date": "2024-10-09",
+    "portfolio_value": 121678.53,
+    "cash": 883.43,
+    "invested": 120795.1,
+    "peak": 122909.08,
+    "drawdown": -0.010012
+  },
+  {
+    "date": "2024-10-10",
+    "portfolio_value": 121606.28,
+    "cash": 883.43,
+    "invested": 120722.85,
+    "peak": 122909.08,
+    "drawdown": -0.0106
+  },
+  {
+    "date": "2024-10-11",
+    "portfolio_value": 122689.87,
+    "cash": 883.43,
+    "invested": 121806.44,
+    "peak": 122909.08,
+    "drawdown": -0.001784
+  },
+  {
+    "date": "2024-10-14",
+    "portfolio_value": 123535.85,
+    "cash": 883.43,
+    "invested": 122652.41,
+    "peak": 123535.85,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-10-15",
+    "portfolio_value": 122878.82,
+    "cash": 883.43,
+    "invested": 121995.39,
+    "peak": 123535.85,
+    "drawdown": -0.005319
+  },
+  {
+    "date": "2024-10-16",
+    "portfolio_value": 123223.53,
+    "cash": 883.43,
+    "invested": 122340.09,
+    "peak": 123535.85,
+    "drawdown": -0.002528
+  },
+  {
+    "date": "2024-10-17",
+    "portfolio_value": 122923.39,
+    "cash": 883.43,
+    "invested": 122039.96,
+    "peak": 123535.85,
+    "drawdown": -0.004958
+  },
+  {
+    "date": "2024-10-18",
+    "portfolio_value": 123464.51,
+    "cash": 883.43,
+    "invested": 122581.08,
+    "peak": 123535.85,
+    "drawdown": -0.000577
+  },
+  {
+    "date": "2024-10-21",
+    "portfolio_value": 122887.27,
+    "cash": 883.43,
+    "invested": 122003.84,
+    "peak": 123535.85,
+    "drawdown": -0.00525
+  },
+  {
+    "date": "2024-10-22",
+    "portfolio_value": 123430.42,
+    "cash": 883.43,
+    "invested": 122546.99,
+    "peak": 123535.85,
+    "drawdown": -0.000853
+  },
+  {
+    "date": "2024-10-23",
+    "portfolio_value": 123170.85,
+    "cash": 883.43,
+    "invested": 122287.42,
+    "peak": 123535.85,
+    "drawdown": -0.002955
+  },
+  {
+    "date": "2024-10-24",
+    "portfolio_value": 122528.14,
+    "cash": 883.43,
+    "invested": 121644.71,
+    "peak": 123535.85,
+    "drawdown": -0.008157
+  },
+  {
+    "date": "2024-10-25",
+    "portfolio_value": 121943.68,
+    "cash": 883.43,
+    "invested": 121060.25,
+    "peak": 123535.85,
+    "drawdown": -0.012888
+  },
+  {
+    "date": "2024-10-28",
+    "portfolio_value": 122508.02,
+    "cash": 883.43,
+    "invested": 121624.59,
+    "peak": 123535.85,
+    "drawdown": -0.00832
+  },
+  {
+    "date": "2024-10-29",
+    "portfolio_value": 121219.44,
+    "cash": 883.43,
+    "invested": 120336.01,
+    "peak": 123535.85,
+    "drawdown": -0.018751
+  },
+  {
+    "date": "2024-10-30",
+    "portfolio_value": 121008.98,
+    "cash": 883.43,
+    "invested": 120125.54,
+    "peak": 123535.85,
+    "drawdown": -0.020455
+  },
+  {
+    "date": "2024-10-31",
+    "portfolio_value": 119772.28,
+    "cash": 883.43,
+    "invested": 118888.85,
+    "peak": 123535.85,
+    "drawdown": -0.030465
+  },
+  {
+    "date": "2024-11-01",
+    "portfolio_value": 119426.81,
+    "cash": 883.43,
+    "invested": 118543.37,
+    "peak": 123535.85,
+    "drawdown": -0.033262
+  },
+  {
+    "date": "2024-11-04",
+    "portfolio_value": 119318.53,
+    "cash": 883.43,
+    "invested": 118435.1,
+    "peak": 123535.85,
+    "drawdown": -0.034138
+  },
+  {
+    "date": "2024-11-05",
+    "portfolio_value": 120178.11,
+    "cash": 883.43,
+    "invested": 119294.67,
+    "peak": 123535.85,
+    "drawdown": -0.02718
+  },
+  {
+    "date": "2024-11-06",
+    "portfolio_value": 121618.73,
+    "cash": 883.43,
+    "invested": 120735.3,
+    "peak": 123535.85,
+    "drawdown": -0.015519
+  },
+  {
+    "date": "2024-11-07",
+    "portfolio_value": 121678.31,
+    "cash": 883.43,
+    "invested": 120794.88,
+    "peak": 123535.85,
+    "drawdown": -0.015036
+  },
+  {
+    "date": "2024-11-08",
+    "portfolio_value": 122568.67,
+    "cash": 883.43,
+    "invested": 121685.23,
+    "peak": 123535.85,
+    "drawdown": -0.007829
+  },
+  {
+    "date": "2024-11-11",
+    "portfolio_value": 122072.44,
+    "cash": 883.43,
+    "invested": 121189.01,
+    "peak": 123535.85,
+    "drawdown": -0.011846
+  },
+  {
+    "date": "2024-11-12",
+    "portfolio_value": 121735.96,
+    "cash": 883.43,
+    "invested": 120852.53,
+    "peak": 123535.85,
+    "drawdown": -0.01457
+  },
+  {
+    "date": "2024-11-13",
+    "portfolio_value": 122016.79,
+    "cash": 883.43,
+    "invested": 121133.35,
+    "peak": 123535.85,
+    "drawdown": -0.012297
+  },
+  {
+    "date": "2024-11-14",
+    "portfolio_value": 121791.27,
+    "cash": 883.43,
+    "invested": 120907.84,
+    "peak": 123535.85,
+    "drawdown": -0.014122
+  },
+  {
+    "date": "2024-11-15",
+    "portfolio_value": 121623.24,
+    "cash": 883.43,
+    "invested": 120739.81,
+    "peak": 123535.85,
+    "drawdown": -0.015482
+  },
+  {
+    "date": "2024-11-18",
+    "portfolio_value": 121949.72,
+    "cash": 883.43,
+    "invested": 121066.28,
+    "peak": 123535.85,
+    "drawdown": -0.012839
+  },
+  {
+    "date": "2024-11-19",
+    "portfolio_value": 122076.31,
+    "cash": 883.43,
+    "invested": 121192.88,
+    "peak": 123535.85,
+    "drawdown": -0.011815
+  },
+  {
+    "date": "2024-11-20",
+    "portfolio_value": 122666.9,
+    "cash": 883.43,
+    "invested": 121783.47,
+    "peak": 123535.85,
+    "drawdown": -0.007034
+  },
+  {
+    "date": "2024-11-21",
+    "portfolio_value": 123591.82,
+    "cash": 883.43,
+    "invested": 122708.39,
+    "peak": 123591.82,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-11-22",
+    "portfolio_value": 124310.16,
+    "cash": 883.43,
+    "invested": 123426.73,
+    "peak": 124310.16,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-11-25",
+    "portfolio_value": 124902.03,
+    "cash": 883.43,
+    "invested": 124018.6,
+    "peak": 124902.03,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-11-26",
+    "portfolio_value": 125656.36,
+    "cash": 883.43,
+    "invested": 124772.93,
+    "peak": 125656.36,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-11-27",
+    "portfolio_value": 125781.8,
+    "cash": 883.43,
+    "invested": 124898.37,
+    "peak": 125781.8,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-11-29",
+    "portfolio_value": 126031.71,
+    "cash": 883.43,
+    "invested": 125148.28,
+    "peak": 126031.71,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2024-12-02",
+    "portfolio_value": 125843.31,
+    "cash": 883.43,
+    "invested": 124959.87,
+    "peak": 126031.71,
+    "drawdown": -0.001495
+  },
+  {
+    "date": "2024-12-03",
+    "portfolio_value": 125444.48,
+    "cash": 883.43,
+    "invested": 124561.04,
+    "peak": 126031.71,
+    "drawdown": -0.004659
+  },
+  {
+    "date": "2024-12-04",
+    "portfolio_value": 125110.02,
+    "cash": 883.43,
+    "invested": 124226.59,
+    "peak": 126031.71,
+    "drawdown": -0.007313
+  },
+  {
+    "date": "2024-12-05",
+    "portfolio_value": 125157.61,
+    "cash": 883.43,
+    "invested": 124274.18,
+    "peak": 126031.71,
+    "drawdown": -0.006936
+  },
+  {
+    "date": "2024-12-06",
+    "portfolio_value": 124323.29,
+    "cash": 883.43,
+    "invested": 123439.86,
+    "peak": 126031.71,
+    "drawdown": -0.013555
+  },
+  {
+    "date": "2024-12-09",
+    "portfolio_value": 123958.12,
+    "cash": 883.43,
+    "invested": 123074.69,
+    "peak": 126031.71,
+    "drawdown": -0.016453
+  },
+  {
+    "date": "2024-12-10",
+    "portfolio_value": 124118.69,
+    "cash": 883.43,
+    "invested": 123235.26,
+    "peak": 126031.71,
+    "drawdown": -0.015179
+  },
+  {
+    "date": "2024-12-11",
+    "portfolio_value": 123306.15,
+    "cash": 883.43,
+    "invested": 122422.71,
+    "peak": 126031.71,
+    "drawdown": -0.021626
+  },
+  {
+    "date": "2024-12-12",
+    "portfolio_value": 122835.21,
+    "cash": 883.43,
+    "invested": 121951.77,
+    "peak": 126031.71,
+    "drawdown": -0.025363
+  },
+  {
+    "date": "2024-12-13",
+    "portfolio_value": 122680.49,
+    "cash": 883.43,
+    "invested": 121797.06,
+    "peak": 126031.71,
+    "drawdown": -0.02659
+  },
+  {
+    "date": "2024-12-16",
+    "portfolio_value": 122038.49,
+    "cash": 883.43,
+    "invested": 121155.05,
+    "peak": 126031.71,
+    "drawdown": -0.031684
+  },
+  {
+    "date": "2024-12-17",
+    "portfolio_value": 122156.0,
+    "cash": 883.43,
+    "invested": 121272.57,
+    "peak": 126031.71,
+    "drawdown": -0.030752
+  },
+  {
+    "date": "2024-12-18",
+    "portfolio_value": 120083.39,
+    "cash": 883.43,
+    "invested": 119199.96,
+    "peak": 126031.71,
+    "drawdown": -0.047197
+  },
+  {
+    "date": "2024-12-19",
+    "portfolio_value": 119787.64,
+    "cash": 883.43,
+    "invested": 118904.2,
+    "peak": 126031.71,
+    "drawdown": -0.049544
+  },
+  {
+    "date": "2024-12-20",
+    "portfolio_value": 120660.56,
+    "cash": 883.43,
+    "invested": 119777.13,
+    "peak": 126031.71,
+    "drawdown": -0.042617
+  },
+  {
+    "date": "2024-12-23",
+    "portfolio_value": 120675.1,
+    "cash": 883.43,
+    "invested": 119791.67,
+    "peak": 126031.71,
+    "drawdown": -0.042502
+  },
+  {
+    "date": "2024-12-24",
+    "portfolio_value": 121880.51,
+    "cash": 883.43,
+    "invested": 120997.07,
+    "peak": 126031.71,
+    "drawdown": -0.032938
+  },
+  {
+    "date": "2024-12-26",
+    "portfolio_value": 122010.97,
+    "cash": 883.43,
+    "invested": 121127.54,
+    "peak": 126031.71,
+    "drawdown": -0.031903
+  },
+  {
+    "date": "2024-12-27",
+    "portfolio_value": 121098.81,
+    "cash": 883.43,
+    "invested": 120215.37,
+    "peak": 126031.71,
+    "drawdown": -0.03914
+  },
+  {
+    "date": "2024-12-30",
+    "portfolio_value": 119927.17,
+    "cash": 883.43,
+    "invested": 119043.74,
+    "peak": 126031.71,
+    "drawdown": -0.048437
+  },
+  {
+    "date": "2024-12-31",
+    "portfolio_value": 119972.06,
+    "cash": 883.43,
+    "invested": 119088.63,
+    "peak": 126031.71,
+    "drawdown": -0.04808
+  },
+  {
+    "date": "2025-01-02",
+    "portfolio_value": 119195.85,
+    "cash": 883.43,
+    "invested": 118312.42,
+    "peak": 126031.71,
+    "drawdown": -0.054239
+  },
+  {
+    "date": "2025-01-03",
+    "portfolio_value": 119885.37,
+    "cash": 883.43,
+    "invested": 119001.94,
+    "peak": 126031.71,
+    "drawdown": -0.048768
+  },
+  {
+    "date": "2025-01-06",
+    "portfolio_value": 119478.23,
+    "cash": 883.43,
+    "invested": 118594.79,
+    "peak": 126031.71,
+    "drawdown": -0.051999
+  },
+  {
+    "date": "2025-01-07",
+    "portfolio_value": 119386.91,
+    "cash": 883.43,
+    "invested": 118503.48,
+    "peak": 126031.71,
+    "drawdown": -0.052723
+  },
+  {
+    "date": "2025-01-08",
+    "portfolio_value": 119700.89,
+    "cash": 883.43,
+    "invested": 118817.45,
+    "peak": 126031.71,
+    "drawdown": -0.050232
+  },
+  {
+    "date": "2025-01-10",
+    "portfolio_value": 118270.16,
+    "cash": 883.43,
+    "invested": 117386.73,
+    "peak": 126031.71,
+    "drawdown": -0.061584
+  },
+  {
+    "date": "2025-01-13",
+    "portfolio_value": 118949.94,
+    "cash": 883.43,
+    "invested": 118066.51,
+    "peak": 126031.71,
+    "drawdown": -0.05619
+  },
+  {
+    "date": "2025-01-14",
+    "portfolio_value": 119303.58,
+    "cash": 883.43,
+    "invested": 118420.14,
+    "peak": 126031.71,
+    "drawdown": -0.053384
+  },
+  {
+    "date": "2025-01-15",
+    "portfolio_value": 120603.79,
+    "cash": 883.43,
+    "invested": 119720.36,
+    "peak": 126031.71,
+    "drawdown": -0.043068
+  },
+  {
+    "date": "2025-01-16",
+    "portfolio_value": 120071.71,
+    "cash": 883.43,
+    "invested": 119188.27,
+    "peak": 126031.71,
+    "drawdown": -0.04729
+  },
+  {
+    "date": "2025-01-17",
+    "portfolio_value": 120799.89,
+    "cash": 883.43,
+    "invested": 119916.45,
+    "peak": 126031.71,
+    "drawdown": -0.041512
+  },
+  {
+    "date": "2025-01-21",
+    "portfolio_value": 121141.31,
+    "cash": 883.43,
+    "invested": 120257.88,
+    "peak": 126031.71,
+    "drawdown": -0.038803
+  },
+  {
+    "date": "2025-01-22",
+    "portfolio_value": 121048.54,
+    "cash": 883.43,
+    "invested": 120165.11,
+    "peak": 126031.71,
+    "drawdown": -0.039539
+  },
+  {
+    "date": "2025-01-23",
+    "portfolio_value": 121860.07,
+    "cash": 883.43,
+    "invested": 120976.63,
+    "peak": 126031.71,
+    "drawdown": -0.0331
+  },
+  {
+    "date": "2025-01-24",
+    "portfolio_value": 122228.11,
+    "cash": 883.43,
+    "invested": 121344.67,
+    "peak": 126031.71,
+    "drawdown": -0.03018
+  },
+  {
+    "date": "2025-01-27",
+    "portfolio_value": 124441.52,
+    "cash": 883.43,
+    "invested": 123558.08,
+    "peak": 126031.71,
+    "drawdown": -0.012617
+  },
+  {
+    "date": "2025-01-28",
+    "portfolio_value": 124043.72,
+    "cash": 883.43,
+    "invested": 123160.28,
+    "peak": 126031.71,
+    "drawdown": -0.015774
+  },
+  {
+    "date": "2025-01-29",
+    "portfolio_value": 124106.98,
+    "cash": 883.43,
+    "invested": 123223.55,
+    "peak": 126031.71,
+    "drawdown": -0.015272
+  },
+  {
+    "date": "2025-01-30",
+    "portfolio_value": 124183.15,
+    "cash": 883.43,
+    "invested": 123299.71,
+    "peak": 126031.71,
+    "drawdown": -0.014667
+  },
+  {
+    "date": "2025-01-31",
+    "portfolio_value": 123455.07,
+    "cash": 883.43,
+    "invested": 122571.64,
+    "peak": 126031.71,
+    "drawdown": -0.020444
+  },
+  {
+    "date": "2025-02-03",
+    "portfolio_value": 123301.55,
+    "cash": 883.43,
+    "invested": 122418.12,
+    "peak": 126031.71,
+    "drawdown": -0.021662
+  },
+  {
+    "date": "2025-02-04",
+    "portfolio_value": 123877.0,
+    "cash": 883.43,
+    "invested": 122993.57,
+    "peak": 126031.71,
+    "drawdown": -0.017097
+  },
+  {
+    "date": "2025-02-05",
+    "portfolio_value": 124346.35,
+    "cash": 883.43,
+    "invested": 123462.92,
+    "peak": 126031.71,
+    "drawdown": -0.013373
+  },
+  {
+    "date": "2025-02-06",
+    "portfolio_value": 124621.2,
+    "cash": 883.43,
+    "invested": 123737.77,
+    "peak": 126031.71,
+    "drawdown": -0.011192
+  },
+  {
+    "date": "2025-02-07",
+    "portfolio_value": 123577.39,
+    "cash": 883.43,
+    "invested": 122693.96,
+    "peak": 126031.71,
+    "drawdown": -0.019474
+  },
+  {
+    "date": "2025-02-10",
+    "portfolio_value": 124329.06,
+    "cash": 883.43,
+    "invested": 123445.63,
+    "peak": 126031.71,
+    "drawdown": -0.01351
+  },
+  {
+    "date": "2025-02-11",
+    "portfolio_value": 125690.07,
+    "cash": 883.43,
+    "invested": 124806.64,
+    "peak": 126031.71,
+    "drawdown": -0.002711
+  },
+  {
+    "date": "2025-02-12",
+    "portfolio_value": 125591.98,
+    "cash": 883.43,
+    "invested": 124708.54,
+    "peak": 126031.71,
+    "drawdown": -0.003489
+  },
+  {
+    "date": "2025-02-13",
+    "portfolio_value": 126611.04,
+    "cash": 883.43,
+    "invested": 125727.6,
+    "peak": 126611.04,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-02-14",
+    "portfolio_value": 125635.79,
+    "cash": 883.43,
+    "invested": 124752.36,
+    "peak": 126611.04,
+    "drawdown": -0.007703
+  },
+  {
+    "date": "2025-02-18",
+    "portfolio_value": 125735.08,
+    "cash": 883.43,
+    "invested": 124851.64,
+    "peak": 126611.04,
+    "drawdown": -0.006919
+  },
+  {
+    "date": "2025-02-19",
+    "portfolio_value": 126625.69,
+    "cash": 883.43,
+    "invested": 125742.26,
+    "peak": 126625.69,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-02-20",
+    "portfolio_value": 124929.13,
+    "cash": 883.43,
+    "invested": 124045.7,
+    "peak": 126625.69,
+    "drawdown": -0.013398
+  },
+  {
+    "date": "2025-02-21",
+    "portfolio_value": 124017.94,
+    "cash": 883.43,
+    "invested": 123134.51,
+    "peak": 126625.69,
+    "drawdown": -0.020594
+  },
+  {
+    "date": "2025-02-24",
+    "portfolio_value": 123397.28,
+    "cash": 883.43,
+    "invested": 122513.85,
+    "peak": 126625.69,
+    "drawdown": -0.025496
+  },
+  {
+    "date": "2025-02-25",
+    "portfolio_value": 124227.67,
+    "cash": 883.43,
+    "invested": 123344.24,
+    "peak": 126625.69,
+    "drawdown": -0.018938
+  },
+  {
+    "date": "2025-02-26",
+    "portfolio_value": 123143.86,
+    "cash": 883.43,
+    "invested": 122260.42,
+    "peak": 126625.69,
+    "drawdown": -0.027497
+  },
+  {
+    "date": "2025-02-27",
+    "portfolio_value": 122897.56,
+    "cash": 883.43,
+    "invested": 122014.13,
+    "peak": 126625.69,
+    "drawdown": -0.029442
+  },
+  {
+    "date": "2025-02-28",
+    "portfolio_value": 124591.74,
+    "cash": 883.43,
+    "invested": 123708.31,
+    "peak": 126625.69,
+    "drawdown": -0.016063
+  },
+  {
+    "date": "2025-03-03",
+    "portfolio_value": 123857.11,
+    "cash": 883.43,
+    "invested": 122973.68,
+    "peak": 126625.69,
+    "drawdown": -0.021864
+  },
+  {
+    "date": "2025-03-04",
+    "portfolio_value": 121958.27,
+    "cash": 883.43,
+    "invested": 121074.84,
+    "peak": 126625.69,
+    "drawdown": -0.03686
+  },
+  {
+    "date": "2025-03-05",
+    "portfolio_value": 122439.07,
+    "cash": 883.43,
+    "invested": 121555.63,
+    "peak": 126625.69,
+    "drawdown": -0.033063
+  },
+  {
+    "date": "2025-03-06",
+    "portfolio_value": 122177.82,
+    "cash": 883.43,
+    "invested": 121294.38,
+    "peak": 126625.69,
+    "drawdown": -0.035126
+  },
+  {
+    "date": "2025-03-07",
+    "portfolio_value": 122407.96,
+    "cash": 883.43,
+    "invested": 121524.52,
+    "peak": 126625.69,
+    "drawdown": -0.033309
+  },
+  {
+    "date": "2025-03-10",
+    "portfolio_value": 120519.43,
+    "cash": 883.43,
+    "invested": 119636.0,
+    "peak": 126625.69,
+    "drawdown": -0.048223
+  },
+  {
+    "date": "2025-03-11",
+    "portfolio_value": 119080.21,
+    "cash": 883.43,
+    "invested": 118196.77,
+    "peak": 126625.69,
+    "drawdown": -0.059589
+  },
+  {
+    "date": "2025-03-12",
+    "portfolio_value": 117518.97,
+    "cash": 883.43,
+    "invested": 116635.54,
+    "peak": 126625.69,
+    "drawdown": -0.071918
+  },
+  {
+    "date": "2025-03-13",
+    "portfolio_value": 116575.33,
+    "cash": 883.43,
+    "invested": 115691.9,
+    "peak": 126625.69,
+    "drawdown": -0.079371
+  },
+  {
+    "date": "2025-03-14",
+    "portfolio_value": 118129.12,
+    "cash": 883.43,
+    "invested": 117245.68,
+    "peak": 126625.69,
+    "drawdown": -0.0671
+  },
+  {
+    "date": "2025-03-17",
+    "portfolio_value": 119083.93,
+    "cash": 883.43,
+    "invested": 118200.5,
+    "peak": 126625.69,
+    "drawdown": -0.059559
+  },
+  {
+    "date": "2025-03-18",
+    "portfolio_value": 118292.99,
+    "cash": 883.43,
+    "invested": 117409.56,
+    "peak": 126625.69,
+    "drawdown": -0.065806
+  },
+  {
+    "date": "2025-03-19",
+    "portfolio_value": 119047.29,
+    "cash": 883.43,
+    "invested": 118163.85,
+    "peak": 126625.69,
+    "drawdown": -0.059849
+  },
+  {
+    "date": "2025-03-20",
+    "portfolio_value": 119161.11,
+    "cash": 883.43,
+    "invested": 118277.68,
+    "peak": 126625.69,
+    "drawdown": -0.05895
+  },
+  {
+    "date": "2025-03-21",
+    "portfolio_value": 119574.86,
+    "cash": 883.43,
+    "invested": 118691.42,
+    "peak": 126625.69,
+    "drawdown": -0.055682
+  },
+  {
+    "date": "2025-03-24",
+    "portfolio_value": 120334.75,
+    "cash": 883.43,
+    "invested": 119451.32,
+    "peak": 126625.69,
+    "drawdown": -0.049681
+  },
+  {
+    "date": "2025-03-25",
+    "portfolio_value": 119724.5,
+    "cash": 883.43,
+    "invested": 118841.07,
+    "peak": 126625.69,
+    "drawdown": -0.054501
+  },
+  {
+    "date": "2025-03-26",
+    "portfolio_value": 120412.72,
+    "cash": 883.43,
+    "invested": 119529.29,
+    "peak": 126625.69,
+    "drawdown": -0.049066
+  },
+  {
+    "date": "2025-03-27",
+    "portfolio_value": 120750.18,
+    "cash": 883.43,
+    "invested": 119866.75,
+    "peak": 126625.69,
+    "drawdown": -0.046401
+  },
+  {
+    "date": "2025-03-28",
+    "portfolio_value": 119605.05,
+    "cash": 883.43,
+    "invested": 118721.62,
+    "peak": 126625.69,
+    "drawdown": -0.055444
+  },
+  {
+    "date": "2025-03-31",
+    "portfolio_value": 121202.16,
+    "cash": 883.43,
+    "invested": 120318.72,
+    "peak": 126625.69,
+    "drawdown": -0.042831
+  },
+  {
+    "date": "2025-04-01",
+    "portfolio_value": 120829.99,
+    "cash": 883.43,
+    "invested": 119946.55,
+    "peak": 126625.69,
+    "drawdown": -0.04577
+  },
+  {
+    "date": "2025-04-02",
+    "portfolio_value": 121056.01,
+    "cash": 883.43,
+    "invested": 120172.57,
+    "peak": 126625.69,
+    "drawdown": -0.043985
+  },
+  {
+    "date": "2025-04-03",
+    "portfolio_value": 118853.52,
+    "cash": 883.43,
+    "invested": 117970.08,
+    "peak": 126625.69,
+    "drawdown": -0.061379
+  },
+  {
+    "date": "2025-04-04",
+    "portfolio_value": 112384.71,
+    "cash": 883.43,
+    "invested": 111501.27,
+    "peak": 126625.69,
+    "drawdown": -0.112465
+  },
+  {
+    "date": "2025-04-07",
+    "portfolio_value": 111285.32,
+    "cash": 883.43,
+    "invested": 110401.88,
+    "peak": 126625.69,
+    "drawdown": -0.121147
+  },
+  {
+    "date": "2025-04-08",
+    "portfolio_value": 110570.02,
+    "cash": 883.43,
+    "invested": 109686.59,
+    "peak": 126625.69,
+    "drawdown": -0.126796
+  },
+  {
+    "date": "2025-04-09",
+    "portfolio_value": 117732.86,
+    "cash": 883.43,
+    "invested": 116849.43,
+    "peak": 126625.69,
+    "drawdown": -0.070229
+  },
+  {
+    "date": "2025-04-10",
+    "portfolio_value": 116459.95,
+    "cash": 883.43,
+    "invested": 115576.51,
+    "peak": 126625.69,
+    "drawdown": -0.080282
+  },
+  {
+    "date": "2025-04-11",
+    "portfolio_value": 118870.81,
+    "cash": 883.43,
+    "invested": 117987.38,
+    "peak": 126625.69,
+    "drawdown": -0.061243
+  },
+  {
+    "date": "2025-04-14",
+    "portfolio_value": 119872.04,
+    "cash": 883.43,
+    "invested": 118988.6,
+    "peak": 126625.69,
+    "drawdown": -0.053336
+  },
+  {
+    "date": "2025-04-15",
+    "portfolio_value": 119256.25,
+    "cash": 883.43,
+    "invested": 118372.81,
+    "peak": 126625.69,
+    "drawdown": -0.058199
+  },
+  {
+    "date": "2025-04-16",
+    "portfolio_value": 117332.48,
+    "cash": 883.43,
+    "invested": 116449.05,
+    "peak": 126625.69,
+    "drawdown": -0.073391
+  },
+  {
+    "date": "2025-04-17",
+    "portfolio_value": 116322.41,
+    "cash": 883.43,
+    "invested": 115438.98,
+    "peak": 126625.69,
+    "drawdown": -0.081368
+  },
+  {
+    "date": "2025-04-21",
+    "portfolio_value": 114171.45,
+    "cash": 883.43,
+    "invested": 113288.02,
+    "peak": 126625.69,
+    "drawdown": -0.098355
+  },
+  {
+    "date": "2025-04-22",
+    "portfolio_value": 116610.48,
+    "cash": 883.43,
+    "invested": 115727.04,
+    "peak": 126625.69,
+    "drawdown": -0.079093
+  },
+  {
+    "date": "2025-04-23",
+    "portfolio_value": 117126.72,
+    "cash": 883.43,
+    "invested": 116243.28,
+    "peak": 126625.69,
+    "drawdown": -0.075016
+  },
+  {
+    "date": "2025-04-24",
+    "portfolio_value": 117478.3,
+    "cash": 883.43,
+    "invested": 116594.87,
+    "peak": 126625.69,
+    "drawdown": -0.07224
+  },
+  {
+    "date": "2025-04-25",
+    "portfolio_value": 117270.33,
+    "cash": 883.43,
+    "invested": 116386.89,
+    "peak": 126625.69,
+    "drawdown": -0.073882
+  },
+  {
+    "date": "2025-04-28",
+    "portfolio_value": 117425.59,
+    "cash": 883.43,
+    "invested": 116542.15,
+    "peak": 126625.69,
+    "drawdown": -0.072656
+  },
+  {
+    "date": "2025-04-29",
+    "portfolio_value": 117887.01,
+    "cash": 883.43,
+    "invested": 117003.58,
+    "peak": 126625.69,
+    "drawdown": -0.069012
+  },
+  {
+    "date": "2025-04-30",
+    "portfolio_value": 118053.21,
+    "cash": 883.43,
+    "invested": 117169.78,
+    "peak": 126625.69,
+    "drawdown": -0.067699
+  },
+  {
+    "date": "2025-05-01",
+    "portfolio_value": 118366.42,
+    "cash": 883.43,
+    "invested": 117482.98,
+    "peak": 126625.69,
+    "drawdown": -0.065226
+  },
+  {
+    "date": "2025-05-02",
+    "portfolio_value": 119206.8,
+    "cash": 883.43,
+    "invested": 118323.37,
+    "peak": 126625.69,
+    "drawdown": -0.058589
+  },
+  {
+    "date": "2025-05-05",
+    "portfolio_value": 118517.12,
+    "cash": 883.43,
+    "invested": 117633.69,
+    "peak": 126625.69,
+    "drawdown": -0.064036
+  },
+  {
+    "date": "2025-05-06",
+    "portfolio_value": 118024.51,
+    "cash": 883.43,
+    "invested": 117141.07,
+    "peak": 126625.69,
+    "drawdown": -0.067926
+  },
+  {
+    "date": "2025-05-07",
+    "portfolio_value": 118293.04,
+    "cash": 883.43,
+    "invested": 117409.6,
+    "peak": 126625.69,
+    "drawdown": -0.065805
+  },
+  {
+    "date": "2025-05-08",
+    "portfolio_value": 118326.17,
+    "cash": 883.43,
+    "invested": 117442.74,
+    "peak": 126625.69,
+    "drawdown": -0.065544
+  },
+  {
+    "date": "2025-05-09",
+    "portfolio_value": 118278.61,
+    "cash": 883.43,
+    "invested": 117395.18,
+    "peak": 126625.69,
+    "drawdown": -0.065919
+  },
+  {
+    "date": "2025-05-12",
+    "portfolio_value": 119815.27,
+    "cash": 883.43,
+    "invested": 118931.84,
+    "peak": 126625.69,
+    "drawdown": -0.053784
+  },
+  {
+    "date": "2025-05-13",
+    "portfolio_value": 118415.87,
+    "cash": 883.43,
+    "invested": 117532.44,
+    "peak": 126625.69,
+    "drawdown": -0.064835
+  },
+  {
+    "date": "2025-05-14",
+    "portfolio_value": 118568.37,
+    "cash": 883.43,
+    "invested": 117684.93,
+    "peak": 126625.69,
+    "drawdown": -0.063631
+  },
+  {
+    "date": "2025-05-15",
+    "portfolio_value": 119139.48,
+    "cash": 883.43,
+    "invested": 118256.05,
+    "peak": 126625.69,
+    "drawdown": -0.059121
+  },
+  {
+    "date": "2025-05-16",
+    "portfolio_value": 120122.69,
+    "cash": 883.43,
+    "invested": 119239.26,
+    "peak": 126625.69,
+    "drawdown": -0.051356
+  },
+  {
+    "date": "2025-05-19",
+    "portfolio_value": 120242.6,
+    "cash": 883.43,
+    "invested": 119359.16,
+    "peak": 126625.69,
+    "drawdown": -0.050409
+  },
+  {
+    "date": "2025-05-20",
+    "portfolio_value": 120259.56,
+    "cash": 883.43,
+    "invested": 119376.12,
+    "peak": 126625.69,
+    "drawdown": -0.050275
+  },
+  {
+    "date": "2025-05-21",
+    "portfolio_value": 118351.21,
+    "cash": 883.43,
+    "invested": 117467.78,
+    "peak": 126625.69,
+    "drawdown": -0.065346
+  },
+  {
+    "date": "2025-05-22",
+    "portfolio_value": 117228.91,
+    "cash": 883.43,
+    "invested": 116345.47,
+    "peak": 126625.69,
+    "drawdown": -0.074209
+  },
+  {
+    "date": "2025-05-23",
+    "portfolio_value": 117108.37,
+    "cash": 883.43,
+    "invested": 116224.94,
+    "peak": 126625.69,
+    "drawdown": -0.075161
+  },
+  {
+    "date": "2025-05-27",
+    "portfolio_value": 118445.94,
+    "cash": 883.43,
+    "invested": 117562.5,
+    "peak": 126625.69,
+    "drawdown": -0.064598
+  },
+  {
+    "date": "2025-05-28",
+    "portfolio_value": 117813.33,
+    "cash": 883.43,
+    "invested": 116929.9,
+    "peak": 126625.69,
+    "drawdown": -0.069594
+  },
+  {
+    "date": "2025-05-29",
+    "portfolio_value": 118374.12,
+    "cash": 883.43,
+    "invested": 117490.69,
+    "peak": 126625.69,
+    "drawdown": -0.065165
+  },
+  {
+    "date": "2025-05-30",
+    "portfolio_value": 119315.35,
+    "cash": 883.43,
+    "invested": 118431.91,
+    "peak": 126625.69,
+    "drawdown": -0.057732
+  },
+  {
+    "date": "2025-06-02",
+    "portfolio_value": 119554.81,
+    "cash": 883.43,
+    "invested": 118671.38,
+    "peak": 126625.69,
+    "drawdown": -0.055841
+  },
+  {
+    "date": "2025-06-03",
+    "portfolio_value": 119664.8,
+    "cash": 883.43,
+    "invested": 118781.36,
+    "peak": 126625.69,
+    "drawdown": -0.054972
+  },
+  {
+    "date": "2025-06-04",
+    "portfolio_value": 119020.46,
+    "cash": 883.43,
+    "invested": 118137.02,
+    "peak": 126625.69,
+    "drawdown": -0.060061
+  },
+  {
+    "date": "2025-06-05",
+    "portfolio_value": 118457.32,
+    "cash": 883.43,
+    "invested": 117573.88,
+    "peak": 126625.69,
+    "drawdown": -0.064508
+  },
+  {
+    "date": "2025-06-06",
+    "portfolio_value": 119574.67,
+    "cash": 883.43,
+    "invested": 118691.23,
+    "peak": 126625.69,
+    "drawdown": -0.055684
+  },
+  {
+    "date": "2025-06-09",
+    "portfolio_value": 119583.67,
+    "cash": 883.43,
+    "invested": 118700.24,
+    "peak": 126625.69,
+    "drawdown": -0.055613
+  },
+  {
+    "date": "2025-06-10",
+    "portfolio_value": 120225.35,
+    "cash": 883.43,
+    "invested": 119341.92,
+    "peak": 126625.69,
+    "drawdown": -0.050545
+  },
+  {
+    "date": "2025-06-11",
+    "portfolio_value": 119924.85,
+    "cash": 883.43,
+    "invested": 119041.42,
+    "peak": 126625.69,
+    "drawdown": -0.052918
+  },
+  {
+    "date": "2025-06-12",
+    "portfolio_value": 120464.78,
+    "cash": 883.43,
+    "invested": 119581.35,
+    "peak": 126625.69,
+    "drawdown": -0.048655
+  },
+  {
+    "date": "2025-06-13",
+    "portfolio_value": 119773.53,
+    "cash": 883.43,
+    "invested": 118890.09,
+    "peak": 126625.69,
+    "drawdown": -0.054114
+  },
+  {
+    "date": "2025-06-16",
+    "portfolio_value": 119950.33,
+    "cash": 883.43,
+    "invested": 119066.9,
+    "peak": 126625.69,
+    "drawdown": -0.052717
+  },
+  {
+    "date": "2025-06-17",
+    "portfolio_value": 119094.02,
+    "cash": 883.43,
+    "invested": 118210.58,
+    "peak": 126625.69,
+    "drawdown": -0.05948
+  },
+  {
+    "date": "2025-06-18",
+    "portfolio_value": 119315.54,
+    "cash": 883.43,
+    "invested": 118432.11,
+    "peak": 126625.69,
+    "drawdown": -0.05773
+  },
+  {
+    "date": "2025-06-20",
+    "portfolio_value": 119700.61,
+    "cash": 883.43,
+    "invested": 118817.18,
+    "peak": 126625.69,
+    "drawdown": -0.054689
+  },
+  {
+    "date": "2025-06-23",
+    "portfolio_value": 120502.93,
+    "cash": 883.43,
+    "invested": 119619.5,
+    "peak": 126625.69,
+    "drawdown": -0.048353
+  },
+  {
+    "date": "2025-06-24",
+    "portfolio_value": 120781.0,
+    "cash": 883.43,
+    "invested": 119897.57,
+    "peak": 126625.69,
+    "drawdown": -0.046157
+  },
+  {
+    "date": "2025-06-25",
+    "portfolio_value": 120562.9,
+    "cash": 883.43,
+    "invested": 119679.47,
+    "peak": 126625.69,
+    "drawdown": -0.04788
+  },
+  {
+    "date": "2025-06-26",
+    "portfolio_value": 120953.69,
+    "cash": 883.43,
+    "invested": 120070.26,
+    "peak": 126625.69,
+    "drawdown": -0.044793
+  },
+  {
+    "date": "2025-06-27",
+    "portfolio_value": 121344.98,
+    "cash": 883.43,
+    "invested": 120461.55,
+    "peak": 126625.69,
+    "drawdown": -0.041703
+  },
+  {
+    "date": "2025-06-30",
+    "portfolio_value": 121666.72,
+    "cash": 883.43,
+    "invested": 120783.28,
+    "peak": 126625.69,
+    "drawdown": -0.039162
+  },
+  {
+    "date": "2025-07-01",
+    "portfolio_value": 123178.34,
+    "cash": 883.43,
+    "invested": 122294.91,
+    "peak": 126625.69,
+    "drawdown": -0.027225
+  },
+  {
+    "date": "2025-07-02",
+    "portfolio_value": 123022.62,
+    "cash": 883.43,
+    "invested": 122139.19,
+    "peak": 126625.69,
+    "drawdown": -0.028454
+  },
+  {
+    "date": "2025-07-03",
+    "portfolio_value": 124043.48,
+    "cash": 883.43,
+    "invested": 123160.05,
+    "peak": 126625.69,
+    "drawdown": -0.020392
+  },
+  {
+    "date": "2025-07-07",
+    "portfolio_value": 123530.41,
+    "cash": 883.43,
+    "invested": 122646.98,
+    "peak": 126625.69,
+    "drawdown": -0.024444
+  },
+  {
+    "date": "2025-07-08",
+    "portfolio_value": 122215.51,
+    "cash": 883.43,
+    "invested": 121332.08,
+    "peak": 126625.69,
+    "drawdown": -0.034828
+  },
+  {
+    "date": "2025-07-09",
+    "portfolio_value": 122379.09,
+    "cash": 883.43,
+    "invested": 121495.65,
+    "peak": 126625.69,
+    "drawdown": -0.033537
+  },
+  {
+    "date": "2025-07-10",
+    "portfolio_value": 122740.99,
+    "cash": 883.43,
+    "invested": 121857.55,
+    "peak": 126625.69,
+    "drawdown": -0.030679
+  },
+  {
+    "date": "2025-07-11",
+    "portfolio_value": 122529.71,
+    "cash": 883.43,
+    "invested": 121646.27,
+    "peak": 126625.69,
+    "drawdown": -0.032347
+  },
+  {
+    "date": "2025-07-14",
+    "portfolio_value": 122362.71,
+    "cash": 883.43,
+    "invested": 121479.28,
+    "peak": 126625.69,
+    "drawdown": -0.033666
+  },
+  {
+    "date": "2025-07-15",
+    "portfolio_value": 121757.88,
+    "cash": 883.43,
+    "invested": 120874.45,
+    "peak": 126625.69,
+    "drawdown": -0.038443
+  },
+  {
+    "date": "2025-07-16",
+    "portfolio_value": 122323.97,
+    "cash": 883.43,
+    "invested": 121440.54,
+    "peak": 126625.69,
+    "drawdown": -0.033972
+  },
+  {
+    "date": "2025-07-17",
+    "portfolio_value": 122921.77,
+    "cash": 883.43,
+    "invested": 122038.34,
+    "peak": 126625.69,
+    "drawdown": -0.029251
+  },
+  {
+    "date": "2025-07-18",
+    "portfolio_value": 122577.7,
+    "cash": 883.43,
+    "invested": 121694.27,
+    "peak": 126625.69,
+    "drawdown": -0.031968
+  },
+  {
+    "date": "2025-07-21",
+    "portfolio_value": 122862.66,
+    "cash": 883.43,
+    "invested": 121979.23,
+    "peak": 126625.69,
+    "drawdown": -0.029718
+  },
+  {
+    "date": "2025-07-22",
+    "portfolio_value": 123547.97,
+    "cash": 883.43,
+    "invested": 122664.54,
+    "peak": 126625.69,
+    "drawdown": -0.024306
+  },
+  {
+    "date": "2025-07-23",
+    "portfolio_value": 123442.31,
+    "cash": 883.43,
+    "invested": 122558.87,
+    "peak": 126625.69,
+    "drawdown": -0.02514
+  },
+  {
+    "date": "2025-07-24",
+    "portfolio_value": 123447.04,
+    "cash": 883.43,
+    "invested": 122563.61,
+    "peak": 126625.69,
+    "drawdown": -0.025103
+  },
+  {
+    "date": "2025-07-25",
+    "portfolio_value": 123737.29,
+    "cash": 883.43,
+    "invested": 122853.85,
+    "peak": 126625.69,
+    "drawdown": -0.022811
+  },
+  {
+    "date": "2025-07-28",
+    "portfolio_value": 123360.05,
+    "cash": 883.43,
+    "invested": 122476.62,
+    "peak": 126625.69,
+    "drawdown": -0.02579
+  },
+  {
+    "date": "2025-07-29",
+    "portfolio_value": 123349.46,
+    "cash": 883.43,
+    "invested": 122466.02,
+    "peak": 126625.69,
+    "drawdown": -0.025873
+  },
+  {
+    "date": "2025-07-30",
+    "portfolio_value": 122762.05,
+    "cash": 883.43,
+    "invested": 121878.62,
+    "peak": 126625.69,
+    "drawdown": -0.030512
+  },
+  {
+    "date": "2025-07-31",
+    "portfolio_value": 122333.39,
+    "cash": 883.43,
+    "invested": 121449.96,
+    "peak": 126625.69,
+    "drawdown": -0.033898
+  },
+  {
+    "date": "2025-08-01",
+    "portfolio_value": 121228.43,
+    "cash": 883.43,
+    "invested": 120345.0,
+    "peak": 126625.69,
+    "drawdown": -0.042624
+  },
+  {
+    "date": "2025-08-04",
+    "portfolio_value": 122297.13,
+    "cash": 883.43,
+    "invested": 121413.7,
+    "peak": 126625.69,
+    "drawdown": -0.034184
+  },
+  {
+    "date": "2025-08-05",
+    "portfolio_value": 122056.54,
+    "cash": 883.43,
+    "invested": 121173.11,
+    "peak": 126625.69,
+    "drawdown": -0.036084
+  },
+  {
+    "date": "2025-08-06",
+    "portfolio_value": 123247.61,
+    "cash": 883.43,
+    "invested": 122364.17,
+    "peak": 126625.69,
+    "drawdown": -0.026678
+  },
+  {
+    "date": "2025-08-07",
+    "portfolio_value": 123647.04,
+    "cash": 883.43,
+    "invested": 122763.6,
+    "peak": 126625.69,
+    "drawdown": -0.023523
+  },
+  {
+    "date": "2025-08-08",
+    "portfolio_value": 124705.52,
+    "cash": 883.43,
+    "invested": 123822.08,
+    "peak": 126625.69,
+    "drawdown": -0.015164
+  },
+  {
+    "date": "2025-08-11",
+    "portfolio_value": 124813.33,
+    "cash": 883.43,
+    "invested": 123929.9,
+    "peak": 126625.69,
+    "drawdown": -0.014313
+  },
+  {
+    "date": "2025-08-12",
+    "portfolio_value": 125400.43,
+    "cash": 883.43,
+    "invested": 124517.0,
+    "peak": 126625.69,
+    "drawdown": -0.009676
+  },
+  {
+    "date": "2025-08-13",
+    "portfolio_value": 125183.69,
+    "cash": 883.43,
+    "invested": 124300.25,
+    "peak": 126625.69,
+    "drawdown": -0.011388
+  },
+  {
+    "date": "2025-08-14",
+    "portfolio_value": 125148.71,
+    "cash": 883.43,
+    "invested": 124265.28,
+    "peak": 126625.69,
+    "drawdown": -0.011664
+  },
+  {
+    "date": "2025-08-15",
+    "portfolio_value": 125867.02,
+    "cash": 883.43,
+    "invested": 124983.59,
+    "peak": 126625.69,
+    "drawdown": -0.005991
+  },
+  {
+    "date": "2025-08-18",
+    "portfolio_value": 126014.27,
+    "cash": 883.43,
+    "invested": 125130.84,
+    "peak": 126625.69,
+    "drawdown": -0.004829
+  },
+  {
+    "date": "2025-08-19",
+    "portfolio_value": 126352.1,
+    "cash": 883.43,
+    "invested": 125468.67,
+    "peak": 126625.69,
+    "drawdown": -0.002161
+  },
+  {
+    "date": "2025-08-20",
+    "portfolio_value": 126505.64,
+    "cash": 883.43,
+    "invested": 125622.21,
+    "peak": 126625.69,
+    "drawdown": -0.000948
+  },
+  {
+    "date": "2025-08-21",
+    "portfolio_value": 125572.36,
+    "cash": 883.43,
+    "invested": 124688.93,
+    "peak": 126625.69,
+    "drawdown": -0.008318
+  },
+  {
+    "date": "2025-08-22",
+    "portfolio_value": 126153.56,
+    "cash": 883.43,
+    "invested": 125270.13,
+    "peak": 126625.69,
+    "drawdown": -0.003729
+  },
+  {
+    "date": "2025-08-25",
+    "portfolio_value": 125224.3,
+    "cash": 883.43,
+    "invested": 124340.87,
+    "peak": 126625.69,
+    "drawdown": -0.011067
+  },
+  {
+    "date": "2025-08-26",
+    "portfolio_value": 125177.87,
+    "cash": 883.43,
+    "invested": 124294.43,
+    "peak": 126625.69,
+    "drawdown": -0.011434
+  },
+  {
+    "date": "2025-08-27",
+    "portfolio_value": 125575.19,
+    "cash": 883.43,
+    "invested": 124691.75,
+    "peak": 126625.69,
+    "drawdown": -0.008296
+  },
+  {
+    "date": "2025-08-28",
+    "portfolio_value": 125415.27,
+    "cash": 883.43,
+    "invested": 124531.84,
+    "peak": 126625.69,
+    "drawdown": -0.009559
+  },
+  {
+    "date": "2025-08-29",
+    "portfolio_value": 126012.99,
+    "cash": 883.43,
+    "invested": 125129.55,
+    "peak": 126625.69,
+    "drawdown": -0.004839
+  },
+  {
+    "date": "2025-09-02",
+    "portfolio_value": 126100.2,
+    "cash": 883.43,
+    "invested": 125216.76,
+    "peak": 126625.69,
+    "drawdown": -0.00415
+  },
+  {
+    "date": "2025-09-03",
+    "portfolio_value": 126466.97,
+    "cash": 883.43,
+    "invested": 125583.53,
+    "peak": 126625.69,
+    "drawdown": -0.001253
+  },
+  {
+    "date": "2025-09-04",
+    "portfolio_value": 127144.69,
+    "cash": 883.43,
+    "invested": 126261.25,
+    "peak": 127144.69,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-05",
+    "portfolio_value": 125859.84,
+    "cash": 883.43,
+    "invested": 124976.4,
+    "peak": 127144.69,
+    "drawdown": -0.010105
+  },
+  {
+    "date": "2025-09-08",
+    "portfolio_value": 125890.07,
+    "cash": 883.43,
+    "invested": 125006.64,
+    "peak": 127144.69,
+    "drawdown": -0.009868
+  },
+  {
+    "date": "2025-09-09",
+    "portfolio_value": 126727.79,
+    "cash": 883.43,
+    "invested": 125844.35,
+    "peak": 127144.69,
+    "drawdown": -0.003279
+  },
+  {
+    "date": "2025-09-10",
+    "portfolio_value": 126263.11,
+    "cash": 883.43,
+    "invested": 125379.67,
+    "peak": 127144.69,
+    "drawdown": -0.006934
+  },
+  {
+    "date": "2025-09-11",
+    "portfolio_value": 127567.2,
+    "cash": 883.43,
+    "invested": 126683.76,
+    "peak": 127567.2,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-12",
+    "portfolio_value": 128151.08,
+    "cash": 883.43,
+    "invested": 127267.65,
+    "peak": 128151.08,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-15",
+    "portfolio_value": 128289.0,
+    "cash": 883.43,
+    "invested": 127405.57,
+    "peak": 128289.0,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-16",
+    "portfolio_value": 127970.49,
+    "cash": 883.43,
+    "invested": 127087.06,
+    "peak": 128289.0,
+    "drawdown": -0.002483
+  },
+  {
+    "date": "2025-09-17",
+    "portfolio_value": 128859.86,
+    "cash": 883.43,
+    "invested": 127976.43,
+    "peak": 128859.86,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-18",
+    "portfolio_value": 128068.19,
+    "cash": 883.43,
+    "invested": 127184.75,
+    "peak": 128859.86,
+    "drawdown": -0.006144
+  },
+  {
+    "date": "2025-09-19",
+    "portfolio_value": 128673.86,
+    "cash": 883.43,
+    "invested": 127790.43,
+    "peak": 128859.86,
+    "drawdown": -0.001443
+  },
+  {
+    "date": "2025-09-22",
+    "portfolio_value": 128953.99,
+    "cash": 883.43,
+    "invested": 128070.56,
+    "peak": 128953.99,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-23",
+    "portfolio_value": 129152.08,
+    "cash": 883.43,
+    "invested": 128268.65,
+    "peak": 129152.08,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-24",
+    "portfolio_value": 129454.82,
+    "cash": 883.43,
+    "invested": 128571.38,
+    "peak": 129454.82,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-25",
+    "portfolio_value": 129723.6,
+    "cash": 883.43,
+    "invested": 128840.16,
+    "peak": 129723.6,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-26",
+    "portfolio_value": 130345.23,
+    "cash": 883.43,
+    "invested": 129461.8,
+    "peak": 130345.23,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-29",
+    "portfolio_value": 130407.67,
+    "cash": 883.43,
+    "invested": 129524.24,
+    "peak": 130407.67,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-09-30",
+    "portfolio_value": 130559.0,
+    "cash": 883.43,
+    "invested": 129675.57,
+    "peak": 130559.0,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-01",
+    "portfolio_value": 130685.25,
+    "cash": 883.43,
+    "invested": 129801.82,
+    "peak": 130685.25,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-02",
+    "portfolio_value": 130185.49,
+    "cash": 883.43,
+    "invested": 129302.06,
+    "peak": 130685.25,
+    "drawdown": -0.003824
+  },
+  {
+    "date": "2025-10-03",
+    "portfolio_value": 131357.72,
+    "cash": 883.43,
+    "invested": 130474.29,
+    "peak": 131357.72,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-06",
+    "portfolio_value": 131783.18,
+    "cash": 883.43,
+    "invested": 130899.75,
+    "peak": 131783.18,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-07",
+    "portfolio_value": 132194.1,
+    "cash": 883.43,
+    "invested": 131310.67,
+    "peak": 132194.1,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-08",
+    "portfolio_value": 132041.89,
+    "cash": 883.43,
+    "invested": 131158.46,
+    "peak": 132194.1,
+    "drawdown": -0.001151
+  },
+  {
+    "date": "2025-10-09",
+    "portfolio_value": 131572.07,
+    "cash": 883.43,
+    "invested": 130688.63,
+    "peak": 132194.1,
+    "drawdown": -0.004705
+  },
+  {
+    "date": "2025-10-10",
+    "portfolio_value": 129974.63,
+    "cash": 883.43,
+    "invested": 129091.19,
+    "peak": 132194.1,
+    "drawdown": -0.016789
+  },
+  {
+    "date": "2025-10-13",
+    "portfolio_value": 130904.69,
+    "cash": 883.43,
+    "invested": 130021.25,
+    "peak": 132194.1,
+    "drawdown": -0.009754
+  },
+  {
+    "date": "2025-10-14",
+    "portfolio_value": 131733.09,
+    "cash": 883.43,
+    "invested": 130849.66,
+    "peak": 132194.1,
+    "drawdown": -0.003487
+  },
+  {
+    "date": "2025-10-15",
+    "portfolio_value": 132357.47,
+    "cash": 883.43,
+    "invested": 131474.04,
+    "peak": 132357.47,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-16",
+    "portfolio_value": 131257.9,
+    "cash": 883.43,
+    "invested": 130374.47,
+    "peak": 132357.47,
+    "drawdown": -0.008308
+  },
+  {
+    "date": "2025-10-17",
+    "portfolio_value": 132139.41,
+    "cash": 883.43,
+    "invested": 131255.97,
+    "peak": 132357.47,
+    "drawdown": -0.001648
+  },
+  {
+    "date": "2025-10-20",
+    "portfolio_value": 133288.58,
+    "cash": 883.43,
+    "invested": 132405.15,
+    "peak": 133288.58,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-21",
+    "portfolio_value": 133089.92,
+    "cash": 883.43,
+    "invested": 132206.49,
+    "peak": 133288.58,
+    "drawdown": -0.00149
+  },
+  {
+    "date": "2025-10-22",
+    "portfolio_value": 132859.09,
+    "cash": 883.43,
+    "invested": 131975.66,
+    "peak": 133288.58,
+    "drawdown": -0.003222
+  },
+  {
+    "date": "2025-10-23",
+    "portfolio_value": 132869.76,
+    "cash": 883.43,
+    "invested": 131986.32,
+    "peak": 133288.58,
+    "drawdown": -0.003142
+  },
+  {
+    "date": "2025-10-24",
+    "portfolio_value": 133423.55,
+    "cash": 883.43,
+    "invested": 132540.12,
+    "peak": 133423.55,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-27",
+    "portfolio_value": 134292.82,
+    "cash": 883.43,
+    "invested": 133409.38,
+    "peak": 134292.82,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-10-28",
+    "portfolio_value": 133855.52,
+    "cash": 883.43,
+    "invested": 132972.09,
+    "peak": 134292.82,
+    "drawdown": -0.003256
+  },
+  {
+    "date": "2025-10-29",
+    "portfolio_value": 132868.76,
+    "cash": 883.43,
+    "invested": 131985.32,
+    "peak": 134292.82,
+    "drawdown": -0.010604
+  },
+  {
+    "date": "2025-10-30",
+    "portfolio_value": 132644.16,
+    "cash": 883.43,
+    "invested": 131760.72,
+    "peak": 134292.82,
+    "drawdown": -0.012277
+  },
+  {
+    "date": "2025-10-31",
+    "portfolio_value": 132168.6,
+    "cash": 883.43,
+    "invested": 131285.17,
+    "peak": 134292.82,
+    "drawdown": -0.015818
+  },
+  {
+    "date": "2025-11-03",
+    "portfolio_value": 131406.44,
+    "cash": 883.43,
+    "invested": 130523.01,
+    "peak": 134292.82,
+    "drawdown": -0.021493
+  },
+  {
+    "date": "2025-11-04",
+    "portfolio_value": 131558.88,
+    "cash": 883.43,
+    "invested": 130675.44,
+    "peak": 134292.82,
+    "drawdown": -0.020358
+  },
+  {
+    "date": "2025-11-05",
+    "portfolio_value": 131164.35,
+    "cash": 883.43,
+    "invested": 130280.92,
+    "peak": 134292.82,
+    "drawdown": -0.023296
+  },
+  {
+    "date": "2025-11-06",
+    "portfolio_value": 131097.97,
+    "cash": 883.43,
+    "invested": 130214.53,
+    "peak": 134292.82,
+    "drawdown": -0.02379
+  },
+  {
+    "date": "2025-11-07",
+    "portfolio_value": 132085.64,
+    "cash": 883.43,
+    "invested": 131202.21,
+    "peak": 134292.82,
+    "drawdown": -0.016436
+  },
+  {
+    "date": "2025-11-10",
+    "portfolio_value": 132729.98,
+    "cash": 883.43,
+    "invested": 131846.55,
+    "peak": 134292.82,
+    "drawdown": -0.011638
+  },
+  {
+    "date": "2025-11-11",
+    "portfolio_value": 134343.06,
+    "cash": 883.43,
+    "invested": 133459.63,
+    "peak": 134343.06,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-11-12",
+    "portfolio_value": 134731.11,
+    "cash": 883.43,
+    "invested": 133847.67,
+    "peak": 134731.11,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-11-13",
+    "portfolio_value": 133194.61,
+    "cash": 883.43,
+    "invested": 132311.17,
+    "peak": 134731.11,
+    "drawdown": -0.011404
+  },
+  {
+    "date": "2025-11-14",
+    "portfolio_value": 132818.6,
+    "cash": 883.43,
+    "invested": 131935.17,
+    "peak": 134731.11,
+    "drawdown": -0.014195
+  },
+  {
+    "date": "2025-11-17",
+    "portfolio_value": 132458.35,
+    "cash": 883.43,
+    "invested": 131574.92,
+    "peak": 134731.11,
+    "drawdown": -0.016869
+  },
+  {
+    "date": "2025-11-18",
+    "portfolio_value": 131706.38,
+    "cash": 883.43,
+    "invested": 130822.94,
+    "peak": 134731.11,
+    "drawdown": -0.02245
+  },
+  {
+    "date": "2025-11-19",
+    "portfolio_value": 131533.59,
+    "cash": 883.43,
+    "invested": 130650.16,
+    "peak": 134731.11,
+    "drawdown": -0.023733
+  },
+  {
+    "date": "2025-11-20",
+    "portfolio_value": 132152.37,
+    "cash": 883.43,
+    "invested": 131268.93,
+    "peak": 134731.11,
+    "drawdown": -0.01914
+  },
+  {
+    "date": "2025-11-21",
+    "portfolio_value": 132486.03,
+    "cash": 883.43,
+    "invested": 131602.6,
+    "peak": 134731.11,
+    "drawdown": -0.016663
+  },
+  {
+    "date": "2025-11-24",
+    "portfolio_value": 132372.92,
+    "cash": 883.43,
+    "invested": 131489.49,
+    "peak": 134731.11,
+    "drawdown": -0.017503
+  },
+  {
+    "date": "2025-11-25",
+    "portfolio_value": 133636.91,
+    "cash": 883.43,
+    "invested": 132753.47,
+    "peak": 134731.11,
+    "drawdown": -0.008121
+  },
+  {
+    "date": "2025-11-26",
+    "portfolio_value": 134896.78,
+    "cash": 883.43,
+    "invested": 134013.35,
+    "peak": 134896.78,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-11-28",
+    "portfolio_value": 135990.17,
+    "cash": 883.43,
+    "invested": 135106.73,
+    "peak": 135990.17,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-12-01",
+    "portfolio_value": 135324.63,
+    "cash": 883.43,
+    "invested": 134441.2,
+    "peak": 135990.17,
+    "drawdown": -0.004894
+  },
+  {
+    "date": "2025-12-02",
+    "portfolio_value": 135279.76,
+    "cash": 883.43,
+    "invested": 134396.32,
+    "peak": 135990.17,
+    "drawdown": -0.005224
+  },
+  {
+    "date": "2025-12-03",
+    "portfolio_value": 136081.91,
+    "cash": 883.43,
+    "invested": 135198.47,
+    "peak": 136081.91,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-12-04",
+    "portfolio_value": 135597.38,
+    "cash": 883.43,
+    "invested": 134713.95,
+    "peak": 136081.91,
+    "drawdown": -0.003561
+  },
+  {
+    "date": "2025-12-05",
+    "portfolio_value": 135164.09,
+    "cash": 883.43,
+    "invested": 134280.66,
+    "peak": 136081.91,
+    "drawdown": -0.006745
+  },
+  {
+    "date": "2025-12-08",
+    "portfolio_value": 134208.89,
+    "cash": 883.43,
+    "invested": 133325.46,
+    "peak": 136081.91,
+    "drawdown": -0.013764
+  },
+  {
+    "date": "2025-12-09",
+    "portfolio_value": 133501.61,
+    "cash": 883.43,
+    "invested": 132618.18,
+    "peak": 136081.91,
+    "drawdown": -0.018961
+  },
+  {
+    "date": "2025-12-10",
+    "portfolio_value": 134364.03,
+    "cash": 883.43,
+    "invested": 133480.6,
+    "peak": 136081.91,
+    "drawdown": -0.012624
+  },
+  {
+    "date": "2025-12-11",
+    "portfolio_value": 135623.43,
+    "cash": 883.43,
+    "invested": 134740.0,
+    "peak": 136081.91,
+    "drawdown": -0.003369
+  },
+  {
+    "date": "2025-12-12",
+    "portfolio_value": 136356.58,
+    "cash": 883.43,
+    "invested": 135473.15,
+    "peak": 136356.58,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-12-15",
+    "portfolio_value": 136405.69,
+    "cash": 883.43,
+    "invested": 135522.26,
+    "peak": 136405.69,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2025-12-16",
+    "portfolio_value": 135089.16,
+    "cash": 883.43,
+    "invested": 134205.73,
+    "peak": 136405.69,
+    "drawdown": -0.009652
+  },
+  {
+    "date": "2025-12-17",
+    "portfolio_value": 135243.57,
+    "cash": 883.43,
+    "invested": 134360.13,
+    "peak": 136405.69,
+    "drawdown": -0.00852
+  },
+  {
+    "date": "2025-12-18",
+    "portfolio_value": 134829.6,
+    "cash": 883.43,
+    "invested": 133946.16,
+    "peak": 136405.69,
+    "drawdown": -0.011554
+  },
+  {
+    "date": "2025-12-19",
+    "portfolio_value": 134737.83,
+    "cash": 883.43,
+    "invested": 133854.39,
+    "peak": 136405.69,
+    "drawdown": -0.012227
+  },
+  {
+    "date": "2025-12-22",
+    "portfolio_value": 134752.14,
+    "cash": 883.43,
+    "invested": 133868.7,
+    "peak": 136405.69,
+    "drawdown": -0.012122
+  },
+  {
+    "date": "2025-12-23",
+    "portfolio_value": 134712.19,
+    "cash": 883.43,
+    "invested": 133828.76,
+    "peak": 136405.69,
+    "drawdown": -0.012415
+  },
+  {
+    "date": "2025-12-24",
+    "portfolio_value": 135556.21,
+    "cash": 883.43,
+    "invested": 134672.78,
+    "peak": 136405.69,
+    "drawdown": -0.006228
+  },
+  {
+    "date": "2025-12-26",
+    "portfolio_value": 135498.62,
+    "cash": 883.43,
+    "invested": 134615.18,
+    "peak": 136405.69,
+    "drawdown": -0.00665
+  },
+  {
+    "date": "2025-12-29",
+    "portfolio_value": 135442.87,
+    "cash": 883.43,
+    "invested": 134559.43,
+    "peak": 136405.69,
+    "drawdown": -0.007059
+  },
+  {
+    "date": "2025-12-30",
+    "portfolio_value": 135335.84,
+    "cash": 883.43,
+    "invested": 134452.41,
+    "peak": 136405.69,
+    "drawdown": -0.007843
+  },
+  {
+    "date": "2025-12-31",
+    "portfolio_value": 134773.56,
+    "cash": 883.43,
+    "invested": 133890.13,
+    "peak": 136405.69,
+    "drawdown": -0.011965
+  },
+  {
+    "date": "2026-01-02",
+    "portfolio_value": 135077.33,
+    "cash": 883.43,
+    "invested": 134193.89,
+    "peak": 136405.69,
+    "drawdown": -0.009738
+  },
+  {
+    "date": "2026-01-05",
+    "portfolio_value": 135349.07,
+    "cash": 883.43,
+    "invested": 134465.63,
+    "peak": 136405.69,
+    "drawdown": -0.007746
+  },
+  {
+    "date": "2026-01-06",
+    "portfolio_value": 135295.45,
+    "cash": 883.43,
+    "invested": 134412.02,
+    "peak": 136405.69,
+    "drawdown": -0.008139
+  },
+  {
+    "date": "2026-01-07",
+    "portfolio_value": 133767.01,
+    "cash": 883.43,
+    "invested": 132883.58,
+    "peak": 136405.69,
+    "drawdown": -0.019344
+  },
+  {
+    "date": "2026-01-08",
+    "portfolio_value": 134858.36,
+    "cash": 883.43,
+    "invested": 133974.92,
+    "peak": 136405.69,
+    "drawdown": -0.011344
+  },
+  {
+    "date": "2026-01-09",
+    "portfolio_value": 135417.43,
+    "cash": 883.43,
+    "invested": 134534.0,
+    "peak": 136405.69,
+    "drawdown": -0.007245
+  },
+  {
+    "date": "2026-01-12",
+    "portfolio_value": 136199.71,
+    "cash": 883.43,
+    "invested": 135316.28,
+    "peak": 136405.69,
+    "drawdown": -0.00151
+  },
+  {
+    "date": "2026-01-13",
+    "portfolio_value": 136147.74,
+    "cash": 883.43,
+    "invested": 135264.31,
+    "peak": 136405.69,
+    "drawdown": -0.001891
+  },
+  {
+    "date": "2026-01-14",
+    "portfolio_value": 136336.1,
+    "cash": 883.43,
+    "invested": 135452.66,
+    "peak": 136405.69,
+    "drawdown": -0.00051
+  },
+  {
+    "date": "2026-01-15",
+    "portfolio_value": 135903.27,
+    "cash": 883.43,
+    "invested": 135019.83,
+    "peak": 136405.69,
+    "drawdown": -0.003683
+  },
+  {
+    "date": "2026-01-16",
+    "portfolio_value": 136201.06,
+    "cash": 883.43,
+    "invested": 135317.63,
+    "peak": 136405.69,
+    "drawdown": -0.0015
+  },
+  {
+    "date": "2026-01-20",
+    "portfolio_value": 135249.49,
+    "cash": 883.43,
+    "invested": 134366.06,
+    "peak": 136405.69,
+    "drawdown": -0.008476
+  },
+  {
+    "date": "2026-01-21",
+    "portfolio_value": 135537.6,
+    "cash": 883.43,
+    "invested": 134654.17,
+    "peak": 136405.69,
+    "drawdown": -0.006364
+  },
+  {
+    "date": "2026-01-22",
+    "portfolio_value": 136182.51,
+    "cash": 883.43,
+    "invested": 135299.07,
+    "peak": 136405.69,
+    "drawdown": -0.001636
+  },
+  {
+    "date": "2026-01-23",
+    "portfolio_value": 136594.87,
+    "cash": 883.43,
+    "invested": 135711.44,
+    "peak": 136594.87,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-01-26",
+    "portfolio_value": 137320.88,
+    "cash": 883.43,
+    "invested": 136437.44,
+    "peak": 137320.88,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-01-27",
+    "portfolio_value": 136924.3,
+    "cash": 883.43,
+    "invested": 136040.87,
+    "peak": 137320.88,
+    "drawdown": -0.002888
+  },
+  {
+    "date": "2026-01-28",
+    "portfolio_value": 137219.65,
+    "cash": 883.43,
+    "invested": 136336.22,
+    "peak": 137320.88,
+    "drawdown": -0.000737
+  },
+  {
+    "date": "2026-01-29",
+    "portfolio_value": 136914.38,
+    "cash": 883.43,
+    "invested": 136030.94,
+    "peak": 137320.88,
+    "drawdown": -0.00296
+  },
+  {
+    "date": "2026-01-30",
+    "portfolio_value": 137447.08,
+    "cash": 883.43,
+    "invested": 136563.64,
+    "peak": 137447.08,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-02-02",
+    "portfolio_value": 138759.72,
+    "cash": 883.43,
+    "invested": 137876.28,
+    "peak": 138759.72,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-02-03",
+    "portfolio_value": 140813.0,
+    "cash": 883.43,
+    "invested": 139929.56,
+    "peak": 140813.0,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-02-04",
+    "portfolio_value": 142101.41,
+    "cash": 883.43,
+    "invested": 141217.98,
+    "peak": 142101.41,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-02-05",
+    "portfolio_value": 140911.5,
+    "cash": 883.43,
+    "invested": 140028.06,
+    "peak": 142101.41,
+    "drawdown": -0.008374
+  },
+  {
+    "date": "2026-02-06",
+    "portfolio_value": 143562.74,
+    "cash": 883.43,
+    "invested": 142679.31,
+    "peak": 143562.74,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-02-09",
+    "portfolio_value": 143110.95,
+    "cash": 883.43,
+    "invested": 142227.51,
+    "peak": 143562.74,
+    "drawdown": -0.003147
+  },
+  {
+    "date": "2026-02-10",
+    "portfolio_value": 142443.46,
+    "cash": 883.43,
+    "invested": 141560.03,
+    "peak": 143562.74,
+    "drawdown": -0.007796
+  },
+  {
+    "date": "2026-02-11",
+    "portfolio_value": 143203.28,
+    "cash": 883.43,
+    "invested": 142319.84,
+    "peak": 143562.74,
+    "drawdown": -0.002504
+  },
+  {
+    "date": "2026-02-12",
+    "portfolio_value": 142779.17,
+    "cash": 883.43,
+    "invested": 141895.73,
+    "peak": 143562.74,
+    "drawdown": -0.005458
+  },
+  {
+    "date": "2026-02-13",
+    "portfolio_value": 142596.48,
+    "cash": 883.43,
+    "invested": 141713.05,
+    "peak": 143562.74,
+    "drawdown": -0.006731
+  },
+  {
+    "date": "2026-02-17",
+    "portfolio_value": 141984.48,
+    "cash": 883.43,
+    "invested": 141101.04,
+    "peak": 143562.74,
+    "drawdown": -0.010994
+  },
+  {
+    "date": "2026-02-18",
+    "portfolio_value": 141862.55,
+    "cash": 883.43,
+    "invested": 140979.11,
+    "peak": 143562.74,
+    "drawdown": -0.011843
+  },
+  {
+    "date": "2026-02-19",
+    "portfolio_value": 141496.12,
+    "cash": 883.43,
+    "invested": 140612.69,
+    "peak": 143562.74,
+    "drawdown": -0.014395
+  },
+  {
+    "date": "2026-02-20",
+    "portfolio_value": 141323.11,
+    "cash": 883.43,
+    "invested": 140439.68,
+    "peak": 143562.74,
+    "drawdown": -0.0156
+  },
+  {
+    "date": "2026-02-23",
+    "portfolio_value": 141688.46,
+    "cash": 883.43,
+    "invested": 140805.03,
+    "peak": 143562.74,
+    "drawdown": -0.013055
+  },
+  {
+    "date": "2026-02-24",
+    "portfolio_value": 142305.41,
+    "cash": 883.43,
+    "invested": 141421.98,
+    "peak": 143562.74,
+    "drawdown": -0.008758
+  },
+  {
+    "date": "2026-02-25",
+    "portfolio_value": 142864.13,
+    "cash": 883.43,
+    "invested": 141980.7,
+    "peak": 143562.74,
+    "drawdown": -0.004866
+  },
+  {
+    "date": "2026-02-26",
+    "portfolio_value": 142250.7,
+    "cash": 883.43,
+    "invested": 141367.27,
+    "peak": 143562.74,
+    "drawdown": -0.009139
+  },
+  {
+    "date": "2026-02-27",
+    "portfolio_value": 143174.61,
+    "cash": 883.43,
+    "invested": 142291.18,
+    "peak": 143562.74,
+    "drawdown": -0.002704
+  },
+  {
+    "date": "2026-03-02",
+    "portfolio_value": 142607.86,
+    "cash": 883.43,
+    "invested": 141724.43,
+    "peak": 143562.74,
+    "drawdown": -0.006651
+  },
+  {
+    "date": "2026-03-03",
+    "portfolio_value": 142203.98,
+    "cash": 883.43,
+    "invested": 141320.55,
+    "peak": 143562.74,
+    "drawdown": -0.009465
+  },
+  {
+    "date": "2026-03-04",
+    "portfolio_value": 141589.71,
+    "cash": 883.43,
+    "invested": 140706.27,
+    "peak": 143562.74,
+    "drawdown": -0.013743
+  },
+  {
+    "date": "2026-03-05",
+    "portfolio_value": 139416.14,
+    "cash": 883.43,
+    "invested": 138532.71,
+    "peak": 143562.74,
+    "drawdown": -0.028884
+  },
+  {
+    "date": "2026-03-06",
+    "portfolio_value": 139024.71,
+    "cash": 883.43,
+    "invested": 138141.27,
+    "peak": 143562.74,
+    "drawdown": -0.03161
+  },
+  {
+    "date": "2026-03-09",
+    "portfolio_value": 139719.46,
+    "cash": 883.43,
+    "invested": 138836.02,
+    "peak": 143562.74,
+    "drawdown": -0.026771
+  },
+  {
+    "date": "2026-03-10",
+    "portfolio_value": 139536.93,
+    "cash": 883.43,
+    "invested": 138653.49,
+    "peak": 143562.74,
+    "drawdown": -0.028042
+  },
+  {
+    "date": "2026-03-11",
+    "portfolio_value": 139241.44,
+    "cash": 883.43,
+    "invested": 138358.01,
+    "peak": 143562.74,
+    "drawdown": -0.0301
+  },
+  {
+    "date": "2026-03-12",
+    "portfolio_value": 138662.75,
+    "cash": 883.43,
+    "invested": 137779.31,
+    "peak": 143562.74,
+    "drawdown": -0.034131
+  },
+  {
+    "date": "2026-03-13",
+    "portfolio_value": 138815.67,
+    "cash": 883.43,
+    "invested": 137932.24,
+    "peak": 143562.74,
+    "drawdown": -0.033066
+  },
+  {
+    "date": "2026-03-16",
+    "portfolio_value": 139631.31,
+    "cash": 883.43,
+    "invested": 138747.88,
+    "peak": 143562.74,
+    "drawdown": -0.027385
+  },
+  {
+    "date": "2026-03-17",
+    "portfolio_value": 139319.1,
+    "cash": 883.43,
+    "invested": 138435.66,
+    "peak": 143562.74,
+    "drawdown": -0.029559
+  },
+  {
+    "date": "2026-03-18",
+    "portfolio_value": 137314.02,
+    "cash": 883.43,
+    "invested": 136430.59,
+    "peak": 143562.74,
+    "drawdown": -0.043526
+  },
+  {
+    "date": "2026-03-19",
+    "portfolio_value": 137037.98,
+    "cash": 883.43,
+    "invested": 136154.54,
+    "peak": 143562.74,
+    "drawdown": -0.045449
+  },
+  {
+    "date": "2026-03-20",
+    "portfolio_value": 135597.87,
+    "cash": 883.43,
+    "invested": 134714.44,
+    "peak": 143562.74,
+    "drawdown": -0.05548
+  },
+  {
+    "date": "2026-03-23",
+    "portfolio_value": 136516.99,
+    "cash": 883.43,
+    "invested": 135633.55,
+    "peak": 143562.74,
+    "drawdown": -0.049078
+  },
+  {
+    "date": "2026-03-24",
+    "portfolio_value": 137106.13,
+    "cash": 883.43,
+    "invested": 136222.69,
+    "peak": 143562.74,
+    "drawdown": -0.044974
+  },
+  {
+    "date": "2026-03-25",
+    "portfolio_value": 137647.32,
+    "cash": 883.43,
+    "invested": 136763.89,
+    "peak": 143562.74,
+    "drawdown": -0.041204
+  },
+  {
+    "date": "2026-03-26",
+    "portfolio_value": 136998.31,
+    "cash": 883.43,
+    "invested": 136114.87,
+    "peak": 143562.74,
+    "drawdown": -0.045725
+  },
+  {
+    "date": "2026-03-27",
+    "portfolio_value": 136626.15,
+    "cash": 883.43,
+    "invested": 135742.72,
+    "peak": 143562.74,
+    "drawdown": -0.048317
+  },
+  {
+    "date": "2026-03-30",
+    "portfolio_value": 137283.51,
+    "cash": 883.43,
+    "invested": 136400.08,
+    "peak": 143562.74,
+    "drawdown": -0.043739
+  },
+  {
+    "date": "2026-03-31",
+    "portfolio_value": 139064.56,
+    "cash": 883.43,
+    "invested": 138181.12,
+    "peak": 143562.74,
+    "drawdown": -0.031333
+  },
+  {
+    "date": "2026-04-01",
+    "portfolio_value": 138580.94,
+    "cash": 883.43,
+    "invested": 137697.51,
+    "peak": 143562.74,
+    "drawdown": -0.034701
+  },
+  {
+    "date": "2026-04-02",
+    "portfolio_value": 138942.29,
+    "cash": 883.43,
+    "invested": 138058.86,
+    "peak": 143562.74,
+    "drawdown": -0.032184
+  },
+  {
+    "date": "2026-04-06",
+    "portfolio_value": 139514.72,
+    "cash": 883.43,
+    "invested": 138631.28,
+    "peak": 143562.74,
+    "drawdown": -0.028197
+  },
+  {
+    "date": "2026-04-07",
+    "portfolio_value": 138778.95,
+    "cash": 883.43,
+    "invested": 137895.51,
+    "peak": 143562.74,
+    "drawdown": -0.033322
+  },
+  {
+    "date": "2026-04-08",
+    "portfolio_value": 140746.77,
+    "cash": 883.43,
+    "invested": 139863.34,
+    "peak": 143562.74,
+    "drawdown": -0.019615
+  },
+  {
+    "date": "2026-04-09",
+    "portfolio_value": 141526.05,
+    "cash": 883.43,
+    "invested": 140642.62,
+    "peak": 143562.74,
+    "drawdown": -0.014187
+  },
+  {
+    "date": "2026-04-10",
+    "portfolio_value": 140282.53,
+    "cash": 883.43,
+    "invested": 139399.1,
+    "peak": 143562.74,
+    "drawdown": -0.022849
+  },
+  {
+    "date": "2026-04-13",
+    "portfolio_value": 140083.14,
+    "cash": 883.43,
+    "invested": 139199.7,
+    "peak": 143562.74,
+    "drawdown": -0.024237
+  },
+  {
+    "date": "2026-04-14",
+    "portfolio_value": 139925.72,
+    "cash": 883.43,
+    "invested": 139042.29,
+    "peak": 143562.74,
+    "drawdown": -0.025334
+  },
+  {
+    "date": "2026-04-15",
+    "portfolio_value": 140208.9,
+    "cash": 883.43,
+    "invested": 139325.47,
+    "peak": 143562.74,
+    "drawdown": -0.023361
+  },
+  {
+    "date": "2026-04-16",
+    "portfolio_value": 140684.11,
+    "cash": 883.43,
+    "invested": 139800.68,
+    "peak": 143562.74,
+    "drawdown": -0.020051
+  },
+  {
+    "date": "2026-04-17",
+    "portfolio_value": 141687.33,
+    "cash": 883.43,
+    "invested": 140803.89,
+    "peak": 143562.74,
+    "drawdown": -0.013063
+  },
+  {
+    "date": "2026-04-20",
+    "portfolio_value": 141901.96,
+    "cash": 883.43,
+    "invested": 141018.53,
+    "peak": 143562.74,
+    "drawdown": -0.011568
+  },
+  {
+    "date": "2026-04-21",
+    "portfolio_value": 141492.4,
+    "cash": 883.43,
+    "invested": 140608.96,
+    "peak": 143562.74,
+    "drawdown": -0.014421
+  },
+  {
+    "date": "2026-04-22",
+    "portfolio_value": 142396.01,
+    "cash": 883.43,
+    "invested": 141512.58,
+    "peak": 143562.74,
+    "drawdown": -0.008127
+  },
+  {
+    "date": "2026-04-23",
+    "portfolio_value": 143938.45,
+    "cash": 883.43,
+    "invested": 143055.02,
+    "peak": 143938.45,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-04-24",
+    "portfolio_value": 143214.32,
+    "cash": 883.43,
+    "invested": 142330.89,
+    "peak": 143938.45,
+    "drawdown": -0.005031
+  },
+  {
+    "date": "2026-04-27",
+    "portfolio_value": 142374.1,
+    "cash": 883.43,
+    "invested": 141490.67,
+    "peak": 143938.45,
+    "drawdown": -0.010868
+  },
+  {
+    "date": "2026-04-28",
+    "portfolio_value": 144054.44,
+    "cash": 883.43,
+    "invested": 143171.01,
+    "peak": 144054.44,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-04-29",
+    "portfolio_value": 143788.15,
+    "cash": 883.43,
+    "invested": 142904.72,
+    "peak": 144054.44,
+    "drawdown": -0.001849
+  },
+  {
+    "date": "2026-04-30",
+    "portfolio_value": 145011.68,
+    "cash": 883.43,
+    "invested": 144128.25,
+    "peak": 145011.68,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-05-01",
+    "portfolio_value": 145107.26,
+    "cash": 883.43,
+    "invested": 144223.82,
+    "peak": 145107.26,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-05-04",
+    "portfolio_value": 143758.48,
+    "cash": 883.43,
+    "invested": 142875.05,
+    "peak": 145107.26,
+    "drawdown": -0.009295
+  },
+  {
+    "date": "2026-05-05",
+    "portfolio_value": 144606.0,
+    "cash": 883.43,
+    "invested": 143722.57,
+    "peak": 145107.26,
+    "drawdown": -0.003454
+  },
+  {
+    "date": "2026-05-06",
+    "portfolio_value": 144786.43,
+    "cash": 883.43,
+    "invested": 143903.0,
+    "peak": 145107.26,
+    "drawdown": -0.002211
+  },
+  {
+    "date": "2026-05-07",
+    "portfolio_value": 143616.07,
+    "cash": 883.43,
+    "invested": 142732.64,
+    "peak": 145107.26,
+    "drawdown": -0.010276
+  },
+  {
+    "date": "2026-05-08",
+    "portfolio_value": 143489.1,
+    "cash": 883.43,
+    "invested": 142605.67,
+    "peak": 145107.26,
+    "drawdown": -0.011151
+  },
+  {
+    "date": "2026-05-11",
+    "portfolio_value": 143349.88,
+    "cash": 883.43,
+    "invested": 142466.45,
+    "peak": 145107.26,
+    "drawdown": -0.012111
+  },
+  {
+    "date": "2026-05-12",
+    "portfolio_value": 144878.15,
+    "cash": 883.43,
+    "invested": 143994.72,
+    "peak": 145107.26,
+    "drawdown": -0.001579
+  },
+  {
+    "date": "2026-05-13",
+    "portfolio_value": 145444.35,
+    "cash": 883.43,
+    "invested": 144560.91,
+    "peak": 145444.35,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-05-14",
+    "portfolio_value": 145959.13,
+    "cash": 883.43,
+    "invested": 145075.69,
+    "peak": 145959.13,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-05-15",
+    "portfolio_value": 145859.32,
+    "cash": 883.43,
+    "invested": 144975.88,
+    "peak": 145959.13,
+    "drawdown": -0.000684
+  },
+  {
+    "date": "2026-05-18",
+    "portfolio_value": 146103.99,
+    "cash": 883.43,
+    "invested": 145220.56,
+    "peak": 146103.99,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-05-19",
+    "portfolio_value": 146208.34,
+    "cash": 883.43,
+    "invested": 145324.91,
+    "peak": 146208.34,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-05-20",
+    "portfolio_value": 145368.83,
+    "cash": 883.43,
+    "invested": 144485.39,
+    "peak": 146208.34,
+    "drawdown": -0.005742
+  },
+  {
+    "date": "2026-05-21",
+    "portfolio_value": 144049.12,
+    "cash": 883.43,
+    "invested": 143165.69,
+    "peak": 146208.34,
+    "drawdown": -0.014768
+  },
+  {
+    "date": "2026-05-22",
+    "portfolio_value": 144481.87,
+    "cash": 883.43,
+    "invested": 143598.43,
+    "peak": 146208.34,
+    "drawdown": -0.011808
+  },
+  {
+    "date": "2026-05-26",
+    "portfolio_value": 142771.97,
+    "cash": 883.43,
+    "invested": 141888.54,
+    "peak": 146208.34,
+    "drawdown": -0.023503
+  },
+  {
+    "date": "2026-05-27",
+    "portfolio_value": 142844.82,
+    "cash": 883.43,
+    "invested": 141961.38,
+    "peak": 146208.34,
+    "drawdown": -0.023005
+  },
+  {
+    "date": "2026-05-28",
+    "portfolio_value": 142755.42,
+    "cash": 883.43,
+    "invested": 141871.98,
+    "peak": 146208.34,
+    "drawdown": -0.023616
+  },
+  {
+    "date": "2026-05-29",
+    "portfolio_value": 142078.7,
+    "cash": 883.43,
+    "invested": 141195.27,
+    "peak": 146208.34,
+    "drawdown": -0.028245
+  },
+  {
+    "date": "2026-06-01",
+    "portfolio_value": 141143.76,
+    "cash": 883.43,
+    "invested": 140260.33,
+    "peak": 146208.34,
+    "drawdown": -0.034639
+  },
+  {
+    "date": "2026-06-02",
+    "portfolio_value": 141305.07,
+    "cash": 883.43,
+    "invested": 140421.63,
+    "peak": 146208.34,
+    "drawdown": -0.033536
+  },
+  {
+    "date": "2026-06-03",
+    "portfolio_value": 141414.8,
+    "cash": 883.43,
+    "invested": 140531.36,
+    "peak": 146208.34,
+    "drawdown": -0.032786
+  },
+  {
+    "date": "2026-06-04",
+    "portfolio_value": 142829.85,
+    "cash": 883.43,
+    "invested": 141946.42,
+    "peak": 146208.34,
+    "drawdown": -0.023107
+  },
+  {
+    "date": "2026-06-05",
+    "portfolio_value": 143587.01,
+    "cash": 883.43,
+    "invested": 142703.58,
+    "peak": 146208.34,
+    "drawdown": -0.017929
+  },
+  {
+    "date": "2026-06-08",
+    "portfolio_value": 143115.95,
+    "cash": 883.43,
+    "invested": 142232.51,
+    "peak": 146208.34,
+    "drawdown": -0.021151
+  },
+  {
+    "date": "2026-06-09",
+    "portfolio_value": 143023.65,
+    "cash": 883.43,
+    "invested": 142140.22,
+    "peak": 146208.34,
+    "drawdown": -0.021782
+  },
+  {
+    "date": "2026-06-10",
+    "portfolio_value": 143551.34,
+    "cash": 883.43,
+    "invested": 142667.91,
+    "peak": 146208.34,
+    "drawdown": -0.018173
+  },
+  {
+    "date": "2026-06-11",
+    "portfolio_value": 143184.59,
+    "cash": 883.43,
+    "invested": 142301.16,
+    "peak": 146208.34,
+    "drawdown": -0.020681
+  },
+  {
+    "date": "2026-06-12",
+    "portfolio_value": 144039.98,
+    "cash": 883.43,
+    "invested": 143156.55,
+    "peak": 146208.34,
+    "drawdown": -0.014831
+  },
+  {
+    "date": "2026-06-15",
+    "portfolio_value": 143472.42,
+    "cash": 883.43,
+    "invested": 142588.98,
+    "peak": 146208.34,
+    "drawdown": -0.018712
+  },
+  {
+    "date": "2026-06-16",
+    "portfolio_value": 144297.56,
+    "cash": 883.43,
+    "invested": 143414.13,
+    "peak": 146208.34,
+    "drawdown": -0.013069
+  },
+  {
+    "date": "2026-06-17",
+    "portfolio_value": 142719.76,
+    "cash": 883.43,
+    "invested": 141836.33,
+    "peak": 146208.34,
+    "drawdown": -0.02386
+  },
+  {
+    "date": "2026-06-18",
+    "portfolio_value": 141593.48,
+    "cash": 883.43,
+    "invested": 140710.05,
+    "peak": 146208.34,
+    "drawdown": -0.031564
+  },
+  {
+    "date": "2026-06-22",
+    "portfolio_value": 141696.63,
+    "cash": 883.43,
+    "invested": 140813.2,
+    "peak": 146208.34,
+    "drawdown": -0.030858
+  },
+  {
+    "date": "2026-06-23",
+    "portfolio_value": 143350.89,
+    "cash": 883.43,
+    "invested": 142467.46,
+    "peak": 146208.34,
+    "drawdown": -0.019544
+  },
+  {
+    "date": "2026-06-24",
+    "portfolio_value": 143011.02,
+    "cash": 883.43,
+    "invested": 142127.59,
+    "peak": 146208.34,
+    "drawdown": -0.021868
+  },
+  {
+    "date": "2026-06-25",
+    "portfolio_value": 141394.5,
+    "cash": 883.43,
+    "invested": 140511.07,
+    "peak": 146208.34,
+    "drawdown": -0.032925
+  },
+  {
+    "date": "2026-06-26",
+    "portfolio_value": 143354.94,
+    "cash": 883.43,
+    "invested": 142471.51,
+    "peak": 146208.34,
+    "drawdown": -0.019516
+  },
+  {
+    "date": "2026-06-29",
+    "portfolio_value": 142947.22,
+    "cash": 883.43,
+    "invested": 142063.78,
+    "peak": 146208.34,
+    "drawdown": -0.022305
+  },
+  {
+    "date": "2026-06-30",
+    "portfolio_value": 142338.64,
+    "cash": 883.43,
+    "invested": 141455.21,
+    "peak": 146208.34,
+    "drawdown": -0.026467
+  },
+  {
+    "date": "2026-07-01",
+    "portfolio_value": 142633.48,
+    "cash": 883.43,
+    "invested": 141750.04,
+    "peak": 146208.34,
+    "drawdown": -0.02445
+  },
+  {
+    "date": "2026-07-02",
+    "portfolio_value": 145822.69,
+    "cash": 883.43,
+    "invested": 144939.26,
+    "peak": 146208.34,
+    "drawdown": -0.002638
+  },
+  {
+    "date": "2026-07-06",
+    "portfolio_value": 145040.22,
+    "cash": 883.43,
+    "invested": 144156.79,
+    "peak": 146208.34,
+    "drawdown": -0.007989
+  },
+  {
+    "date": "2026-07-07",
+    "portfolio_value": 146943.46,
+    "cash": 883.43,
+    "invested": 146060.02,
+    "peak": 146943.46,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-07-08",
+    "portfolio_value": 145765.87,
+    "cash": 883.43,
+    "invested": 144882.43,
+    "peak": 146943.46,
+    "drawdown": -0.008014
+  },
+  {
+    "date": "2026-07-09",
+    "portfolio_value": 145384.32,
+    "cash": 883.43,
+    "invested": 144500.89,
+    "peak": 146943.46,
+    "drawdown": -0.01061
+  },
+  {
+    "date": "2026-07-10",
+    "portfolio_value": 145865.67,
+    "cash": 883.43,
+    "invested": 144982.23,
+    "peak": 146943.46,
+    "drawdown": -0.007335
+  },
+  {
+    "date": "2026-07-13",
+    "portfolio_value": 147076.86,
+    "cash": 883.43,
+    "invested": 146193.43,
+    "peak": 147076.86,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-07-14",
+    "portfolio_value": 146674.0,
+    "cash": 883.43,
+    "invested": 145790.57,
+    "peak": 147076.86,
+    "drawdown": -0.002739
+  },
+  {
+    "date": "2026-07-15",
+    "portfolio_value": 147113.83,
+    "cash": 883.43,
+    "invested": 146230.4,
+    "peak": 147113.83,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-07-16",
+    "portfolio_value": 148870.45,
+    "cash": 883.43,
+    "invested": 147987.02,
+    "peak": 148870.45,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-07-17",
+    "portfolio_value": 148018.73,
+    "cash": 883.43,
+    "invested": 147135.3,
+    "peak": 148870.45,
+    "drawdown": -0.005721
+  },
+  {
+    "date": "2026-07-20",
+    "portfolio_value": 147014.44,
+    "cash": 883.43,
+    "invested": 146131.01,
+    "peak": 148870.45,
+    "drawdown": -0.012467
+  },
+  {
+    "date": "2026-07-21",
+    "portfolio_value": 147627.42,
+    "cash": 883.43,
+    "invested": 146743.98,
+    "peak": 148870.45,
+    "drawdown": -0.00835
+  },
+  {
+    "date": "2026-07-22",
+    "portfolio_value": 148066.66,
+    "cash": 883.43,
+    "invested": 147183.22,
+    "peak": 148870.45,
+    "drawdown": -0.005399
+  },
+  {
+    "date": "2026-07-23",
+    "portfolio_value": 147525.08,
+    "cash": 883.43,
+    "invested": 146641.65,
+    "peak": 148870.45,
+    "drawdown": -0.009037
+  },
+  {
+    "date": "2026-07-24",
+    "portfolio_value": 148993.6,
+    "cash": 883.43,
+    "invested": 148110.17,
+    "peak": 148993.6,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-07-27",
+    "portfolio_value": 150209.39,
+    "cash": 883.43,
+    "invested": 149325.95,
+    "peak": 150209.39,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-07-28",
+    "portfolio_value": 151763.47,
+    "cash": 883.43,
+    "invested": 150880.04,
+    "peak": 151763.47,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-07-29",
+    "portfolio_value": 150853.23,
+    "cash": 883.43,
+    "invested": 149969.79,
+    "peak": 151763.47,
+    "drawdown": -0.005998
+  },
+  {
+    "date": "2026-07-30",
+    "portfolio_value": 151376.11,
+    "cash": 883.43,
+    "invested": 150492.67,
+    "peak": 151763.47,
+    "drawdown": -0.002552
+  },
+  {
+    "date": "2026-07-31",
+    "portfolio_value": 149986.31,
+    "cash": 883.43,
+    "invested": 149102.88,
+    "peak": 151763.47,
+    "drawdown": -0.01171
+  },
+  {
+    "date": "2026-08-03",
+    "portfolio_value": 150054.62,
+    "cash": 883.43,
+    "invested": 149171.18,
+    "peak": 151763.47,
+    "drawdown": -0.01126
+  },
+  {
+    "date": "2026-08-04",
+    "portfolio_value": 151042.24,
+    "cash": 883.43,
+    "invested": 150158.81,
+    "peak": 151763.47,
+    "drawdown": -0.004752
+  },
+  {
+    "date": "2026-08-05",
+    "portfolio_value": 151081.64,
+    "cash": 883.43,
+    "invested": 150198.21,
+    "peak": 151763.47,
+    "drawdown": -0.004493
+  },
+  {
+    "date": "2026-08-06",
+    "portfolio_value": 151170.89,
+    "cash": 883.43,
+    "invested": 150287.46,
+    "peak": 151763.47,
+    "drawdown": -0.003905
+  },
+  {
+    "date": "2026-08-07",
+    "portfolio_value": 151281.2,
+    "cash": 883.43,
+    "invested": 150397.77,
+    "peak": 151763.47,
+    "drawdown": -0.003178
+  },
+  {
+    "date": "2026-08-10",
+    "portfolio_value": 152260.51,
+    "cash": 883.43,
+    "invested": 151377.07,
+    "peak": 152260.51,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-08-11",
+    "portfolio_value": 152017.6,
+    "cash": 883.43,
+    "invested": 151134.16,
+    "peak": 152260.51,
+    "drawdown": -0.001595
+  },
+  {
+    "date": "2026-08-12",
+    "portfolio_value": 152339.56,
+    "cash": 883.43,
+    "invested": 151456.13,
+    "peak": 152339.56,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-08-13",
+    "portfolio_value": 152464.06,
+    "cash": 883.43,
+    "invested": 151580.63,
+    "peak": 152464.06,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-08-14",
+    "portfolio_value": 152526.25,
+    "cash": 883.43,
+    "invested": 151642.82,
+    "peak": 152526.25,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-08-17",
+    "portfolio_value": 151662.56,
+    "cash": 883.43,
+    "invested": 150779.13,
+    "peak": 152526.25,
+    "drawdown": -0.005663
+  },
+  {
+    "date": "2026-08-18",
+    "portfolio_value": 153446.81,
+    "cash": 883.43,
+    "invested": 152563.38,
+    "peak": 153446.81,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-08-19",
+    "portfolio_value": 153587.37,
+    "cash": 883.43,
+    "invested": 152703.93,
+    "peak": 153587.37,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-08-20",
+    "portfolio_value": 150378.21,
+    "cash": 883.43,
+    "invested": 149494.78,
+    "peak": 153587.37,
+    "drawdown": -0.020895
+  },
+  {
+    "date": "2026-08-21",
+    "portfolio_value": 150512.65,
+    "cash": 883.43,
+    "invested": 149629.22,
+    "peak": 153587.37,
+    "drawdown": -0.020019
+  },
+  {
+    "date": "2026-08-24",
+    "portfolio_value": 152115.16,
+    "cash": 883.43,
+    "invested": 151231.72,
+    "peak": 153587.37,
+    "drawdown": -0.009585
+  },
+  {
+    "date": "2026-08-25",
+    "portfolio_value": 151593.84,
+    "cash": 883.43,
+    "invested": 150710.41,
+    "peak": 153587.37,
+    "drawdown": -0.01298
+  },
+  {
+    "date": "2026-08-26",
+    "portfolio_value": 151125.13,
+    "cash": 883.43,
+    "invested": 150241.69,
+    "peak": 153587.37,
+    "drawdown": -0.016032
+  },
+  {
+    "date": "2026-08-27",
+    "portfolio_value": 150055.91,
+    "cash": 883.43,
+    "invested": 149172.48,
+    "peak": 153587.37,
+    "drawdown": -0.022993
+  },
+  {
+    "date": "2026-08-28",
+    "portfolio_value": 150935.49,
+    "cash": 883.43,
+    "invested": 150052.05,
+    "peak": 153587.37,
+    "drawdown": -0.017266
+  },
+  {
+    "date": "2026-08-31",
+    "portfolio_value": 150949.43,
+    "cash": 883.43,
+    "invested": 150066.0,
+    "peak": 153587.37,
+    "drawdown": -0.017176
+  },
+  {
+    "date": "2026-09-01",
+    "portfolio_value": 152154.04,
+    "cash": 883.43,
+    "invested": 151270.6,
+    "peak": 153587.37,
+    "drawdown": -0.009332
+  },
+  {
+    "date": "2026-09-02",
+    "portfolio_value": 152570.41,
+    "cash": 883.43,
+    "invested": 151686.98,
+    "peak": 153587.37,
+    "drawdown": -0.006621
+  },
+  {
+    "date": "2026-09-03",
+    "portfolio_value": 154215.03,
+    "cash": 883.43,
+    "invested": 153331.6,
+    "peak": 154215.03,
+    "drawdown": 0.0
+  },
+  {
+    "date": "2026-09-04",
+    "portfolio_value": 152225.45,
+    "cash": 883.43,
+    "invested": 151342.01,
+    "peak": 154215.03,
+    "drawdown": -0.012901
+  },
+  {
+    "date": "2026-09-08",
+    "portfolio_value": 151156.14,
+    "cash": 883.43,
+    "invested": 150272.7,
+    "peak": 154215.03,
+    "drawdown": -0.019835
+  },
+  {
+    "date": "2026-09-09",
+    "portfolio_value": 150603.04,
+    "cash": 883.43,
+    "invested": 149719.61,
+    "peak": 154215.03,
+    "drawdown": -0.023422
+  },
+  {
+    "date": "2026-09-10",
+    "portfolio_value": 151144.08,
+    "cash": 883.43,
+    "invested": 150260.64,
+    "peak": 154215.03,
+    "drawdown": -0.019913
+  },
+  {
+    "date": "2026-09-11",
+    "portfolio_value": 152037.6,
+    "cash": 883.43,
+    "invested": 151154.17,
+    "peak": 154215.03,
+    "drawdown": -0.014119
+  },
+  {
+    "date": "2026-09-14",
+    "portfolio_value": 152514.67,
+    "cash": 883.43,
+    "invested": 151631.24,
+    "peak": 154215.03,
+    "drawdown": -0.011026
+  },
+  {
+    "date": "2026-09-15",
+    "portfolio_value": 152251.43,
+    "cash": 883.43,
+    "invested": 151368.0,
+    "peak": 154215.03,
+    "drawdown": -0.012733
+  },
+  {
+    "date": "2026-09-16",
+    "portfolio_value": 151018.09,
+    "cash": 883.43,
+    "invested": 150134.65,
+    "peak": 154215.03,
+    "drawdown": -0.02073
+  },
+  {
+    "date": "2026-09-17",
+    "portfolio_value": 151768.17,
+    "cash": 883.43,
+    "invested": 150884.74,
+    "peak": 154215.03,
+    "drawdown": -0.015867
+  },
+  {
+    "date": "2026-09-18",
+    "portfolio_value": 151563.01,
+    "cash": 883.43,
+    "invested": 150679.58,
+    "peak": 154215.03,
+    "drawdown": -0.017197
+  }
+]

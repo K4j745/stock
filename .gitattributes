@@ -1,0 +1,19 @@
+# Mark the regenerated dashboard dataset as generated so GitHub collapses it in
+# diffs/reviews and excludes it from language stats. These files are produced by
+# `python dashboard/generate.py` (and the daily "Update Dashboard Data" workflow).
+docs/data/**            linguist-generated=true
+docs/charts/plots/**    linguist-generated=true
+
+# Recurring merge conflicts on the regenerated data are meaningless: whichever
+# side ran generate.py most recently is authoritative, byte-for-byte diffs are
+# not reviewable, and JSON cannot be line-merged. When syncing the default branch
+# INTO a feature branch, keep the local (feature-branch) copy so the sync never
+# stops on a data conflict. Activate once per clone with:
+#
+#     git config merge.keep-ours.name  "Keep our generated data on merge"
+#     git config merge.keep-ours.driver "true"
+#
+# (`true` is the shell no-op: it exits 0 and leaves our version in place.)
+# See docs/data/README.md for the full rationale and the deploy-time-generation
+# upgrade path that removes committed data entirely.
+docs/data/**            merge=keep-ours
