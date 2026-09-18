@@ -6017,10 +6017,18 @@
   },
   {
     "date": "2026-09-17",
-    "portfolio_value": 125051.15,
-    "cash": 50639.96,
-    "invested": 74411.19,
+    "portfolio_value": 125047.15,
+    "cash": 50639.85,
+    "invested": 74407.3,
     "peak": 126102.61,
-    "drawdown": -0.008338
+    "drawdown": -0.00837
+  },
+  {
+    "date": "2026-09-18",
+    "portfolio_value": 124865.21,
+    "cash": 51522.03,
+    "invested": 73343.18,
+    "peak": 126102.61,
+    "drawdown": -0.009813
   }
 ]
