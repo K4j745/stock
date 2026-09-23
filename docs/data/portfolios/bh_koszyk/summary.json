@@ -3,10 +3,10 @@
   "portfolio_name": "Koszyk 10 \u2014 kup i trzymaj",
   "description": "Kup i trzymaj r\u00f3wnowa\u017cony koszyk 10 sp\u00f3\u0142ek za ca\u0142y kapita\u0142. Baseline pasywny.",
   "initial_capital": 100000.0,
-  "final_value": 153579.51,
+  "final_value": 153129.91,
   "cash": 1020.7563171386719,
   "metadata": {
-    "generated_at_utc": "2026-09-22T20:04:17Z",
+    "generated_at_utc": "2026-09-23T20:03:24Z",
     "data_version": "2026-05-15",
     "strategy_version": "1.0",
     "signal_source": "buy_and_hold",
@@ -19,21 +19,21 @@
       "rebalance": "on_signal",
       "trade_mode": "all_in"
     },
-    "n_decisions": 7510,
+    "n_decisions": 7514,
     "n_transactions": 10,
     "first_date": "2023-09-25",
-    "last_date": "2026-09-22",
+    "last_date": "2026-09-23",
     "label_mode": "binary",
     "label_version": "binary-2026-08"
   },
   "metrics": {
-    "total_return": 0.530658,
-    "cagr": 0.15377,
-    "volatility_annualised": 0.109884,
-    "sharpe_ratio": 1.399378,
+    "total_return": 0.526177,
+    "cagr": 0.152416,
+    "volatility_annualised": 0.109828,
+    "sharpe_ratio": 1.387769,
     "max_drawdown": -0.127692,
-    "calmar_ratio": 1.204221,
-    "n_observations": 750,
+    "calmar_ratio": 1.193618,
+    "n_observations": 751,
     "trade_n_trades": 0,
     "trade_n_wins": 0,
     "trade_n_losses": 0,
@@ -45,12 +45,12 @@
     "trade_expectancy": null
   },
   "benchmark_metrics": {
-    "total_return": 0.789418,
-    "cagr": 0.215937,
-    "volatility_annualised": 0.153387,
-    "sharpe_ratio": 1.407794,
+    "total_return": 0.776438,
+    "cagr": 0.212655,
+    "volatility_annualised": 0.153355,
+    "sharpe_ratio": 1.386685,
     "max_drawdown": -0.189989,
-    "calmar_ratio": 1.136577,
-    "n_observations": 750
+    "calmar_ratio": 1.119301,
+    "n_observations": 751
   }
 }
