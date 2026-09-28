@@ -9,11 +9,11 @@
     "trade_mode": "all_in",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 179746.58,
-    "total_return": 0.811011,
-    "sharpe": 1.439309,
-    "max_drawdown": -0.18996,
-    "n_decisions": 753,
+    "final_value": 177140.13,
+    "total_return": 0.788714,
+    "sharpe": 1.411023,
+    "max_drawdown": -0.189608,
+    "n_decisions": 751,
     "n_transactions": 1
   },
   {
@@ -26,11 +26,11 @@
     "trade_mode": "all_in",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 154096.07,
-    "total_return": 0.550873,
-    "sharpe": 1.443969,
-    "max_drawdown": -0.127839,
-    "n_decisions": 7530,
+    "final_value": 155279.41,
+    "total_return": 0.56872,
+    "sharpe": 1.484334,
+    "max_drawdown": -0.126866,
+    "n_decisions": 7510,
     "n_transactions": 10
   },
   {
@@ -43,12 +43,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 134306.79,
-    "total_return": 0.344481,
-    "sharpe": 0.850108,
-    "max_drawdown": -0.168104,
-    "n_decisions": 7540,
-    "n_transactions": 5543
+    "final_value": 133569.6,
+    "total_return": 0.337796,
+    "sharpe": 0.842759,
+    "max_drawdown": -0.166933,
+    "n_decisions": 7520,
+    "n_transactions": 5538
   },
   {
     "portfolio_id": "lr",
@@ -60,12 +60,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 137191.66,
-    "total_return": 0.373681,
-    "sharpe": 1.183483,
-    "max_drawdown": -0.083953,
-    "n_decisions": 7540,
-    "n_transactions": 6217
+    "final_value": 137455.81,
+    "total_return": 0.377201,
+    "sharpe": 1.196531,
+    "max_drawdown": -0.083948,
+    "n_decisions": 7520,
+    "n_transactions": 6180
   },
   {
     "portfolio_id": "rf",
@@ -77,12 +77,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 115257.48,
-    "total_return": 0.153787,
-    "sharpe": 0.46149,
-    "max_drawdown": -0.137369,
-    "n_decisions": 7540,
-    "n_transactions": 7077
+    "final_value": 115013.94,
+    "total_return": 0.151948,
+    "sharpe": 0.457712,
+    "max_drawdown": -0.137238,
+    "n_decisions": 7520,
+    "n_transactions": 7067
   },
   {
     "portfolio_id": "xgb",
@@ -94,12 +94,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 124078.7,
-    "total_return": 0.242383,
-    "sharpe": 0.932156,
-    "max_drawdown": -0.121128,
-    "n_decisions": 7540,
-    "n_transactions": 7036
+    "final_value": 124015.52,
+    "total_return": 0.242539,
+    "sharpe": 0.936218,
+    "max_drawdown": -0.121123,
+    "n_decisions": 7520,
+    "n_transactions": 6963
   },
   {
     "portfolio_id": "lgbm",
@@ -111,12 +111,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 135725.69,
-    "total_return": 0.358685,
-    "sharpe": 1.219657,
-    "max_drawdown": -0.123535,
-    "n_decisions": 7540,
-    "n_transactions": 5736
+    "final_value": 135736.64,
+    "total_return": 0.359501,
+    "sharpe": 1.224207,
+    "max_drawdown": -0.12352,
+    "n_decisions": 7520,
+    "n_transactions": 5710
   },
   {
     "portfolio_id": "candle",
@@ -128,12 +128,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 137249.64,
-    "total_return": 0.373906,
-    "sharpe": 0.997175,
-    "max_drawdown": -0.138827,
-    "n_decisions": 7540,
-    "n_transactions": 7454
+    "final_value": 136206.34,
+    "total_return": 0.364205,
+    "sharpe": 0.973185,
+    "max_drawdown": -0.140023,
+    "n_decisions": 7520,
+    "n_transactions": 7427
   },
   {
     "portfolio_id": "ensemble",
@@ -145,11 +145,11 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 132989.67,
-    "total_return": 0.331263,
-    "sharpe": 1.167824,
-    "max_drawdown": -0.077845,
-    "n_decisions": 7540,
-    "n_transactions": 6467
+    "final_value": 132953.41,
+    "total_return": 0.331625,
+    "sharpe": 1.170743,
+    "max_drawdown": -0.078543,
+    "n_decisions": 7520,
+    "n_transactions": 6418
   }
 ]
