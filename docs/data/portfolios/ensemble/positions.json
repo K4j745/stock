@@ -1,0 +1,74 @@
+[
+  {
+    "ticker": "MSFT",
+    "shares": 20.0,
+    "avg_cost": 420.325,
+    "last_price": 517.53,
+    "market_value": 10350.6,
+    "unrealised_pnl_abs": 1944.1,
+    "unrealised_pnl_pct": 0.231262,
+    "entry_date": "2026-08-13",
+    "entry_price": 493.2699890136719,
+    "last_signal_id": "S-MSFT-ensemble_majority-20260813-d18493"
+  },
+  {
+    "ticker": "XOM",
+    "shares": 45.0,
+    "avg_cost": 136.1102,
+    "last_price": 164.01,
+    "market_value": 7380.45,
+    "unrealised_pnl_abs": 1255.49,
+    "unrealised_pnl_pct": 0.20498,
+    "entry_date": "2026-09-15",
+    "entry_price": 165.36000061035156,
+    "last_signal_id": "S-XOM-ensemble_majority-20260915-4af343"
+  },
+  {
+    "ticker": "UNH",
+    "shares": 41.0,
+    "avg_cost": 355.5827,
+    "last_price": 371.9,
+    "market_value": 15247.9,
+    "unrealised_pnl_abs": 669.01,
+    "unrealised_pnl_pct": 0.045889,
+    "entry_date": "2026-10-02",
+    "entry_price": 365.1400146484375,
+    "last_signal_id": "S-UNH-ensemble_majority-20261002-52220b"
+  },
+  {
+    "ticker": "PG",
+    "shares": 66.0,
+    "avg_cost": 147.3684,
+    "last_price": 144.91,
+    "market_value": 9564.06,
+    "unrealised_pnl_abs": -162.25,
+    "unrealised_pnl_pct": -0.016682,
+    "entry_date": "2026-09-30",
+    "entry_price": 148.89999389648438,
+    "last_signal_id": "S-PG-ensemble_majority-20260930-17cbb2"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 53.0,
+    "avg_cost": 111.6289,
+    "last_price": 104.26,
+    "market_value": 5525.78,
+    "unrealised_pnl_abs": -390.55,
+    "unrealised_pnl_pct": -0.066013,
+    "entry_date": "2026-09-30",
+    "entry_price": 106.97000122070312,
+    "last_signal_id": "S-WMT-ensemble_majority-20260930-f5bdb1"
+  },
+  {
+    "ticker": "NEE",
+    "shares": 37.0,
+    "avg_cost": 84.4928,
+    "last_price": 76.83,
+    "market_value": 2842.71,
+    "unrealised_pnl_abs": -283.52,
+    "unrealised_pnl_pct": -0.090692,
+    "entry_date": "2026-10-01",
+    "entry_price": 75.5,
+    "last_signal_id": "S-NEE-ensemble_majority-20261001-501dcd"
+  }
+]
