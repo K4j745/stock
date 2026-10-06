@@ -1,14 +1,14 @@
 [
   {
     "ticker": "SPY",
-    "shares": 236.0,
-    "avg_cost": 421.97,
-    "last_price": 774.83,
-    "market_value": 182859.88,
-    "unrealised_pnl_abs": 83274.96,
-    "unrealised_pnl_pct": 0.836221,
-    "entry_date": "2023-10-06",
-    "entry_price": 421.9700012207031,
-    "last_signal_id": "S-SPY-buy_and_hold-20231006-30857d"
+    "shares": 233.0,
+    "avg_cost": 427.58,
+    "last_price": 779.09,
+    "market_value": 181527.98,
+    "unrealised_pnl_abs": 81901.84,
+    "unrealised_pnl_pct": 0.822092,
+    "entry_date": "2023-10-09",
+    "entry_price": 427.5799865722656,
+    "last_signal_id": "S-SPY-buy_and_hold-20231009-efd300"
   }
 ]
