@@ -1,0 +1,58 @@
+{
+  "portfolio_id": "ensemble",
+  "portfolio_name": "Zesp\u00f3\u0142 (g\u0142osowanie wi\u0119kszo\u015bciowe)",
+  "description": "Sygna\u0142 wykonywany gdy min. 2 modele g\u0142osuj\u0105 zgodnie.",
+  "initial_capital": 100000.0,
+  "final_value": 135156.65,
+  "cash": 76732.86456298828,
+  "metadata": {
+    "generated_at_utc": "2026-10-16T19:52:13Z",
+    "data_version": "2026-05-15",
+    "strategy_version": "1.0",
+    "signal_source": "ensemble_majority",
+    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: ensemble_majority \u2014 sygna\u0142 wykonywany, gdy co najmniej 2 modele g\u0142osuj\u0105 zgodnie (agregacja wi\u0119kszo\u015bciowa). START: portfel kupuje po 10 akcji ka\u017cdego tickera po cenie otwarcia pierwszej sesji (pozycje zal\u0105\u017ckowe SEED). REGU\u0141A HANDLU: tryb incremental, 1 akcja na sygna\u0142 \u2014 BUY dokupuje 1 akcj\u0119, SELL sprzedaje 1 akcj\u0119, gdy wi\u0119kszo\u015b\u0107 modeli zgadza si\u0119 co do kierunku. ROLA: test hipotezy, \u017ce agregacja modeli jest stabilniejsza ni\u017c pojedynczy model. Benchmark SPY liczony automatycznie.",
+    "seed_shares": 10,
+    "trade_mode": "incremental",
+    "trade_size": 1,
+    "rules": {
+      "max_positions": 10,
+      "rebalance": "on_signal",
+      "seed_shares": 10,
+      "trade_mode": "incremental",
+      "trade_size": 1
+    },
+    "n_decisions": 7550,
+    "n_transactions": 6401,
+    "first_date": "2023-10-16",
+    "last_date": "2026-10-16",
+    "label_mode": "binary",
+    "label_version": "binary-2026-08"
+  },
+  "metrics": {
+    "total_return": 0.351854,
+    "cagr": 0.106158,
+    "volatility_annualised": 0.086759,
+    "sharpe_ratio": 1.223591,
+    "max_drawdown": -0.082028,
+    "calmar_ratio": 1.294171,
+    "n_observations": 753,
+    "trade_n_trades": 3105,
+    "trade_n_wins": 2069,
+    "trade_n_losses": 1030,
+    "trade_win_rate": 0.666345,
+    "trade_avg_trade_pnl": 9.496563,
+    "trade_avg_win": 19.720934,
+    "trade_avg_loss": -10.986199,
+    "trade_profit_factor": 3.605814,
+    "trade_expectancy": 9.475334
+  },
+  "benchmark_metrics": {
+    "total_return": 0.749461,
+    "cagr": 0.205843,
+    "volatility_annualised": 0.152807,
+    "sharpe_ratio": 1.347075,
+    "max_drawdown": -0.189989,
+    "calmar_ratio": 1.083445,
+    "n_observations": 753
+  }
+}
