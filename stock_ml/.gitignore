@@ -1,0 +1,8 @@
+data/raw/
+models/saved/
+reports/*.csv
+reports/*.json
+reports/plots/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

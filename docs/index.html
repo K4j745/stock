@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.plot.ly https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>StocKK Forecast — Market Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root, [data-theme="dark"] {
+    --color-bg: #0d1117;
+    --color-surface: #161b22;
+    --color-surface-2: #1c2128;
+    --color-surface-offset: #21262d;
+    --color-border: #30363d;
+    --color-divider: #21262d;
+    --color-text: #e6edf3;
+    --color-text-muted: #8b949e;
+    --color-text-faint: #484f58;
+    --color-primary: #388bfd;
+    --color-primary-hover: #58a6ff;
+    --color-primary-highlight: #1f3358;
+    --color-success: #3fb950;
+    --color-success-muted: #1a3a24;
+    --color-error: #f85149;
+    --color-error-muted: #3d1a1a;
+    --color-warning: #e3b341;
+    --color-warning-muted: #3a2f12;
+    --font-display: 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+    --transition-interactive: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="light"] { /* base tokens; cyberpunk.css retints on top */
+    --color-bg: #f6f8fa;
+    --color-surface: #ffffff;
+    --color-surface-2: #f6f8fa;
+    --color-surface-offset: #f0f3f6;
+    --color-border: #d0d7de;
+    --color-divider: #eaeef2;
+    --color-text: #1f2328;
+    --color-text-muted: #656d76;
+    --color-text-faint: #adb5bd;
+    --color-primary: #0969da;
+    --color-primary-hover: #0550ae;
+    --color-primary-highlight: #dbeafe;
+    --color-success: #1a7f37;
+    --color-success-muted: #d4f8df;
+    --color-error: #cf222e;
+    --color-error-muted: #fde8e8;
+    --color-warning: #9a6700;
+    --color-warning-muted: #fff8c5;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 56px;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    backdrop-filter: blur(12px);
+  }
+  .site-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .site-header .logo svg { color: var(--color-primary); }
+  .site-header nav {
+    display: flex;
+    gap: 4px;
+    margin: 0 auto;
+  }
+  .site-header nav a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: 6px 16px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color var(--transition-interactive), background var(--transition-interactive);
+  }
+  .site-header nav a:hover {
+    color: var(--color-text);
+    background: var(--color-surface-offset);
+  }
+  .site-header nav a.active {
+    color: var(--color-text);
+    background: var(--color-surface-2);
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .header-right .last-update {
+    font-size: 12px;
+    color: var(--color-text-faint);
+    font-family: var(--font-mono);
+  }
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-interactive), border-color var(--transition-interactive);
+  }
+  .theme-toggle:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-muted);
+  }
+
+  /* Mobile nav */
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 4px;
+  }
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 8px 16px;
+    z-index: 99;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .mobile-nav a.active {
+    color: var(--color-text);
+    background: var(--color-surface-2);
+  }
+
+  @media (max-width: 768px) {
+    .site-header nav { display: none; }
+    .hamburger { display: block; }
+    .header-right .last-update { display: none; }
+  }
+
+  /* Main content */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  /* KPI cards */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .kpi-card .kpi-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .kpi-card .kpi-value {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .kpi-card .kpi-sub {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-top: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .kpi-row { grid-template-columns: 1fr; }
+  }
+
+  /* Main layout */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 1024px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Card */
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-divider);
+  }
+  .card-header h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .card-header .badge {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+  }
+  .card-body { padding: 0; }
+
+  /* Table */
+  .table-wrapper { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--color-divider);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    position: sticky;
+    top: 0;
+    background: var(--color-surface);
+    z-index: 1;
+  }
+  thead th:hover { color: var(--color-text); }
+  thead th .sort-icon {
+    display: inline-block;
+    margin-left: 4px;
+    opacity: 0.3;
+    font-size: 10px;
+  }
+  thead th.sorted .sort-icon { opacity: 1; }
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--color-divider);
+    white-space: nowrap;
+  }
+  tbody tr {
+    transition: background var(--transition-interactive);
+  }
+  tbody tr:hover { background: var(--color-surface-offset); }
+  td.mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  td.ticker-cell {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+  td.price-cell {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums lining-nums;
+    text-align: right;
+  }
+  .text-right { text-align: right; }
+
+  /* Change % */
+  .change-pos { color: var(--color-success); }
+  .change-neg { color: var(--color-error); }
+
+  /* Signal badges */
+  .signal-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .signal-buy {
+    background: var(--color-success-muted);
+    color: var(--color-success);
+    border: 1px solid var(--color-success);
+  }
+  .signal-sell {
+    background: var(--color-error-muted);
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+  }
+  .signal-hold {
+    background: var(--color-warning-muted);
+    color: var(--color-warning);
+    border: 1px solid var(--color-warning);
+  }
+
+  /* RSI bar */
+  .rsi-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .rsi-bar {
+    width: 48px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--color-surface-offset);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .rsi-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+  .rsi-green { background: var(--color-success); }
+  .rsi-yellow { background: var(--color-warning); }
+  .rsi-red { background: var(--color-error); }
+  .rsi-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    min-width: 32px;
+  }
+
+  /* Sidebar summary cards */
+  .sidebar-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .sidebar-card + .sidebar-card { margin-top: 16px; }
+  .sidebar-card h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .stat-row + .stat-row { border-top: 1px solid var(--color-divider); }
+  .stat-row .stat-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .stat-row .stat-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-buy { background: var(--color-success); }
+  .dot-sell { background: var(--color-error); }
+  .dot-hold { background: var(--color-warning); }
+
+  /* Auto refresh bar */
+  .refresh-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--color-text-faint);
+  }
+
+  /* Loading */
+  .loading-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--color-text-muted);
+  }
+  .spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Error */
+  .error-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-error);
+    background: var(--color-error-muted);
+    border-radius: var(--radius-lg);
+    margin: 20px 0;
+  }
+  .error-state p {
+    margin-top: 8px;
+    color: var(--color-text-muted);
+    font-size: 13px;
+  }
+
+  /* Overview visualisations: market heatmap + daily movers */
+  .viz-row {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 900px) { .viz-row { grid-template-columns: 1fr; } }
+
+  /* Extra breathing room inside the heatmap + daily-movers cards. */
+  .viz-row > .card > .card-body { padding: 20px 22px 22px; }
+
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+    gap: 8px;
+    padding: 4px 2px 2px;
+  }
+  .heat-tile {
+    position: relative;
+    border-radius: var(--radius-md);
+    padding: 9px 10px 8px;
+    min-height: 68px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: transform var(--transition-interactive), box-shadow var(--transition-interactive);
+  }
+  .heat-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .heat-tile .ht-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .heat-tile .ht-ticker { font-family: var(--font-mono); font-weight: 700; font-size: 13px; letter-spacing: 0.03em; }
+  .heat-tile .ht-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .heat-tile .ht-change { font-family: var(--font-mono); font-weight: 600; font-size: 15px; margin-top: 4px; }
+  .heat-tile .ht-price { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-muted); }
+  .heat-legend {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 14px; font-size: 11px; color: var(--color-text-muted);
+    font-family: var(--font-mono); flex-wrap: wrap;
+  }
+  .heat-scale { flex: 1; min-width: 120px; height: 8px; border-radius: 4px;
+    background: linear-gradient(90deg, var(--color-error), var(--color-surface-2), var(--color-success)); }
+
+  /* Daily movers — diverging horizontal bars */
+  .movers { display: flex; flex-direction: column; gap: 9px; padding: 4px 2px; }
+  .mv-row { display: grid; grid-template-columns: 50px 1fr 60px; align-items: center; gap: 8px; }
+  .mv-ticker { font-family: var(--font-mono); font-weight: 600; font-size: 12px; color: var(--color-text); }
+  .mv-track { position: relative; height: 16px; background: var(--color-surface-2); border-radius: 4px; overflow: hidden; }
+  .mv-mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--color-border); }
+  .mv-bar { position: absolute; top: 2px; bottom: 2px; border-radius: 3px; }
+  .mv-val { text-align: right; font-family: var(--font-mono); font-weight: 600; font-size: 12px; }
+
+  /* Footer */
+  .site-footer {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--color-text-faint);
+    font-size: 12px;
+    margin-top: 48px;
+    border-top: 1px solid var(--color-divider);
+  }
+</style>
+<link rel="stylesheet" href="assets/cyberpunk.css">
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <a href="./" class="logo">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+      <polyline points="16 7 22 7 22 13"/>
+    </svg>
+    StocKK Forecast
+  </a>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <nav>
+    <a href="./" class="active" data-i18n="nav.overview">Overview</a>
+    <a href="prices/" data-i18n="nav.prices">Prices</a>
+    <a href="charts/" data-i18n="nav.charts">Charts</a>
+    <a href="signals/" data-i18n="nav.signals">Signals</a>
+    <a href="portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+    <a href="methodology/" data-i18n="nav.methodology">Instructions</a>
+    <a href="about/" data-i18n="nav.about">About</a>
+  </nav>
+  <div class="header-right">
+    <span class="last-update" id="headerUpdate"></span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sun">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon" style="display:none">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="./" class="active" data-i18n="nav.overview">Overview</a>
+  <a href="prices/" data-i18n="nav.prices">Prices</a>
+  <a href="charts/" data-i18n="nav.charts">Charts</a>
+  <a href="signals/" data-i18n="nav.signals">Signals</a>
+  <a href="portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+  <a href="methodology/" data-i18n="nav.methodology">Instructions</a>
+  <a href="about/" data-i18n="nav.about">About</a>
+</div>
+
+<div class="container">
+  <!-- KPI cards -->
+  <div class="kpi-row" id="kpiRow">
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.total">Total Signals</div><div class="kpi-value" id="kpiTotal">--</div></div>
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.buy">BUY Signals</div><div class="kpi-value change-pos" id="kpiBuy">--</div></div>
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.sell">SELL Signals</div><div class="kpi-value change-neg" id="kpiSell">--</div></div>
+    <div class="kpi-card"><div class="kpi-label" data-i18n="kpi.buyRatio">BUY Share</div><div class="kpi-value" id="kpiBuyRatio">--</div></div>
+  </div>
+
+  <div class="refresh-bar" style="gap:12px;flex-wrap:wrap">
+    <span id="lastUpdated">Loading...</span>
+    <span style="display:flex;align-items:center;gap:8px;">
+      <label style="font-size:12px;color:var(--color-text-muted)"><span data-i18n="label.model">Model:</span>
+        <select id="modelSelect" style="margin-left:6px;background:var(--color-surface-2);border:1px solid var(--color-border);color:var(--color-text);border-radius:var(--radius-md);padding:3px 8px;font-size:12px;">
+          <option value="technical_rule_based">technical_rule_based</option>
+        </select>
+      </label>
+      <span style="color:var(--color-text-faint)">|</span>
+      <span data-i18n="label.autoRefresh">Auto-refresh: 60s</span>
+    </span>
+  </div>
+
+  <!-- Sectors strip (coloured pills) -->
+  <div id="sectorStrip" style="display:none;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:10px 14px;margin-bottom:16px;font-size:12px;">
+    <div style="font-size:11px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;" data-i18n="card.universeBySector">Universe by sector</div>
+    <div id="sectorPills" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+  </div>
+
+  <!-- Market heatmap + daily movers -->
+  <div class="viz-row" id="vizRow" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2 data-i18n="card.heatmap">Market Heatmap</h2>
+        <span class="badge" id="heatmapCount"></span>
+      </div>
+      <div class="card-body">
+        <div id="heatmap" class="heatmap"></div>
+        <div class="heat-legend">
+          <span data-i18n="heat.down">Down</span>
+          <span class="heat-scale"></span>
+          <span data-i18n="heat.up">Up</span>
+          <span style="margin-left:auto" data-i18n="heat.legend">Daily change (%)</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2 data-i18n="card.movers">Daily Movers</h2>
+      </div>
+      <div class="card-body">
+        <div id="movers" class="movers"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <!-- Table -->
+    <div class="card">
+      <div class="card-header">
+        <h2 data-i18n="card.marketSignals">Market Signals</h2>
+        <span class="badge" id="signalDate"></span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrapper" id="content">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <div data-i18n="label.loading">Loading market data...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+      <div class="sidebar-card">
+        <h3 data-i18n="card.signalSummary">Signal Summary</h3>
+        <div class="stat-row">
+          <span class="stat-label"><span class="stat-dot dot-buy"></span> BUY</span>
+          <span class="stat-value change-pos" id="sidebarBuy">--</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label"><span class="stat-dot dot-sell"></span> SELL</span>
+          <span class="stat-value change-neg" id="sidebarSell">--</span>
+        </div>
+      </div>
+      <div class="sidebar-card" id="sectorSummary">
+        <h3 data-i18n="card.bySector">By Sector</h3>
+        <div style="color:var(--color-text-muted);font-size:13px;padding:8px 0;">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <span data-i18n="footer.index">Data: Yahoo Finance — Not financial advice</span>
+</footer>
+
+<script>
+(function() {
+  // Theme
+  var saved = localStorage.getItem('stockwatch-theme');
+  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+  updateThemeIcon(theme);
+
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('stockwatch-theme', next);
+    updateThemeIcon(next);
+  });
+
+  function updateThemeIcon(t) {
+    document.querySelector('.icon-sun').style.display = t === 'dark' ? 'block' : 'none';
+    document.querySelector('.icon-moon').style.display = t === 'light' ? 'block' : 'none';
+  }
+
+  // Mobile menu
+  document.getElementById('hamburgerBtn').addEventListener('click', function() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  });
+
+  var contentEl = document.getElementById('content');
+  var lastUpdateTime = null;
+  var sortCol = null;
+  var sortAsc = true;
+  var currentSignals = [];
+  var allLatestRecords = []; // full rich latest.json (per ticker × model)
+  var currentModel = 'technical_rule_based';
+  var availableModels = [];
+
+  // Sector lookup — driven by docs/data/registry/tickers.json. We keep a
+  // single object so legacy call-sites (sectorMap[ticker]) keep working,
+  // but it's rebuilt from the registry on every loadData(). SPY is tagged
+  // as "Benchmark" so the table colour-codes it consistently.
+  var sectorMap = {};
+  function rebuildSectorMap() {
+    sectorMap = {};
+    registryTickers.forEach(function(t){
+      sectorMap[t.symbol] = t.sector || 'Other';
+    });
+    var benchmarks = (richMeta && richMeta.benchmark_tickers) || ['SPY'];
+    benchmarks.forEach(function(sym){ if (!sectorMap[sym]) sectorMap[sym] = 'Benchmark'; });
+  }
+
+  function formatChange(val) {
+    var sign = val >= 0 ? '+' : '';
+    var arrow = val >= 0 ? '\u25B2' : '\u25BC';
+    var cls = val >= 0 ? 'change-pos' : 'change-neg';
+    return '<span class="' + cls + '">' + arrow + ' ' + sign + val.toFixed(2) + '%</span>';
+  }
+
+  function rsiColor(rsi) {
+    if (rsi < 35) return 'rsi-green';
+    if (rsi > 65) return 'rsi-red';
+    return 'rsi-yellow';
+  }
+
+  function signalBadge(sig) {
+    var cls = sig === 'BUY' ? 'signal-buy' : sig === 'SELL' ? 'signal-sell' : 'signal-hold';
+    return '<span class="signal-badge ' + cls + '">' + sig + '</span>';
+  }
+
+  function renderTable(signals) {
+    var cols = [
+      { key: 'ticker', label: 'Ticker' },
+      { key: 'sector', label: 'Sector' },
+      { key: 'price', label: 'Price', right: true },
+      { key: 'change_pct', label: 'Change %', right: true },
+      { key: 'rsi', label: 'RSI' },
+      { key: 'signal', label: 'Signal' },
+      { key: 'score', label: 'Score', right: true },
+      { key: 'date', label: 'Updated' }
+    ];
+
+    var html = '<table><thead><tr>';
+    cols.forEach(function(c) {
+      var sorted = sortCol === c.key;
+      var icon = sorted ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25B2';
+      html += '<th class="' + (sorted ? 'sorted' : '') + (c.right ? ' text-right' : '') + '" data-col="' + c.key + '">';
+      html += c.label + ' <span class="sort-icon">' + icon + '</span></th>';
+    });
+    html += '</tr></thead><tbody>';
+
+    signals.forEach(function(s) {
+      var sector = sectorMap[s.ticker] || '--';
+      html += '<tr>';
+      html += '<td class="ticker-cell">' + s.ticker + '</td>';
+      html += '<td>' + sector + '</td>';
+      html += '<td class="price-cell">$' + s.price.toFixed(2) + '</td>';
+      html += '<td class="text-right">' + formatChange(s.change_pct) + '</td>';
+      html += '<td>';
+      if (s.rsi !== null) {
+        var rsiCls = rsiColor(s.rsi);
+        html += '<div class="rsi-indicator"><div class="rsi-bar"><div class="rsi-bar-fill ' + rsiCls + '" style="width:' + s.rsi + '%"></div></div><span class="rsi-val">' + s.rsi.toFixed(1) + '</span></div>';
+      } else {
+        html += '<span class="rsi-val">N/A</span>';
+      }
+      html += '</td>';
+      html += '<td>' + signalBadge(s.signal) + '</td>';
+      html += '<td class="mono text-right">' + s.score + '</td>';
+      html += '<td style="color:var(--color-text-muted);font-size:12px">' + s.date + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    return html;
+  }
+
+  function sortSignals(signals) {
+    if (!sortCol) return signals;
+    var sorted = signals.slice();
+    sorted.sort(function(a, b) {
+      var va = sortCol === 'sector' ? (sectorMap[a.ticker] || '') : a[sortCol];
+      var vb = sortCol === 'sector' ? (sectorMap[b.ticker] || '') : b[sortCol];
+      if (va === null || va === undefined) va = '';
+      if (vb === null || vb === undefined) vb = '';
+      if (typeof va === 'string') va = va.toLowerCase();
+      if (typeof vb === 'string') vb = vb.toLowerCase();
+      if (va < vb) return sortAsc ? -1 : 1;
+      if (va > vb) return sortAsc ? 1 : -1;
+      return 0;
+    });
+    return sorted;
+  }
+
+  function updateKPIs(signals) {
+    // Binary classifier: only BUY / SELL. (buy_and_hold benchmark may still
+    // carry a HOLD position; those are bucketed into `hold` but no longer
+    // surfaced as a headline KPI.)
+    var buy = 0, sell = 0, hold = 0;
+    signals.forEach(function(s) {
+      if (s.signal === 'BUY') buy++;
+      else if (s.signal === 'SELL') sell++;
+      else hold++;
+    });
+    var decided = buy + sell;
+    document.getElementById('kpiTotal').textContent = signals.length;
+    document.getElementById('kpiBuy').textContent = buy;
+    document.getElementById('kpiSell').textContent = sell;
+    document.getElementById('kpiBuyRatio').textContent =
+      decided > 0 ? Math.round((buy / decided) * 100) + '%' : '--';
+    document.getElementById('sidebarBuy').textContent = buy;
+    document.getElementById('sidebarSell').textContent = sell;
+
+    // Sector summary
+    var sectors = {};
+    signals.forEach(function(s) {
+      var sec = sectorMap[s.ticker] || 'Other';
+      if (!sectors[sec]) sectors[sec] = { buy: 0, sell: 0 };
+      if (s.signal === 'BUY') sectors[sec].buy++;
+      else if (s.signal === 'SELL') sectors[sec].sell++;
+    });
+    var secHtml = '';
+    Object.keys(sectors).forEach(function(sec) {
+      var d = sectors[sec];
+      secHtml += '<div class="stat-row"><span class="stat-label">' + sec + '</span>';
+      secHtml += '<span style="font-size:12px;font-family:var(--font-mono)">';
+      if (d.buy) secHtml += '<span class="change-pos">' + d.buy + 'B</span> ';
+      if (d.sell) secHtml += '<span class="change-neg">' + d.sell + 'S</span> ';
+      secHtml += '</span></div>';
+    });
+    var bySectorLabel = (window.S4C ? window.S4C.t('card.bySector') : 'By Sector');
+    document.getElementById('sectorSummary').innerHTML = '<h3>' + bySectorLabel + '</h3>' + secHtml;
+  }
+
+  function updateTimer() {
+    if (!lastUpdateTime) return;
+    var diffSec = Math.floor((Date.now() - lastUpdateTime) / 1000);
+    var txt;
+    if (diffSec < 60) txt = diffSec + 's ago';
+    else txt = Math.floor(diffSec / 60) + 'm ago';
+    document.getElementById('lastUpdated').textContent = 'Last refreshed ' + txt;
+    document.getElementById('headerUpdate').textContent = 'Updated ' + txt;
+  }
+
+  // Market heatmap — one colour-scaled tile per ticker, sorted best→worst.
+  // Tile tint uses color-mix over the surface token so it tracks the active
+  // theme automatically (no getComputedStyle, no re-render on theme toggle).
+  function renderHeatmap(signals) {
+    var host = document.getElementById('heatmap');
+    var row = document.getElementById('vizRow');
+    if (!host || !row) return;
+    if (!signals || !signals.length) { row.style.display = 'none'; return; }
+    row.style.display = '';
+    var countEl = document.getElementById('heatmapCount');
+    if (countEl) countEl.textContent = signals.length + ' tickers';
+    var palette = (richMeta && richMeta.sector_palette) || {};
+    var CAP = 4; // % daily move that maps to peak colour intensity
+    var sorted = signals.slice().sort(function(a, b) { return (b.change_pct || 0) - (a.change_pct || 0); });
+    var html = '';
+    sorted.forEach(function(s) {
+      var v = s.change_pct || 0;
+      var mag = Math.min(Math.abs(v) / CAP, 1);
+      var mix = Math.round(16 + 39 * mag); // 16%..55% over surface — keeps text readable
+      var base = v >= 0 ? '--color-success' : '--color-error';
+      var bg = 'color-mix(in srgb, var(' + base + ') ' + mix + '%, var(--color-surface))';
+      var sector = sectorMap[s.ticker] || 'Other';
+      var dot = palette[sector] || palette['Other'] || 'var(--color-text-faint)';
+      var sign = v >= 0 ? '+' : '';
+      var arrow = v >= 0 ? '▲' : '▼';
+      var price = (s.price != null) ? '$' + s.price.toFixed(2) : '--';
+      html += '<div class="heat-tile" style="background:' + bg + '" title="' + s.ticker + ' · ' + sector + '">';
+      html += '<div class="ht-top"><span class="ht-ticker">' + s.ticker + '</span>';
+      html += '<span class="ht-dot" style="background:' + dot + '"></span></div>';
+      html += '<div class="ht-change">' + arrow + ' ' + sign + v.toFixed(2) + '%</div>';
+      html += '<div class="ht-price">' + price + '</div>';
+      html += '</div>';
+    });
+    host.innerHTML = html;
+  }
+
+  // Daily movers — diverging horizontal bars, ranked by change %.
+  function renderMovers(signals) {
+    var host = document.getElementById('movers');
+    if (!host) return;
+    if (!signals || !signals.length) { host.innerHTML = ''; return; }
+    var sorted = signals.slice().sort(function(a, b) { return (b.change_pct || 0) - (a.change_pct || 0); });
+    var maxAbs = sorted.reduce(function(m, s) { return Math.max(m, Math.abs(s.change_pct || 0)); }, 0) || 1;
+    var html = '';
+    sorted.forEach(function(s) {
+      var v = s.change_pct || 0;
+      var w = (Math.abs(v) / maxAbs) * 50; // each side spans up to half the track
+      var pos = v >= 0 ? ('left:50%;width:' + w + '%') : ('left:' + (50 - w) + '%;width:' + w + '%');
+      var color = v >= 0 ? 'var(--color-success)' : 'var(--color-error)';
+      var cls = v >= 0 ? 'change-pos' : 'change-neg';
+      var sign = v >= 0 ? '+' : '';
+      html += '<div class="mv-row">';
+      html += '<span class="mv-ticker">' + s.ticker + '</span>';
+      html += '<div class="mv-track"><span class="mv-mid"></span><span class="mv-bar" style="' + pos + ';background:' + color + '"></span></div>';
+      html += '<span class="mv-val ' + cls + '">' + sign + v.toFixed(2) + '%</span>';
+      html += '</div>';
+    });
+    host.innerHTML = html;
+  }
+
+  function doRender() {
+    var sorted = sortSignals(currentSignals);
+    contentEl.innerHTML = renderTable(sorted);
+    updateKPIs(currentSignals);
+    renderHeatmap(currentSignals);
+    renderMovers(currentSignals);
+
+    // Bind sort
+    contentEl.querySelectorAll('th[data-col]').forEach(function(th) {
+      th.addEventListener('click', function() {
+        var col = th.getAttribute('data-col');
+        if (sortCol === col) sortAsc = !sortAsc;
+        else { sortCol = col; sortAsc = true; }
+        doRender();
+      });
+    });
+  }
+
+  function recordsToLegacyShape(records, model) {
+    // Pick latest row per ticker for the requested model.
+    var perTicker = {};
+    records.forEach(function(r) {
+      if (r.model_name !== model) return;
+      var prev = perTicker[r.ticker];
+      if (!prev || r.signal_date > prev.signal_date) perTicker[r.ticker] = r;
+    });
+    return Object.values(perTicker).map(function(r) {
+      return {
+        ticker: r.ticker,
+        price: r.close,
+        change_pct: (r.close != null && r.previous_close) ? +(((r.close - r.previous_close) / r.previous_close) * 100).toFixed(2) : 0,
+        rsi: r.rsi,
+        macd: r.macd,
+        macd_signal_value: r.macd_signal,
+        signal: r.signal,
+        score: r.score,
+        date: r.signal_date,
+        probability_up: r.probability_up,
+        confidence: r.confidence,
+        model_name: r.model_name,
+        signal_source: r.signal_source
+      };
+    });
+  }
+
+  function applyModel(model) {
+    currentModel = model;
+    if (allLatestRecords.length) {
+      currentSignals = recordsToLegacyShape(allLatestRecords, model);
+      doRender();
+    }
+  }
+
+  document.getElementById('modelSelect').addEventListener('change', function(e){
+    applyModel(e.target.value);
+  });
+
+  var richMeta = null;
+  var registryTickers = [];
+
+  function renderSectorStrip(tickers, meta) {
+    if (!tickers || !tickers.length) return;
+    var palette = (meta && meta.sector_palette) || {};
+    var bySector = {};
+    tickers.forEach(function(t){
+      var s = (t.sector || 'Other');
+      (bySector[s] = bySector[s] || []).push(t);
+    });
+    var host = document.getElementById('sectorPills');
+    host.innerHTML = '';
+    Object.keys(bySector).sort().forEach(function(sector){
+      var color = palette[sector] || palette['Other'] || '#a371f7';
+      var group = document.createElement('div');
+      group.style.cssText = 'display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:' + hexAlpha(color, 0.12) + ';border:1px solid ' + hexAlpha(color, 0.4) + ';';
+      var dot = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';"></span>';
+      var symbols = bySector[sector].map(function(t){ return t.symbol; }).join(', ');
+      group.innerHTML = dot + '<span style="color:' + color + ';font-weight:600;">' + sector + '</span><span style="color:var(--color-text-muted);font-family:var(--font-mono);font-size:11px;">' + symbols + '</span>';
+      host.appendChild(group);
+    });
+    document.getElementById('sectorStrip').style.display = '';
+  }
+
+  function hexAlpha(hex, a) {
+    var h = hex.replace('#', '');
+    if (h.length === 3) h = h.split('').map(function(c){ return c+c; }).join('');
+    var r = parseInt(h.slice(0,2), 16), g = parseInt(h.slice(2,4), 16), b = parseInt(h.slice(4,6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
+
+  function loadData() {
+    // Prefer the new rich data layout; fall back to the legacy flat signals.json
+    // so partial deploys / older browsers still work.
+    Promise.all([
+      fetch('data/signals/latest.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
+      fetch('data/registry/models.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
+      fetch('data/last_updated.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+      fetch('data/meta.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; }),
+      fetch('data/registry/tickers.json').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).catch(function(){ return null; })
+    ]).then(function(results) {
+      var latest = results[0];
+      var models = results[1];
+      var meta = results[2];
+      richMeta = results[3];
+      registryTickers = results[4] || [];
+      rebuildSectorMap();
+      renderSectorStrip(registryTickers, richMeta);
+
+      if (latest && Array.isArray(latest)) {
+        allLatestRecords = latest;
+        availableModels = models && models.length
+          ? models.map(function(m){ return m.name; })
+          : Array.from(new Set(latest.map(function(r){ return r.model_name; })));
+
+        var sel = document.getElementById('modelSelect');
+        sel.innerHTML = '';
+        availableModels.forEach(function(m){
+          var o = document.createElement('option'); o.value = m; o.textContent = m;
+          if (m === currentModel) o.selected = true;
+          sel.appendChild(o);
+        });
+        if (!availableModels.includes(currentModel)) currentModel = availableModels[0] || 'technical_rule_based';
+        sel.value = currentModel;
+        currentSignals = recordsToLegacyShape(latest, currentModel);
+      } else {
+        // Legacy fallback
+        return fetch('data/signals.json').then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function(legacy){
+          currentSignals = legacy;
+        });
+      }
+      lastUpdateTime = new Date(meta.timestamp).getTime();
+      if (currentSignals.length > 0) {
+        document.getElementById('signalDate').textContent = currentSignals[0].date;
+      }
+      doRender();
+      updateTimer();
+    }).then(function(){
+      if (currentSignals && !document.getElementById('content').firstChild) doRender();
+    }).catch(function(err) {
+      contentEl.innerHTML = '<div class="error-state">Failed to load data<p>' + err.message + '</p><p>Run <code>python dashboard/generate.py</code> to generate data.</p></div>';
+    });
+  }
+
+  loadData();
+  setInterval(loadData, 60000);
+  setInterval(updateTimer, 10000);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'r' || e.key === 'R') {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      loadData();
+    }
+  });
+})();
+</script>
+</body>
+</html>

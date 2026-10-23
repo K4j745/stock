@@ -1,0 +1,184 @@
+@startuml uml_components
+' ---------------------------------------------------------------------------
+' Diagram komponentow - StocKK Forecast
+' Praca inzynierska: "Prognozowanie krotkoterminowych zmian cen akcji
+' gieldowych z wykorzystaniem metod uczenia maszynowego oraz symulacja
+' strategii inwestycyjnej"
+' Autor: Kajetan Kaczynski, Uniwersytet Przyrodniczy w Poznaniu
+' ---------------------------------------------------------------------------
+' Render:  plantuml -tsvg docs/engineering/uml_components.puml
+' ---------------------------------------------------------------------------
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam ArrowColor #37474F
+skinparam component {
+  BackgroundColor #ECEFF1
+  BorderColor #546E7A
+}
+skinparam package {
+  BackgroundColor #FAFAFA
+  BorderColor #90A4AE
+}
+skinparam database {
+  BackgroundColor #ECEFF1
+  BorderColor #546E7A
+}
+skinparam interface {
+  BackgroundColor #FFFFFF
+  BorderColor #546E7A
+}
+
+title Diagram komponentow - system StocKK Forecast
+
+' --- Warstwa 1: zrodlo danych zewnetrznych ----------------------------------
+package "Warstwa danych zewnetrznych" as L1 {
+  component "Yahoo Finance\n(serwis zewnetrzny)" as YF
+  component "yfinance\n(klient HTTP w Pythonie)" as YFLIB
+  interface "OHLCV + kurs USD/PLN" as I_OHLCV
+
+  YF -up- I_OHLCV
+  YFLIB -up-> I_OHLCV : uzywa
+}
+
+' --- Warstwa 2: pipeline uczenia maszynowego --------------------------------
+package "Pipeline ML - stock_ml (uruchamiany offline)" as L2 {
+  component "main.py\n(interfejs CLI)" as ML_CLI
+  component "config.py\n(tickery, progi, okna walk-forward)" as ML_CFG
+  component "data\n(pobieranie i archiwizacja CSV)" as ML_DATA
+  component "features\n(indicators, candles, pipeline,\nvalidation)" as ML_FEAT
+  component "models\n(train, tune, evaluate,\ncandle_model)" as ML_MODELS
+  component "backtest\n(run, portfolio)" as ML_BT
+  component "reports\n(generate, plots, shap_analysis)" as ML_REP
+
+  database "models/saved/\nmodele + skalery\n(poza kontrola wersji)" as ART
+  database "reports/\nCSV, JSON, PNG" as ML_OUT
+
+  interface "artefakty modeli\n(.json / .txt / .joblib)" as I_ART
+  interface "wykresy PNG" as I_PNG
+
+  ML_CLI --> ML_DATA
+  ML_CLI --> ML_MODELS
+  ML_CLI --> ML_BT
+  ML_CLI --> ML_REP
+  ML_CFG <.. ML_DATA : konfiguracja
+  ML_CFG <.. ML_MODELS : konfiguracja
+  ML_DATA --> ML_FEAT
+  ML_FEAT --> ML_MODELS
+  ML_FEAT --> ML_BT
+  ML_MODELS --> ART
+  ML_BT --> ML_OUT
+  ML_REP --> ML_OUT
+  ART -up- I_ART
+  ML_OUT -up- I_PNG
+}
+
+ML_DATA --> I_OHLCV : pobiera dane historyczne
+
+' --- Warstwa 3: generator dashboardu ----------------------------------------
+package "Generator dashboardu - dashboard/" as L3 {
+  component "generate.py\n(orkiestracja przebiegu)" as GEN
+  component "config_loader\n(walidacja config.json)" as CFG
+  component "data_fetcher\n(pobieranie cen i kursu FX)" as FETCH
+  component "indicators\n(wskazniki dla warstwy WWW)" as IND
+  component "ml_loader\n(wczytanie modeli lub proxy)" as MLL
+  component "signals\n(reguly, ML, ensemble,\nbuy & hold, proxy)" as SIG
+  component "portfolio\n(wycena pozycji)" as PORT
+  component "exporters\n(zapis JSON i CSV)" as EXP
+  component "audit\n(metadane przebiegu)" as AUD
+
+  interface "config.json" as I_CFG
+
+  CFG -up- I_CFG
+  GEN --> I_CFG : czyta konfiguracje
+  GEN --> FETCH
+  GEN --> IND
+  GEN --> MLL
+  GEN --> SIG
+  GEN --> PORT
+  GEN --> EXP
+  GEN --> AUD
+  MLL --> SIG : prawdopodobienstwa
+  IND --> SIG : wartosci wskaznikow
+  SIG --> EXP : sygnaly BUY/SELL
+  PORT --> EXP : wyceny portfeli
+}
+
+FETCH --> I_OHLCV : pobiera biezace notowania
+MLL --> I_ART : wczytuje modele i skalery
+GEN --> I_PNG : kopiuje wykresy do docs/charts/plots
+
+note right of MLL
+  Gdy artefakty sa niedostepne
+  lub zestaw cech sie nie zgadza,
+  komponent zwraca deterministyczne
+  proxy (model_version = proxy-1.0).
+end note
+
+' --- Warstwa 4: repozytorium artefaktow statycznych -------------------------
+package "Repozytorium artefaktow statycznych - docs/" as L4 {
+  database "docs/data/\nsignals, prices, registry,\nfx, meta, last_updated, CSV" as DOCSDATA
+  database "docs/charts/plots/\nPNG + plots_index.json" as DOCSPNG
+
+  interface "HTTP GET\n(JSON / CSV / PNG)" as I_HTTP
+
+  DOCSDATA -up- I_HTTP
+  DOCSPNG -up- I_HTTP
+}
+
+EXP --> DOCSDATA : zapisuje pliki
+AUD --> DOCSDATA : zapisuje metadane
+GEN --> DOCSPNG : kopiuje wykresy
+
+' --- Warstwa 5: warstwa prezentacji -----------------------------------------
+package "Warstwa prezentacji - przegladarka uzytkownika" as L5 {
+  component "Strony HTML\n(index, signals, prices,\ncharts, portfolio, methodology)" as HTML
+  component "assets/app.js\n(i18n PL/EN, motyw, formatowanie)" as APPJS
+  component "Modul portfela\n(symulacja transakcji)" as UIPORT
+  component "Plotly.js 2.27\n(wykresy swiecowe)" as PLOTLY
+  component "Chart.js 4.4\n(wykresy pomocnicze)" as CHARTJS
+
+  database "localStorage\nportfele, jezyk, motyw, waluta" as LS
+
+  HTML --> APPJS
+  HTML --> PLOTLY
+  HTML --> CHARTJS
+  HTML --> UIPORT
+  UIPORT --> LS : zapis i odczyt
+  APPJS --> LS : preferencje interfejsu
+}
+
+HTML --> I_HTTP : fetch() plikow statycznych
+
+note bottom of L5
+  Cala logika dziala po stronie klienta.
+  System nie posiada back-endu, bazy danych
+  ani kont uzytkownikow - stad brak
+  komponentow serwerowych na diagramie.
+end note
+
+' --- Warstwa 6: automatyzacja i hosting -------------------------------------
+package "Automatyzacja i hosting" as L6 {
+  component "GitHub Actions\n(.github/workflows/dashboard.yml)" as CI
+  component "Repozytorium Git" as GIT
+  component "GitHub Pages\n(serwer plikow statycznych)" as PAGES
+
+  CI --> GIT : commit i push katalogu docs/
+  GIT --> PAGES : publikacja
+}
+
+CI --> GEN : uruchamia generator (cron pn-pt 17:00 UTC)
+PAGES --> I_HTTP : udostepnia artefakty
+HTML <.. PAGES : serwowanie stron
+
+note right of CI
+  W CI nie sa trenowane modele -
+  katalog stock_ml/models/saved/
+  jest objety .gitignore.
+  Interfejs I_ART jest w praktyce
+  dostepny tylko na stacji autora.
+end note
+
+@enduml

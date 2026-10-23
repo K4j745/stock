@@ -1,0 +1,58 @@
+{
+  "portfolio_id": "lr",
+  "portfolio_name": "Regresja logistyczna",
+  "description": "Portfel sterowany modelem logistic_regression.",
+  "initial_capital": 100000.0,
+  "final_value": 143023.77,
+  "cash": 61963.28804016113,
+  "metadata": {
+    "generated_at_utc": "2026-10-23T20:15:51Z",
+    "data_version": "2026-05-15",
+    "strategy_version": "1.0",
+    "signal_source": "logistic_regression",
+    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: model logistic_regression (regresja logistyczna). START: portfel kupuje po 10 akcji ka\u017cdego tickera po cenie otwarcia pierwszej sesji (pozycje zal\u0105\u017ckowe SEED). REGU\u0141A HANDLU: tryb incremental, 1 akcja na sygna\u0142 \u2014 BUY dokupuje 1 akcj\u0119, SELL sprzedaje 1 akcj\u0119, w zale\u017cno\u015bci od binarnej predykcji modelu (pr\u00f3g 0.5, etykieta bin2 = zwrot nast\u0119pnego dnia > 0,2%). ROLA: monitoring pojedynczego modelu ML. Benchmark SPY liczony automatycznie.",
+    "seed_shares": 10,
+    "trade_mode": "incremental",
+    "trade_size": 1,
+    "rules": {
+      "max_positions": 10,
+      "rebalance": "on_signal",
+      "seed_shares": 10,
+      "trade_mode": "incremental",
+      "trade_size": 1
+    },
+    "n_decisions": 7540,
+    "n_transactions": 6173,
+    "first_date": "2023-10-24",
+    "last_date": "2026-10-23",
+    "label_mode": "binary",
+    "label_version": "binary-2026-08"
+  },
+  "metrics": {
+    "total_return": 0.429612,
+    "cagr": 0.127235,
+    "volatility_annualised": 0.095024,
+    "sharpe_ratio": 1.338977,
+    "max_drawdown": -0.084199,
+    "calmar_ratio": 1.511122,
+    "n_observations": 752,
+    "trade_n_trades": 2933,
+    "trade_n_wins": 2105,
+    "trade_n_losses": 828,
+    "trade_win_rate": 0.717695,
+    "trade_avg_trade_pnl": 11.775836,
+    "trade_avg_win": 20.830344,
+    "trade_avg_loss": -11.243172,
+    "trade_profit_factor": 4.710092,
+    "trade_expectancy": 11.775836
+  },
+  "benchmark_metrics": {
+    "total_return": 0.793947,
+    "cagr": 0.216335,
+    "volatility_annualised": 0.152585,
+    "sharpe_ratio": 1.417805,
+    "max_drawdown": -0.189989,
+    "calmar_ratio": 1.138672,
+    "n_observations": 752
+  }
+}
