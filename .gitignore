@@ -1,0 +1,37 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# --- Editors / agents / OS ---
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Local secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Generated dashboard splits (never published; see docs/data/README.md) ---
+# The per-ticker / per-model signal breakouts are reconstructable from
+# signals/history.json and must NOT be committed. Keeping them ignored prevents
+# a local `python dashboard/generate.py --write-splits` run from re-adding them.
+docs/data/signals/by_ticker/
+docs/data/signals/by_model/

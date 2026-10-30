@@ -1,0 +1,123 @@
+[
+  {
+    "ticker": "AAPL",
+    "price": 344.63,
+    "change_pct": -1.23,
+    "rsi": 55.35,
+    "macd": 3.7832,
+    "macd_signal_value": 4.0058,
+    "signal": "BUY",
+    "score": 1.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "MSFT",
+    "price": 521.91,
+    "change_pct": -1.55,
+    "rsi": 49.02,
+    "macd": 4.7846,
+    "macd_signal_value": 7.0388,
+    "signal": "BUY",
+    "score": 0.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "JPM",
+    "price": 337.04,
+    "change_pct": -1.9,
+    "rsi": 49.05,
+    "macd": -0.8545,
+    "macd_signal_value": -2.0986,
+    "signal": "SELL",
+    "score": 0.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "XOM",
+    "price": 187.25,
+    "change_pct": 2.16,
+    "rsi": 72.97,
+    "macd": 5.2581,
+    "macd_signal_value": 4.65,
+    "signal": "BUY",
+    "score": 1.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "JNJ",
+    "price": 273.2,
+    "change_pct": -0.73,
+    "rsi": 60.35,
+    "macd": 2.2521,
+    "macd_signal_value": 0.0545,
+    "signal": "BUY",
+    "score": 1.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "UNH",
+    "price": 406.97,
+    "change_pct": -0.96,
+    "rsi": 56.05,
+    "macd": 7.6276,
+    "macd_signal_value": 7.089,
+    "signal": "BUY",
+    "score": 1.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "PG",
+    "price": 161.57,
+    "change_pct": 0.61,
+    "rsi": 62.68,
+    "macd": 3.4148,
+    "macd_signal_value": 3.3038,
+    "signal": "BUY",
+    "score": 1.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "KO",
+    "price": 94.08,
+    "change_pct": 1.36,
+    "rsi": 62.48,
+    "macd": 1.333,
+    "macd_signal_value": 1.2739,
+    "signal": "BUY",
+    "score": 1.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "WMT",
+    "price": 123.51,
+    "change_pct": 1.86,
+    "rsi": 72.71,
+    "macd": 3.365,
+    "macd_signal_value": 2.9258,
+    "signal": "BUY",
+    "score": 1.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "NEE",
+    "price": 83.71,
+    "change_pct": 1.91,
+    "rsi": 65.17,
+    "macd": 0.8523,
+    "macd_signal_value": 0.2426,
+    "signal": "BUY",
+    "score": 1.0,
+    "date": "2026-10-30"
+  },
+  {
+    "ticker": "SPY",
+    "price": 755.72,
+    "change_pct": -1.77,
+    "rsi": 40.2,
+    "macd": -1.0085,
+    "macd_signal_value": 0.101,
+    "signal": "SELL",
+    "score": 1.0,
+    "date": "2026-10-30"
+  }
+]

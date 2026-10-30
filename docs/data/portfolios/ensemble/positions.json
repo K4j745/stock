@@ -1,0 +1,110 @@
+[
+  {
+    "ticker": "MSFT",
+    "shares": 6.0,
+    "avg_cost": 437.4985,
+    "last_price": 521.91,
+    "market_value": 3131.46,
+    "unrealised_pnl_abs": 506.47,
+    "unrealised_pnl_pct": 0.192941,
+    "entry_date": "2026-10-15",
+    "entry_price": 533.3200073242188,
+    "last_signal_id": "S-MSFT-ensemble_majority-20261015-720f3a"
+  },
+  {
+    "ticker": "JPM",
+    "shares": 16.0,
+    "avg_cost": 334.9283,
+    "last_price": 337.04,
+    "market_value": 5392.64,
+    "unrealised_pnl_abs": 33.79,
+    "unrealised_pnl_pct": 0.006305,
+    "entry_date": "2026-10-30",
+    "entry_price": 345.2900085449219,
+    "last_signal_id": "S-JPM-ensemble_majority-20261030-1f953d"
+  },
+  {
+    "ticker": "XOM",
+    "shares": 53.0,
+    "avg_cost": 149.3466,
+    "last_price": 187.25,
+    "market_value": 9924.25,
+    "unrealised_pnl_abs": 2008.88,
+    "unrealised_pnl_pct": 0.253794,
+    "entry_date": "2026-10-30",
+    "entry_price": 185.97999572753906,
+    "last_signal_id": "S-XOM-ensemble_majority-20261030-8553f5"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 7.0,
+    "avg_cost": 265.2033,
+    "last_price": 273.2,
+    "market_value": 1912.4,
+    "unrealised_pnl_abs": 55.98,
+    "unrealised_pnl_pct": 0.030153,
+    "entry_date": "2026-10-30",
+    "entry_price": 280.0,
+    "last_signal_id": "S-JNJ-ensemble_majority-20261030-274204"
+  },
+  {
+    "ticker": "UNH",
+    "shares": 57.0,
+    "avg_cost": 368.7232,
+    "last_price": 406.97,
+    "market_value": 23197.29,
+    "unrealised_pnl_abs": 2180.07,
+    "unrealised_pnl_pct": 0.103728,
+    "entry_date": "2026-10-29",
+    "entry_price": 413.7099914550781,
+    "last_signal_id": "S-UNH-ensemble_majority-20261029-c3cd40"
+  },
+  {
+    "ticker": "PG",
+    "shares": 74.0,
+    "avg_cost": 149.019,
+    "last_price": 161.57,
+    "market_value": 11956.18,
+    "unrealised_pnl_abs": 928.77,
+    "unrealised_pnl_pct": 0.084224,
+    "entry_date": "2026-10-28",
+    "entry_price": 157.99000549316406,
+    "last_signal_id": "S-PG-ensemble_majority-20261028-dd3e56"
+  },
+  {
+    "ticker": "KO",
+    "shares": 6.0,
+    "avg_cost": 92.685,
+    "last_price": 94.08,
+    "market_value": 564.48,
+    "unrealised_pnl_abs": 8.37,
+    "unrealised_pnl_pct": 0.015051,
+    "entry_date": "2026-10-27",
+    "entry_price": 90.81999969482422,
+    "last_signal_id": "S-KO-ensemble_majority-20261027-b44624"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 65.0,
+    "avg_cost": 112.7921,
+    "last_price": 123.51,
+    "market_value": 8028.15,
+    "unrealised_pnl_abs": 696.67,
+    "unrealised_pnl_pct": 0.095024,
+    "entry_date": "2026-10-30",
+    "entry_price": 123.1500015258789,
+    "last_signal_id": "S-WMT-ensemble_majority-20261030-3853f2"
+  },
+  {
+    "ticker": "NEE",
+    "shares": 57.0,
+    "avg_cost": 82.742,
+    "last_price": 83.71,
+    "market_value": 4771.47,
+    "unrealised_pnl_abs": 55.18,
+    "unrealised_pnl_pct": 0.011699,
+    "entry_date": "2026-10-30",
+    "entry_price": 83.2300033569336,
+    "last_signal_id": "S-NEE-ensemble_majority-20261030-2c942b"
+  }
+]
