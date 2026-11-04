@@ -1,0 +1,276 @@
+/* ============================================================================
+   StocKK Forecast — Cyberpunk / Glitch theme (shared token override layer)
+   Loaded AFTER each page's inline <style>, so it retints the existing
+   design-token system without touching per-page markup.
+
+   Aesthetic (per cyberpunk.xml): neon green (#00ff88) + magenta (#ff00ff) +
+   cyan (#00d4ff) on void black (#0a0a0f). Orbitron display, Share Tech Mono /
+   JetBrains Mono terminal type, CRT scanlines, chromatic-aberration glitch on
+   headings, chamfered (clip-path) panels, neon glow. Body text stays a clean
+   readable sans so long Polish/English prose keeps WCAG-AA contrast; the neon
+   terminal flavour is carried by headings, nav, tickers, KPIs and badges.
+   All motion is gated behind prefers-reduced-motion.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+/* ---- Dark (default) neon palette ---------------------------------------- */
+html[data-theme="dark"] {
+  --color-bg: #0a0a0f;
+  --color-surface: #12121a;
+  --color-surface-2: #1c1c2e;
+  --color-surface-offset: #242438;
+  --color-border: #2a2a3a;
+  --color-divider: #22222e;
+  --color-text: #e6e6ee;           /* bright off-white — AA on void black    */
+  --color-text-muted: #9a9ab5;
+  --color-text-faint: #64647e;
+  --color-primary: #00ff88;         /* neon green — primary accent            */
+  --color-primary-hover: #66ffb2;
+  --color-primary-highlight: #06331f;
+  --color-success: #00ff88;         /* neon green  -> BUY                      */
+  --color-success-muted: #06331f;
+  --color-error: #ff3366;           /* neon red    -> SELL                     */
+  --color-error-muted: #3a0e1c;
+  --color-warning: #00d4ff;         /* neon cyan   -> HOLD                     */
+  --color-warning-muted: #06283a;
+  --font-display: 'Orbitron', 'Share Tech Mono', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Share Tech Mono', 'JetBrains Mono', ui-monospace, monospace;
+  --shadow-sm: 0 0 0 1px rgba(42,42,58,0.9), 0 2px 12px rgba(0,0,0,0.55);
+  --shadow-md: 0 0 24px rgba(0,255,136,0.10), 0 8px 22px rgba(0,0,0,0.6);
+  --cyber-chamfer: 10px;
+  --cyber-glow-green: 0 0 8px rgba(0,255,136,0.75);
+  --cyber-glow-magenta: 0 0 8px rgba(255,0,255,0.7);
+  --cyber-glow-cyan: 0 0 8px rgba(0,212,255,0.7);
+  --cyber-glow-red: 0 0 8px rgba(255,51,102,0.7);
+}
+
+/* ---- Light (high-contrast terminal) — readability first ----------------- */
+html[data-theme="light"] {
+  --color-bg: #eef0f4;
+  --color-surface: #ffffff;
+  --color-surface-2: #f2f4f8;
+  --color-surface-offset: #e8ebf1;
+  --color-border: #c2c8d4;
+  --color-divider: #e3e7ee;
+  --color-text: #14141c;
+  --color-text-muted: #4a4f5e;
+  --color-text-faint: #8b91a3;
+  --color-primary: #00915a;         /* readable green -> BUY                  */
+  --color-primary-hover: #006e44;
+  --color-primary-highlight: #d2f7e6;
+  --color-success: #00915a;
+  --color-success-muted: #d2f7e6;
+  --color-error: #d61f52;           /* readable magenta-red -> SELL           */
+  --color-error-muted: #ffdbe6;
+  --color-warning: #0079a8;         /* readable cyan -> HOLD                  */
+  --color-warning-muted: #d4eefb;
+  --font-display: 'Orbitron', 'Share Tech Mono', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Share Tech Mono', 'JetBrains Mono', ui-monospace, monospace;
+  --cyber-chamfer: 10px;
+  --cyber-glow-green: 0 0 5px rgba(0,145,90,0.32);
+  --cyber-glow-magenta: 0 0 5px rgba(214,31,82,0.3);
+  --cyber-glow-cyan: 0 0 5px rgba(0,121,168,0.3);
+  --cyber-glow-red: 0 0 5px rgba(214,31,82,0.3);
+}
+
+/* ---- Atmospheric background (void + neon horizon glow) ------------------ */
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(1100px 520px at 50% -10%, rgba(0,255,136,0.10), transparent 62%),
+    radial-gradient(900px 640px at 8% 108%, rgba(0,212,255,0.09), transparent 60%),
+    radial-gradient(900px 640px at 92% 108%, rgba(255,0,255,0.09), transparent 60%),
+    linear-gradient(180deg, #0a0a0f 0%, #07070b 100%);
+  background-attachment: fixed;
+}
+html[data-theme="light"] body {
+  background:
+    radial-gradient(1000px 480px at 50% -12%, rgba(0,145,90,0.07), transparent 60%),
+    radial-gradient(820px 560px at 92% 112%, rgba(0,121,168,0.07), transparent 60%),
+    linear-gradient(180deg, #f1f3f7 0%, #e7eaf0 100%);
+  background-attachment: fixed;
+}
+
+/* CRT scanline overlay — very low opacity so it never fights the text. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0,
+    rgba(0,0,0,0) 2px,
+    rgba(0,0,0,0.05) 3px,
+    rgba(0,0,0,0) 4px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme="dark"] body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    pointer-events: none;
+    background: linear-gradient(rgba(0,255,136,0.03), rgba(0,255,136,0));
+    animation: cyber-scan 7.5s linear infinite;
+  }
+}
+@keyframes cyber-scan {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* ---- Header / branding -------------------------------------------------- */
+.site-header {
+  background: color-mix(in srgb, var(--color-surface) 84%, transparent);
+  border-bottom: 1px solid var(--color-primary);
+  box-shadow: 0 1px 0 rgba(0,255,136,0.35), 0 6px 24px rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+}
+.site-header .logo {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-shadow: -1px 0 rgba(255,0,255,0.55), 1px 0 rgba(0,212,255,0.55), var(--cyber-glow-green);
+}
+.site-header .logo svg { color: var(--color-primary); filter: drop-shadow(var(--cyber-glow-green)); }
+
+.site-header nav a,
+.mobile-nav a {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-size: 12.5px;
+  text-transform: uppercase;
+}
+.site-header nav a.active,
+.mobile-nav a.active {
+  color: var(--color-primary);
+  background: linear-gradient(180deg, rgba(0,255,136,0.16), rgba(0,255,136,0.05));
+  box-shadow: inset 0 0 0 1px var(--color-primary), var(--cyber-glow-green);
+}
+.site-header nav a:hover { color: var(--color-primary-hover); text-shadow: var(--cyber-glow-green); }
+
+/* ---- Cards & panels (chamfered, neon-edged) ----------------------------- */
+.kpi-card, .card, .sidebar-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 94%, transparent), var(--color-surface));
+  border: 0;
+  border-radius: 0;
+  clip-path: polygon(
+    var(--cyber-chamfer) 0, 100% 0,
+    100% calc(100% - var(--cyber-chamfer)),
+    calc(100% - var(--cyber-chamfer)) 100%,
+    0 100%, 0 var(--cyber-chamfer)
+  );
+  box-shadow:
+    inset 0 0 0 1px var(--color-border),
+    inset 0 0 22px rgba(0,0,0,0.25);
+  transition: box-shadow var(--transition-interactive);
+}
+.kpi-card:hover, .card:hover, .sidebar-card:hover {
+  box-shadow:
+    inset 0 0 0 1px var(--color-primary),
+    inset 0 0 26px rgba(0,255,136,0.06);
+}
+.card-header h2, .sidebar-card h3, .kpi-card .kpi-label {
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.kpi-card .kpi-value, .stat-row .stat-value {
+  font-family: var(--font-mono);
+  text-shadow: 0 0 7px rgba(0,255,136,0.28);
+}
+
+/* ---- Chamfered neon buttons --------------------------------------------- */
+.theme-toggle, .hamburger, .vw-btn, .cyber-btn {
+  border: 1px solid var(--color-primary);
+  border-radius: 0;
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  clip-path: polygon(
+    6px 0, 100% 0, 100% calc(100% - 6px),
+    calc(100% - 6px) 100%, 0 100%, 0 6px
+  );
+  box-shadow: inset 0 0 8px rgba(0,255,136,0.10);
+  transition: color var(--transition-interactive), box-shadow var(--transition-interactive), border-color var(--transition-interactive);
+}
+.theme-toggle:hover, .vw-btn:hover, .cyber-btn:hover, .hamburger:hover {
+  color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  box-shadow: inset 0 0 12px rgba(0,255,136,0.24), var(--cyber-glow-green);
+}
+
+/* Language toggle (injected by app.js) */
+.lang-toggle {
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+  clip-path: polygon(
+    6px 0, 100% 0, 100% calc(100% - 6px),
+    calc(100% - 6px) 100%, 0 100%, 0 6px
+  );
+  box-shadow: inset 0 0 8px rgba(255,51,102,0.14);
+  transition: color var(--transition-interactive), box-shadow var(--transition-interactive);
+}
+.lang-toggle:hover { color: #fff; box-shadow: inset 0 0 12px rgba(255,51,102,0.3), var(--cyber-glow-red); }
+.lang-toggle .lang-on { text-shadow: var(--cyber-glow-red); }
+.lang-toggle .lang-off { opacity: 0.42; }
+
+/* ---- Signal badges (BUY = neon green, SELL = neon red, HOLD = cyan) ------ */
+.signal-badge { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.06em; }
+.signal-buy  { box-shadow: 0 0 10px rgba(0,255,136,0.4); }
+.signal-sell { box-shadow: 0 0 10px rgba(255,51,102,0.4); }
+.signal-hold { box-shadow: 0 0 10px rgba(0,212,255,0.32); }
+
+/* ---- Tables ------------------------------------------------------------- */
+thead th {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--color-surface-2);
+}
+td.ticker-cell {
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  text-shadow: var(--cyber-glow-green);
+}
+
+/* ---- Page headings — subtle chromatic-aberration glitch ------------------ */
+.page-header h1 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: -1px 0 rgba(255,0,255,0.45), 1px 0 rgba(0,212,255,0.45);
+}
+
+/* ---- Footer ------------------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--color-primary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.site-footer .vw-copyright { display: block; margin-top: 6px; color: var(--color-text-muted); }
+
+/* Respect users who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="dark"] body::after { animation: none; display: none; }
+}
