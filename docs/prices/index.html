@@ -455,8 +455,9 @@
   function getPlotlyTheme() {
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     return {
-      paper_bgcolor: isDark ? '#12121a' : '#ffffff',
-      plot_bgcolor: isDark ? '#0a0a0f' : '#eef0f4',
+      // Near-solid: real price data must not blend with the decorative candles.
+      paper_bgcolor: isDark ? 'rgba(18,18,26,0.9)' : 'rgba(255,255,255,0.92)',
+      plot_bgcolor: 'rgba(0,0,0,0)',
       font: { family: 'JetBrains Mono, Share Tech Mono, monospace', color: isDark ? '#9a9ab5' : '#4a4f5e', size: 11 },
       xaxis: { gridcolor: isDark ? '#22222e' : '#e3e7ee', linecolor: isDark ? '#2a2a3a' : '#c2c8d4', rangeslider: { visible: false } },
       yaxis: { gridcolor: isDark ? '#22222e' : '#e3e7ee', linecolor: isDark ? '#2a2a3a' : '#c2c8d4' },
