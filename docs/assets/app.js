@@ -14,6 +14,12 @@
   var COPYRIGHT =
     "© 2025 Kajetan Kaczyński — Praca inżynierska / " +
     "Uniwersytet Przyrodniczy w Poznaniu / Wszelkie prawa zastrzeżone.";
+  // The footer has one fixed height, so narrow screens get the short form.
+  var COPYRIGHT_SHORT = "© 2025 Kajetan Kaczyński — UP w Poznaniu";
+  var MENU_ICON =
+    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
+    '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+  var APP_SCRIPT = document.currentScript;
 
   var DICT = {
     pl: {
@@ -59,7 +65,10 @@
       "footer.methodology": "Instrukcja i metodologia projektu — praca inżynierska",
       "footer.about": "O projekcie — praca inżynierska",
 
-      "lang.aria": "Przełącz język (polski / angielski)"
+      "lang.aria": "Przełącz język (polski / angielski)",
+      "bg.pause": "Zatrzymaj animację tła",
+      "bg.play": "Wznów animację tła",
+      "menu.aria": "Menu nawigacji"
     },
     en: {
       "nav.overview": "Overview",
@@ -104,7 +113,10 @@
       "footer.methodology": "Project guide & methodology — engineering thesis",
       "footer.about": "About the project — engineering thesis",
 
-      "lang.aria": "Switch language (Polish / English)"
+      "lang.aria": "Switch language (Polish / English)",
+      "bg.pause": "Pause background animation",
+      "bg.play": "Resume background animation",
+      "menu.aria": "Navigation menu"
     }
   };
 
@@ -145,9 +157,79 @@
       if (f.querySelector(".vw-copyright")) return;
       var span = document.createElement("span");
       span.className = "vw-copyright";
-      span.textContent = COPYRIGHT;
+      span.setAttribute("title", COPYRIGHT);
+      [["vw-copyright-full", COPYRIGHT], ["vw-copyright-short", COPYRIGHT_SHORT]].forEach(function (part) {
+        var text = document.createElement("span");
+        text.className = part[0];
+        text.textContent = part[1];
+        span.appendChild(text);
+      });
       f.appendChild(span);
     });
+  }
+
+  /** Pages without their own menu get one built from the header links. */
+  function ensureMobileNav(header) {
+    var hamburger = header.querySelector(".hamburger");
+    var menu = document.querySelector(".mobile-nav");
+    if (hamburger && menu) return { hamburger: hamburger, menu: menu };
+
+    hamburger = document.createElement("button");
+    hamburger.type = "button";
+    hamburger.className = "hamburger";
+    hamburger.innerHTML = MENU_ICON;
+    header.insertBefore(hamburger, header.querySelector("nav"));
+
+    menu = document.createElement("div");
+    menu.className = "mobile-nav";
+    menu.id = "mobileNav";
+    header.querySelectorAll("nav a").forEach(function (link) {
+      menu.appendChild(link.cloneNode(true));
+    });
+    header.insertAdjacentElement("afterend", menu);
+    hamburger.addEventListener("click", function () {
+      menu.classList.toggle("open");
+    });
+    return { hamburger: hamburger, menu: menu };
+  }
+
+  function setupMobileNav() {
+    var header = document.querySelector(".site-header");
+    if (!header) return;
+    var parts = ensureMobileNav(header);
+    var hamburger = parts.hamburger;
+    var menu = parts.menu;
+    if (!menu.id) menu.id = "mobileNav";
+    hamburger.setAttribute("aria-controls", menu.id);
+    hamburger.setAttribute("data-i18n-attr", "aria-label:menu.aria");
+
+    function syncState() {
+      hamburger.setAttribute("aria-expanded", menu.classList.contains("open") ? "true" : "false");
+    }
+    function closeMenu() {
+      menu.classList.remove("open");
+      syncState();
+    }
+
+    syncState();
+    hamburger.addEventListener("click", syncState);
+    menu.addEventListener("click", function (event) {
+      if (event.target.closest("a")) closeMenu();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && menu.classList.contains("open")) {
+        closeMenu();
+        hamburger.focus();
+      }
+    });
+    window.matchMedia("(min-width: 1280px)").addEventListener("change", closeMenu);
+  }
+
+  function loadMarketBackground() {
+    if (!APP_SCRIPT) return;
+    var script = document.createElement("script");
+    script.src = APP_SCRIPT.src.replace(/app\.js(\?.*)?$/, "market-bg.js");
+    document.body.appendChild(script);
   }
 
   function renderLangToggle() {
@@ -197,7 +279,9 @@
     document.documentElement.setAttribute("lang", lang);
     mountLangToggle();
     injectCopyright();
+    setupMobileNav();
     applyTranslations(document);
+    loadMarketBackground();
   }
 
   if (document.readyState === "loading") {
