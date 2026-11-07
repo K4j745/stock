@@ -240,42 +240,6 @@
   .range-btn + .range-btn { margin-left: -1px; }
   .range-btn.active { position: relative; z-index: 1; }
 
-  /* Chamfered neon frame. The polygon traces an outer and an inner outline, so
-     the line also runs along the cut corners. */
-  .frame {
-    --frame-cut: var(--cyber-chamfer);
-    --frame-diagonal: calc(var(--frame-cut) + 0.41px);
-    position: relative;
-    clip-path: polygon(
-      var(--frame-cut) 0, 100% 0,
-      100% calc(100% - var(--frame-cut)),
-      calc(100% - var(--frame-cut)) 100%,
-      0 100%, 0 var(--frame-cut)
-    );
-  }
-  .frame::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-border) 30%, var(--color-border) 70%, var(--color-warning));
-    opacity: 0.75;
-    transition: opacity var(--transition-interactive);
-    clip-path: polygon(evenodd,
-      var(--frame-cut) 0, 100% 0,
-      100% calc(100% - var(--frame-cut)),
-      calc(100% - var(--frame-cut)) 100%,
-      0 100%, 0 var(--frame-cut), var(--frame-cut) 0,
-      var(--frame-diagonal) 1px, calc(100% - 1px) 1px,
-      calc(100% - 1px) calc(100% - var(--frame-diagonal)),
-      calc(100% - var(--frame-diagonal)) calc(100% - 1px),
-      1px calc(100% - 1px), 1px var(--frame-diagonal),
-      var(--frame-diagonal) 1px
-    );
-  }
-  .frame:hover::before { opacity: 1; }
-
   /* Stats strip above the charts */
   .chart-layout {
     display: grid;
@@ -294,7 +258,6 @@
     gap: 8px;
     min-height: 84px;
     padding: 14px 12px;
-    background: var(--panel-bg);
     text-align: center;
   }
   .stat-label {
@@ -326,7 +289,7 @@
   /* Chart panels */
   .chart-stack { display: grid; gap: 14px; min-width: 0; }
   /* Near-solid: real price data must not blend with the decorative candles. */
-  .chart-panel {
+  .chart-panel.frame {
     min-width: 0;
     padding: 8px 10px;
     background: color-mix(in srgb, var(--color-surface) 90%, transparent);
@@ -334,9 +297,6 @@
   .chart-box { min-height: 600px; overflow: hidden; }
   .chart-box.is-small { min-height: 240px; }
 
-  @media (min-width: 1024px) {
-    .stat-tile { backdrop-filter: blur(3px); }
-  }
   @media (max-width: 1100px) {
     .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }

@@ -194,27 +194,62 @@ body::before {
 }
 .site-header nav a:hover { color: var(--color-primary-hover); text-shadow: var(--cyber-glow-green); }
 
-/* ---- Cards & panels (chamfered, neon-edged) ----------------------------- */
-.kpi-card, .card, .sidebar-card {
+/* ---- Panels: chamfered neon frame, shared by every page ------------------ */
+:is(.frame, .kpi-card, .card, .sidebar-card, .kpi, .chart-card, .filters, .matrix-grid,
+    .agreement-card, .note-box, .empty-state, .copyright-block, .callout) {
+  --frame-cut: var(--cyber-chamfer);
+  --frame-diagonal: calc(var(--frame-cut) + 0.41px);
+  /* Wide panels grow by a smaller factor, so no panel gains more than about
+     6px per side and neighbours stay uncovered. */
+  --hover-scale: 1.008;
   position: relative;
   background: var(--panel-bg);
   border: 0;
   border-radius: 0;
   clip-path: polygon(
-    var(--cyber-chamfer) 0, 100% 0,
-    100% calc(100% - var(--cyber-chamfer)),
-    calc(100% - var(--cyber-chamfer)) 100%,
-    0 100%, 0 var(--cyber-chamfer)
+    var(--frame-cut) 0, 100% 0,
+    100% calc(100% - var(--frame-cut)),
+    calc(100% - var(--frame-cut)) 100%,
+    0 100%, 0 var(--frame-cut)
   );
-  box-shadow:
-    inset 0 0 0 1px var(--color-border),
-    inset 0 0 22px rgba(0,0,0,0.25);
-  transition: box-shadow var(--transition-interactive);
+  box-shadow: inset 0 0 22px rgba(0,0,0,0.25);
+  transition:
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow var(--transition-interactive);
+
+  /* The polygon traces an outer and an inner outline, so the 1px line also runs
+     along the cut corners. */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-border) 30%, var(--color-border) 70%, var(--color-warning));
+    opacity: 0.75;
+    transition: opacity var(--transition-interactive);
+    clip-path: polygon(evenodd,
+      var(--frame-cut) 0, 100% 0,
+      100% calc(100% - var(--frame-cut)),
+      calc(100% - var(--frame-cut)) 100%,
+      0 100%, 0 var(--frame-cut), var(--frame-cut) 0,
+      var(--frame-diagonal) 1px, calc(100% - 1px) 1px,
+      calc(100% - 1px) calc(100% - var(--frame-diagonal)),
+      calc(100% - var(--frame-diagonal)) calc(100% - 1px),
+      1px calc(100% - 1px), 1px var(--frame-diagonal),
+      var(--frame-diagonal) 1px
+    );
+  }
+  &:hover { box-shadow: inset 0 0 26px rgba(0,255,136,0.07); }
+  &:hover::before { opacity: 1; }
+
+  /* Transform leaves the layout untouched, so nothing around the panel moves. */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    &:hover { z-index: 2; transform: scale(var(--hover-scale)); }
+  }
 }
-.kpi-card:hover, .card:hover, .sidebar-card:hover {
-  box-shadow:
-    inset 0 0 0 1px var(--color-primary),
-    inset 0 0 26px rgba(0,255,136,0.06);
+:is(.kpi-card, .kpi, .agreement-card, .stat-tile, .sidebar-card, .chart-card) {
+  --hover-scale: 1.025;
 }
 .card-header h2, .sidebar-card h3, .kpi-card .kpi-label {
   font-family: var(--font-display);
@@ -392,10 +427,8 @@ html[data-theme="light"] .market-bg::after {
 }
 
 /* ---- Translucent panels over the background ------------------------------ */
-.kpi, .chart-card, .info-panel, .filters, .agreement-card, .matrix-grid,
-.note-box, .cmp-wrap, .empty-state, .copyright-block, .callout {
-  background: var(--panel-bg);
-}
+/* The table scrolls inside .cmp-wrap; the frame sits on the still .cmp-frame. */
+.cmp-wrap { background: none; border: 0; border-radius: 0; }
 .mobile-nav {
   display: none;
   position: fixed;
@@ -412,8 +445,8 @@ html[data-theme="light"] .market-bg::after {
 .mobile-nav a { color: var(--color-text-muted); text-decoration: none; }
 .mobile-nav a.active { color: var(--color-primary); }
 @media (min-width: 1024px) {
-  .kpi-card, .card, .sidebar-card, .kpi, .chart-card, .info-panel, .filters,
-  .agreement-card, .matrix-grid, .note-box, .cmp-wrap, .empty-state,
+  .frame, .kpi-card, .card, .sidebar-card, .kpi, .chart-card, .filters,
+  .agreement-card, .matrix-grid, .note-box, .empty-state,
   .copyright-block, .callout {
     backdrop-filter: blur(3px);
   }
@@ -421,7 +454,7 @@ html[data-theme="light"] .market-bg::after {
 
 /* ---- Centred panel text --------------------------------------------------- */
 .page-header, .container > h1, .subtitle, .note, .section-desc,
-.kpi-card, .kpi, .sidebar-card, .chart-card, .info-panel, .empty-state,
+.kpi-card, .kpi, .sidebar-card, .chart-card, .empty-state,
 .agreement-card, .note-box, .callout, .prose h2, .prose h3, .prose p {
   text-align: center;
 }
