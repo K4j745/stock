@@ -200,6 +200,21 @@
       <h2>Portfele automatyczne (monitorujące)</h2>
       <p class="section-desc">Dziewięć portfeli symulowanych automatycznie przez backend (<code>dashboard/generate.py</code>) na pełnej historii. Wszystkie mają identyczne warunki (kapitał 100&nbsp;000&nbsp;USD, koszyk 10 spółek, start 10 akcji każdej spółki, handel przyrostowy ±1 akcja na sygnał) — różnią się <strong>wyłącznie źródłem sygnału</strong>. Kliknij wiersz, aby zobaczyć szczegóły: krzywą kapitału, metryki i bieżące pozycje. Wartości w USD.</p>
     </div>
+    <details class="note-box" id="metricsHelp">
+      <summary style="cursor:pointer;font-weight:600;color:var(--color-text);">Jak czytać metryki wyników?</summary>
+      <div style="margin-top:10px;">
+        <p style="margin:0 0 8px;"><strong>Wskaźnik Sharpe'a</strong> — najważniejsza miara <em>zwrotu skorygowanego o ryzyko</em>. Odpowiada na pytanie: ile zwrotu portfel wypracowuje na jednostkę ponoszonego ryzyka (zmienności). Liczony jest jako:</p>
+        <p style="margin:0 0 8px;padding:8px 12px;background:var(--color-surface-offset);border-radius:var(--radius-sm);font-family:var(--font-mono);">Sharpe = (średni dzienny zwrot − stopa wolna od ryzyka) ÷ odchylenie&nbsp;standardowe dziennych zwrotów × √252</p>
+        <p style="margin:0 0 8px;">Mnożnik <code>√252</code> (liczba sesji w roku) annualizuje wynik. W tym projekcie przyjęto <strong>stopę wolną od ryzyka = 0</strong>, więc licznik to po prostu średni dzienny zwrot. Interpretacja orientacyjna: <strong>&lt;0</strong> — strategia traci względem ryzyka; <strong>~1</strong> — dobra; <strong>~2 i więcej</strong> — bardzo dobra. Dwa portfele o tym samym zwrocie, ale różnej zmienności, mają różny Sharpe — wyższy ma ten spokojniejszy.</p>
+        <ul style="margin:8px 0 0;padding-left:18px;line-height:1.7;">
+          <li><strong>Zwrot całkowity</strong> — procentowa zmiana wartości portfela w całym badanym okresie.</li>
+          <li><strong>CAGR</strong> — średnioroczna stopa zwrotu (zwrot złożony), czyli „wygładzony” zwrot roczny.</li>
+          <li><strong>Zmienność (roczna)</strong> — odchylenie standardowe zwrotów annualizowane przez √252; miara wahań, czyli ryzyka.</li>
+          <li><strong>Maks. obsunięcie (max drawdown)</strong> — największy spadek wartości od szczytu do dołka; mówi, ile w najgorszym momencie można było stracić.</li>
+          <li><strong>Calmar</strong> — CAGR podzielony przez wartość bezwzględną maksymalnego obsunięcia; zwrot względem największej „bolesnej” straty.</li>
+        </ul>
+      </div>
+    </details>
     <div id="autoCompare"><div class="empty">Ładowanie portfeli automatycznych…</div></div>
     <div id="autoDetail"></div>
   </section>

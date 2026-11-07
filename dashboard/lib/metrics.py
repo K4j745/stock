@@ -87,8 +87,15 @@ def _empty_classification() -> Dict[str, Optional[float]]:
 # ---------------------------------------------------------------------------
 
 def portfolio_metrics(equity_curve: pd.Series, daily_returns: Optional[pd.Series] = None,
-                       annualisation: int = 252) -> Dict[str, Optional[float]]:
-    """Compute total return / CAGR / vol / Sharpe / Calmar / max drawdown."""
+                       annualisation: int = 252, risk_free_rate: float = 0.0) -> Dict[str, Optional[float]]:
+    """Compute total return / CAGR / vol / Sharpe / Calmar / max drawdown.
+
+    The Sharpe ratio uses the textbook definition: the annualised mean of the
+    per-period *excess* return divided by the annualised standard deviation of
+    returns. With ``risk_free_rate=0`` the numerator is simply the mean daily
+    return. (Previously this used CAGR/vol, which mixes a geometric return with
+    an arithmetic volatility and overstates Sharpe when returns are volatile.)
+    """
     if equity_curve is None or len(equity_curve) < 2:
         return _empty_portfolio()
 
@@ -103,7 +110,13 @@ def portfolio_metrics(equity_curve: pd.Series, daily_returns: Optional[pd.Series
     cagr = (1 + total_return) ** (1 / n_years) - 1 if n_years > 0 else 0.0
 
     vol = float(daily_returns.std() * np.sqrt(annualisation))
-    sharpe = (cagr / vol) if vol > 0 else 0.0
+
+    # Textbook annualised Sharpe: mean daily excess return / daily std, scaled
+    # by sqrt(252). risk_free_rate is an *annual* rate, converted to daily.
+    rf_daily = risk_free_rate / annualisation
+    daily_std = float(daily_returns.std())
+    excess_mean_daily = float(daily_returns.mean()) - rf_daily
+    sharpe = (excess_mean_daily / daily_std * np.sqrt(annualisation)) if daily_std > 0 else 0.0
 
     rolling_max = equity_curve.cummax()
     drawdown = (equity_curve - rolling_max) / rolling_max
