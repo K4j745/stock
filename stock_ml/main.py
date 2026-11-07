@@ -9,6 +9,7 @@ Binary next-day direction (BUY vs SELL) at two decision thresholds
 Usage:
     python main.py train [--ticker TICKER] [--threshold 0.002|0.005|0.01] [--refresh] [--tune]
     python main.py candle [--ticker TICKER] [--threshold 0.002|0.005|0.01] [--model-type xgboost|random_forest]
+    python main.py arima [--ticker TICKER] [--threshold 0.002|0.005|0.01]
     python main.py backtest [--ticker TICKER] [--model MODEL] [--label-version {A,B}]
     python main.py evaluate [--ticker TICKER] [--threshold 0.002|0.005|0.01]
     python main.py report [--ticker TICKER] [--label-version {A,B}]
@@ -60,6 +61,19 @@ def cmd_candle(args):
             threshold=args.threshold,
             model_type=args.model_type,
             refresh=args.refresh,
+        )
+
+
+def cmd_arima(args):
+    from models.arima_baseline import run_arima_baseline
+    tickers = [args.ticker] if args.ticker else TICKERS
+    for ticker in tickers:
+        logger.info(f"=== ARIMA baseline {ticker} | threshold={args.threshold} ===")
+        run_arima_baseline(
+            ticker,
+            args.label_version,
+            label_mode=args.label_mode,
+            threshold=args.threshold,
         )
 
 
@@ -155,6 +169,11 @@ def main():
                           help="Candle model estimator (default: xgboost)")
     p_candle.add_argument("--refresh", action="store_true", help="Re-download data from yfinance")
 
+    # arima
+    p_arima = subparsers.add_parser(
+        "arima", help="Evaluate the ARIMA baseline on the same walk-forward folds as the ML models")
+    add_common(p_arima)
+
     # backtest
     p_bt = subparsers.add_parser("backtest", help="Run portfolio backtest")
     add_common(p_bt)
@@ -185,6 +204,7 @@ def main():
     dispatch = {
         "train": cmd_train,
         "candle": cmd_candle,
+        "arima": cmd_arima,
         "backtest": cmd_backtest,
         "evaluate": cmd_evaluate,
         "report": cmd_report,

@@ -94,6 +94,9 @@ WF_TEST_SIZE = 21    # ~1 trading month
 WF_STEP = 21         # window slide step
 WF_MODE = "rolling"  # 'rolling' (default) or 'expanding'
 
+# ARIMA baseline: (p, d, q) on daily returns. d=0 because returns are already stationary.
+ARIMA_ORDER = (1, 0, 1)
+
 # Legacy: number of TimeSeriesSplit folds (deprecated, kept for transitional use)
 N_SPLITS = 5
 

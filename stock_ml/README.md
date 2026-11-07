@@ -26,6 +26,14 @@ thresholds coexist on disk as separate artifacts.
 Reported metrics are for the **BUY (positive) class**: accuracy, precision, recall,
 F1, ROC-AUC, and MCC.
 
+## ARIMA baseline
+
+`python main.py arima [--ticker TICKER] [--threshold 0.002]` scores a classical ARIMA(1,0,1)
+model on daily returns, using the same walk-forward folds, labels and metrics as the ML
+classifiers. Results are added to `reports/{TICKER}_{TAG}_results.json` under `arima`, so
+`python main.py report` shows ARIMA in the model comparison chart. Run it again after
+`train`, which rewrites that report.
+
 ## Installation
 
 ```bash
