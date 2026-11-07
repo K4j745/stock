@@ -9,7 +9,7 @@
     "unrealised_pnl_pct": 0.034426,
     "entry_date": "2026-10-23",
     "entry_price": 349.1199951171875,
-    "last_signal_id": "S-AAPL-technical_rule_based-20261023-c218b5"
+    "last_signal_id": "S-AAPL-technical_rule_based-20261023-1bd462"
   },
   {
     "ticker": "MSFT",
@@ -21,7 +21,7 @@
     "unrealised_pnl_pct": 0.040403,
     "entry_date": "2026-11-03",
     "entry_price": 509.010009765625,
-    "last_signal_id": "S-MSFT-technical_rule_based-20261103-c999db"
+    "last_signal_id": "S-MSFT-technical_rule_based-20261103-8a0975"
   },
   {
     "ticker": "JPM",
@@ -33,7 +33,7 @@
     "unrealised_pnl_pct": 0.255909,
     "entry_date": "2026-09-09",
     "entry_price": 352.0,
-    "last_signal_id": "S-JPM-technical_rule_based-20260909-7ed647"
+    "last_signal_id": "S-JPM-technical_rule_based-20260909-5195f3"
   },
   {
     "ticker": "XOM",
@@ -45,7 +45,7 @@
     "unrealised_pnl_pct": 0.130399,
     "entry_date": "2026-11-03",
     "entry_price": 178.0,
-    "last_signal_id": "S-XOM-technical_rule_based-20261103-2b27b1"
+    "last_signal_id": "S-XOM-technical_rule_based-20261103-5216fe"
   },
   {
     "ticker": "JNJ",
@@ -57,7 +57,7 @@
     "unrealised_pnl_pct": 0.213896,
     "entry_date": "2026-11-06",
     "entry_price": 267.55999755859375,
-    "last_signal_id": "S-JNJ-technical_rule_based-20261106-b4b919"
+    "last_signal_id": "S-JNJ-technical_rule_based-20261106-76f3aa"
   },
   {
     "ticker": "UNH",
@@ -69,7 +69,7 @@
     "unrealised_pnl_pct": -0.048483,
     "entry_date": "2026-11-05",
     "entry_price": 412.3999938964844,
-    "last_signal_id": "S-UNH-technical_rule_based-20261105-b52a25"
+    "last_signal_id": "S-UNH-technical_rule_based-20261105-94897e"
   },
   {
     "ticker": "PG",
@@ -81,7 +81,7 @@
     "unrealised_pnl_pct": 0.056475,
     "entry_date": "2026-11-06",
     "entry_price": 162.36000061035156,
-    "last_signal_id": "S-PG-technical_rule_based-20261106-dd9c68"
+    "last_signal_id": "S-PG-technical_rule_based-20261106-d351fc"
   },
   {
     "ticker": "KO",
@@ -93,7 +93,7 @@
     "unrealised_pnl_pct": 0.200565,
     "entry_date": "2026-11-06",
     "entry_price": 93.20999908447266,
-    "last_signal_id": "S-KO-technical_rule_based-20261106-979f90"
+    "last_signal_id": "S-KO-technical_rule_based-20261106-cdb0bf"
   },
   {
     "ticker": "WMT",
@@ -105,6 +105,6 @@
     "unrealised_pnl_pct": 0.315199,
     "entry_date": "2026-10-22",
     "entry_price": 119.44000244140625,
-    "last_signal_id": "S-WMT-technical_rule_based-20261022-b74695"
+    "last_signal_id": "S-WMT-technical_rule_based-20261022-369ab3"
   }
 ]

@@ -6,7 +6,7 @@
   "final_value": 135286.5,
   "cash": 8.26718521118164,
   "metadata": {
-    "generated_at_utc": "2026-11-06T21:59:28Z",
+    "generated_at_utc": "2026-11-07T13:33:47Z",
     "data_version": "2026-05-15",
     "strategy_version": "1.0",
     "signal_source": "technical_rule_based",
@@ -32,7 +32,7 @@
     "total_return": 0.352287,
     "cagr": 0.106425,
     "volatility_annualised": 0.123232,
-    "sharpe_ratio": 0.863619,
+    "sharpe_ratio": 0.882405,
     "max_drawdown": -0.165394,
     "calmar_ratio": 0.643464,
     "n_observations": 752,
@@ -50,7 +50,7 @@
     "total_return": 0.682855,
     "cagr": 0.190556,
     "volatility_annualised": 0.154388,
-    "sharpe_ratio": 1.234264,
+    "sharpe_ratio": 1.206867,
     "max_drawdown": -0.189989,
     "calmar_ratio": 1.002983,
     "n_observations": 752
