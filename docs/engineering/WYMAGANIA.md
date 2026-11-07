@@ -270,3 +270,40 @@ a pięć za planowane (NFR-03, NFR-10, NFR-15, NFR-30, NFR-36). Największy dłu
 trzech obszarów: rozmiaru artefaktu historii sygnałów pobieranego przez przeglądarkę, pokrycia
 testami automatycznymi oraz formalnego potwierdzenia zgodności z wytycznymi dostępności.
 Obszary te wyznaczają naturalny kierunek dalszego rozwoju systemu.
+
+## 6. Bezpieczeństwo — zarządzanie sekretami (rozwinięcie NFR-13)
+
+Projekt **świadomie nie przechowuje żadnych kluczy API, haseł ani tokenów** w kodzie źródłowym
+ani w historii repozytorium. Rozwiązanie to spełnia wymaganie NFR-13 i jest zgodne z zasadą
+nieujawniania danych uwierzytelniających w publicznym repozytorium.
+
+**Dlaczego w repozytorium nie ma klucza API:**
+
+- **Źródło danych nie wymaga uwierzytelniania.** Dane giełdowe pobierane są biblioteką
+  `yfinance` (nieoficjalny klient punktu końcowego Yahoo Finance), która nie korzysta z klucza
+  API. Zarówno pipeline treningowy (`stock_ml/data/download.py`), jak i generator danych
+  (`dashboard/lib/data_fetcher.py`) wywołują ją bez jakichkolwiek poświadczeń. Nie zastosowano
+  komercyjnych dostawców płatnych (np. Alpha Vantage, Finnhub, Polygon), którzy takiego klucza
+  by wymagali.
+- **Ciągła integracja używa wyłącznie wbudowanego tokenu środowiska.** Przepływ pracy
+  `.github/workflows/dashboard.yml` autoryzuje zapis danych do repozytorium automatycznym
+  tokenem `GITHUB_TOKEN`, dostarczanym przez platformę na czas pojedynczego uruchomienia
+  i ograniczonym deklaracją `permissions: contents: write`. Token ten nie jest sekretem
+  przechowywanym przez autora, nie jest widoczny w kodzie i wygasa po zakończeniu zadania.
+
+**Zastosowane środki organizacyjne i techniczne:**
+
+- Plik `.gitignore` blokuje wersjonowanie plików `.env` oraz `.env.*` (z wyjątkiem ewentualnego
+  wzorca `.env.example`), co zapobiega przypadkowemu dodaniu lokalnych poświadczeń, gdyby
+  w przyszłości projekt zaczął korzystać z płatnego dostawcy danych.
+- Konfiguracja sterująca (progi, lista spółek, parametry walidacji) jest oddzielona od kodu
+  i nie zawiera danych wrażliwych (NFR-28).
+
+**Weryfikacja:** przeprowadzono skan całej historii repozytorium (przeszukanie commitów pod
+kątem typowych wzorców kluczy, m.in. `api_key`, `ghp_`, `sk-`, nazw dostawców płatnych). Skan
+**nie wykazał żadnego sekretu** w żadnej rewizji — zarówno w stanie bieżącym, jak i historycznym.
+
+**Rekomendacja na przyszłość (gdyby doszedł płatny dostawca danych):** klucz należy wczytywać ze
+zmiennej środowiskowej (np. przez `python-dotenv` i plik `.env` poza kontrolą wersji), a w CI
+przechowywać go jako *GitHub Actions Secret* i wstrzykiwać do zadania przez sekcję `env`. Wzorzec
+ten można udokumentować plikiem `.env.example` zawierającym wyłącznie nazwy zmiennych bez wartości.
