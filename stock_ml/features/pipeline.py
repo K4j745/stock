@@ -2,7 +2,7 @@ import logging
 
 import pandas as pd
 
-from config import DEFAULT_LABEL_MODE
+from config import DEFAULT_LABEL_MODE, LABEL_THRESHOLD
 from data.download import download_single
 from data.preprocess import clean_data
 from features.indicators import add_technical_indicators
@@ -30,13 +30,14 @@ def build_feature_matrix(
     label_version: str = "A",
     refresh: bool = False,
     label_mode: str = DEFAULT_LABEL_MODE,
+    threshold: float = LABEL_THRESHOLD,
 ) -> tuple:
     """Build feature matrix X and labels y for a given ticker.
 
     Steps:
     1. Load data from cache (or download)
     2. Clean data
-    3. Add technical indicators (+ VIX, earnings dummy, candlestick patterns)
+    3. Add technical indicators
     4. Add labels (binary by default; legacy A/B or multiclass available)
     5. Remove NaN rows
     6. Split into X (features only) and y (labels)
@@ -44,11 +45,14 @@ def build_feature_matrix(
     Args:
         ticker: Stock symbol.
         label_version: 'A' or 'B' for legacy labels. Ignored when label_mode is
-            'binary' (default) or 'multiclass'; the LABEL_THRESHOLD from config
-            is used instead.
+            'binary' (default) or 'multiclass'; the ``threshold`` argument is
+            used instead.
         refresh: Force re-download from yfinance.
         label_mode: 'binary' (default) or 'multiclass'. 'legacy' will fall back
             to label_version A/B for backwards compatibility.
+        threshold: Binary/multiclass decision threshold on the next-day return
+            (default: config.LABEL_THRESHOLD = 0.5%). The two-threshold study
+            trains once at 0.5% and once at 1.0%.
 
     Returns:
         Tuple of (X, y) with the date index preserved.
@@ -71,9 +75,9 @@ def build_feature_matrix(
 
     # 4. Add labels
     if label_mode == "binary":
-        df["label"] = create_binary_labels(df)
+        df["label"] = create_binary_labels(df, threshold=threshold)
     elif label_mode == "multiclass":
-        df["label"] = create_multiclass_labels(df)
+        df["label"] = create_multiclass_labels(df, threshold=threshold)
     elif label_mode == "legacy":
         if label_version == "A":
             df["label"] = create_labels_version_a(df)

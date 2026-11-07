@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockWatch — ML Charts</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.plot.ly https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>StocKK Forecast — ML Charts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -311,6 +312,8 @@
     border-top: 1px solid var(--color-divider);
   }
 </style>
+<link rel="stylesheet" href="../assets/cyberpunk.css">
+<script defer src="../assets/app.js"></script>
 </head>
 <body>
 
@@ -320,16 +323,19 @@
       <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
       <polyline points="16 7 22 7 22 13"/>
     </svg>
-    StockWatch
+    StocKK Forecast
   </a>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
   <nav>
-    <a href="../">Overview</a>
-    <a href="../prices/">Prices</a>
-    <a href="./" class="active">Charts</a>
-    <a href="../portfolio/">Portfolio</a>
+    <a href="../" data-i18n="nav.overview">Overview</a>
+    <a href="../prices/" data-i18n="nav.prices">Prices</a>
+    <a href="./" class="active" data-i18n="nav.charts">Charts</a>
+    <a href="../signals/" data-i18n="nav.signals">Signals</a>
+    <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+    <a href="../methodology/" data-i18n="nav.methodology">Instructions</a>
+    <a href="../about/" data-i18n="nav.about">About</a>
   </nav>
   <div class="header-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -340,16 +346,19 @@
 </header>
 
 <div class="mobile-nav" id="mobileNav">
-  <a href="../">Overview</a>
-  <a href="../prices/">Prices</a>
-  <a href="./" class="active">Charts</a>
-  <a href="../portfolio/">Portfolio</a>
+  <a href="../" data-i18n="nav.overview">Overview</a>
+  <a href="../prices/" data-i18n="nav.prices">Prices</a>
+  <a href="./" class="active" data-i18n="nav.charts">Charts</a>
+  <a href="../signals/" data-i18n="nav.signals">Signals</a>
+  <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+  <a href="../methodology/" data-i18n="nav.methodology">Instructions</a>
+  <a href="../about/" data-i18n="nav.about">About</a>
 </div>
 
 <div class="container">
   <div class="page-header">
-    <h1>ML Analysis Charts</h1>
-    <p>Model performance, feature importance, and prediction analysis visualizations</p>
+    <h1 data-i18n="h1.charts">ML Analysis Charts</h1>
+    <p data-i18n="sub.charts">Model performance, feature importance, and prediction analysis visualizations</p>
   </div>
 
   <div class="filter-pills" id="filterPills">
@@ -365,7 +374,7 @@
 </div>
 
 <footer class="site-footer">
-  StockWatch &mdash; Charts auto-generated from ML pipeline
+  <span data-i18n="footer.charts">Charts auto-generated from the ML pipeline</span>
 </footer>
 
 <script>
@@ -398,21 +407,7 @@
   var filterPills = document.getElementById('filterPills');
   var allPlots = [];
   var activeFilter = 'all';
-
-  var knownPlots = [
-    'confusion_matrix.png', 'feature_importance.png', 'roc_curve.png',
-    'shap_summary.png', 'equity_curve.png', 'drawdown.png',
-    'cumulative_returns.png', 'learning_curve.png'
-  ];
-
-  function tryLoadImage(src) {
-    return new Promise(function(resolve) {
-      var img = new Image();
-      img.onload = function() { resolve(true); };
-      img.onerror = function() { resolve(false); };
-      img.src = src;
-    });
-  }
+  var tickerSet = [];
 
   function formatTitle(filename) {
     return filename.replace('.png', '').replace(/_/g, ' ').replace(/\b\w/g, function(c) {
@@ -424,7 +419,7 @@
     var parts = filename.split('_');
     if (parts.length > 1) {
       var first = parts[0].toUpperCase();
-      if (['JNJ','UNH','ABT','PG','KO','WMT','NEE','DUK','SPY'].indexOf(first) >= 0) return first;
+      if (tickerSet.indexOf(first) >= 0) return first;
     }
     return 'General';
   }
@@ -455,10 +450,20 @@
 
   async function loadPlots() {
     var tickers = [];
+    var plotsIndex = null;
     try {
       var resp = await fetch('../data/tickers.json');
       if (resp.ok) tickers = await resp.json();
     } catch(e) {}
+    try {
+      // plots_index.json is the *authoritative* list — written by
+      // dashboard/generate.py after copying PNGs from stock_ml/reports/plots/
+      // and reports/plots/ into docs/charts/plots/. No filename probing.
+      var pidx = await fetch('plots_index.json');
+      if (pidx.ok) plotsIndex = await pidx.json();
+    } catch(e) {}
+
+    tickerSet = (tickers || []).map(function(t) { return String(t).toUpperCase(); });
 
     // Build filter pills
     tickers.forEach(function(t) {
@@ -482,26 +487,20 @@
       });
     });
 
-    // Build candidate list
-    var candidates = knownPlots.slice();
-    tickers.forEach(function(t) {
-      knownPlots.forEach(function(p) {
-        candidates.push(t.toLowerCase() + '_' + p);
-        candidates.push(t + '_' + p);
-      });
-    });
-
-    var found = [];
-    var checks = candidates.map(function(fname) {
-      return tryLoadImage('plots/' + fname).then(function(exists) {
-        if (exists) found.push(fname);
-      });
-    });
-
-    await Promise.all(checks);
-    found.sort();
-    allPlots = found;
-    renderPlots(found);
+    if (plotsIndex && Array.isArray(plotsIndex.plots)) {
+      allPlots = plotsIndex.plots.slice().sort();
+      renderPlots(allPlots);
+      if (allPlots.length === 0) {
+        var hint = plotsIndex.source_directories_checked
+          ? ('<br><span style="font-size:12px;color:var(--color-text-faint);">Source dirs checked: <code>' + plotsIndex.source_directories_checked.join('</code>, <code>') + '</code></span>')
+          : '';
+        contentEl.innerHTML = '<div class="empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg><h3>No Analysis Charts Available</h3><p>Train ML models and run <code>python -m stock_ml.main plots</code> + <code>python -m stock_ml.main report</code>. PNGs are written to <code>stock_ml/reports/plots/</code>; the dashboard generator copies them into <code>docs/charts/plots/</code> on the next run.' + hint + '</p></div>';
+      }
+    } else {
+      // plots_index.json missing entirely — likely an older deploy. Show
+      // an explicit empty state rather than spinning forever.
+      contentEl.innerHTML = '<div class="empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><h3>Charts index not available</h3><p>Run <code>python dashboard/generate.py</code> to publish <code>plots_index.json</code>.</p></div>';
+    }
   }
 
   loadPlots();

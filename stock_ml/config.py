@@ -13,11 +13,14 @@ else:
 
 # --- Paths ---
 DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
+# Committed CSV backup of the raw OHLCV history (NOT gitignored), so the thesis
+# results stay reproducible even if yfinance data changes or goes offline.
+HISTORICAL_DIR = os.path.join(BASE_DIR, "data", "historical")
 MODEL_DIR = os.path.join(BASE_DIR, "models", "saved")
 REPORTS_DIR = os.path.join(BASE_DIR, "reports")
 
 # Ensure directories exist
-for d in [DATA_DIR, MODEL_DIR, REPORTS_DIR]:
+for d in [DATA_DIR, HISTORICAL_DIR, MODEL_DIR, REPORTS_DIR]:
     os.makedirs(d, exist_ok=True)
 
 # --- Tickers ---
@@ -46,10 +49,40 @@ DATA_END = "2026-04-01"
 DATA_INTERVAL = "1d"
 
 # --- Label params ---
-# Binary label: 1 if next-day return > LABEL_THRESHOLD, else 0.
-LABEL_THRESHOLD = 0.005  # 0.5% - main binary threshold (default mode)
-LABEL_THRESHOLD_B = 0.002  # 0.2% for legacy version B
+# Binary classification: BUY (1) if next-day return > threshold, else SELL (0).
+# The primary threshold is 0.2% ("version B"): it filters out the very small
+# moves that are indistinguishable from noise/spread, while still leaving a
+# workable class balance. 0.5% and 1.0% are kept as stricter comparison points
+# for the results chapter.
+LABEL_THRESHOLD = 0.002         # T1: 0.2% - primary binary threshold (default)
+LABEL_THRESHOLD_MID = 0.005     # T2: 0.5% - comparison threshold
+LABEL_THRESHOLD_STRONG = 0.010  # T3: 1.0% - strict "strong move" threshold
+LABEL_THRESHOLD_B = LABEL_THRESHOLD  # "version B" == the primary threshold
+
+# Named thresholds for the threshold study (used by the CLI/dashboard).
+BINARY_THRESHOLDS = {
+    "t02": LABEL_THRESHOLD,         # 0.2% (primary)
+    "t05": LABEL_THRESHOLD_MID,     # 0.5%
+    "t10": LABEL_THRESHOLD_STRONG,  # 1.0%
+}
+
 DEFAULT_LABEL_MODE = "binary"  # 'binary' (default) or 'multiclass'
+
+# Positive class label = BUY, negative class = SELL (binary mode).
+CLASS_BUY = 1
+CLASS_SELL = 0
+
+
+def model_tag(label_mode: str, label_version: str, threshold: float = LABEL_THRESHOLD) -> str:
+    """Filename tag used to key saved models/scalers on disk.
+
+    Legacy mode keeps the ``A``/``B`` version letter; binary/multiclass modes
+    derive a stable tag from the threshold (e.g. 0.2% -> ``bin2``, 1.0% ->
+    ``bin10``) so both thresholds can coexist as separate artifacts.
+    """
+    if label_mode == "legacy":
+        return label_version
+    return f"bin{int(round(threshold * 1000))}"
 
 # --- Model params ---
 RANDOM_STATE = 42
@@ -60,6 +93,9 @@ WF_TRAIN_SIZE = 252  # ~1 trading year
 WF_TEST_SIZE = 21    # ~1 trading month
 WF_STEP = 21         # window slide step
 WF_MODE = "rolling"  # 'rolling' (default) or 'expanding'
+
+# ARIMA baseline: (p, d, q) on daily returns. d=0 because returns are already stationary.
+ARIMA_ORDER = (1, 0, 1)
 
 # Legacy: number of TimeSeriesSplit folds (deprecated, kept for transitional use)
 N_SPLITS = 5

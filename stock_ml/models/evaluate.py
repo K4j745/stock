@@ -1,17 +1,8 @@
-"""Classification metrics.
-
-PRIMARY METRIC: macro-F1 (key 'f1_macro'). Accuracy and balanced accuracy are
-kept as auxiliary metrics — accuracy is misleading on imbalanced binary
-direction labels. ROC AUC is reported for the binary case when probabilities
-are available.
-"""
 import logging
 
 import numpy as np
 from sklearn.metrics import (
     accuracy_score,
-    balanced_accuracy_score,
-    classification_report,
     f1_score,
     matthews_corrcoef,
     precision_score,
@@ -23,30 +14,28 @@ logger = logging.getLogger("stock_ml")
 
 
 def evaluate_model(y_true, y_pred, y_prob=None) -> dict:
-    """Compute classification metrics. Macro-F1 is the primary score.
+    """Compute binary classification metrics.
+
+    In binary mode the positive class is BUY (label = 1), so precision/recall/f1
+    are reported for the BUY class; the negative class is SELL (label = 0).
 
     Args:
         y_true: Ground truth labels.
         y_pred: Predicted labels.
-        y_prob: Predicted probabilities for the positive class (binary only).
+        y_prob: Predicted probabilities for the positive (BUY) class (optional).
 
     Returns:
-        Dict with accuracy, balanced_accuracy, precision, recall, f1, f1_macro,
-        roc_auc, mcc. ``f1`` is kept for backwards compatibility and equals
-        ``f1_macro``.
+        Dictionary with accuracy, precision, recall, f1, roc_auc, mcc.
     """
     metrics = {
         "accuracy": accuracy_score(y_true, y_pred),
-        "balanced_accuracy": balanced_accuracy_score(y_true, y_pred),
-        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
-        "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
-        "f1_macro": f1_score(y_true, y_pred, average="macro", zero_division=0),
+        "precision": precision_score(y_true, y_pred, zero_division=0),
+        "recall": recall_score(y_true, y_pred, zero_division=0),
+        "f1": f1_score(y_true, y_pred, zero_division=0),
         "mcc": matthews_corrcoef(y_true, y_pred),
     }
-    # Back-compat key: 'f1' == macro-F1
-    metrics["f1"] = metrics["f1_macro"]
 
-    if y_prob is not None and len(np.unique(y_true)) == 2:
+    if y_prob is not None and len(np.unique(y_true)) > 1:
         metrics["roc_auc"] = roc_auc_score(y_true, y_prob)
     else:
         metrics["roc_auc"] = np.nan
@@ -63,54 +52,63 @@ def print_classification_report(results: dict) -> None:
 
         for i, fold_metrics in enumerate(model_results["fold_metrics"]):
             logger.info(
-                "  Fold %d: acc=%.4f bal_acc=%.4f f1_macro=%.4f auc=%.4f mcc=%.4f",
+                "  Fold %d: acc=%.4f prec=%.4f rec=%.4f f1=%.4f auc=%.4f mcc=%.4f",
                 i + 1,
                 fold_metrics["accuracy"],
-                fold_metrics.get("balanced_accuracy", float("nan")),
-                fold_metrics["f1_macro"],
+                fold_metrics["precision"],
+                fold_metrics["recall"],
+                fold_metrics["f1"],
                 fold_metrics.get("roc_auc", float("nan")),
                 fold_metrics["mcc"],
             )
 
         mean = model_results["mean_metrics"]
         logger.info(
-            "  MEAN:   acc=%.4f bal_acc=%.4f f1_macro=%.4f auc=%.4f mcc=%.4f",
+            "  MEAN:   acc=%.4f prec=%.4f rec=%.4f f1=%.4f auc=%.4f mcc=%.4f",
             mean["accuracy"],
-            mean.get("balanced_accuracy", float("nan")),
-            mean["f1_macro"],
+            mean["precision"],
+            mean["recall"],
+            mean["f1"],
             mean.get("roc_auc", float("nan")),
             mean["mcc"],
         )
         logger.info("=" * 60)
 
 
-def print_model_card(y_true, y_pred, model_name: str) -> None:
-    """Print a sklearn classification report plus the headline metrics."""
-    logger.info("\n=== %s ===", model_name)
-    logger.info("\n%s", classification_report(y_true, y_pred, zero_division=0))
-    logger.info("Balanced Accuracy: %.4f", balanced_accuracy_score(y_true, y_pred))
-    logger.info(
-        "Macro F1: %.4f  (PRIMARY METRIC)",
-        f1_score(y_true, y_pred, average="macro", zero_division=0),
-    )
-
-
-def evaluate_saved_models(ticker: str, label_version: str = "A"):
+def evaluate_saved_models(
+    ticker: str,
+    label_mode: str = None,
+    label_version: str = "A",
+    threshold: float = None,
+):
     """
     Load saved models, run evaluation on test split (last 20%), print metrics.
+
+    Artifacts are keyed by ``model_tag`` so the two binary thresholds
+    (``bin2`` = 0.2%, ``bin5`` = 0.5%, ``bin10`` = 1.0%) and the legacy A/B versions each map to
+    their own saved model/scaler files.
     """
     import os
     import joblib
     import pandas as pd
     from features.pipeline import build_feature_matrix
-    from config import MODEL_DIR
+    from config import MODEL_DIR, DEFAULT_LABEL_MODE, LABEL_THRESHOLD, model_tag
 
-    X, y = build_feature_matrix(ticker, label_version)
+    if label_mode is None:
+        label_mode = DEFAULT_LABEL_MODE
+    if threshold is None:
+        threshold = LABEL_THRESHOLD
+
+    tag = model_tag(label_mode, label_version, threshold)
+
+    X, y = build_feature_matrix(
+        ticker, label_version=label_version, label_mode=label_mode, threshold=threshold,
+    )
     split_idx = int(len(X) * 0.8)
     X_test = X.iloc[split_idx:]
     y_test = y.iloc[split_idx:]
 
-    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}.joblib")
+    scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{tag}.joblib")
     if not os.path.exists(scaler_path):
         logger.error(f"Scaler not found: {scaler_path}")
         return
@@ -130,7 +128,7 @@ def evaluate_saved_models(ticker: str, label_version: str = "A"):
 
     all_results = {}
     for model_name, file_prefix, ext in model_configs:
-        model_path = os.path.join(MODEL_DIR, f"{file_prefix}_{ticker}_{label_version}{ext}")
+        model_path = os.path.join(MODEL_DIR, f"{file_prefix}_{ticker}_{tag}{ext}")
         if not os.path.exists(model_path):
             logger.warning(f"Model not found: {model_path}, skipping")
             continue
@@ -153,12 +151,6 @@ def evaluate_saved_models(ticker: str, label_version: str = "A"):
 
         metrics = evaluate_model(y_test, preds, proba)
         all_results[model_name] = metrics
-        logger.info(
-            f"{model_name:25s} | f1_macro={metrics['f1_macro']:.4f} | "
-            f"bal_acc={metrics['balanced_accuracy']:.4f} | "
-            f"acc={metrics['accuracy']:.4f} | "
-            f"auc={metrics.get('roc_auc', float('nan')):.4f} | "
-            f"mcc={metrics['mcc']:.4f}"
-        )
+        logger.info(f"{model_name:25s} | acc={metrics['accuracy']:.4f} | f1={metrics['f1']:.4f} | auc={metrics.get('roc_auc', 0):.4f} | mcc={metrics['mcc']:.4f}")
 
     return all_results

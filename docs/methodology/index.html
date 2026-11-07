@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.plot.ly https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>StocKK Forecast — Instrukcja / Instructions</title>
+<meta name="description" content="StocKK Forecast — instrukcja i metodologia projektu inżynierskiego: dobór spółek, klasyfikacja binarna BUY/SELL, cechy techniczne i świecowe, walidacja walk-forward, obsługa dashboardu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/page.css">
+<link rel="stylesheet" href="../assets/cyberpunk.css">
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../" class="logo">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+      <polyline points="16 7 22 7 22 13"/>
+    </svg>
+    StocKK Forecast
+  </a>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <nav>
+    <a href="../" data-i18n="nav.overview">Overview</a>
+    <a href="../prices/" data-i18n="nav.prices">Prices</a>
+    <a href="../charts/" data-i18n="nav.charts">Charts</a>
+    <a href="../signals/" data-i18n="nav.signals">Signals</a>
+    <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+    <a href="./" class="active" data-i18n="nav.methodology">Instructions</a>
+    <a href="../about/" data-i18n="nav.about">About</a>
+  </nav>
+  <div class="header-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sun"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="../" data-i18n="nav.overview">Overview</a>
+  <a href="../prices/" data-i18n="nav.prices">Prices</a>
+  <a href="../charts/" data-i18n="nav.charts">Charts</a>
+  <a href="../signals/" data-i18n="nav.signals">Signals</a>
+  <a href="../portfolio/" data-i18n="nav.portfolios">Portfolios</a>
+  <a href="./" class="active" data-i18n="nav.methodology">Instructions</a>
+  <a href="../about/" data-i18n="nav.about">About</a>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="eyebrow">StocKK Forecast</div>
+    <h1 data-i18n="nav.methodology">Instrukcja</h1>
+    <p>
+      <span data-lang="pl" class="lang-active">Opis projektu, dobór spółek, metodyka uczenia maszynowego i walidacja czasowa — praca inżynierska.</span>
+      <span data-lang="en">Project description, ticker selection, machine-learning methodology and temporal validation — engineering thesis.</span>
+    </p>
+  </div>
+
+  <!-- ==================== POLISH ==================== -->
+  <div class="prose" data-lang="pl" id="content-pl">
+
+    <section>
+      <h2><span class="num">1</span> O projekcie</h2>
+      <div class="card">
+        <p><strong>StocKK Forecast</strong> to projekt zrealizowany w ramach pracy inżynierskiej. Łączy klasyczne wskaźniki analizy technicznej z modelami uczenia maszynowego, aby dla wybranego uniwersum spółek generować dzienne sygnały decyzyjne <span class="pill pill-buy">BUY</span> / <span class="pill pill-sell">SELL</span>.</p>
+        <p><strong>Cel pracy:</strong> zbadanie, czy nadzorowane modele klasyfikacji binarnej, uczone na cechach technicznych i świecowych, są w stanie przewidzieć kierunek ruchu ceny w następnej sesji lepiej niż strategia odniesienia (kup i trzymaj benchmark SPY), przy zachowaniu poprawnej metodyki walidacji szeregów czasowych.</p>
+        <p><strong>Cele szczegółowe:</strong></p>
+        <ul>
+          <li>zbudowanie powtarzalnego pipeline'u ML: pobranie danych → cechy → etykiety → trening → ewaluacja → backtest;</li>
+          <li>porównanie kilku rodzin modeli (regresja logistyczna, lasy losowe, gradient boosting) na tym samym zbiorze;</li>
+          <li>zbadanie wpływu <strong>progu decyzyjnego</strong> (0,2% jako próg podstawowy, 0,5% i 1,0% jako warianty porównawcze) na jakość i liczbę sygnałów;</li>
+          <li>udostępnienie wyników w postaci statycznego, interaktywnego dashboardu (GitHub Pages, bez back-endu).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="sec-tickers-pl"><span class="num">2</span> Dobór spółek</h2>
+      <p>Uniwersum obejmuje <strong>10 spółek</strong> notowanych na rynku amerykańskim, dobranych tak, aby były zróżnicowane sektorowo i jednocześnie spełniały wymogi jakości danych. Indeks <code>SPY</code> pełni wyłącznie rolę <strong>benchmarku</strong> w backteście (strategia kup-i-trzymaj) — nigdy nie jest wejściem treningowym.</p>
+      <h3>Kryteria doboru</h3>
+      <ul>
+        <li><strong>Płynność</strong> — duże, szeroko handlowane spółki o wysokim wolumenie, dzięki czemu ceny zamknięcia są wiarygodne, a poślizg w backteście minimalny.</li>
+        <li><strong>Dostępność danych</strong> — pełna, ciągła historia dzienna od <code>2011-04-01</code> (ponad 5 lat wymagane; w praktyce ~15 lat), bez długich luk.</li>
+        <li><strong>Reprezentatywność sektorowa</strong> — pokrycie kilku sektorów (technologia, finanse, energia, ochrona zdrowia, dobra podstawowe, usługi komunalne), aby model nie uczył się specyfiki jednej branży.</li>
+      </ul>
+      <table class="data">
+        <thead><tr><th>Ticker</th><th>Sektor</th><th>Rola</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">AAPL</td><td>Technologia</td><td>trening</td></tr>
+          <tr><td class="mono">MSFT</td><td>Technologia</td><td>trening</td></tr>
+          <tr><td class="mono">JPM</td><td>Finanse</td><td>trening</td></tr>
+          <tr><td class="mono">XOM</td><td>Energia</td><td>trening</td></tr>
+          <tr><td class="mono">JNJ</td><td>Ochrona zdrowia</td><td>trening</td></tr>
+          <tr><td class="mono">UNH</td><td>Ochrona zdrowia</td><td>trening</td></tr>
+          <tr><td class="mono">PG</td><td>Dobra podstawowe</td><td>trening</td></tr>
+          <tr><td class="mono">WMT</td><td>Dobra podstawowe</td><td>trening</td></tr>
+          <tr><td class="mono">KO</td><td>Dobra podstawowe</td><td>trening</td></tr>
+          <tr><td class="mono">NEE</td><td>Usługi komunalne</td><td>trening</td></tr>
+          <tr><td class="mono">SPY</td><td>Indeks szeroki (ETF)</td><td>tylko benchmark</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Uzasadnienie wyboru poszczególnych spółek</h3>
+      <p>Uniwersum nie jest listą „największych spółek” — każda pozycja wnosi <strong>inny czynnik ryzyka</strong> lub inny profil zmienności. W dwóch sektorach celowo umieszczono po dwie (ochrona zdrowia) lub trzy (dobra podstawowe) spółki, aby sprawdzić, czy model uczy się mechanizmu wspólnego dla sektora, czy specyfiki pojedynczej firmy.</p>
+      <table class="data">
+        <thead><tr><th>Ticker</th><th>Spółka</th><th>Dlaczego znalazła się w uniwersum</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">AAPL</td><td>Apple Inc.</td><td>Najwyższa kapitalizacja i jeden z najwyższych wolumenów na rynku — wzorcowy przypadek płynności. Zmienność napędzana cyklem produktowym daje wyraźne, powtarzalne ruchy dzienne.</td></tr>
+          <tr><td class="mono">MSFT</td><td>Microsoft Corp.</td><td>Ten sam sektor co AAPL, ale odmienny model biznesowy (oprogramowanie i chmura, przychody abonamentowe). Pozwala sprawdzić, czy model rozróżnia dwie firmy technologiczne o różnej cykliczności.</td></tr>
+          <tr><td class="mono">JPM</td><td>JPMorgan Chase</td><td>Największy bank w USA. Kurs reaguje na stopy procentowe i cykl kredytowy — czynnik ryzyka zupełnie inny niż w technologii.</td></tr>
+          <tr><td class="mono">XOM</td><td>Exxon Mobil</td><td>Sektor energetyczny, kurs silnie powiązany z ceną ropy, czyli ze zmienną makroekonomiczną zewnętrzną wobec rynku akcji. Test zachowania modelu na szeregu o innej dynamice.</td></tr>
+          <tr><td class="mono">JNJ</td><td>Johnson &amp; Johnson</td><td>Klasyczna spółka defensywna o niskiej becie i długiej historii dywidend. Niska zmienność sprawdza, jak model radzi sobie przy słabym stosunku sygnału do szumu.</td></tr>
+          <tr><td class="mono">UNH</td><td>UnitedHealth Group</td><td>Ten sam sektor co JNJ, ale ubezpieczenia zdrowotne: wyraźnie wyższa zmienność i wrażliwość na zmiany regulacyjne. Świadomy kontrast wewnątrz jednego sektora.</td></tr>
+          <tr><td class="mono">PG</td><td>Procter &amp; Gamble</td><td>Wzorcowy przedstawiciel dóbr podstawowych — stabilny popyt niezależny od cyklu koniunkturalnego.</td></tr>
+          <tr><td class="mono">WMT</td><td>Walmart Inc.</td><td>Handel detaliczny: wrażliwość na konsumpcję gospodarstw domowych i inflację, przy zachowaniu defensywnego charakteru sektora.</td></tr>
+          <tr><td class="mono">KO</td><td>The Coca-Cola Co.</td><td>Bardzo stabilny szereg cenowy z globalną ekspozycją walutową. Trzecia spółka w sektorze pozwala odróżnić efekt sektorowy od efektu pojedynczej firmy.</td></tr>
+          <tr><td class="mono">NEE</td><td>NextEra Energy</td><td>Usługi komunalne — sektor najsilniej reagujący na stopy procentowe i najniżej skorelowany z technologią. Domyka dywersyfikację uniwersum.</td></tr>
+          <tr><td class="mono">SPY</td><td>SPDR S&amp;P 500 ETF</td><td>ETF odwzorowujący indeks S&amp;P 500. Pełni <strong>wyłącznie</strong> rolę benchmarku kup-i-trzymaj w backteście — nigdy nie jest wejściem treningowym ani przedmiotem predykcji.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        Wszystkie spółki notowane są na rynku amerykańskim i w tej samej strefie czasowej, więc dzienne świece są ze sobą porównywalne i nie występuje problem rozjeżdżających się kalendarzy sesyjnych.
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">3</span> Metodyka uczenia maszynowego</h2>
+      <h3>Klasyfikacja binarna: BUY vs SELL</h3>
+      <p>Problem jest sformułowany jako <strong>klasyfikacja binarna</strong>. Dla każdej sesji obliczana jest stopa zwrotu następnego dnia i porównywana z progiem decyzyjnym:</p>
+      <div class="callout">
+        <code>zwrot_następnego_dnia &gt; próg</code> &nbsp;⇒&nbsp; <span class="pill pill-buy">BUY (1)</span><br>
+        w przeciwnym razie &nbsp;⇒&nbsp; <span class="pill pill-sell">SELL (0)</span>
+      </div>
+      <p>Klasą pozytywną jest <strong>BUY</strong> — to na niej skupia się raportowanie metryk (precyzja, czułość, F1), ponieważ odpowiada realnej decyzji „warto kupić".</p>
+
+      <h3>Próg decyzyjny</h3>
+      <p>Progiem <strong>podstawowym</strong> jest <strong>0,2%</strong> (wariant „B”). Odcina on ruchy tak małe, że są nieodróżnialne od szumu i spreadu, a jednocześnie zachowuje sensowny balans klas — przy progu bliskim zeru model uczyłby się przede wszystkim mikrodrgań ceny. Dwa wyższe progi zachowano jako punkty porównawcze do rozdziału wyników:</p>
+      <table class="data">
+        <thead><tr><th>Próg</th><th>Wartość</th><th>Tag</th><th>Interpretacja</th></tr></thead>
+        <tbody>
+          <tr><td>T1 (podstawowy)</td><td class="mono">0,2%</td><td class="mono">bin2</td><td>ruch przekraczający szum i koszty transakcyjne liczy się jako BUY</td></tr>
+          <tr><td>T2 (porównawczy)</td><td class="mono">0,5%</td><td class="mono">bin5</td><td>każdy istotny ruch w górę liczy się jako BUY</td></tr>
+          <tr><td>T3 (silny)</td><td class="mono">1,0%</td><td class="mono">bin10</td><td>tylko wyraźnie silne ruchy w górę liczą się jako BUY</td></tr>
+        </tbody>
+      </table>
+      <p>Wyższy próg daje mniej sygnałów BUY, ale potencjalnie „mocniejszych”; niższy próg jest bardziej czuły. Każdy wariant jest trenowany i zapisywany jako <strong>osobny artefakt</strong>, dzięki czemu wyniki można porównywać bez ponownego uczenia. Dashboard prezentuje domyślnie wariant <code>bin2</code>.</p>
+
+      <h3>Modele</h3>
+      <ul>
+        <li><strong>Regresja logistyczna</strong> — liniowy model bazowy (punkt odniesienia).</li>
+        <li><strong>Random Forest</strong> — zespół drzew decyzyjnych, odporny na przeuczenie.</li>
+        <li><strong>XGBoost</strong> — gradient boosting, zwykle najmocniejszy na danych tabelarycznych.</li>
+        <li><strong>LightGBM</strong> — szybki gradient boosting, alternatywa dla XGBoost.</li>
+        <li><strong>Model świecowy (Candle Signal)</strong> — osobny model (XGBoost/RF) uczony na cechach geometrii świec + bazowych cechach technicznych, prezentowany na dashboardzie jako „Candle Signal".</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="num">4</span> Cechy (features)</h2>
+      <h3>Cechy techniczne</h3>
+      <p>Standardowe wskaźniki analizy technicznej liczone z ceny i wolumenu, m.in.:</p>
+      <ul>
+        <li><strong>Trend:</strong> średnie kroczące <code>SMA 5/10/20/50</code>, <code>EMA 12/26</code>, <code>MACD</code> (linia, sygnał, histogram);</li>
+        <li><strong>Momentum:</strong> <code>RSI 14</code>, oscylator stochastyczny, <code>ROC 5/10</code>;</li>
+        <li><strong>Zmienność:</strong> wstęgi Bollingera (górna/środkowa/dolna/szerokość), <code>ATR 14</code>;</li>
+        <li><strong>Wolumen</strong> i cechy pochodne.</li>
+      </ul>
+
+      <h3>Cechy świecowe (candlestick)</h3>
+      <p>Cechy opisujące <strong>geometrię pojedynczej świecy</strong> — rozmiar korpusu, długości cieni, położenie zamknięcia w zakresie dnia — oraz klasyczne formacje. Cechy ciągłe są normalizowane ceną otwarcia, aby były porównywalne między spółkami o różnych poziomach cen.</p>
+      <table class="data">
+        <thead><tr><th>Cecha</th><th>Opis</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">body_length</td><td>długość korpusu świecy (|close − open|) / open</td></tr>
+          <tr><td class="mono">upper_shadow</td><td>górny cień (high − max(open,close)) / open</td></tr>
+          <tr><td class="mono">lower_shadow</td><td>dolny cień (min(open,close) − low) / open</td></tr>
+          <tr><td class="mono">close_position</td><td>położenie zamknięcia w zakresie dnia (0 = minimum, 1 = maksimum)</td></tr>
+          <tr><td class="mono">doji_flag</td><td>flaga: świeca typu doji (bardzo mały korpus)</td></tr>
+          <tr><td class="mono">long_lower_shadow_flag</td><td>flaga: długi dolny cień (&gt; 2× korpus)</td></tr>
+          <tr><td class="mono">long_upper_shadow_flag</td><td>flaga: długi górny cień (&gt; 2× korpus)</td></tr>
+          <tr><td class="mono">bullish_engulfing</td><td>flaga: formacja objęcia hossy (dzisiejszy korpus obejmuje wczorajszy spadkowy)</td></tr>
+          <tr><td class="mono">bearish_engulfing</td><td>flaga: formacja objęcia bessy (dzisiejszy korpus obejmuje wczorajszy wzrostowy)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2><span class="num">5</span> Walidacja czasowa (brak wycieku danych)</h2>
+      <p>Ponieważ dane są <strong>szeregiem czasowym</strong>, klasyczna walidacja krzyżowa z losowym mieszaniem prowadziłaby do <strong>wycieku danych z przyszłości</strong> (data leakage) i zawyżonych wyników. Dlatego stosowana jest <strong>walidacja walk-forward</strong> z oknem przesuwnym.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Parametry okna</h3>
+          <ul>
+            <li>okno treningowe: <code>252</code> sesji (≈ 1 rok);</li>
+            <li>okno testowe: <code>21</code> sesji (≈ 1 miesiąc);</li>
+            <li>krok przesunięcia: <code>21</code> sesji;</li>
+            <li>tryb: <code>rolling</code> (okno przesuwne).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Zabezpieczenie przed wyciekiem</h3>
+          <ul>
+            <li>zbiór testowy zawsze <strong>następuje po</strong> zbiorze treningowym w czasie;</li>
+            <li><strong>skalowanie</strong> (standaryzacja) jest dopasowywane wyłącznie na foldzie treningowym, a następnie stosowane do testowego;</li>
+            <li>brak podglądania przyszłości — żadna cecha nie korzysta z danych późniejszych niż moment predykcji.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">Model jest wielokrotnie trenowany i testowany na kolejnych, rozłącznych oknach czasowych, a metryki są uśredniane — to symuluje realne, sekwencyjne użycie modelu na rynku.</div>
+    </section>
+
+    <section>
+      <h2><span class="num">6</span> Źródło danych</h2>
+      <p>Dane cenowe (OHLCV) pochodzą z <strong>Yahoo Finance</strong>, pobierane biblioteką <code>yfinance</code> — interwał dzienny (<code>1d</code>), od <code>2011-04-01</code>. Aby wyniki pracy były <strong>powtarzalne</strong> nawet jeśli dane u dostawcy się zmienią lub znikną, surowa historia jest zapisywana jako kopia CSV w katalogu <code>stock_ml/data/historical/</code> (pliki <code>{TICKER}_historical.csv</code>) i wersjonowana w repozytorium.</p>
+      <p>Kopia lokalna pełni jednocześnie rolę <strong>trybu offline</strong>: jeśli zewnętrzne źródło jest niedostępne, pipeline korzysta z zarchiwizowanych plików CSV zamiast przerywać działanie.</p>
+      <div class="callout"><strong>Zastrzeżenie:</strong> dane mają charakter edukacyjny. Dashboard nie stanowi porady inwestycyjnej.</div>
+      <p>Zasady licencyjne obowiązujące przy pobieraniu i udostępnianiu tych danych opisano na podstronie <a href="../about/">O stronie</a> oraz szczegółowo w dokumencie <a href="../LICENSING.md">LICENSING.md</a>.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">7</span> Jak korzystać z dashboardu</h2>
+      <ul>
+        <li><strong>Przegląd</strong> — zbiorcze KPI i najnowsze sygnały rynkowe dla całego uniwersum.</li>
+        <li><strong>Ceny</strong> — interaktywne wykresy cen (Plotly.js) dla poszczególnych spółek.</li>
+        <li><strong>Wykresy</strong> — wizualizacje z pipeline'u ML: skuteczność modeli, ważność cech, analiza predykcji.</li>
+        <li><strong>Sygnały</strong> — porównanie decyzji BUY / SELL modeli technicznych i ML; filtrowanie wg tickera, modelu, typu sygnału, daty lub portfela.</li>
+        <li><strong>Portfele</strong> — symulator wirtualnego handlu po ostatnich cenach zamknięcia; portfele są przechowywane wyłącznie w przeglądarce.</li>
+        <li><strong>Język</strong> — przełącznik <strong>PL / EN</strong> w prawym górnym rogu; motyw jasny/ciemny obok niego.</li>
+      </ul>
+      <p>Sygnały są kodowane kolorem: <span class="pill pill-buy">BUY</span> (neonowa zieleń) oraz <span class="pill pill-sell">SELL</span> (neonowa magenta).</p>
+    </section>
+
+    <section>
+      <h2><span class="num">8</span> Pomoc techniczna (FAQ)</h2>
+
+      <h3>Pytania ogólne</h3>
+      <div class="card">
+        <p><strong>Czym właściwie jest ten serwis?</strong><br>
+        To statyczna strona prezentująca wyniki pipeline'u uczenia maszynowego zbudowanego w ramach pracy inżynierskiej. Nie ma tu back-endu, bazy danych ani konta użytkownika — wszystkie dane są policzone wcześniej i opublikowane jako pliki JSON.</p>
+        <p><strong>Czy sygnały BUY / SELL to porada inwestycyjna?</strong><br>
+        Nie. Serwis ma charakter wyłącznie edukacyjny i badawczy. Prezentowane sygnały nie są rekomendacją ani doradztwem inwestycyjnym, a wyniki historyczne nie gwarantują wyników przyszłych. Szczegóły na podstronie <a href="../about/">O stronie</a>.</p>
+        <p><strong>Dlaczego wybrano akurat te spółki?</strong><br>
+        Uzasadnienie wyboru — kryteria oraz powód obecności każdej spółki z osobna — znajduje się w sekcji <a href="#sec-tickers-pl">2 „Dobór spółek”</a> powyżej.</p>
+        <p><strong>Jak często dane są aktualizowane?</strong><br>
+        Automatycznie po zamknięciu sesji w dni robocze. Data ostatniej aktualizacji jest widoczna na stronie <strong>Przegląd</strong>. Jeśli źródło zewnętrzne jest chwilowo niedostępne, prezentowana jest ostatnia zarchiwizowana kopia lokalna.</p>
+        <p><strong>Czy mogę wykorzystać te dane u siebie?</strong><br>
+        Dane pochodne (sygnały, metryki, wykresy) powstały w ramach tej pracy. Surowe notowania pochodzą z Yahoo Finance i podlegają regulaminowi tego serwisu — omówienie znajduje się w dokumencie <a href="../LICENSING.md">LICENSING.md</a>.</p>
+      </div>
+
+      <h3>Interpretacja sygnałów</h3>
+      <div class="card">
+        <p><strong>Skąd biorą się sygnały?</strong><br>
+        Z kilku niezależnych strumieni: modeli ML (regresja logistyczna, Random Forest, XGBoost, LightGBM), modelu świecowego, reguły technicznej opartej na wskaźnikach oraz głosowania większościowego. Osobno prezentowany jest pasywny benchmark kup-i-trzymaj.</p>
+        <p><strong>Co oznacza „Candle Signal”?</strong><br>
+        To predykcja osobnego modelu uczonego głównie na <strong>geometrii świecy</strong> — długości korpusu i cieni, położeniu zamknięcia w zakresie dnia oraz podstawowych formacjach. Pozwala porównać wartość informacyjną kształtu świecy z klasycznymi wskaźnikami technicznymi.</p>
+        <p><strong>Dlaczego dwa modele dają sprzeczne sygnały dla tej samej spółki?</strong><br>
+        To normalne i zamierzone. Każdy model inaczej waży cechy, więc rozbieżność jest informacją samą w sobie — mówi, że sygnał jest niepewny. Strumień <strong>ensemble</strong> rozstrzyga takie przypadki większością głosów.</p>
+        <p><strong>Co oznacza próg 0,2%?</strong><br>
+        Etykieta BUY jest przypisywana tylko wtedy, gdy zwrot następnego dnia przekracza 0,2%. Ruchy mniejsze są traktowane jako szum i trafiają do klasy SELL. Progi 0,5% i 1,0% są liczone jako warianty porównawcze.</p>
+        <p><strong>Co oznacza etykieta <code>proxy</code> przy sygnale?</strong><br>
+        Że dla danej spółki nie był dostępny wytrenowany artefakt modelu i sygnał policzono uproszczoną regułą zastępczą. Sygnały oznaczone jako <code>proxy</code> <strong>nie są</strong> predykcją modelu ML i nie powinny być tak interpretowane.</p>
+        <p><strong>Dlaczego wyniki backtestu są lepsze niż realne byłyby na rynku?</strong><br>
+        Backtest zakłada wykonanie po cenie zamknięcia i nie modeluje pełnych kosztów transakcyjnych, poślizgu ani wpływu zlecenia na rynek. Służy porównaniu modeli między sobą, a nie prognozie realnego zysku.</p>
+      </div>
+
+      <h3>Problemy techniczne</h3>
+      <div class="card">
+        <p><strong>Strona się ładuje, ale tabele i wykresy są puste.</strong><br>
+        Najczęściej to stara wersja plików w pamięci podręcznej przeglądarki. Wykonaj twarde odświeżenie: <code>Ctrl</code>+<code>F5</code> (Windows/Linux) lub <code>Cmd</code>+<code>Shift</code>+<code>R</code> (macOS). Serwis wymaga włączonego JavaScriptu.</p>
+        <p><strong>Wykresy cen nie renderują się.</strong><br>
+        Wykresy korzystają z biblioteki Plotly.js ładowanej z sieci CDN. Jeśli blokuje ją rozszerzenie przeglądarki, firewall lub tryb offline, wykresy się nie pojawią — pozostałe podstrony działają normalnie.</p>
+        <p><strong>Na podstronie „Wykresy” brakuje niektórych obrazów.</strong><br>
+        Wykresy PNG powstają w pipelinie ML i są kopiowane do serwisu przy każdej publikacji. Brak obrazu oznacza, że dany wariant modelu nie został jeszcze przeliczony dla tej spółki.</p>
+        <p><strong>Czy moje portfele są gdzieś wysyłane?</strong><br>
+        Nie. Symulator zapisuje portfele wyłącznie w pamięci lokalnej przeglądarki (<code>localStorage</code>). Nie ma serwera, nie ma żadnej transmisji danych. Wyczyszczenie danych witryny usuwa portfele bezpowrotnie.</p>
+        <p><strong>Jak zmienić język lub motyw?</strong><br>
+        Przełącznik <strong>PL / EN</strong> oraz przycisk motywu jasny/ciemny znajdują się w prawym górnym rogu każdej podstrony. Wybór jest zapamiętywany w przeglądarce.</p>
+        <p><strong>Serwis nie działa poprawnie na telefonie.</strong><br>
+        Układ jest responsywny, ale tabele z wieloma kolumnami wymagają przewijania w poziomie. Menu na wąskich ekranach ukryte jest pod przyciskiem hamburgera.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==================== ENGLISH ==================== -->
+  <div class="prose" data-lang="en" id="content-en">
+
+    <section>
+      <h2><span class="num">1</span> About the project</h2>
+      <div class="card">
+        <p><strong>StocKK Forecast</strong> is a project built as part of an engineering (BSc) thesis. It combines classical technical-analysis indicators with machine-learning models to generate daily <span class="pill pill-buy">BUY</span> / <span class="pill pill-sell">SELL</span> decision signals for a chosen universe of stocks.</p>
+        <p><strong>Thesis goal:</strong> to investigate whether supervised binary-classification models, trained on technical and candlestick features, can predict the direction of the next session's price move better than a reference strategy (buy-and-hold of the SPY benchmark), while following a correct time-series validation methodology.</p>
+        <p><strong>Detailed objectives:</strong></p>
+        <ul>
+          <li>build a reproducible ML pipeline: data download → features → labels → training → evaluation → backtest;</li>
+          <li>compare several model families (logistic regression, random forests, gradient boosting) on the same dataset;</li>
+          <li>study the effect of the <strong>decision threshold</strong> (0.2% as the primary threshold, 0.5% and 1.0% as comparison variants) on signal quality and count;</li>
+          <li>publish the results as a static, interactive dashboard (GitHub Pages, no back-end).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="sec-tickers-en"><span class="num">2</span> Ticker selection</h2>
+      <p>The universe covers <strong>10 US-listed stocks</strong>, chosen to be sector-diverse while meeting data-quality requirements. The <code>SPY</code> index serves only as a <strong>benchmark</strong> in the backtest (buy-and-hold strategy) — it is never a training input.</p>
+      <h3>Selection criteria</h3>
+      <ul>
+        <li><strong>Liquidity</strong> — large, widely traded stocks with high volume, so closing prices are reliable and backtest slippage is minimal.</li>
+        <li><strong>Data availability</strong> — full, continuous daily history from <code>2011-04-01</code> (5+ years required; ~15 years in practice), with no long gaps.</li>
+        <li><strong>Sector representativeness</strong> — coverage of several sectors (technology, financials, energy, healthcare, consumer staples, utilities), so the model does not learn the quirks of a single industry.</li>
+      </ul>
+      <table class="data">
+        <thead><tr><th>Ticker</th><th>Sector</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">AAPL</td><td>Technology</td><td>training</td></tr>
+          <tr><td class="mono">MSFT</td><td>Technology</td><td>training</td></tr>
+          <tr><td class="mono">JPM</td><td>Financials</td><td>training</td></tr>
+          <tr><td class="mono">XOM</td><td>Energy</td><td>training</td></tr>
+          <tr><td class="mono">JNJ</td><td>Healthcare</td><td>training</td></tr>
+          <tr><td class="mono">UNH</td><td>Healthcare</td><td>training</td></tr>
+          <tr><td class="mono">PG</td><td>Consumer Staples</td><td>training</td></tr>
+          <tr><td class="mono">WMT</td><td>Consumer Staples</td><td>training</td></tr>
+          <tr><td class="mono">KO</td><td>Consumer Staples</td><td>training</td></tr>
+          <tr><td class="mono">NEE</td><td>Utilities</td><td>training</td></tr>
+          <tr><td class="mono">SPY</td><td>Broad index (ETF)</td><td>benchmark only</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Why each individual company was chosen</h3>
+      <p>The universe is not a list of “the biggest companies” — every entry contributes a <strong>different risk factor</strong> or volatility profile. Two sectors deliberately contain two (healthcare) or three (consumer staples) companies, to test whether the model learns a sector-wide mechanism or the quirks of one particular firm.</p>
+      <table class="data">
+        <thead><tr><th>Ticker</th><th>Company</th><th>Why it is in the universe</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">AAPL</td><td>Apple Inc.</td><td>The largest market capitalisation and one of the highest trading volumes on the market — a textbook liquidity case. Volatility driven by the product cycle produces clear, recurring daily moves.</td></tr>
+          <tr><td class="mono">MSFT</td><td>Microsoft Corp.</td><td>Same sector as AAPL but a different business model (software and cloud, subscription revenue). Tests whether the model can distinguish two technology firms with different cyclicality.</td></tr>
+          <tr><td class="mono">JPM</td><td>JPMorgan Chase</td><td>The largest US bank. Its price responds to interest rates and the credit cycle — a risk factor entirely different from technology.</td></tr>
+          <tr><td class="mono">XOM</td><td>Exxon Mobil</td><td>Energy sector, price tightly coupled to crude oil, i.e. a macroeconomic variable external to the equity market. Tests model behaviour on a series with different dynamics.</td></tr>
+          <tr><td class="mono">JNJ</td><td>Johnson &amp; Johnson</td><td>A classic defensive, low-beta stock with a long dividend history. Its low volatility tests how the model copes with a weak signal-to-noise ratio.</td></tr>
+          <tr><td class="mono">UNH</td><td>UnitedHealth Group</td><td>Same sector as JNJ but health insurance: markedly higher volatility and sensitivity to regulatory change. A deliberate contrast within one sector.</td></tr>
+          <tr><td class="mono">PG</td><td>Procter &amp; Gamble</td><td>The archetypal consumer-staples name — stable demand independent of the business cycle.</td></tr>
+          <tr><td class="mono">WMT</td><td>Walmart Inc.</td><td>Retail: sensitive to household consumption and inflation while retaining the defensive character of the sector.</td></tr>
+          <tr><td class="mono">KO</td><td>The Coca-Cola Co.</td><td>A very stable price series with global currency exposure. A third company in the sector makes it possible to separate the sector effect from a single-firm effect.</td></tr>
+          <tr><td class="mono">NEE</td><td>NextEra Energy</td><td>Utilities — the sector most sensitive to interest rates and least correlated with technology. Completes the diversification of the universe.</td></tr>
+          <tr><td class="mono">SPY</td><td>SPDR S&amp;P 500 ETF</td><td>An ETF tracking the S&amp;P 500. It serves <strong>only</strong> as the buy-and-hold benchmark in the backtest — it is never a training input and is never predicted.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        All companies are US-listed and share one trading calendar and time zone, so their daily candles are directly comparable and there is no misaligned-session problem.
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">3</span> Machine-learning methodology</h2>
+      <h3>Binary classification: BUY vs SELL</h3>
+      <p>The problem is framed as <strong>binary classification</strong>. For each session the next-day return is computed and compared to a decision threshold:</p>
+      <div class="callout">
+        <code>next_day_return &gt; threshold</code> &nbsp;⇒&nbsp; <span class="pill pill-buy">BUY (1)</span><br>
+        otherwise &nbsp;⇒&nbsp; <span class="pill pill-sell">SELL (0)</span>
+      </div>
+      <p>The positive class is <strong>BUY</strong> — metrics (precision, recall, F1) are reported for it, since it corresponds to the real "worth buying" decision.</p>
+
+      <h3>Decision threshold</h3>
+      <p>The <strong>primary</strong> threshold is <strong>0.2%</strong> (“version B”). It filters out moves so small that they are indistinguishable from noise and the spread, while still leaving a workable class balance — with a threshold close to zero the model would mostly learn price micro-jitter. Two higher thresholds are kept as comparison points for the results chapter:</p>
+      <table class="data">
+        <thead><tr><th>Threshold</th><th>Value</th><th>Tag</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>T1 (primary)</td><td class="mono">0.2%</td><td class="mono">bin2</td><td>a move exceeding noise and transaction costs counts as BUY</td></tr>
+          <tr><td>T2 (comparison)</td><td class="mono">0.5%</td><td class="mono">bin5</td><td>any meaningful up move counts as BUY</td></tr>
+          <tr><td>T3 (strong)</td><td class="mono">1.0%</td><td class="mono">bin10</td><td>only clearly strong up moves count as BUY</td></tr>
+        </tbody>
+      </table>
+      <p>A higher threshold yields fewer but potentially “stronger” BUY signals; a lower threshold is more sensitive. Each variant is trained and saved as a <strong>separate artifact</strong>, so results can be compared without retraining. The dashboard shows the <code>bin2</code> variant by default.</p>
+
+      <h3>Models</h3>
+      <ul>
+        <li><strong>Logistic Regression</strong> — linear baseline model (reference point).</li>
+        <li><strong>Random Forest</strong> — ensemble of decision trees, robust to overfitting.</li>
+        <li><strong>XGBoost</strong> — gradient boosting, usually the strongest on tabular data.</li>
+        <li><strong>LightGBM</strong> — fast gradient boosting, an alternative to XGBoost.</li>
+        <li><strong>Candle Signal model</strong> — a separate model (XGBoost/RF) trained on candle-geometry features + base technical features, shown on the dashboard as "Candle Signal".</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="num">4</span> Features</h2>
+      <h3>Technical features</h3>
+      <p>Standard technical-analysis indicators computed from price and volume, including:</p>
+      <ul>
+        <li><strong>Trend:</strong> moving averages <code>SMA 5/10/20/50</code>, <code>EMA 12/26</code>, <code>MACD</code> (line, signal, histogram);</li>
+        <li><strong>Momentum:</strong> <code>RSI 14</code>, stochastic oscillator, <code>ROC 5/10</code>;</li>
+        <li><strong>Volatility:</strong> Bollinger Bands (upper/middle/lower/width), <code>ATR 14</code>;</li>
+        <li><strong>Volume</strong> and derived features.</li>
+      </ul>
+
+      <h3>Candlestick features</h3>
+      <p>Features describing the <strong>geometry of a single candle</strong> — body size, shadow lengths, where the close sits within the day's range — plus classic formations. Continuous features are normalized by the open price so they are comparable across stocks with very different price levels.</p>
+      <table class="data">
+        <thead><tr><th>Feature</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">body_length</td><td>candle body length (|close − open|) / open</td></tr>
+          <tr><td class="mono">upper_shadow</td><td>upper shadow (high − max(open,close)) / open</td></tr>
+          <tr><td class="mono">lower_shadow</td><td>lower shadow (min(open,close) − low) / open</td></tr>
+          <tr><td class="mono">close_position</td><td>close position within the day's range (0 = low, 1 = high)</td></tr>
+          <tr><td class="mono">doji_flag</td><td>flag: doji candle (very small body)</td></tr>
+          <tr><td class="mono">long_lower_shadow_flag</td><td>flag: long lower shadow (&gt; 2× body)</td></tr>
+          <tr><td class="mono">long_upper_shadow_flag</td><td>flag: long upper shadow (&gt; 2× body)</td></tr>
+          <tr><td class="mono">bullish_engulfing</td><td>flag: bullish engulfing (today's body engulfs yesterday's down body)</td></tr>
+          <tr><td class="mono">bearish_engulfing</td><td>flag: bearish engulfing (today's body engulfs yesterday's up body)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2><span class="num">5</span> Temporal validation (no data leakage)</h2>
+      <p>Because the data is a <strong>time series</strong>, classic cross-validation with random shuffling would cause <strong>look-ahead data leakage</strong> and inflated results. Therefore a <strong>walk-forward validation</strong> with a rolling window is used.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Window parameters</h3>
+          <ul>
+            <li>training window: <code>252</code> sessions (≈ 1 year);</li>
+            <li>test window: <code>21</code> sessions (≈ 1 month);</li>
+            <li>slide step: <code>21</code> sessions;</li>
+            <li>mode: <code>rolling</code> (sliding window).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Leakage safeguards</h3>
+          <ul>
+            <li>the test set always <strong>follows</strong> the training set in time;</li>
+            <li><strong>scaling</strong> (standardization) is fit only on the training fold, then applied to the test fold;</li>
+            <li>no peeking into the future — no feature uses data later than the prediction moment.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">The model is repeatedly trained and tested on successive, disjoint time windows, and metrics are averaged — this simulates realistic, sequential use of the model on the market.</div>
+    </section>
+
+    <section>
+      <h2><span class="num">6</span> Data source</h2>
+      <p>Price data (OHLCV) comes from <strong>Yahoo Finance</strong>, downloaded with the <code>yfinance</code> library — daily interval (<code>1d</code>), from <code>2011-04-01</code>. To keep the thesis results <strong>reproducible</strong> even if the provider's data changes or disappears, the raw history is saved as a CSV backup under <code>stock_ml/data/historical/</code> (files <code>{TICKER}_historical.csv</code>) and versioned in the repository.</p>
+      <p>The local copy doubles as an <strong>offline mode</strong>: if the external source is unavailable, the pipeline falls back to the archived CSV files instead of failing.</p>
+      <div class="callout"><strong>Disclaimer:</strong> the data is for educational purposes. The dashboard is not financial advice.</div>
+      <p>The licensing terms governing the download and redistribution of this data are summarised on the <a href="../about/">About</a> page and discussed in detail in <a href="../LICENSING.md">LICENSING.md</a>.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">7</span> How to use the dashboard</h2>
+      <ul>
+        <li><strong>Overview</strong> — aggregate KPIs and the latest market signals for the whole universe.</li>
+        <li><strong>Prices</strong> — interactive price charts (Plotly.js) for individual stocks.</li>
+        <li><strong>Charts</strong> — ML-pipeline visualizations: model performance, feature importance, prediction analysis.</li>
+        <li><strong>Signals</strong> — comparison of BUY / SELL calls across technical and ML models; filter by ticker, model, signal type, date or portfolio.</li>
+        <li><strong>Portfolios</strong> — a virtual trading simulator at last close prices; portfolios are stored in your browser only.</li>
+        <li><strong>Language</strong> — the <strong>PL / EN</strong> switch is in the top-right corner; the light/dark theme toggle sits next to it.</li>
+      </ul>
+      <p>Signals are color-coded: <span class="pill pill-buy">BUY</span> (neon green) and <span class="pill pill-sell">SELL</span> (neon magenta).</p>
+    </section>
+
+    <section>
+      <h2><span class="num">8</span> Technical help (FAQ)</h2>
+
+      <h3>General questions</h3>
+      <div class="card">
+        <p><strong>What exactly is this site?</strong><br>
+        A static page presenting the results of a machine-learning pipeline built for an engineering thesis. There is no back-end, no database and no user account — all data is computed in advance and published as JSON files.</p>
+        <p><strong>Are the BUY / SELL signals investment advice?</strong><br>
+        No. The site is strictly educational and research-oriented. The signals are not a recommendation or investment advice, and past results do not guarantee future performance. See the <a href="../about/">About</a> page for details.</p>
+        <p><strong>Why were these particular companies chosen?</strong><br>
+        The selection criteria and the reason each individual company is included are given in section <a href="#sec-tickers-en">2 “Ticker selection”</a> above.</p>
+        <p><strong>How often is the data updated?</strong><br>
+        Automatically after the session close on business days. The last update timestamp is shown on the <strong>Overview</strong> page. If the external source is temporarily unavailable, the most recent local archive copy is displayed instead.</p>
+        <p><strong>Can I reuse this data in my own work?</strong><br>
+        The derived data (signals, metrics, charts) was produced as part of this thesis. The raw quotes come from Yahoo Finance and are subject to that service's terms — this is discussed in <a href="../LICENSING.md">LICENSING.md</a>.</p>
+      </div>
+
+      <h3>Interpreting the signals</h3>
+      <div class="card">
+        <p><strong>Where do the signals come from?</strong><br>
+        From several independent streams: ML models (logistic regression, Random Forest, XGBoost, LightGBM), the candlestick model, a technical rule based on indicators, and a majority vote. The passive buy-and-hold benchmark is shown separately.</p>
+        <p><strong>What does “Candle Signal” mean?</strong><br>
+        It is the prediction of a separate model trained mainly on <strong>candle geometry</strong> — body and shadow lengths, the position of the close within the daily range, and basic formations. It lets you compare the information value of candle shape against classical technical indicators.</p>
+        <p><strong>Why do two models disagree on the same stock?</strong><br>
+        That is normal and intentional. Each model weights features differently, so a disagreement is information in itself — it says the signal is uncertain. The <strong>ensemble</strong> stream resolves such cases by majority vote.</p>
+        <p><strong>What does the 0.2% threshold mean?</strong><br>
+        A BUY label is assigned only when the next-day return exceeds 0.2%. Smaller moves are treated as noise and fall into the SELL class. The 0.5% and 1.0% thresholds are computed as comparison variants.</p>
+        <p><strong>What does the <code>proxy</code> tag on a signal mean?</strong><br>
+        That no trained model artifact was available for that stock, so the signal was computed with a simplified fallback rule. Signals tagged <code>proxy</code> are <strong>not</strong> ML model predictions and should not be read as such.</p>
+        <p><strong>Why do the backtest results look better than real-world trading would?</strong><br>
+        The backtest assumes execution at the closing price and does not model full transaction costs, slippage or market impact. It is meant for comparing models against each other, not for forecasting real profit.</p>
+      </div>
+
+      <h3>Technical problems</h3>
+      <div class="card">
+        <p><strong>The page loads but the tables and charts are empty.</strong><br>
+        Usually an outdated version of the files in your browser cache. Do a hard refresh: <code>Ctrl</code>+<code>F5</code> (Windows/Linux) or <code>Cmd</code>+<code>Shift</code>+<code>R</code> (macOS). The site requires JavaScript to be enabled.</p>
+        <p><strong>The price charts do not render.</strong><br>
+        The charts use the Plotly.js library loaded from a CDN. If a browser extension, firewall or offline mode blocks it, the charts will not appear — the other pages keep working normally.</p>
+        <p><strong>Some images are missing on the “Charts” page.</strong><br>
+        The PNG charts are produced by the ML pipeline and copied into the site on every publish. A missing image means that model variant has not yet been computed for that stock.</p>
+        <p><strong>Are my portfolios sent anywhere?</strong><br>
+        No. The simulator stores portfolios exclusively in your browser's local storage (<code>localStorage</code>). There is no server and no data transmission. Clearing site data deletes the portfolios irreversibly.</p>
+        <p><strong>How do I change the language or theme?</strong><br>
+        The <strong>PL / EN</strong> switch and the light/dark theme button are in the top-right corner of every page. Your choice is remembered in the browser.</p>
+        <p><strong>The site does not work well on my phone.</strong><br>
+        The layout is responsive, but wide tables require horizontal scrolling. On narrow screens the navigation is hidden behind the hamburger button.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="copyright-block">
+    <span data-lang="pl" class="lang-active">
+      © 2025 Kajetan Kaczyński — <strong>Praca inżynierska</strong><br>
+      Uniwersytet Przyrodniczy w Poznaniu<br>
+      Wszelkie prawa zastrzeżone.
+    </span>
+    <span data-lang="en">
+      © 2025 Kajetan Kaczyński — <strong>Engineering thesis</strong><br>
+      Poznań University of Life Sciences<br>
+      All rights reserved.
+    </span>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <span data-i18n="footer.methodology">Project methodology — engineering thesis</span>
+</footer>
+
+<script>
+(function() {
+  // --- Theme (mirrors the other pages; localStorage key kept as 'stockwatch-theme') ---
+  var saved = localStorage.getItem('stockwatch-theme');
+  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+  updateThemeIcon(theme);
+
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('stockwatch-theme', next);
+    updateThemeIcon(next);
+  });
+
+  function updateThemeIcon(t) {
+    document.querySelector('.icon-sun').style.display = t === 'dark' ? 'block' : 'none';
+    document.querySelector('.icon-moon').style.display = t === 'light' ? 'block' : 'none';
+  }
+
+  document.getElementById('hamburgerBtn').addEventListener('click', function() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  });
+
+  // --- Bilingual content: show only the blocks matching the active language ---
+  // Read the shared key directly so the correct language shows before app.js runs;
+  // then stay in sync via the 's4c:langchange' event app.js dispatches.
+  function currentLang() {
+    var l = localStorage.getItem('stockk-forecast-lang') || 'pl';
+    return (l === 'pl' || l === 'en') ? l : 'pl';
+  }
+  function applyLang(lang) {
+    document.querySelectorAll('[data-lang]').forEach(function(el) {
+      el.classList.toggle('lang-active', el.getAttribute('data-lang') === lang);
+    });
+  }
+  applyLang(currentLang());
+  document.addEventListener('s4c:langchange', function(e) {
+    applyLang((e.detail && e.detail.lang) || currentLang());
+  });
+})();
+</script>
+
+</body>
+</html>

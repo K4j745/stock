@@ -12,13 +12,15 @@ from config import MODEL_DIR, REPORTS_DIR, DATA_DIR, TICKERS, BENCHMARK_TICKER
 logger = logging.getLogger(__name__)
 
 
-def compute_portfolio_metrics(returns: pd.Series, annualization_factor: int = 252) -> dict:
+def compute_portfolio_metrics(returns: pd.Series, annualization_factor: int = 252,
+                              risk_free_rate: float = 0.0) -> dict:
     """
     Compute standard portfolio performance metrics.
 
     Args:
         returns: Daily return series
         annualization_factor: Trading days per year (252)
+        risk_free_rate: Annual risk-free rate (default 0)
 
     Returns:
         dict with: total_return, annualized_return, sharpe_ratio,
@@ -37,8 +39,12 @@ def compute_portfolio_metrics(returns: pd.Series, annualization_factor: int = 25
     # Volatility (annualized)
     volatility = returns.std() * np.sqrt(annualization_factor)
 
-    # Sharpe Ratio (assume risk-free rate = 0 for simplicity)
-    sharpe_ratio = annualized_return / volatility if volatility > 0 else 0
+    # Sharpe Ratio: textbook definition — annualised mean daily excess return
+    # divided by annualised volatility. rf is an annual rate -> daily.
+    rf_daily = risk_free_rate / annualization_factor
+    daily_std = returns.std()
+    excess_mean_daily = returns.mean() - rf_daily
+    sharpe_ratio = (excess_mean_daily / daily_std * np.sqrt(annualization_factor)) if daily_std > 0 else 0
 
     # Max Drawdown
     cumulative = (1 + returns).cumprod()

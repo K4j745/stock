@@ -1,0 +1,74 @@
+[
+  {
+    "ticker": "XOM",
+    "shares": 87.0,
+    "avg_cost": 140.4026,
+    "last_price": 165.87,
+    "market_value": 14430.69,
+    "unrealised_pnl_abs": 2215.66,
+    "unrealised_pnl_pct": 0.181388,
+    "entry_date": "2026-10-21",
+    "entry_price": 177.72000122070312,
+    "last_signal_id": "S-XOM-random_forest-20261021-bb3818"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 240.0,
+    "avg_cost": 213.7141,
+    "last_price": 276.22,
+    "market_value": 66292.8,
+    "unrealised_pnl_abs": 15001.41,
+    "unrealised_pnl_pct": 0.292474,
+    "entry_date": "2026-10-30",
+    "entry_price": 280.0,
+    "last_signal_id": "S-JNJ-random_forest-20261030-3b7dd8"
+  },
+  {
+    "ticker": "PG",
+    "shares": 10.0,
+    "avg_cost": 160.3347,
+    "last_price": 165.4,
+    "market_value": 1654.0,
+    "unrealised_pnl_abs": 50.65,
+    "unrealised_pnl_pct": 0.031592,
+    "entry_date": "2026-11-06",
+    "entry_price": 162.36000061035156,
+    "last_signal_id": "S-PG-random_forest-20261106-93f2ea"
+  },
+  {
+    "ticker": "KO",
+    "shares": 427.0,
+    "avg_cost": 72.5474,
+    "last_price": 95.67,
+    "market_value": 40851.09,
+    "unrealised_pnl_abs": 9873.33,
+    "unrealised_pnl_pct": 0.318723,
+    "entry_date": "2026-11-04",
+    "entry_price": 96.30000305175781,
+    "last_signal_id": "S-KO-random_forest-20261104-40e847"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 231.0,
+    "avg_cost": 102.1746,
+    "last_price": 125.52,
+    "market_value": 28995.12,
+    "unrealised_pnl_abs": 5392.78,
+    "unrealised_pnl_pct": 0.228485,
+    "entry_date": "2026-11-04",
+    "entry_price": 127.0,
+    "last_signal_id": "S-WMT-random_forest-20261104-a7d4e0"
+  },
+  {
+    "ticker": "NEE",
+    "shares": 197.0,
+    "avg_cost": 83.0478,
+    "last_price": 86.95,
+    "market_value": 17129.15,
+    "unrealised_pnl_abs": 768.72,
+    "unrealised_pnl_pct": 0.046987,
+    "entry_date": "2026-11-05",
+    "entry_price": 89.94999694824219,
+    "last_signal_id": "S-NEE-random_forest-20261105-f67bf0"
+  }
+]
