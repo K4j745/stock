@@ -928,7 +928,7 @@
     var bestRet = Math.max.apply(null, summary.map(function(p){ return p.total_return == null ? -Infinity : p.total_return; }));
     var bestSharpe = Math.max.apply(null, summary.map(function(p){ return p.sharpe == null ? -Infinity : p.sharpe; }));
 
-    var html = '<div class="cmp-wrap"><table class="cmp"><thead><tr>' +
+    var html = '<div class="cmp-frame frame"><div class="cmp-wrap"><table class="cmp"><thead><tr>' +
       '<th class="left">Portfel</th>' +
       '<th class="left">Źródło sygnału</th>' +
       '<th>Wartość końcowa</th>' +
@@ -953,7 +953,7 @@
         '<td class="mono">' + (p.n_transactions != null ? Number(p.n_transactions).toLocaleString('pl-PL') : '—') + '</td>' +
         '</tr>';
     });
-    html += '</tbody></table></div>';
+    html += '</tbody></table></div></div>';
     host.innerHTML = html;
 
     host.querySelectorAll('tbody tr').forEach(function(tr){
