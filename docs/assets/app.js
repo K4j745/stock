@@ -68,7 +68,15 @@
       "lang.aria": "Przełącz język (polski / angielski)",
       "bg.pause": "Zatrzymaj animację tła",
       "bg.play": "Wznów animację tła",
-      "menu.aria": "Menu nawigacji"
+      "menu.aria": "Menu nawigacji",
+
+      "prices.stat.price": "Cena",
+      "prices.stat.dayRange": "Zakres dnia",
+      "prices.stat.yearRange": "Zakres 52 tyg.",
+      "prices.stat.signal": "Sygnał",
+      "prices.stats.pick": "Wybierz spółkę, aby zobaczyć statystyki",
+      "prices.stats.none": "Brak danych dla",
+      "prices.chart.price": "Cena"
     },
     en: {
       "nav.overview": "Overview",
@@ -116,7 +124,15 @@
       "lang.aria": "Switch language (Polish / English)",
       "bg.pause": "Pause background animation",
       "bg.play": "Resume background animation",
-      "menu.aria": "Navigation menu"
+      "menu.aria": "Navigation menu",
+
+      "prices.stat.price": "Price",
+      "prices.stat.dayRange": "Day range",
+      "prices.stat.yearRange": "52W range",
+      "prices.stat.signal": "Signal",
+      "prices.stats.pick": "Select a ticker to view stats",
+      "prices.stats.none": "No data available for",
+      "prices.chart.price": "Price"
     }
   };
 

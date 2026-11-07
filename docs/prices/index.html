@@ -173,137 +173,187 @@
   }
 
   /* Container */
-  .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+  .container { max-width: 1880px; margin: 0 auto; padding: 24px; }
 
-  /* Ticker pills */
+  /* Ticker and range controls */
+  .price-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px 24px;
+    margin-bottom: 16px;
+  }
   .ticker-pills {
     display: flex;
     gap: 6px;
+    min-width: 0;
+    max-width: 100%;
     overflow-x: auto;
-    padding-bottom: 4px;
-    margin-bottom: 20px;
+    padding-bottom: 2px;
     scrollbar-width: thin;
   }
-  .ticker-pill {
-    padding: 6px 16px;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    background: var(--color-surface);
+  .ticker-pill, .range-btn {
+    min-height: var(--control-h);
+    padding: 0 14px;
+    background: var(--panel-bg);
     color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color var(--transition-interactive), background var(--transition-interactive), border-color var(--transition-interactive);
+  }
+  .ticker-pill {
+    flex-shrink: 0;
     font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 500;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all var(--transition-interactive);
-    flex-shrink: 0;
+    clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
   }
-  .ticker-pill:hover {
+  .ticker-pill:hover, .range-btn:hover {
     color: var(--color-text);
     border-color: var(--color-text-muted);
   }
-  .ticker-pill.active {
-    background: var(--color-primary);
-    color: #fff;
+  .ticker-pill.active, .range-btn.active {
+    color: var(--color-primary);
+    background: linear-gradient(180deg, rgba(0,255,136,0.18), rgba(0,255,136,0.05));
     border-color: var(--color-primary);
+  }
+  .ticker-pill:focus-visible, .range-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -3px;
   }
 
   /* Time range buttons */
   .range-group {
     display: flex;
-    gap: 0;
-    margin-bottom: 20px;
+    flex-shrink: 0;
+    clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
   }
   .range-btn {
-    padding: 6px 14px;
-    background: var(--color-surface);
-    color: var(--color-text-muted);
-    border: 1px solid var(--color-border);
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-interactive);
+    font-family: var(--font-display);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
   }
-  .range-btn:first-child { border-radius: var(--radius-md) 0 0 var(--radius-md); }
-  .range-btn:last-child { border-radius: 0 var(--radius-md) var(--radius-md) 0; }
-  .range-btn + .range-btn { border-left: none; }
-  .range-btn:hover { color: var(--color-text); background: var(--color-surface-offset); }
-  .range-btn.active {
-    background: var(--color-primary-highlight);
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-  .range-btn.active + .range-btn { border-left-color: var(--color-primary); }
+  .range-btn + .range-btn { margin-left: -1px; }
+  .range-btn.active { position: relative; z-index: 1; }
 
-  /* Chart + info layout */
+  /* Chamfered neon frame. The polygon traces an outer and an inner outline, so
+     the line also runs along the cut corners. */
+  .frame {
+    --frame-cut: var(--cyber-chamfer);
+    --frame-diagonal: calc(var(--frame-cut) + 0.41px);
+    position: relative;
+    clip-path: polygon(
+      var(--frame-cut) 0, 100% 0,
+      100% calc(100% - var(--frame-cut)),
+      calc(100% - var(--frame-cut)) 100%,
+      0 100%, 0 var(--frame-cut)
+    );
+  }
+  .frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-border) 30%, var(--color-border) 70%, var(--color-warning));
+    opacity: 0.75;
+    transition: opacity var(--transition-interactive);
+    clip-path: polygon(evenodd,
+      var(--frame-cut) 0, 100% 0,
+      100% calc(100% - var(--frame-cut)),
+      calc(100% - var(--frame-cut)) 100%,
+      0 100%, 0 var(--frame-cut), var(--frame-cut) 0,
+      var(--frame-diagonal) 1px, calc(100% - 1px) 1px,
+      calc(100% - 1px) calc(100% - var(--frame-diagonal)),
+      calc(100% - var(--frame-diagonal)) calc(100% - 1px),
+      1px calc(100% - 1px), 1px var(--frame-diagonal),
+      var(--frame-diagonal) 1px
+    );
+  }
+  .frame:hover::before { opacity: 1; }
+
+  /* Stats strip above the charts */
   .chart-layout {
     display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 20px;
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
   }
-  @media (max-width: 1024px) {
-    .chart-layout { grid-template-columns: 1fr; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
   }
-
-  /* Card */
-  .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-  }
-  .card-header {
+  .stat-tile {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--color-divider);
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    min-height: 84px;
+    padding: 14px 12px;
+    background: var(--panel-bg);
+    text-align: center;
   }
-  .card-header h2 {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-text);
-  }
-  .card-body { padding: 16px; }
-
-  .chart-box {
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    margin-bottom: 16px;
-    min-height: 400px;
-  }
-  .chart-box:last-child { margin-bottom: 0; }
-
-  /* Info panel */
-  .info-panel {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-  }
-  .info-panel h3 {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text-muted);
+  .stat-label {
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 16px;
+    color: var(--color-text-muted);
   }
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    font-size: 13px;
-  }
-  .info-row + .info-row { border-top: 1px solid var(--color-divider); }
-  .info-row .info-label { color: var(--color-text-muted); }
-  .info-row .info-value {
+  .stat-value {
     font-family: var(--font-mono);
-    font-weight: 500;
+    font-size: 18px;
     font-variant-numeric: tabular-nums;
+    color: var(--color-text);
+    text-shadow: 0 0 7px rgba(0,255,136,0.22);
+  }
+  .stat-value.is-range { font-size: 15px; }
+  .stat-value.is-buy { color: var(--color-success); }
+  .stat-value.is-sell { color: var(--color-error); }
+  .stat-value.is-hold { color: var(--color-warning); }
+  .stats-empty {
+    grid-column: 1 / -1;
+    padding: 18px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
+
+  /* Chart panels */
+  .chart-stack { display: grid; gap: 14px; min-width: 0; }
+  /* Near-solid: real price data must not blend with the decorative candles. */
+  .chart-panel {
+    min-width: 0;
+    padding: 8px 10px;
+    background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  }
+  .chart-box { min-height: 600px; overflow: hidden; }
+  .chart-box.is-small { min-height: 240px; }
+
+  @media (min-width: 1024px) {
+    .stat-tile { backdrop-filter: blur(3px); }
+  }
+  @media (max-width: 1100px) {
+    .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 767.98px) {
+    .chart-box { min-height: 420px; }
+    .range-group { width: 100%; }
+    .range-btn { flex: 1; padding: 0 6px; }
+  }
+  @media (max-width: 560px) {
+    .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .stat-tile { padding: 12px 8px; }
+    .stat-value { font-size: 16px; }
+    .stat-value.is-range { font-size: 13px; }
+    .chart-panel { padding: 6px 4px; }
+  }
+  @media (max-width: 360px) {
+    .stat-value.is-range { font-size: 11.5px; }
   }
 
   /* Loading */
@@ -386,30 +436,33 @@
 </div>
 
 <div class="container">
-  <div class="ticker-pills" id="tickerPills">
-    <div class="loading-state" style="padding:20px;width:100%;text-align:center;color:var(--color-text-muted)">Loading tickers...</div>
-  </div>
+  <div class="price-controls">
+    <div class="ticker-pills" id="tickerPills">
+      <div class="loading-state" style="padding:20px;width:100%;text-align:center;color:var(--color-text-muted)">Loading tickers...</div>
+    </div>
 
-  <div class="range-group">
-    <button class="range-btn" data-range="7">1W</button>
-    <button class="range-btn" data-range="30">1M</button>
-    <button class="range-btn" data-range="90">3M</button>
-    <button class="range-btn" data-range="180">6M</button>
-    <button class="range-btn active" data-range="365">1Y</button>
-    <button class="range-btn" data-range="0">MAX</button>
+    <div class="range-group">
+      <button class="range-btn" data-range="7">1W</button>
+      <button class="range-btn" data-range="30">1M</button>
+      <button class="range-btn" data-range="90">3M</button>
+      <button class="range-btn" data-range="180">6M</button>
+      <button class="range-btn active" data-range="365">1Y</button>
+      <button class="range-btn" data-range="0">MAX</button>
+    </div>
   </div>
 
   <div class="chart-layout">
-    <div>
-      <div id="candlestickChart" class="chart-box">
-        <div class="loading-state"><div class="spinner"></div><div>Loading chart data...</div></div>
+    <section class="stats-grid" id="infoPanel" aria-live="polite">
+      <div class="stats-empty" data-i18n="prices.stats.pick">Select a ticker to view stats</div>
+    </section>
+    <div class="chart-stack">
+      <div class="chart-panel frame">
+        <div id="candlestickChart" class="chart-box">
+          <div class="loading-state"><div class="spinner"></div><div>Loading chart data...</div></div>
+        </div>
       </div>
-      <div id="rsiChart" class="chart-box" style="min-height:200px;"></div>
-      <div id="macdChart" class="chart-box" style="min-height:200px;"></div>
-    </div>
-    <div class="info-panel" id="infoPanel">
-      <h3>Current Stats</h3>
-      <div style="color:var(--color-text-muted);font-size:13px;">Select a ticker to view stats</div>
+      <div class="chart-panel frame"><div id="rsiChart" class="chart-box is-small"></div></div>
+      <div class="chart-panel frame"><div id="macdChart" class="chart-box is-small"></div></div>
     </div>
   </div>
 </div>
@@ -455,8 +508,8 @@
   function getPlotlyTheme() {
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     return {
-      // Near-solid: real price data must not blend with the decorative candles.
-      paper_bgcolor: isDark ? 'rgba(18,18,26,0.9)' : 'rgba(255,255,255,0.92)',
+      // Transparent: the .chart-panel behind the plot supplies the background.
+      paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
       font: { family: 'JetBrains Mono, Share Tech Mono, monospace', color: isDark ? '#9a9ab5' : '#4a4f5e', size: 11 },
       xaxis: { gridcolor: isDark ? '#22222e' : '#e3e7ee', linecolor: isDark ? '#2a2a3a' : '#c2c8d4', rangeslider: { visible: false } },
@@ -466,6 +519,24 @@
   }
 
   var plotlyConfig = { responsive: true, displayModeBar: false };
+  var PHONE_MAX_WIDTH = 767;
+  var NARROW_PHONE_MAX_WIDTH = 360;
+  var CANDLE_HEIGHT_PHONE = 420;
+  var CANDLE_HEIGHT_DESKTOP = 600;
+  var INDICATOR_HEIGHT = 240;
+
+  function tr(key, fallback) {
+    return window.S4C ? window.S4C.t(key) : fallback;
+  }
+
+  // app.js is deferred, so labels drawn before it loads are refreshed here too.
+  function refreshLabels() {
+    if (!currentData) return;
+    updateInfoPanel(currentData, currentTicker);
+    renderCharts(currentData);
+  }
+  document.addEventListener('s4c:langchange', refreshLabels);
+  document.addEventListener('DOMContentLoaded', refreshLabels);
 
   // Load tickers + signals + sector palette
   function hexAlpha(hex, a) {
@@ -622,7 +693,7 @@
     var panel = document.getElementById('infoPanel');
     var last = data[data.length - 1];
     if (!last) {
-      panel.innerHTML = '<h3>No Data</h3><div style="color:var(--color-text-muted);font-size:13px;">No OHLCV records available for ' + ticker + '.</div>';
+      panel.innerHTML = '<div class="stats-empty">' + tr('prices.stats.none', 'No data available for') + ' ' + ticker + '.</div>';
       return;
     }
 
@@ -645,25 +716,20 @@
       ? (fmt(yearLow, 2, '$') + ' - ' + fmt(yearHigh, 2, '$'))
       : 'N/A';
 
-    var html = '<h3>' + ticker + ' Stats</h3>';
-    var rows = [
-      ['Price', fmt(last.close, 2, '$')],
-      ['Day Range', dayRange],
-      ['52W Range', range52],
-      ['RSI', fmt(last.rsi, 1)],
-      ['MACD', fmt(last.macd, 4)],
-      ['Signal', sig ? sig.signal : 'N/A']
+    var signal = sig ? sig.signal : 'N/A';
+    var signalClass = { BUY: ' is-buy', SELL: ' is-sell', HOLD: ' is-hold' }[signal] || '';
+    var tiles = [
+      [tr('prices.stat.price', 'Price') + ' \u00b7 ' + ticker, fmt(last.close, 2, '$'), ''],
+      [tr('prices.stat.dayRange', 'Day range'), dayRange, ' is-range'],
+      [tr('prices.stat.yearRange', '52W range'), range52, ' is-range'],
+      ['RSI', fmt(last.rsi, 1), ''],
+      ['MACD', fmt(last.macd, 4), ''],
+      [tr('prices.stat.signal', 'Signal'), signal, signalClass]
     ];
-    rows.forEach(function(r) {
-      var extraCls = '';
-      if (r[0] === 'Signal') {
-        if (r[1] === 'BUY') extraCls = ' style="color:var(--color-success)"';
-        else if (r[1] === 'SELL') extraCls = ' style="color:var(--color-error)"';
-        else if (r[1] === 'HOLD') extraCls = ' style="color:var(--color-warning)"';
-      }
-      html += '<div class="info-row"><span class="info-label">' + r[0] + '</span><span class="info-value"' + extraCls + '>' + r[1] + '</span></div>';
-    });
-    panel.innerHTML = html;
+    panel.innerHTML = tiles.map(function(tile) {
+      return '<div class="stat-tile frame"><span class="stat-label">' + tile[0] + '</span>' +
+        '<span class="stat-value' + tile[2] + '">' + tile[1] + '</span></div>';
+    }).join('');
   }
 
   function renderCharts(rawData) {
@@ -697,6 +763,7 @@
     var candleTrace = {
       x: dates, open: opens, high: highs, low: lows, close: closes,
       type: 'candlestick',
+      name: currentTicker,
       increasing: { line: { color: '#00ff88' }, fillcolor: '#00ff88' },
       decreasing: { line: { color: '#ff3366' }, fillcolor: '#ff3366' }
     };
@@ -712,11 +779,17 @@
     traces.push({ x: dates, y: bbUpper, type: 'scatter', mode: 'lines', line: { color: '#64647e', width: 1, dash: 'dash' }, name: 'BB Upper' });
     traces.push({ x: dates, y: bbLower, type: 'scatter', mode: 'lines', line: { color: '#64647e', width: 1, dash: 'dash' }, name: 'BB Lower' });
 
+    // The title sits at the very top and the legend just above the plot, so a
+    // legend that wraps to two rows on a phone needs the taller top margin.
+    var isPhone = window.innerWidth <= PHONE_MAX_WIDTH;
+    var topMargin = isPhone ? 76 : 60;
+    if (window.innerWidth <= NARROW_PHONE_MAX_WIDTH) topMargin = 96;
     var candleLayout = Object.assign({}, theme, {
-      title: { text: currentTicker + ' \u2014 Price', font: { color: theme.font.color, size: 13, family: 'Inter' } },
+      title: { text: currentTicker + ' \u2014 ' + tr('prices.chart.price', 'Price'), y: 0.985, yanchor: 'top', font: { color: theme.font.color, size: 13, family: 'Inter' } },
       showlegend: true,
-      legend: { font: { size: 10, family: 'Inter' }, bgcolor: 'rgba(0,0,0,0)', orientation: 'h', y: 1.05 },
-      height: 450
+      legend: { font: { size: 10, family: 'Inter' }, bgcolor: 'rgba(0,0,0,0)', orientation: 'h', x: 0.5, xanchor: 'center', y: 1.01, yanchor: 'bottom' },
+      margin: Object.assign({}, theme.margin, { t: topMargin }),
+      height: isPhone ? CANDLE_HEIGHT_PHONE : CANDLE_HEIGHT_DESKTOP
     });
     Plotly.newPlot('candlestickChart', traces, candleLayout, plotlyConfig);
 
@@ -730,7 +803,7 @@
     var rsiLayout = Object.assign({}, theme, {
       title: { text: 'RSI (14)', font: { color: theme.font.color, size: 12, family: 'Inter' } },
       yaxis: Object.assign({}, theme.yaxis, { range: [0, 100] }),
-      height: 200, showlegend: false
+      height: INDICATOR_HEIGHT, showlegend: false
     });
     Plotly.newPlot('rsiChart', rsiTraces, rsiLayout, plotlyConfig);
 
@@ -747,8 +820,8 @@
     ];
     var macdLayout = Object.assign({}, theme, {
       title: { text: 'MACD', font: { color: theme.font.color, size: 12, family: 'Inter' } },
-      height: 200, showlegend: true,
-      legend: { font: { size: 10, family: 'Inter' }, bgcolor: 'rgba(0,0,0,0)', orientation: 'h', y: 1.1 },
+      height: INDICATOR_HEIGHT, showlegend: true,
+      legend: { font: { size: 10, family: 'Inter' }, bgcolor: 'rgba(0,0,0,0)', orientation: 'h', x: 1, xanchor: 'right', y: 1.1, yanchor: 'bottom' },
       barmode: 'relative'
     });
     Plotly.newPlot('macdChart', macdTraces, macdLayout, plotlyConfig);
