@@ -78,20 +78,20 @@ def plot_equity_curve(ticker: str, model_name: str, label_version: str = "A"):
     fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True,
                               gridspec_kw={"height_ratios": [3, 1]})
 
-    axes[0].plot(strat_equity.index, strat_equity.values, label=f"Strategy ({model_name})", linewidth=1.5)
-    axes[0].plot(bh_equity.index, bh_equity.values, label=f"Buy & Hold ({ticker})", linewidth=1.5, linestyle="--")
+    axes[0].plot(strat_equity.index, strat_equity.values, label=f"Strategia ({model_name})", linewidth=1.5)
+    axes[0].plot(bh_equity.index, bh_equity.values, label=f"Kup i trzymaj ({ticker})", linewidth=1.5, linestyle="--")
     axes[0].plot(spy_equity.index, spy_equity.values, label="SPY", linewidth=1.5, linestyle=":")
-    axes[0].set_ylabel("Portfolio Value (normalized)")
-    axes[0].set_title(f"Equity Curve - {ticker} | {model_name} | label={label_version}")
+    axes[0].set_ylabel("Wartość portfela (znormalizowana)")
+    axes[0].set_title(f"Krzywa kapitału — {ticker} | {model_name} | etykieta={label_version}")
     axes[0].legend()
     axes[0].yaxis.set_major_formatter(mticker.PercentFormatter(xmax=1, decimals=0))
 
     # Drawdown
     rolling_max = strat_equity.cummax()
     drawdown = (strat_equity - rolling_max) / rolling_max
-    axes[1].fill_between(drawdown.index, drawdown.values, 0, color="red", alpha=0.4, label="Drawdown")
-    axes[1].set_ylabel("Drawdown")
-    axes[1].set_xlabel("Date")
+    axes[1].fill_between(drawdown.index, drawdown.values, 0, color="red", alpha=0.4, label="Obsunięcie")
+    axes[1].set_ylabel("Obsunięcie kapitału")
+    axes[1].set_xlabel("Data")
     axes[1].yaxis.set_major_formatter(mticker.PercentFormatter(xmax=1, decimals=1))
     axes[1].legend()
 
@@ -134,11 +134,11 @@ def plot_confusion_matrix(ticker: str, model_name: str, label_version: str = "A"
         preds = model.predict(X_test_scaled)
 
     cm = confusion_matrix(y_test, preds)
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Down (0)", "Up (1)"])
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Spadek (0)", "Wzrost (1)"])
 
     fig, ax = plt.subplots(figsize=(6, 5))
     disp.plot(ax=ax, colorbar=False, cmap="Blues")
-    ax.set_title(f"Confusion Matrix\n{ticker} | {model_name} | label={label_version}")
+    ax.set_title(f"Macierz pomyłek\n{ticker} | {model_name} | etykieta={label_version}")
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"confusion_matrix_{ticker}_{model_name}_{label_version}.png")
     plt.savefig(out, dpi=150, bbox_inches="tight")
@@ -170,8 +170,8 @@ def plot_feature_importance(ticker: str, model_name: str = "random_forest", labe
 
     fig, ax = plt.subplots(figsize=(10, max(6, top_n // 2)))
     ax.barh(importances.index, importances.values, color="steelblue", edgecolor="white")
-    ax.set_xlabel("Feature Importance")
-    ax.set_title(f"Top {top_n} Feature Importances\n{ticker} | {model_name} | label={label_version}")
+    ax.set_xlabel("Istotność cechy")
+    ax.set_title(f"Top {top_n} najważniejszych cech\n{ticker} | {model_name} | etykieta={label_version}")
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"feature_importance_{ticker}_{model_name}_{label_version}.png")
     plt.savefig(out, dpi=150, bbox_inches="tight")
@@ -213,17 +213,18 @@ def plot_model_comparison(ticker: str, label_version: str = "A"):
         axes = [axes]
 
     colors = ["#4C72B0", "#DD8452", "#55A868", "#C44E52"]
+    metric_labels_pl = {"accuracy": "Dokładność", "f1": "F1", "roc_auc": "ROC AUC", "mcc": "MCC"}
     for ax, metric, color in zip(axes, metric_cols, colors):
         ax.bar(df.index, df[metric], color=color, edgecolor="white", width=0.6)
-        ax.set_title(metric.upper())
+        ax.set_title(metric_labels_pl.get(metric, metric.upper()))
         ax.set_ylim(0, 1)
-        ax.set_ylabel(metric)
+        ax.set_ylabel(metric_labels_pl.get(metric, metric))
         ax.set_xticks(range(len(df.index)))
         ax.set_xticklabels(df.index, rotation=30, ha="right")
         for i, val in enumerate(df[metric]):
             ax.text(i, val + 0.01, f"{val:.3f}", ha="center", fontsize=9)
 
-    plt.suptitle(f"Model Comparison - {ticker} | label={label_version}", fontsize=13, y=1.02)
+    plt.suptitle(f"Porównanie modeli — {ticker} | etykieta={label_version}", fontsize=13, y=1.02)
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"model_comparison_{ticker}_{label_version}.png")
     plt.savefig(out, dpi=150, bbox_inches="tight")

@@ -95,12 +95,12 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
     else:
         shap_vals = shap_values
 
-    label = f"{ticker} | {model_name}{suffix} | label={label_version}"
+    label = f"{ticker} | {model_name}{suffix} | etykieta={label_version}"
 
     # 1. Summary plot (beeswarm)
     plt.figure(figsize=(10, 8))
     shap.summary_plot(shap_vals, X_scaled_df, show=False, plot_size=None)
-    plt.title(f"SHAP Summary Plot\n{label}", fontsize=12)
+    plt.title(f"Wykres zbiorczy SHAP\n{label}", fontsize=12)
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"shap_summary_{ticker}_{model_name}_{label_version}{suffix}.png")
     plt.savefig(out, dpi=150, bbox_inches="tight")
@@ -110,7 +110,7 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
     # 2. Bar plot (mean absolute SHAP)
     plt.figure(figsize=(10, 8))
     shap.summary_plot(shap_vals, X_scaled_df, plot_type="bar", show=False, plot_size=None)
-    plt.title(f"SHAP Feature Importance\n{label}", fontsize=12)
+    plt.title(f"Istotność cech (SHAP)\n{label}", fontsize=12)
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"shap_bar_{ticker}_{model_name}_{label_version}{suffix}.png")
     plt.savefig(out, dpi=150, bbox_inches="tight")
@@ -133,7 +133,7 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
         )
         plt.figure(figsize=(12, 6))
         shap.waterfall_plot(exp, show=False, max_display=15)
-        plt.title(f"SHAP Waterfall (last sample)\n{label}", fontsize=12)
+        plt.title(f"Wykres wodospadowy SHAP (ostatnia próbka)\n{label}", fontsize=12)
         plt.tight_layout()
         out = os.path.join(PLOTS_DIR, f"shap_waterfall_{ticker}_{model_name}_{label_version}{suffix}.png")
         plt.savefig(out, dpi=150, bbox_inches="tight")
