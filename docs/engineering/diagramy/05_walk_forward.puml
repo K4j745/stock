@@ -1,0 +1,45 @@
+@startgantt 05_walk_forward
+' Schemat walidacji walk-forward (oś czasu) — rzeczywiste daty dla AAPL
+' Rozdział pracy: metodyka. Okno treningowe 252 sesje, test 21 sesji, krok 21 sesji.
+title Walidacja walk-forward (165 foldów) a okno dashboardu
+printscale yearly
+Project starts 2011-06-13
+
+-- Foldy walk-forward (dane 2011-06-13 – 2026-03-31) --
+[Fold 1: trening 252 sesje] as [F1T] starts 2011-06-13 and ends 2012-06-11
+[Fold 1: test 21 sesji] as [F1E] starts 2012-06-12 and ends 2012-07-11
+[Fold 2: trening] as [F2T] starts 2011-07-13 and ends 2012-07-11
+[Fold 2: test] as [F2E] starts 2012-07-12 and ends 2012-08-09
+[Fold 3: trening] as [F3T] starts 2011-08-11 and ends 2012-08-09
+[Fold 3: test] as [F3E] starts 2012-08-10 and ends 2012-09-10
+[Fold 165: trening] as [F165T] starts 2025-02-21 and ends 2026-02-23
+[Fold 165: test] as [F165E] starts 2026-02-24 and ends 2026-03-24
+
+-- Modele zapisane na dashboard --
+[Trening modeli finalnych (= trening foldu 165)] as [FINAL] starts 2025-02-21 and ends 2026-02-23
+
+-- Dashboard (okno 3 lata) --
+[Okno dashboardu] as [DASH] starts 2023-11-07 and ends 2026-11-06
+[Dane widziane przez modele finalne] as [INS] starts 2025-02-21 and ends 2026-02-23
+[Dane nowe dla modeli (poza próbą)] as [OOS] starts 2026-02-24 and ends 2026-11-06
+
+[F1E] is colored in #FFCC80
+[F2E] is colored in #FFCC80
+[F3E] is colored in #FFCC80
+[F165E] is colored in #FFCC80
+[F1T] is colored in #90CAF9
+[F2T] is colored in #90CAF9
+[F3T] is colored in #90CAF9
+[F165T] is colored in #90CAF9
+[FINAL] is colored in #1E88E5
+[DASH] is colored in #CFD8DC
+[INS] is colored in #EF9A9A
+[OOS] is colored in #A5D6A7
+
+note bottom
+  Każdy fold: skaler i model dopasowane tylko na oknie treningowym,
+  metryki liczone na kolejnych 21 sesjach. Kolejne okna przesuwają się o 21 sesji.
+  ARIMA w ewaluacji: test ADF i dobór rzędu BIC w każdym oknie treningowym.
+  Na dashboardzie wyniki modeli ML od 2025-02-21 do 2026-02-23 dotyczą danych treningowych.
+end note
+@endgantt

@@ -1,0 +1,142 @@
+@startuml 09_model_danych
+' Model danych — eksportowane pliki JSON (docs/data), zamiast schematu bazy danych
+' Rozdział pracy: projekt danych
+!include _styl.iuml
+hide circle
+hide methods
+
+title Model danych — artefakty JSON dashboardu (docs/data)
+
+class Ticker <<registry, tickers/T>> {
+  symbol : string
+  name : string
+  sector : string
+}
+
+class Model <<models/index.json>> {
+  name : string
+  family : technical / ml / statistical
+  description : string
+}
+
+class OhlcvBar <<tickers/T/ohlcv.json>> {
+  date : date
+  open, high, low, close : float
+  volume : int
+  rsi, macd, macd_signal, macd_hist : float
+  bb_upper, bb_middle, bb_lower : float
+  sma20, sma50, ema12, ema26 : float
+  return_1d, return_5d, return_20d : float
+}
+
+class Signal <<signals/latest.json, history.json>> {
+  signal_id : string  [PK]
+  signal_date : date
+  ticker : string  [FK]
+  model_name : string  [FK]
+  signal_source : string
+  model_version : string
+  signal : BUY / SELL / HOLD
+  signal_reason : string
+  probability_up : float
+  confidence : float
+  threshold_used : float
+  triggered_rules : string
+  executed_in_portfolio : bool
+  portfolio_ids : string[]
+  return_1d_after, return_5d_after, return_20d_after : float
+  label_version, data_version : string
+}
+
+class Portfolio <<portfolios/index.json, summary.json>> {
+  portfolio_id : string  [PK]
+  portfolio_name : string
+  signal_source : string  [FK → Model]
+  initial_capital : float
+  final_value : float
+  total_return : float
+  sharpe : float
+  max_drawdown : float
+  n_transactions : int
+}
+
+class Decision <<portfolios/id/decisions.json>> {
+  decision_id : string  [PK]
+  signal_id : string  [FK]
+  transaction_id : string lub null
+  ticker : string
+  market_date : date
+  action : BUY / SELL / HOLD / SEED
+  quantity : float
+  execution_price : float
+  shares_before, shares_after : float
+  cash_before, cash_after : float
+  portfolio_value_after : float
+  trade_pnl_abs : float lub null
+  reason : string
+}
+
+class Transaction <<portfolios/id/transactions.json, trades.csv>> {
+  transaction_id : string  [PK]
+  pozostałe pola jak w Decision
+}
+
+class Position <<portfolios/id/positions.json>> {
+  ticker : string
+  shares : float
+  avg_cost : float
+  last_price : float
+  market_value : float
+  unrealised_pnl_abs : float
+  last_signal_id : string
+}
+
+class EquityPoint <<portfolios/id/equity_curve.json>> {
+  date : date
+  portfolio_value : float
+  cash : float
+  invested : float
+  peak : float
+  drawdown : float
+}
+
+class Metrics <<portfolios/id/metrics.json>> {
+  performance : total_return, cagr, volatility,
+    sharpe_ratio, max_drawdown, calmar_ratio, trade_*
+  benchmark : te same miary dla SPY
+}
+
+class ModelSummary <<models/m/summary.json>> {
+  model_name : string
+  n_signals : int
+  overall : accuracy, precision, recall, f1, ...
+  per_ticker : metryki dla każdej spółki
+}
+
+class RunMeta <<meta.json, last_updated.json>> {
+  generated_at_utc : datetime
+  git_commit : string
+  data_version : string
+  label : mode, threshold, version
+  ml_artifacts_present : map
+}
+
+Ticker "1" -- "*" OhlcvBar
+Ticker "1" -- "*" Signal
+Model "1" -- "*" Signal
+Model "1" -- "*" Portfolio : źródło sygnału
+Model "1" -- "1" ModelSummary
+Portfolio "1" *-- "*" Decision
+Portfolio "1" *-- "*" Position
+Portfolio "1" *-- "*" EquityPoint
+Portfolio "1" *-- "1" Metrics
+Decision "1" -- "0..1" Transaction : transakcja = decyzja\nz transaction_id
+Signal "1" -- "*" Decision : signal_id
+
+note bottom of Signal
+  Brak bazy danych: relacje realizują identyfikatory
+  (signal_id, decision_id, transaction_id) zapisane
+  w plikach JSON, które przeglądarka łączy po stronie klienta.
+end note
+
+@enduml

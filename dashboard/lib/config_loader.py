@@ -69,7 +69,11 @@ def _normalise(raw: Dict[str, Any]) -> Dict[str, Any]:
 
     arima = raw.get("arima_signals") or {}
     arima.setdefault("enabled", False)
+    arima.setdefault("order_selection", "bic")
     arima.setdefault("order", [1, 0, 1])
+    arima.setdefault("max_p", 2)
+    arima.setdefault("max_q", 2)
+    arima.setdefault("adf_alpha", 0.05)
     arima.setdefault("train_window", 252)
     arima.setdefault("min_train", 60)
     arima.setdefault("refit_every", 21)
