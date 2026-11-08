@@ -1,0 +1,50 @@
+[
+  {
+    "ticker": "JPM",
+    "shares": 2.0,
+    "avg_cost": 345.895,
+    "last_price": 334.49,
+    "market_value": 668.98,
+    "unrealised_pnl_abs": -22.81,
+    "unrealised_pnl_pct": -0.032972,
+    "entry_date": "2026-11-06",
+    "entry_price": 333.1499938964844,
+    "last_signal_id": "S-JPM-arima-20261106-d56478"
+  },
+  {
+    "ticker": "XOM",
+    "shares": 5.0,
+    "avg_cost": 174.31,
+    "last_price": 165.87,
+    "market_value": 829.35,
+    "unrealised_pnl_abs": -42.2,
+    "unrealised_pnl_pct": -0.048419,
+    "entry_date": "2026-11-06",
+    "entry_price": 164.25,
+    "last_signal_id": "S-XOM-arima-20261106-2290cc"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 1.0,
+    "avg_cost": 267.56,
+    "last_price": 276.22,
+    "market_value": 276.22,
+    "unrealised_pnl_abs": 8.66,
+    "unrealised_pnl_pct": 0.032367,
+    "entry_date": "2026-11-06",
+    "entry_price": 267.55999755859375,
+    "last_signal_id": "S-JNJ-arima-20261106-c89868"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 2.0,
+    "avg_cost": 124.655,
+    "last_price": 125.52,
+    "market_value": 251.04,
+    "unrealised_pnl_abs": 1.73,
+    "unrealised_pnl_pct": 0.006939,
+    "entry_date": "2026-11-06",
+    "entry_price": 124.0,
+    "last_signal_id": "S-WMT-arima-20261106-7a4a4d"
+  }
+]

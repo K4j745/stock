@@ -60,12 +60,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 132628.95,
-    "total_return": 0.325723,
-    "sharpe": 0.815483,
-    "max_drawdown": -0.169024,
+    "final_value": 133423.91,
+    "total_return": 0.333606,
+    "sharpe": 0.825661,
+    "max_drawdown": -0.170653,
     "n_decisions": 7540,
-    "n_transactions": 856
+    "n_transactions": 679
   },
   {
     "portfolio_id": "rf",
@@ -77,12 +77,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 169415.92,
-    "total_return": 0.693435,
-    "sharpe": 1.490195,
-    "max_drawdown": -0.109662,
+    "final_value": 171192.96,
+    "total_return": 0.711117,
+    "sharpe": 1.5088,
+    "max_drawdown": -0.109573,
     "n_decisions": 7540,
-    "n_transactions": 5392
+    "n_transactions": 5230
   },
   {
     "portfolio_id": "xgb",
@@ -94,12 +94,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 125784.25,
-    "total_return": 0.257305,
-    "sharpe": 0.487366,
-    "max_drawdown": -0.339314,
+    "final_value": 130242.05,
+    "total_return": 0.301802,
+    "sharpe": 0.555348,
+    "max_drawdown": -0.32102,
     "n_decisions": 7540,
-    "n_transactions": 5233
+    "n_transactions": 5127
   },
   {
     "portfolio_id": "lgbm",
@@ -111,12 +111,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 143776.15,
-    "total_return": 0.437147,
-    "sharpe": 0.928847,
-    "max_drawdown": -0.196206,
+    "final_value": 148003.39,
+    "total_return": 0.479331,
+    "sharpe": 1.022243,
+    "max_drawdown": -0.178698,
     "n_decisions": 7540,
-    "n_transactions": 5244
+    "n_transactions": 5123
   },
   {
     "portfolio_id": "candle",
@@ -128,12 +128,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 137565.5,
-    "total_return": 0.375067,
-    "sharpe": 1.309744,
-    "max_drawdown": -0.080573,
+    "final_value": 141396.62,
+    "total_return": 0.413295,
+    "sharpe": 1.366834,
+    "max_drawdown": -0.081546,
     "n_decisions": 7540,
-    "n_transactions": 6573
+    "n_transactions": 6540
   },
   {
     "portfolio_id": "ensemble",
@@ -145,11 +145,28 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 153065.29,
-    "total_return": 0.529999,
-    "sharpe": 1.093643,
-    "max_drawdown": -0.164846,
+    "final_value": 157771.5,
+    "total_return": 0.576966,
+    "sharpe": 1.192376,
+    "max_drawdown": -0.145972,
     "n_decisions": 7540,
-    "n_transactions": 5103
+    "n_transactions": 4971
+  },
+  {
+    "portfolio_id": "arima",
+    "portfolio_name": "ARIMA (model statystyczny)",
+    "description": "Portfel sterowany klasycznym modelem ARIMA(1,0,1).",
+    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: model ARIMA(1,0,1) na dziennych stopach zwrotu \u2014 klasyczny model szereg\u00f3w czasowych, punkt odniesienia dla modeli ML. Nie korzysta ze wska\u017anik\u00f3w technicznych ani zapisanych modeli: jest dopasowywany co 21 sesji na 252 poprzednich zwrotach (co najmniej 60), wi\u0119c ka\u017cda prognoza u\u017cywa tylko przesz\u0142ych danych. START: portfel kupuje po 10 akcji ka\u017cdego tickera po cenie otwarcia pierwszej sesji (pozycje zal\u0105\u017ckowe SEED). REGU\u0141A HANDLU: tryb incremental, 1 akcja na sygna\u0142 \u2014 BUY, gdy P(zwrot nast\u0119pnego dnia > 0,2%) \u2265 0,5, czyli ta sama regu\u0142a co w modelach ML; w przeciwnym razie SELL. Do pierwszego dopasowania (ok. 60 sesji) HOLD bez transakcji. ROLA: por\u00f3wnanie strategii ML z klasycznym podej\u015bciem statystycznym. Benchmark SPY liczony automatycznie.",
+    "signal_source": "arima",
+    "seed_shares": 10,
+    "trade_mode": "incremental",
+    "trade_size": 1,
+    "initial_capital": 100000.0,
+    "final_value": 107926.77,
+    "total_return": 0.078755,
+    "sharpe": 0.826553,
+    "max_drawdown": -0.041822,
+    "n_decisions": 7540,
+    "n_transactions": 2480
   }
 ]

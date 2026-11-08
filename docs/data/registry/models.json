@@ -33,5 +33,10 @@
     "name": "ensemble_majority",
     "family": "ml",
     "description": "Majority vote across ML models."
+  },
+  {
+    "name": "arima",
+    "family": "statistical",
+    "description": "ARIMA on daily returns, refitted on a rolling window."
   }
 ]
