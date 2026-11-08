@@ -1,0 +1,61 @@
+@startuml 07_aktywnosc_arima
+' Diagram aktywności — model ARIMA w procedurze Box–Jenkinsa (jeden fold)
+' Rozdział pracy: metodyka (model odniesienia)
+!include _styl.iuml
+
+title Diagram aktywności — ARIMA: identyfikacja, estymacja i prognoza w jednym foldzie
+
+start
+:Okno treningowe: 252 dzienne stopy zwrotu
+(przeskalowane do procent);
+
+partition "Identyfikacja" {
+  :Test ADF (H0: pierwiastek jednostkowy);
+  if (p-wartość < 0,05?) then (tak)
+    :d = 0 (szereg stacjonarny);
+  else (nie)
+    :d = 1 (różnicowanie);
+  endif
+}
+
+partition "Estymacja i wybór modelu" {
+  :Siatka rzędów p ∈ {0, 1, 2}, q ∈ {0, 1, 2};
+  repeat
+    :Dopasowanie ARIMA(p, d, q)
+    metodą największej wiarygodności;
+    if (Dopasowanie poprawne?) then (tak)
+      :Zapis kryterium BIC;
+    else (nie)
+      :Pominięcie rzędu;
+    endif
+  repeat while (Kolejny rząd z siatki?) is (tak) not (nie)
+  :Wybór modelu o najmniejszym BIC;
+  :Zapis rzędu, BIC i p-wartości ADF
+  do raportu (arima_orders.csv);
+}
+
+partition "Prognoza (21 sesji testu)" {
+  repeat
+    :Prognoza zwrotu na 1 dzień do przodu
+    (parametry stałe, dane tylko do dnia prognozy);
+    :P(zwrot > próg) z rozkładu normalnego
+    prognozy (średnia, błąd standardowy);
+    if (P ≥ 0,5?) then (tak)
+      :BUY;
+    else (nie)
+      :SELL;
+    endif
+  repeat while (Kolejny dzień testu?) is (tak) not (nie)
+}
+
+:Metryki foldu: dokładność, F1, ROC AUC, MCC;
+stop
+
+note right
+  Na dashboardzie ten sam rdzeń (arima_core)
+  działa w oknie kroczącym: dopasowanie co 21 sesji
+  na 252 poprzednich zwrotach; przed pierwszym
+  dopasowaniem (60 sesji) sygnał HOLD.
+end note
+
+@enduml

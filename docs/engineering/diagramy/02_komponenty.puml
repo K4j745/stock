@@ -1,0 +1,110 @@
+@startuml 02_komponenty
+' Diagram komponentów — StocKK Forecast
+' Rozdział pracy: architektura systemu
+!include _styl.iuml
+
+title Diagram komponentów — system StocKK Forecast
+
+package "Dane zewnętrzne" {
+  component "Yahoo Finance" as YF
+  interface "OHLCV + kurs USD/PLN" as I_OHLCV
+  YF -up- I_OHLCV
+}
+
+package "Pipeline ML — stock_ml/ (uruchamiany lokalnie)" {
+  component "main.py\n(interfejs CLI)" as ML_CLI
+  component "config.py\n(tickery, progi, walk-forward,\nustawienia ARIMA)" as ML_CFG
+  component "data\n(pobieranie, czyszczenie,\narchiwum CSV)" as ML_DATA
+  component "features\n(wskaźniki, cechy świecowe,\netykiety, walidacja)" as ML_FEAT
+  component "models\n(train, evaluate, tune,\ncandle_model)" as ML_MODELS
+  component "arima_core\n(ADF, dobór rzędu BIC,\nprognoza o 1 krok)" as ARIMA_CORE
+  component "arima_baseline\n(ewaluacja ARIMA\nna foldach walk-forward)" as ARIMA_BASE
+  component "backtest\n(run, strategy)" as ML_BT
+  component "reports\n(plots, shap_analysis,\ngenerate)" as ML_REP
+  database "models/saved/\n140 modeli i skalerów\n(bin2, bin5; w repozytorium)" as ART
+  database "reports/\nCSV, JSON, PNG,\nrzędy ARIMA" as ML_OUT
+
+  ML_CLI --> ML_DATA
+  ML_CLI --> ML_MODELS
+  ML_CLI --> ARIMA_BASE
+  ML_CLI --> ML_BT
+  ML_CLI --> ML_REP
+  ML_DATA --> ML_FEAT
+  ML_FEAT --> ML_MODELS
+  ML_FEAT --> ARIMA_BASE
+  ARIMA_BASE --> ARIMA_CORE
+  ML_MODELS --> ART
+  ML_MODELS ..> ML_CFG
+  ARIMA_BASE --> ML_OUT
+  ML_BT --> ML_OUT
+  ML_REP --> ML_OUT
+}
+
+package "Generator dashboardu — dashboard/" {
+  component "generate.py\n(orkiestracja przebiegu)" as GEN
+  component "config_loader + registry\n(config.json, lista modeli)" as CFG
+  component "data_fetcher\n(pobranie, ponowienia,\narchiwum zapasowe)" as FETCH
+  component "indicators\n(wskaźniki dashboardu)" as IND
+  component "ml_loader\n(model z pliku lub proxy)" as MLL
+  component "arima_signals\n(ARIMA w oknie kroczącym)" as ARS
+  component "signals\n(reguły, progi, zespół,\nkup i trzymaj)" as SIG
+  component "portfolio\n(symulacja 10 portfeli)" as PORT
+  component "metrics\n(zwrot, CAGR, Sharpe,\nobsunięcie, Calmar)" as MET
+  component "exporters + audit\n(JSON, CSV, metadane)" as EXP
+
+  GEN --> CFG
+  GEN --> FETCH
+  GEN --> IND
+  GEN --> MLL
+  GEN --> ARS
+  GEN --> SIG
+  GEN --> PORT
+  GEN --> EXP
+  MLL --> SIG : P(wzrost)
+  ARS --> SIG : P(zwrot > próg)
+  SIG --> PORT : sygnały BUY / SELL / HOLD
+  PORT --> MET
+  PORT --> EXP
+}
+
+package "Artefakty statyczne — docs/" {
+  database "docs/data/\nsygnały, portfele, modele,\nOHLCV, metadane, CSV" as DOCSDATA
+  database "docs/charts/plots/\nwykresy PNG" as DOCSPNG
+  interface "HTTP GET\n(JSON / CSV / PNG)" as I_HTTP
+  DOCSDATA -up- I_HTTP
+  DOCSPNG -up- I_HTTP
+}
+
+package "Przeglądarka użytkownika" {
+  component "Strony HTML\n(Przegląd, Ceny, Wykresy, Sygnały,\nPortfele, Instrukcja, O stronie)" as HTML
+  component "assets/app.js\n(PL/EN, menu, stopka)" as APPJS
+  component "assets/market-bg.js\n(animowane tło)" as BG
+  component "Plotly.js\n(wykresy cen)" as PLOTLY
+  database "localStorage\n(portfel, język, motyw)" as LS
+  HTML --> APPJS
+  HTML --> PLOTLY
+  APPJS --> BG
+  HTML --> LS
+}
+
+ML_DATA --> I_OHLCV
+FETCH --> I_OHLCV
+MLL --> ART : wczytuje modele i skalery
+MLL ..> ML_FEAT : odtwarza cechy treningowe
+ARS ..> ARIMA_CORE : ten sam rdzeń co w pracy
+EXP --> DOCSDATA
+GEN --> DOCSPNG : kopiuje wykresy
+HTML --> I_HTTP : fetch()
+
+note right of ARS
+  ARIMA nie ma zapisanego modelu:
+  przy każdym dopasowaniu test ADF i BIC
+  wybierają rząd na oknie treningowym.
+end note
+
+note bottom of HTML
+  Cała logika prezentacji działa w przeglądarce:
+  brak back-endu, bazy danych i kont użytkowników.
+end note
+
+@enduml

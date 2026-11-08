@@ -1,0 +1,63 @@
+@startuml 04_wdrozenie
+' Diagram wdrożenia — StocKK Forecast
+' Rozdział pracy: architektura (wdrożenie bez serwera aplikacyjnego)
+!include _styl.iuml
+
+title Diagram wdrożenia — system StocKK Forecast
+
+node "Komputer badacza\n<<stacja robocza>>" as PC {
+  artifact "stock_ml/\n(trening, ewaluacja, ARIMA)" as A_ML
+  artifact "modele *.joblib / *.json / *.txt" as A_MODELS
+  artifact "dashboard/generate.py\n(uruchomienie ręczne)" as A_GEN_LOCAL
+}
+
+cloud "GitHub" {
+  node "Repozytorium Git\nK4j745/stock" as REPO {
+    artifact "kod: stock_ml/, dashboard/" as A_CODE
+    artifact "stock_ml/models/saved/\n(140 modeli, 43 MB)" as A_SAVED
+    artifact "docs/ (strona + docs/data)" as A_DOCS
+    artifact ".github/workflows/dashboard.yml" as A_WF
+  }
+
+  node "Runner GitHub Actions\nubuntu-latest, Python 3.11\n<<cron pn–pt 17:00 UTC>>" as RUNNER {
+    artifact "dashboard/generate.py" as A_GEN_CI
+    artifact "zależności: pandas, yfinance,\nscikit-learn 1.7.2, XGBoost 3.1.1,\nLightGBM 4.6.0, statsmodels" as A_DEPS
+  }
+
+  node "GitHub Pages\n<<serwer plików statycznych>>" as PAGES {
+    artifact "HTML, CSS, JS" as A_SITE
+    artifact "data/*.json, charts/plots/*.png" as A_DATA
+  }
+}
+
+cloud "Yahoo Finance\n<<usługa zewnętrzna>>" as YF
+
+node "Urządzenie użytkownika" as CLIENT {
+  node "Przeglądarka WWW" as BROWSER {
+    component "dashboard (JS)" as UI
+    database "localStorage\n(portfel, język, motyw)" as LS
+  }
+}
+
+PC --> REPO : git push (HTTPS)
+PC --> YF : pobranie notowań (HTTPS)
+REPO --> RUNNER : checkout kodu i modeli
+RUNNER --> YF : notowania i kurs USD/PLN (HTTPS)
+RUNNER --> REPO : commit docs/data (GITHUB_TOKEN)
+REPO --> PAGES : wdrożenie katalogu docs/
+BROWSER --> PAGES : HTTPS GET
+UI --> LS
+
+note right of PAGES
+  Brak serwera aplikacyjnego i bazy danych:
+  przeglądarka pobiera wyłącznie pliki
+  wygenerowane wcześniej przez generate.py.
+end note
+
+note bottom of PC
+  Modele trenuje się tylko tutaj.
+  CI ich nie trenuje, jedynie wczytuje
+  zapisane pliki z repozytorium.
+end note
+
+@enduml
