@@ -154,17 +154,21 @@ def from_probabilities(prob_up: pd.Series, buy_threshold: float, sell_threshold:
     There is no HOLD dead-band any more — the classifier is strictly binary.
     ``sell_threshold`` is accepted for signature compatibility but ignored.
     See README "How signals are produced".
+
+    A day without a prediction (NaN, e.g. while features warm up) becomes HOLD
+    with ``no_prediction``: no trade, rather than a SELL nobody predicted.
     """
-    sig = np.where(prob_up >= buy_threshold, "BUY", "SELL")
+    missing = prob_up.isna()
+    sig = np.where(missing, "HOLD", np.where(prob_up >= buy_threshold, "BUY", "SELL"))
     confidence = np.abs(prob_up - 0.5) * 2.0
+    rules = np.where(sig == "BUY", "prob_above_buy_threshold", "prob_below_buy_threshold")
     return pd.DataFrame({
         "signal": sig,
-        "score": np.round(prob_up.fillna(0.5).astype(float) * 100, 2),
+        "score": np.round(prob_up.astype(float) * 100, 2),
         "probability_up": np.round(prob_up.astype(float), 4),
         "confidence": np.round(confidence.astype(float), 4),
         "threshold_used": buy_threshold,
-        "triggered_rules": np.where(sig == "BUY", "prob_above_buy_threshold",
-                                    "prob_below_buy_threshold"),
+        "triggered_rules": np.where(missing, "no_prediction", rules),
     }, index=prob_up.index)
 
 
@@ -287,8 +291,8 @@ def ensemble_majority(per_model_signals: Dict[str, pd.DataFrame], min_votes: int
 
     Each model casts a BUY or SELL vote. The ensemble picks whichever side
     has more votes; on a tie it falls back to the mean predicted
-    ``probability_up`` (>= 0.5 ⇒ BUY else SELL). There is no HOLD class —
-    the consensus is always a concrete BUY or SELL.
+    ``probability_up`` (>= 0.5 ⇒ BUY else SELL). The one HOLD is a day on
+    which no model voted (all HOLD, e.g. while features warm up).
 
     ``min_votes`` is retained for signature compatibility and reported in
     ``threshold_used`` but no longer creates a HOLD dead-zone.
@@ -305,10 +309,12 @@ def ensemble_majority(per_model_signals: Dict[str, pd.DataFrame], min_votes: int
         prob_sum = prob_sum + sigdf["probability_up"].reindex(idx).fillna(0.5).astype(float)
     n_models = len(per_model_signals)
     mean_prob = prob_sum / max(n_models, 1)
+    no_votes = (buy + sell) == 0
     signal = np.where(
-        buy > sell, "BUY",
-        np.where(sell > buy, "SELL",
-                 np.where(mean_prob >= 0.5, "BUY", "SELL")),
+        no_votes, "HOLD",
+        np.where(buy > sell, "BUY",
+                 np.where(sell > buy, "SELL",
+                          np.where(mean_prob >= 0.5, "BUY", "SELL"))),
     )
     score = np.where(signal == "SELL", sell, buy)
     confidence = np.clip(np.abs(buy - sell) / max(n_models, 1), 0, 1)
@@ -320,6 +326,7 @@ def ensemble_majority(per_model_signals: Dict[str, pd.DataFrame], min_votes: int
         "probability_up": np.round(prob_up.astype(float), 4),
         "confidence": np.round(confidence.astype(float), 4),
         "threshold_used": min_votes,
-        "triggered_rules": np.where(signal == "BUY", "majority_buy",
-                                    np.where(score == sell, "majority_sell", "prob_tiebreak")),
+        "triggered_rules": np.where(no_votes, "no_votes",
+                                    np.where(signal == "BUY", "majority_buy",
+                                             np.where(score == sell, "majority_sell", "prob_tiebreak"))),
     }, index=idx)

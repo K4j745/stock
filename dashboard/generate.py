@@ -32,7 +32,7 @@ REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 sys.path.insert(0, SCRIPT_DIR)
 
 from lib import (  # type: ignore  # noqa: E402
-    audit, config_loader, data_fetcher, exporters, indicators,
+    arima_signals, audit, config_loader, data_fetcher, exporters, indicators,
     metrics as metrics_mod, ml_loader, portfolio as portfolio_mod, registry as registry_mod,
     signals as signals_mod,
 )
@@ -151,7 +151,13 @@ def generate_all_signals(reg: registry_mod.Registry, prices: Dict[str, pd.DataFr
                 ml_signals_by_model, min_votes=2,
             )
 
-        # 4) Buy-and-hold — runs for every ticker (baseline strategy).
+            # 4) ARIMA — a statistical baseline refitted on past returns. It
+            #    is kept out of the ensemble so the ML vote stays unchanged.
+            arima = _arima_signals(ticker, df, config, p_buy)
+            if arima is not None:
+                per_model[arima_signals.MODEL_NAME] = arima
+
+        # 5) Buy-and-hold — runs for every ticker (baseline strategy).
         per_model["buy_and_hold"] = signals_mod.buy_and_hold(df)
 
         # Attach a stable signal_id to every (ticker, model, date)
@@ -162,6 +168,24 @@ def generate_all_signals(reg: registry_mod.Registry, prices: Dict[str, pd.DataFr
             ]
         out[ticker] = per_model
     return out
+
+
+def _arima_signals(ticker: str, df: pd.DataFrame, config: Dict, buy_threshold: float):
+    """ARIMA signals for one ticker, or None when ARIMA is off or unavailable."""
+    arima_cfg = config["arima_signals"]
+    if not arima_cfg.get("enabled"):
+        return None
+    try:
+        probs = arima_signals.arima_probabilities(
+            df["Close"], float(config["label"]["threshold"]), arima_cfg, ticker,
+        )
+    except ImportError as exc:
+        logger.warning("ARIMA skipped for %s (%s). Install statsmodels.", ticker, exc)
+        return None
+    sigs = arima_signals.to_signals(probs, buy_threshold)
+    sigs.attrs["signal_source"] = arima_signals.MODEL_NAME
+    sigs.attrs["model_version"] = arima_signals.model_version(arima_cfg)
+    return sigs
 
 
 def build_signal_records(reg: registry_mod.Registry, prices: Dict[str, pd.DataFrame],
@@ -314,17 +338,21 @@ def _classify_signal_reason(model_name: str, row) -> str:
       * ``rule_triggered``         — technical_rule_based fired BUY/SELL
       * ``model_prediction``       — ML model (incl. candle) picked BUY/SELL
       * ``majority_vote``          — ensemble_majority decided BUY/SELL
+      * ``arima_warmup``           — ARIMA has too little history yet (HOLD)
+      * ``no_prediction``          — ML model had no prediction that day (HOLD)
       * ``buy_and_hold_entry`` / ``buy_and_hold_carry`` — benchmark stream
     """
     sig = str(row.get("signal", "HOLD"))
     if model_name == "technical_rule_based":
         return "rule_triggered" if sig in ("BUY", "SELL") else "rule_threshold_not_met"
     if model_name == "ensemble_majority":
-        return "majority_vote" if sig in ("BUY", "SELL") else "model_disagreement"
+        return "majority_vote" if sig in ("BUY", "SELL") else "no_votes"
     if model_name == "buy_and_hold":
         return "buy_and_hold_entry" if sig == "BUY" else "buy_and_hold_carry"
     if model_name in _ML_MODELS:
-        return "model_prediction" if sig in ("BUY", "SELL") else "low_confidence"
+        return "model_prediction" if sig in ("BUY", "SELL") else "no_prediction"
+    if model_name == arima_signals.MODEL_NAME:
+        return "model_prediction" if sig in ("BUY", "SELL") else "arima_warmup"
     return "unknown"
 
 

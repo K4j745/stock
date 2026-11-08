@@ -2,3 +2,10 @@ yfinance
 pandas
 numpy
 ta
+statsmodels>=0.14
+# Pinned to the versions that saved the committed models in stock_ml/models/saved:
+# pickled scikit-learn models are not guaranteed to load in other versions.
+scikit-learn==1.7.2
+xgboost==3.1.1
+lightgbm==4.6.0
+joblib

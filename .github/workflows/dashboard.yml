@@ -32,10 +32,9 @@ jobs:
       # Try to (re)generate ML analysis plots from the stock_ml/ pipeline so
       # they end up in stock_ml/reports/plots/ — generate.py will then copy
       # them into docs/charts/plots/. We DO NOT retrain models here; we only
-      # run the plot helpers, which need pre-existing trained artifacts in
-      # stock_ml/models/saved/. If those aren't committed (default case),
-      # the step fails harmlessly and the dashboard simply shows the empty
-      # state on the Charts tab.
+      # run the plot helpers on the trained artifacts committed in
+      # stock_ml/models/saved/. The same artifacts let generate.py use the
+      # real ML models instead of the indicator proxies.
       - name: Generate ML plots (best effort)
         continue-on-error: true
         run: |

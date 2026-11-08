@@ -35,7 +35,7 @@ _STOCK_ML_DIR = os.path.join(_REPO_ROOT, "stock_ml")
 _OHLCV = ["Open", "High", "Low", "Close", "Volume"]
 
 
-def _ensure_stock_ml_on_path() -> bool:
+def ensure_stock_ml_on_path() -> bool:
     if not os.path.isdir(_STOCK_ML_DIR):
         return False
     if _STOCK_ML_DIR not in sys.path:
@@ -51,7 +51,7 @@ def _stock_ml_features(ticker: str, df: pd.DataFrame) -> Optional[pd.DataFrame]:
     """
     if not all(c in df.columns for c in _OHLCV):
         return None
-    if not _ensure_stock_ml_on_path():
+    if not ensure_stock_ml_on_path():
         return None
     try:
         from data.preprocess import clean_data  # type: ignore
@@ -69,7 +69,7 @@ def _stock_ml_features(ticker: str, df: pd.DataFrame) -> Optional[pd.DataFrame]:
 
 def _candle_real_probabilities(ticker: str, df: pd.DataFrame, threshold: float) -> Optional[pd.Series]:
     """Load the trained candle model (if present) and return P(up)."""
-    if not _ensure_stock_ml_on_path():
+    if not ensure_stock_ml_on_path():
         return None
     try:
         from models.candle_model import predict_candle_proba  # type: ignore
