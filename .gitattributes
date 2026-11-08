@@ -17,3 +17,5 @@ docs/charts/plots/**    linguist-generated=true
 # See docs/data/README.md for the full rationale and the deploy-time-generation
 # upgrade path that removes committed data entirely.
 docs/data/**            merge=keep-ours
+# Trained models must stay byte-exact: no line-ending conversion.
+stock_ml/models/saved/** binary
