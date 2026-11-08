@@ -37,6 +37,6 @@
   {
     "name": "arima",
     "family": "statistical",
-    "description": "ARIMA on daily returns, refitted on a rolling window."
+    "description": "ARIMA on daily returns; ADF and BIC choose the order on a rolling window."
   }
 ]
