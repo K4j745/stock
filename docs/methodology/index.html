@@ -158,6 +158,7 @@
         <li><strong>Random Forest</strong> — zespół drzew decyzyjnych, odporny na przeuczenie.</li>
         <li><strong>XGBoost</strong> — gradient boosting, zwykle najmocniejszy na danych tabelarycznych.</li>
         <li><strong>LightGBM</strong> — szybki gradient boosting, alternatywa dla XGBoost.</li>
+        <li><strong>ARIMA(1,0,1)</strong> — klasyczny model szeregów czasowych na dziennych stopach zwrotu, punkt odniesienia dla modeli ML. Nie używa wskaźników technicznych; jest dopasowywany co 21 sesji na 252 poprzednich zwrotach, więc prognozuje wyłącznie z przeszłych danych. Prognozę zwrotu zamienia na BUY/SELL tą samą regułą co modele ML: BUY, gdy P(zwrot następnego dnia &gt; próg) ≥ 0,5. Ma własny portfel, ale nie głosuje w zespole (ensemble).</li>
         <li><strong>Model świecowy (Candle Signal)</strong> — osobny model (XGBoost/RF) uczony na cechach geometrii świec + bazowych cechach technicznych, prezentowany na dashboardzie jako „Candle Signal".</li>
       </ul>
     </section>
@@ -384,6 +385,7 @@
         <li><strong>Random Forest</strong> — ensemble of decision trees, robust to overfitting.</li>
         <li><strong>XGBoost</strong> — gradient boosting, usually the strongest on tabular data.</li>
         <li><strong>LightGBM</strong> — fast gradient boosting, an alternative to XGBoost.</li>
+        <li><strong>ARIMA(1,0,1)</strong> — a classical time-series model on daily returns and a reference point for the ML models. It uses no technical indicators and is refitted every 21 sessions on the previous 252 returns, so it forecasts from past data only. The return forecast becomes BUY/SELL with the same rule as the ML models: BUY when P(next-day return &gt; threshold) ≥ 0.5. It has its own portfolio but does not vote in the ensemble.</li>
         <li><strong>Candle Signal model</strong> — a separate model (XGBoost/RF) trained on candle-geometry features + base technical features, shown on the dashboard as "Candle Signal".</li>
       </ul>
     </section>

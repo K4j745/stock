@@ -65,6 +65,15 @@
     "_binary_note": "Signals are strictly binary (BUY/SELL) since 2026-07. The 0.45-0.55 HOLD dead-band was removed: a single 0.5 decision threshold is used. label_version bin2 = binary label with a 0.2% next-day return threshold (supervisor's 'version B', adopted 2026-08 in place of the earlier bin5/0.5%); loads real stock_ml artifacts when present."
   },
 
+  "arima_signals": {
+    "enabled": true,
+    "order": [1, 0, 1],
+    "train_window": 252,
+    "min_train": 60,
+    "refit_every": 21,
+    "_note": "ARIMA(1,0,1) on daily returns. No saved artifacts: refitted every 21 sessions on the previous 252 (at least 60) returns, so every forecast uses only past data. BUY when P(next-day return > label threshold) >= 0.5, the same rule as the ML models. HOLD until the first fit. Not part of ensemble_majority."
+  },
+
   "portfolios": [
     {
       "id": "spy_bh",
@@ -171,6 +180,18 @@
       "weights": "equal",
       "initial_capital": 100000,
       "signal_source": "ensemble_majority",
+      "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
+      "benchmark": "SPY"
+    },
+    {
+      "id": "arima",
+      "name": "ARIMA (model statystyczny)",
+      "description": "Portfel sterowany klasycznym modelem ARIMA(1,0,1).",
+      "note": "ŹRÓDŁO SYGNAŁU: model ARIMA(1,0,1) na dziennych stopach zwrotu — klasyczny model szeregów czasowych, punkt odniesienia dla modeli ML. Nie korzysta ze wskaźników technicznych ani zapisanych modeli: jest dopasowywany co 21 sesji na 252 poprzednich zwrotach (co najmniej 60), więc każda prognoza używa tylko przeszłych danych. START: portfel kupuje po 10 akcji każdego tickera po cenie otwarcia pierwszej sesji (pozycje zalążkowe SEED). REGUŁA HANDLU: tryb incremental, 1 akcja na sygnał — BUY, gdy P(zwrot następnego dnia > 0,2%) ≥ 0,5, czyli ta sama reguła co w modelach ML; w przeciwnym razie SELL. Do pierwszego dopasowania (ok. 60 sesji) HOLD bez transakcji. ROLA: porównanie strategii ML z klasycznym podejściem statystycznym. Benchmark SPY liczony automatycznie.",
+      "tickers": ["AAPL","MSFT","JPM","XOM","JNJ","UNH","PG","KO","WMT","NEE"],
+      "weights": "equal",
+      "initial_capital": 100000,
+      "signal_source": "arima",
       "rules": { "max_positions": 10, "rebalance": "on_signal", "seed_shares": 10, "trade_mode": "incremental", "trade_size": 1 },
       "benchmark": "SPY"
     }

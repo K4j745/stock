@@ -14,14 +14,10 @@ use those fixed parameters, each one seeing only observations before its own day
 import json
 import logging
 import os
-import warnings
-from typing import NamedTuple, Tuple
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
-from scipy.stats import norm
-from statsmodels.tools.sm_exceptions import ConvergenceWarning, EstimationWarning
-from statsmodels.tsa.arima.model import ARIMA
 
 from config import (
     ARIMA_ORDER,
@@ -38,21 +34,12 @@ from data.download import download_single
 from data.preprocess import clean_data
 from features.pipeline import build_feature_matrix
 from features.validation import get_time_series_folds
+from models.arima_core import OneStepForecast, probability_above
+from models.arima_core import forecast_one_step as _forecast_one_step
 from models.evaluate import evaluate_model
 from reports.generate import export_results
 
 logger = logging.getLogger("stock_ml")
-
-# Daily returns are ~0.01; fitting in percent keeps the optimiser well conditioned.
-PERCENT_SCALE = 100.0
-
-
-class OneStepForecast(NamedTuple):
-    """One-step-ahead forecasts for a test window, in decimal return units."""
-
-    mean: np.ndarray
-    std: np.ndarray
-    converged: bool
 
 
 def forecast_one_step(
@@ -60,32 +47,8 @@ def forecast_one_step(
     test: np.ndarray,
     order: Tuple[int, int, int] = ARIMA_ORDER,
 ) -> OneStepForecast:
-    """Fit ARIMA on ``train`` and forecast each ``test`` value one step ahead."""
-    train_scaled = np.asarray(train, dtype=float) * PERCENT_SCALE
-    test_scaled = np.asarray(test, dtype=float) * PERCENT_SCALE
-
-    # Non-convergence is reported through ``converged``, not as a warning per fold.
-    # EstimationWarning only says statsmodels reset its starting parameters to zero.
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", ConvergenceWarning)
-        warnings.simplefilter("ignore", EstimationWarning)
-        fitted = ARIMA(train_scaled, order=order).fit()
-
-    extended = fitted.append(test_scaled, refit=False)
-    prediction = extended.get_prediction(
-        start=len(train_scaled),
-        end=len(train_scaled) + len(test_scaled) - 1,
-    )
-    return OneStepForecast(
-        mean=np.asarray(prediction.predicted_mean) / PERCENT_SCALE,
-        std=np.asarray(prediction.se_mean) / PERCENT_SCALE,
-        converged=bool(fitted.mle_retvals.get("converged", True)),
-    )
-
-
-def probability_above(mean: np.ndarray, std: np.ndarray, threshold: float) -> np.ndarray:
-    """Return P(return > threshold) under the normal forecast distribution."""
-    return norm.sf(threshold, loc=mean, scale=std)
+    """Forecast each ``test`` value one step ahead, ARIMA_ORDER by default."""
+    return _forecast_one_step(train, test, order)
 
 
 def _mean_metrics(fold_metrics: list) -> dict:

@@ -68,6 +68,7 @@ _MODEL_DESCRIPTIONS = {
     "xgboost":             ("ml", "Gradient boosted trees (XGBoost)."),
     "lightgbm":            ("ml", "Gradient boosted trees (LightGBM)."),
     "ensemble_majority":   ("ml", "Majority vote across ML models."),
+    "arima":               ("statistical", "ARIMA on daily returns, refitted on a rolling window."),
     "buy_and_hold":        ("technical", "Buy on first day, hold to end (benchmark)."),
 }
 
@@ -78,6 +79,8 @@ def build_registry(config: Dict) -> Registry:
     model_names = ["technical_rule_based"] + list(config["ml_signals"]["models"]) + [
         "ensemble_majority",
     ]
+    if config.get("arima_signals", {}).get("enabled"):
+        model_names.append("arima")
     # de-duplicate while preserving order
     seen, ordered = set(), []
     for m in model_names:

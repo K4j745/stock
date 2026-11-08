@@ -67,6 +67,13 @@ def _normalise(raw: Dict[str, Any]) -> Dict[str, Any]:
     ml.setdefault("reports_dir", "stock_ml/reports")
     ml.setdefault("use_proxy_when_artifacts_missing", True)
 
+    arima = raw.get("arima_signals") or {}
+    arima.setdefault("enabled", False)
+    arima.setdefault("order", [1, 0, 1])
+    arima.setdefault("train_window", 252)
+    arima.setdefault("min_train", 60)
+    arima.setdefault("refit_every", 21)
+
     # An *explicit* empty list means "no portfolios" — respect it. Only fall
     # back to the legacy default when the key is missing entirely.
     raw_portfolios = raw.get("portfolios")
@@ -91,6 +98,7 @@ def _normalise(raw: Dict[str, Any]) -> Dict[str, Any]:
         "label": label,
         "technical_signals": tech,
         "ml_signals": ml,
+        "arima_signals": arima,
         "portfolios": portfolios,
     }
 
