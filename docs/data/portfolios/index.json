@@ -155,18 +155,18 @@
   {
     "portfolio_id": "arima",
     "portfolio_name": "ARIMA (model statystyczny)",
-    "description": "Portfel sterowany klasycznym modelem ARIMA(1,0,1).",
-    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: model ARIMA(1,0,1) na dziennych stopach zwrotu \u2014 klasyczny model szereg\u00f3w czasowych, punkt odniesienia dla modeli ML. Nie korzysta ze wska\u017anik\u00f3w technicznych ani zapisanych modeli: jest dopasowywany co 21 sesji na 252 poprzednich zwrotach (co najmniej 60), wi\u0119c ka\u017cda prognoza u\u017cywa tylko przesz\u0142ych danych. START: portfel kupuje po 10 akcji ka\u017cdego tickera po cenie otwarcia pierwszej sesji (pozycje zal\u0105\u017ckowe SEED). REGU\u0141A HANDLU: tryb incremental, 1 akcja na sygna\u0142 \u2014 BUY, gdy P(zwrot nast\u0119pnego dnia > 0,2%) \u2265 0,5, czyli ta sama regu\u0142a co w modelach ML; w przeciwnym razie SELL. Do pierwszego dopasowania (ok. 60 sesji) HOLD bez transakcji. ROLA: por\u00f3wnanie strategii ML z klasycznym podej\u015bciem statystycznym. Benchmark SPY liczony automatycznie.",
+    "description": "Portfel sterowany klasycznym modelem ARIMA z rz\u0119dem dobieranym przez BIC.",
+    "note": "\u0179R\u00d3D\u0141O SYGNA\u0141U: model ARIMA na dziennych stopach zwrotu \u2014 klasyczny model szereg\u00f3w czasowych (procedura Box\u2013Jenkinsa), punkt odniesienia dla modeli ML. Nie korzysta ze wska\u017anik\u00f3w technicznych ani zapisanych modeli: co 21 sesji jest dopasowywany na 252 poprzednich zwrotach (co najmniej 60). Przy ka\u017cdym dopasowaniu test ADF na tym oknie rozstrzyga o r\u00f3\u017cnicowaniu (d = 0 lub 1), a rz\u0105d (p, q \u2264 2) wybiera najmniejsze kryterium BIC \u2014 ka\u017cda prognoza u\u017cywa wi\u0119c tylko przesz\u0142ych danych. START: portfel kupuje po 10 akcji ka\u017cdego tickera po cenie otwarcia pierwszej sesji (pozycje zal\u0105\u017ckowe SEED). REGU\u0141A HANDLU: tryb incremental, 1 akcja na sygna\u0142 \u2014 BUY, gdy P(zwrot nast\u0119pnego dnia > 0,2%) \u2265 0,5, czyli ta sama regu\u0142a co w modelach ML; w przeciwnym razie SELL. Do pierwszego dopasowania (ok. 60 sesji) HOLD bez transakcji. ROLA: por\u00f3wnanie strategii ML z klasycznym podej\u015bciem statystycznym. Benchmark SPY liczony automatycznie.",
     "signal_source": "arima",
     "seed_shares": 10,
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 107926.77,
-    "total_return": 0.078755,
-    "sharpe": 0.826553,
-    "max_drawdown": -0.041822,
+    "final_value": 107302.09,
+    "total_return": 0.072511,
+    "sharpe": 0.760436,
+    "max_drawdown": -0.027516,
     "n_decisions": 7540,
-    "n_transactions": 2480
+    "n_transactions": 827
   }
 ]

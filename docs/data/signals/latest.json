@@ -1,7 +1,7 @@
 [
   {
-    "signal_id": "S-AAPL-technical_rule_based-20261106-352119",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-technical_rule_based-20261106-14af5f",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
@@ -44,8 +44,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-AAPL-logistic_regression-20261106-696b36",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-logistic_regression-20261106-20750b",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
@@ -88,8 +88,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-AAPL-random_forest-20261106-bef2cc",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-random_forest-20261106-8ea86d",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
@@ -132,8 +132,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-AAPL-xgboost-20261106-bcd913",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-xgboost-20261106-7f1fd3",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
@@ -176,8 +176,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-AAPL-lightgbm-20261106-83bebd",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-lightgbm-20261106-2190f2",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
@@ -220,8 +220,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-AAPL-candle-20261106-9071be",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-candle-20261106-b5ab20",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
@@ -264,8 +264,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-AAPL-ensemble_majority-20261106-40e811",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-ensemble_majority-20261106-56bca1",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
@@ -308,21 +308,21 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-AAPL-arima-20261106-168dbd",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-arima-20261106-d29880",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
     "sector": "Technology",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
     "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 47.31,
-    "probability_up": 0.4731,
-    "probability_down": 0.5269,
-    "confidence": 0.0537,
+    "score": 47.89,
+    "probability_up": 0.4789,
+    "probability_down": 0.5211,
+    "confidence": 0.0423,
     "threshold_used": 0.5,
     "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
@@ -352,8 +352,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-AAPL-buy_and_hold-20261106-be6def",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-AAPL-buy_and_hold-20261106-12a281",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "AAPL",
     "company_name": "Apple Inc.",
@@ -396,8 +396,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-technical_rule_based-20261106-4e9f22",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-technical_rule_based-20261106-954ff0",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
@@ -440,8 +440,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-logistic_regression-20261106-636cc7",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-logistic_regression-20261106-a595be",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
@@ -484,8 +484,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-random_forest-20261106-940d97",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-random_forest-20261106-29fcc6",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
@@ -528,8 +528,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-xgboost-20261106-fcea5a",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-xgboost-20261106-8e1116",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
@@ -572,8 +572,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-lightgbm-20261106-e8f3f8",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-lightgbm-20261106-a01b80",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
@@ -616,8 +616,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-candle-20261106-32efa2",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-candle-20261106-aaf6c5",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
@@ -662,8 +662,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-ensemble_majority-20261106-190df2",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-ensemble_majority-20261106-ecf45c",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
@@ -706,21 +706,21 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-arima-20261106-7c688c",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-arima-20261106-4c6570",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
     "sector": "Technology",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
     "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 44.33,
-    "probability_up": 0.4433,
-    "probability_down": 0.5567,
-    "confidence": 0.1134,
+    "score": 46.69,
+    "probability_up": 0.4669,
+    "probability_down": 0.5331,
+    "confidence": 0.0663,
     "threshold_used": 0.5,
     "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
@@ -750,8 +750,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-MSFT-buy_and_hold-20261106-5ce1fe",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-MSFT-buy_and_hold-20261106-f9c7c8",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "MSFT",
     "company_name": "Microsoft Corp.",
@@ -794,8 +794,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-technical_rule_based-20261106-4aaad8",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-technical_rule_based-20261106-b0c7af",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
@@ -840,8 +840,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-logistic_regression-20261106-e4323a",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-logistic_regression-20261106-610d24",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
@@ -884,8 +884,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-random_forest-20261106-bb0b6a",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-random_forest-20261106-5b4083",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
@@ -928,8 +928,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-xgboost-20261106-f318d6",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-xgboost-20261106-cc1df3",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
@@ -972,8 +972,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-lightgbm-20261106-9947ac",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-lightgbm-20261106-b42bbf",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
@@ -1016,8 +1016,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-candle-20261106-ed875f",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-candle-20261106-8ae6de",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
@@ -1062,8 +1062,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-ensemble_majority-20261106-60362d",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-ensemble_majority-20261106-9d18cc",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
@@ -1106,28 +1106,26 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-arima-20261106-d56478",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-arima-20261106-5560d9",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
     "sector": "Financials",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
-    "signal": "BUY",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
+    "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 51.06,
-    "probability_up": 0.5106,
-    "probability_down": 0.4894,
-    "confidence": 0.0211,
+    "score": 45.64,
+    "probability_up": 0.4564,
+    "probability_down": 0.5436,
+    "confidence": 0.0871,
     "threshold_used": 0.5,
-    "triggered_rules": "prob_above_buy_threshold",
+    "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
-    "executed_in_portfolio": true,
-    "portfolio_ids": [
-      "arima"
-    ],
+    "executed_in_portfolio": false,
+    "portfolio_ids": [],
     "current_price": 334.49,
     "previous_close": 337.34,
     "open": 333.15,
@@ -1152,8 +1150,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JPM-buy_and_hold-20261106-e90b1a",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JPM-buy_and_hold-20261106-0a7741",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JPM",
     "company_name": "JPMorgan Chase",
@@ -1196,8 +1194,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-technical_rule_based-20261106-84df67",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-technical_rule_based-20261106-235c03",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
@@ -1242,8 +1240,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-logistic_regression-20261106-104c43",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-logistic_regression-20261106-4c5a1e",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
@@ -1286,8 +1284,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-random_forest-20261106-d3fd6c",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-random_forest-20261106-28cd23",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
@@ -1332,8 +1330,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-xgboost-20261106-67259a",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-xgboost-20261106-e529f2",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
@@ -1376,8 +1374,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-lightgbm-20261106-218103",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-lightgbm-20261106-a8361f",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
@@ -1422,8 +1420,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-candle-20261106-b81ec8",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-candle-20261106-243605",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
@@ -1468,8 +1466,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-ensemble_majority-20261106-714df3",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-ensemble_majority-20261106-e645c7",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
@@ -1514,28 +1512,26 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-arima-20261106-2290cc",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-arima-20261106-269efa",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
     "sector": "Energy",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
-    "signal": "BUY",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
+    "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 51.41,
-    "probability_up": 0.5141,
-    "probability_down": 0.4859,
-    "confidence": 0.0281,
+    "score": 49.25,
+    "probability_up": 0.4925,
+    "probability_down": 0.5075,
+    "confidence": 0.015,
     "threshold_used": 0.5,
-    "triggered_rules": "prob_above_buy_threshold",
+    "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
-    "executed_in_portfolio": true,
-    "portfolio_ids": [
-      "arima"
-    ],
+    "executed_in_portfolio": false,
+    "portfolio_ids": [],
     "current_price": 165.87,
     "previous_close": 165.3,
     "open": 164.25,
@@ -1560,8 +1556,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-XOM-buy_and_hold-20261106-b02d32",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-XOM-buy_and_hold-20261106-52f8f3",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "XOM",
     "company_name": "Exxon Mobil",
@@ -1604,8 +1600,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-technical_rule_based-20261106-c245f2",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-technical_rule_based-20261106-490400",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
@@ -1650,8 +1646,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-logistic_regression-20261106-66218b",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-logistic_regression-20261106-f33575",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
@@ -1694,8 +1690,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-random_forest-20261106-ed6d7b",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-random_forest-20261106-c4eddb",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
@@ -1738,8 +1734,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-xgboost-20261106-3e4277",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-xgboost-20261106-e3c6c5",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
@@ -1782,8 +1778,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-lightgbm-20261106-cad176",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-lightgbm-20261106-9acafe",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
@@ -1828,8 +1824,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-candle-20261106-561659",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-candle-20261106-621902",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
@@ -1874,8 +1870,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-ensemble_majority-20261106-db4eb3",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-ensemble_majority-20261106-d27d0f",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
@@ -1918,15 +1914,15 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-arima-20261106-c89868",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-arima-20261106-0511c9",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
     "sector": "Healthcare",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
     "signal": "BUY",
     "signal_reason": "model_prediction",
     "score": 74.23,
@@ -1964,8 +1960,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-JNJ-buy_and_hold-20261106-a83ef5",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-JNJ-buy_and_hold-20261106-e92095",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "JNJ",
     "company_name": "Johnson & Johnson",
@@ -2008,8 +2004,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-technical_rule_based-20261106-605f27",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-technical_rule_based-20261106-37e910",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
@@ -2052,8 +2048,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-logistic_regression-20261106-89c1a3",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-logistic_regression-20261106-8cf346",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
@@ -2096,8 +2092,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-random_forest-20261106-e532e7",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-random_forest-20261106-64883e",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
@@ -2140,8 +2136,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-xgboost-20261106-19ff0a",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-xgboost-20261106-1399f0",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
@@ -2184,8 +2180,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-lightgbm-20261106-ac4942",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-lightgbm-20261106-3dd24d",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
@@ -2228,8 +2224,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-candle-20261106-65cd33",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-candle-20261106-f64024",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
@@ -2274,8 +2270,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-ensemble_majority-20261106-6636a3",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-ensemble_majority-20261106-385827",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
@@ -2318,21 +2314,21 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-arima-20261106-438899",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-arima-20261106-97f076",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
     "sector": "Healthcare",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
     "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 47.01,
-    "probability_up": 0.4701,
-    "probability_down": 0.5299,
-    "confidence": 0.0598,
+    "score": 46.95,
+    "probability_up": 0.4695,
+    "probability_down": 0.5305,
+    "confidence": 0.061,
     "threshold_used": 0.5,
     "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
@@ -2362,8 +2358,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-UNH-buy_and_hold-20261106-85e276",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-UNH-buy_and_hold-20261106-fbc16f",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "UNH",
     "company_name": "UnitedHealth Group",
@@ -2406,8 +2402,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-technical_rule_based-20261106-e0d040",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-technical_rule_based-20261106-d533b8",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
@@ -2452,8 +2448,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-logistic_regression-20261106-e285ea",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-logistic_regression-20261106-bc3b4d",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
@@ -2496,8 +2492,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-random_forest-20261106-5de9d3",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-random_forest-20261106-7356e8",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
@@ -2542,8 +2538,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-xgboost-20261106-28d52b",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-xgboost-20261106-bde76c",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
@@ -2586,8 +2582,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-lightgbm-20261106-da34f8",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-lightgbm-20261106-4543dc",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
@@ -2630,8 +2626,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-candle-20261106-4666df",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-candle-20261106-29bfa7",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
@@ -2676,8 +2672,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-ensemble_majority-20261106-48b079",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-ensemble_majority-20261106-32af8e",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
@@ -2722,21 +2718,21 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-arima-20261106-4819e0",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-arima-20261106-a7b241",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
     "sector": "Consumer Staples",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
     "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 41.6,
-    "probability_up": 0.416,
-    "probability_down": 0.584,
-    "confidence": 0.168,
+    "score": 43.89,
+    "probability_up": 0.4389,
+    "probability_down": 0.5611,
+    "confidence": 0.1223,
     "threshold_used": 0.5,
     "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
@@ -2766,8 +2762,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-PG-buy_and_hold-20261106-a9e1b2",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-PG-buy_and_hold-20261106-655821",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "PG",
     "company_name": "Procter & Gamble",
@@ -2810,8 +2806,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-technical_rule_based-20261106-5ee7e4",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-technical_rule_based-20261106-c707b9",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
@@ -2856,8 +2852,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-logistic_regression-20261106-6630a7",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-logistic_regression-20261106-3a5296",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
@@ -2900,8 +2896,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-random_forest-20261106-cf2c49",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-random_forest-20261106-66d467",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
@@ -2944,8 +2940,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-xgboost-20261106-2d906f",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-xgboost-20261106-ff1b8e",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
@@ -2988,8 +2984,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-lightgbm-20261106-8d416f",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-lightgbm-20261106-ca0f2c",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
@@ -3034,8 +3030,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-candle-20261106-d6fde3",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-candle-20261106-f1b416",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
@@ -3080,8 +3076,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-ensemble_majority-20261106-faeb21",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-ensemble_majority-20261106-29209e",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
@@ -3124,21 +3120,21 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-arima-20261106-a88f32",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-arima-20261106-8ed056",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
     "sector": "Consumer Staples",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
     "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 47.61,
-    "probability_up": 0.4761,
-    "probability_down": 0.5239,
-    "confidence": 0.0478,
+    "score": 47.35,
+    "probability_up": 0.4735,
+    "probability_down": 0.5265,
+    "confidence": 0.053,
     "threshold_used": 0.5,
     "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
@@ -3168,8 +3164,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-KO-buy_and_hold-20261106-eb7c1c",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-KO-buy_and_hold-20261106-bba1b4",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "KO",
     "company_name": "Coca-Cola Co.",
@@ -3212,8 +3208,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-technical_rule_based-20261106-7aabea",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-technical_rule_based-20261106-991373",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
@@ -3256,8 +3252,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-logistic_regression-20261106-901bf5",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-logistic_regression-20261106-e2329a",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
@@ -3300,8 +3296,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-random_forest-20261106-8acc2e",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-random_forest-20261106-83e2e0",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
@@ -3344,8 +3340,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-xgboost-20261106-66120e",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-xgboost-20261106-a306ed",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
@@ -3388,8 +3384,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-lightgbm-20261106-19e00b",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-lightgbm-20261106-1ceb23",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
@@ -3432,8 +3428,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-candle-20261106-77776d",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-candle-20261106-f179f7",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
@@ -3478,8 +3474,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-ensemble_majority-20261106-b5aaa0",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-ensemble_majority-20261106-2305ab",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
@@ -3522,28 +3518,26 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-arima-20261106-7a4a4d",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-arima-20261106-d6a4ad",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
     "sector": "Consumer Discretionary",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
-    "signal": "BUY",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
+    "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 54.73,
-    "probability_up": 0.5473,
-    "probability_down": 0.4527,
-    "confidence": 0.0946,
+    "score": 46.3,
+    "probability_up": 0.463,
+    "probability_down": 0.537,
+    "confidence": 0.0741,
     "threshold_used": 0.5,
-    "triggered_rules": "prob_above_buy_threshold",
+    "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
-    "executed_in_portfolio": true,
-    "portfolio_ids": [
-      "arima"
-    ],
+    "executed_in_portfolio": false,
+    "portfolio_ids": [],
     "current_price": 125.52,
     "previous_close": 127.72,
     "open": 124.0,
@@ -3568,8 +3562,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-WMT-buy_and_hold-20261106-333f03",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-WMT-buy_and_hold-20261106-a7c52f",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "WMT",
     "company_name": "Walmart Inc.",
@@ -3612,8 +3606,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-technical_rule_based-20261106-c8ecd0",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-technical_rule_based-20261106-de26a2",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
@@ -3656,8 +3650,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-logistic_regression-20261106-4ea19b",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-logistic_regression-20261106-0c5b27",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
@@ -3700,8 +3694,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-random_forest-20261106-b7f4c0",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-random_forest-20261106-dbebb2",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
@@ -3744,8 +3738,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-xgboost-20261106-ed3403",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-xgboost-20261106-d4dc36",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
@@ -3788,8 +3782,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-lightgbm-20261106-a41242",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-lightgbm-20261106-ceb681",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
@@ -3832,8 +3826,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-candle-20261106-3be889",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-candle-20261106-05926e",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
@@ -3878,8 +3872,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-ensemble_majority-20261106-d6d25f",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-ensemble_majority-20261106-724143",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
@@ -3922,21 +3916,21 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-arima-20261106-86a0f2",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-arima-20261106-fe87ec",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
     "sector": "Utilities",
     "model_name": "arima",
     "signal_source": "arima",
-    "model_version": "arima(1, 0, 1)-window252-refit21",
+    "model_version": "arima-bic-p2q2-adf0.05-window252-refit21",
     "signal": "SELL",
     "signal_reason": "model_prediction",
-    "score": 46.52,
-    "probability_up": 0.4652,
-    "probability_down": 0.5348,
-    "confidence": 0.0696,
+    "score": 43.14,
+    "probability_up": 0.4314,
+    "probability_down": 0.5686,
+    "confidence": 0.1373,
     "threshold_used": 0.5,
     "triggered_rules": "prob_below_buy_threshold",
     "execution_candidate": true,
@@ -3966,8 +3960,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-NEE-buy_and_hold-20261106-58bbd4",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-NEE-buy_and_hold-20261106-72c805",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "NEE",
     "company_name": "NextEra Energy",
@@ -4010,8 +4004,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-SPY-technical_rule_based-20261106-1d4631",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-SPY-technical_rule_based-20261106-804864",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "SPY",
     "company_name": "SPY",
@@ -4054,8 +4048,8 @@
     "data_version": "2026-05-15"
   },
   {
-    "signal_id": "S-SPY-buy_and_hold-20261106-e48b22",
-    "generated_at_utc": "2026-11-08T13:29:18Z",
+    "signal_id": "S-SPY-buy_and_hold-20261106-3f2bcf",
+    "generated_at_utc": "2026-11-08T18:12:41Z",
     "signal_date": "2026-11-06",
     "ticker": "SPY",
     "company_name": "SPY",
