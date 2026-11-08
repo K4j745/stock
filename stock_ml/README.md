@@ -28,9 +28,11 @@ F1, ROC-AUC, and MCC.
 
 ## ARIMA baseline
 
-`python main.py arima [--ticker TICKER] [--threshold 0.002]` scores a classical ARIMA(1,0,1)
-model on daily returns, using the same walk-forward folds, labels and metrics as the ML
-classifiers. Results are added to `reports/{TICKER}_{TAG}_results.json` under `arima`, so
+`python main.py arima [--ticker TICKER] [--threshold 0.002]` scores a classical ARIMA model on
+daily returns, using the same walk-forward folds, labels and metrics as the ML classifiers. In
+each fold an ADF test on the training window decides on differencing and the lowest BIC picks
+`p, q <= 2` (`ARIMA_ORDER_SELECTION` in `config.py`; `fixed` uses `ARIMA_ORDER`). The chosen
+orders are written to `reports/{TICKER}_{TAG}_arima_orders.csv`. Results are added to `reports/{TICKER}_{TAG}_results.json` under `arima`, so
 `python main.py report` shows ARIMA in the model comparison chart. Run it again after
 `train`, which rewrites that report.
 

@@ -94,8 +94,14 @@ WF_TEST_SIZE = 21    # ~1 trading month
 WF_STEP = 21         # window slide step
 WF_MODE = "rolling"  # 'rolling' (default) or 'expanding'
 
-# ARIMA baseline: (p, d, q) on daily returns. d=0 because returns are already stationary.
+# ARIMA baseline on daily returns. "bic": per training window, an ADF test picks
+# d (0 or 1) and the lowest BIC picks p <= ARIMA_MAX_P and q <= ARIMA_MAX_Q
+# (Box-Jenkins). "fixed": always ARIMA_ORDER.
+ARIMA_ORDER_SELECTION = "bic"
 ARIMA_ORDER = (1, 0, 1)
+ARIMA_MAX_P = 2
+ARIMA_MAX_Q = 2
+ARIMA_ADF_ALPHA = 0.05
 
 # Legacy: number of TimeSeriesSplit folds (deprecated, kept for transitional use)
 N_SPLITS = 5
