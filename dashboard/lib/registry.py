@@ -68,7 +68,7 @@ _MODEL_DESCRIPTIONS = {
     "xgboost":             ("ml", "Gradient boosted trees (XGBoost)."),
     "lightgbm":            ("ml", "Gradient boosted trees (LightGBM)."),
     "ensemble_majority":   ("ml", "Majority vote across ML models."),
-    "arima":               ("statistical", "ARIMA on daily returns, refitted on a rolling window."),
+    "arima":               ("statistical", "ARIMA on daily returns; ADF and BIC choose the order on a rolling window."),
     "buy_and_hold":        ("technical", "Buy on first day, hold to end (benchmark)."),
 }
 

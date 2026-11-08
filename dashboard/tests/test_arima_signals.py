@@ -6,7 +6,8 @@ import pytest
 from lib import arima_signals
 
 THRESHOLD = 0.002
-SETTINGS = {"order": [1, 0, 1], "train_window": 120, "min_train": 60, "refit_every": 21}
+SETTINGS = {"order_selection": "fixed", "order": [1, 0, 1], "train_window": 120, "min_train": 60, "refit_every": 21}
+BIC_SETTINGS = {**SETTINGS, "order_selection": "bic", "max_p": 1, "max_q": 1, "adf_alpha": 0.05}
 SESSIONS = 200
 AR_COEFFICIENT = 0.6
 NOISE_STD = 0.01
@@ -73,3 +74,26 @@ def test_series_shorter_than_min_train_stays_in_warm_up():
 def test_rejects_invalid_settings(bad):
     with pytest.raises(ValueError):
         arima_signals.arima_probabilities(make_close(), THRESHOLD, {**SETTINGS, **bad}, "TEST")
+
+
+def test_bic_selection_also_ignores_future_prices():
+    close = make_close()
+    cutoff = 150
+    altered = close.copy()
+    altered.iloc[cutoff:] *= 1.25
+
+    original = arima_signals.arima_probabilities(close, THRESHOLD, BIC_SETTINGS, "TEST")
+    changed = arima_signals.arima_probabilities(altered, THRESHOLD, BIC_SETTINGS, "TEST")
+
+    assert original.iloc[SETTINGS["min_train"]:].notna().all()
+    pd.testing.assert_series_equal(original.iloc[:cutoff - 1], changed.iloc[:cutoff - 1])
+
+
+def test_model_version_names_the_selection_method():
+    assert "bic" in arima_signals.model_version(BIC_SETTINGS)
+    assert "(1, 0, 1)" in arima_signals.model_version(SETTINGS)
+
+
+def test_rejects_unknown_order_selection():
+    with pytest.raises(ValueError):
+        arima_signals.arima_probabilities(make_close(), THRESHOLD, {**SETTINGS, "order_selection": "aic"}, "TEST")
