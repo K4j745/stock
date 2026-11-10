@@ -1,0 +1,59 @@
+' Wspólny styl diagramów pracy inżynierskiej (dołączany przez !include).
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam ArrowColor #37474F
+skinparam roundCorner 6
+skinparam titleFontSize 15
+skinparam note {
+  BackgroundColor #FFFDE7
+  BorderColor #B8A85A
+}
+skinparam package {
+  BackgroundColor #FAFAFA
+  BorderColor #90A4AE
+}
+skinparam rectangle {
+  BackgroundColor #FAFAFA
+  BorderColor #90A4AE
+}
+skinparam component {
+  BackgroundColor #ECEFF1
+  BorderColor #546E7A
+}
+skinparam database {
+  BackgroundColor #ECEFF1
+  BorderColor #546E7A
+}
+skinparam node {
+  BackgroundColor #F5F7F8
+  BorderColor #546E7A
+}
+skinparam artifact {
+  BackgroundColor #FFFFFF
+  BorderColor #78909C
+}
+skinparam usecase {
+  BackgroundColor #ECEFF1
+  BorderColor #546E7A
+}
+skinparam activity {
+  BackgroundColor #ECEFF1
+  BorderColor #546E7A
+  DiamondBackgroundColor #FFFFFF
+  DiamondBorderColor #546E7A
+}
+skinparam class {
+  BackgroundColor #ECEFF1
+  BorderColor #546E7A
+  HeaderBackgroundColor #CFD8DC
+}
+skinparam sequence {
+  LifeLineBorderColor #90A4AE
+  LifeLineBackgroundColor #ECEFF1
+  ParticipantBorderColor #546E7A
+  ParticipantBackgroundColor #ECEFF1
+  ActorBorderColor #546E7A
+  BoxBorderColor #B0BEC5
+}

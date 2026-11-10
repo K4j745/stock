@@ -1,0 +1,98 @@
+[
+  {
+    "ticker": "MSFT",
+    "shares": 60.0,
+    "avg_cost": 404.1192,
+    "last_price": 545.18,
+    "market_value": 32710.8,
+    "unrealised_pnl_abs": 8463.65,
+    "unrealised_pnl_pct": 0.349058,
+    "entry_date": "2024-04-04",
+    "entry_price": 424.989990234375,
+    "last_signal_id": "S-MSFT-logistic_regression-20240404-cfe59b"
+  },
+  {
+    "ticker": "XOM",
+    "shares": 105.0,
+    "avg_cost": 108.8184,
+    "last_price": 164.73,
+    "market_value": 17296.65,
+    "unrealised_pnl_abs": 5870.72,
+    "unrealised_pnl_pct": 0.513806,
+    "entry_date": "2025-05-07",
+    "entry_price": 104.98999786376953,
+    "last_signal_id": "S-XOM-logistic_regression-20250507-8c9ccf"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 107.0,
+    "avg_cost": 156.1651,
+    "last_price": 282.11,
+    "market_value": 30185.77,
+    "unrealised_pnl_abs": 13476.1,
+    "unrealised_pnl_pct": 0.806485,
+    "entry_date": "2025-05-07",
+    "entry_price": 154.74000549316406,
+    "last_signal_id": "S-JNJ-logistic_regression-20250507-2c609c"
+  },
+  {
+    "ticker": "UNH",
+    "shares": 59.0,
+    "avg_cost": 507.2063,
+    "last_price": 397.62,
+    "market_value": 23459.58,
+    "unrealised_pnl_abs": -6465.59,
+    "unrealised_pnl_pct": -0.216059,
+    "entry_date": "2024-04-03",
+    "entry_price": 462.0,
+    "last_signal_id": "S-UNH-logistic_regression-20240403-a8af94"
+  },
+  {
+    "ticker": "PG",
+    "shares": 67.0,
+    "avg_cost": 158.1512,
+    "last_price": 168.32,
+    "market_value": 11277.44,
+    "unrealised_pnl_abs": 681.31,
+    "unrealised_pnl_pct": 0.064298,
+    "entry_date": "2026-03-09",
+    "entry_price": 153.14999389648438,
+    "last_signal_id": "S-PG-logistic_regression-20260309-cf976a"
+  },
+  {
+    "ticker": "KO",
+    "shares": 77.0,
+    "avg_cost": 61.3329,
+    "last_price": 96.03,
+    "market_value": 7394.31,
+    "unrealised_pnl_abs": 2671.68,
+    "unrealised_pnl_pct": 0.565719,
+    "entry_date": "2025-07-16",
+    "entry_price": 69.3499984741211,
+    "last_signal_id": "S-KO-logistic_regression-20250716-026c35"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 60.0,
+    "avg_cost": 57.9209,
+    "last_price": 125.66,
+    "market_value": 7539.6,
+    "unrealised_pnl_abs": 4064.35,
+    "unrealised_pnl_pct": 1.169511,
+    "entry_date": "2024-04-04",
+    "entry_price": 59.540000915527344,
+    "last_signal_id": "S-WMT-logistic_regression-20240404-9d6d55"
+  },
+  {
+    "ticker": "NEE",
+    "shares": 62.0,
+    "avg_cost": 58.5768,
+    "last_price": 86.86,
+    "market_value": 5385.32,
+    "unrealised_pnl_abs": 1753.56,
+    "unrealised_pnl_pct": 0.48284,
+    "entry_date": "2025-03-18",
+    "entry_price": 72.20999908447266,
+    "last_signal_id": "S-NEE-logistic_regression-20250318-bf1463"
+  }
+]
