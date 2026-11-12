@@ -9,11 +9,11 @@
     "trade_mode": "all_in",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 172771.66,
-    "total_return": 0.72396,
-    "sharpe": 1.259474,
+    "final_value": 172161.03,
+    "total_return": 0.717867,
+    "sharpe": 1.250808,
     "max_drawdown": -0.189587,
-    "n_decisions": 752,
+    "n_decisions": 753,
     "n_transactions": 1
   },
   {
@@ -26,11 +26,11 @@
     "trade_mode": "all_in",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 165536.25,
-    "total_return": 0.653109,
-    "sharpe": 1.567393,
+    "final_value": 166018.65,
+    "total_return": 0.657926,
+    "sharpe": 1.575003,
     "max_drawdown": -0.125031,
-    "n_decisions": 7520,
+    "n_decisions": 7530,
     "n_transactions": 10
   },
   {
@@ -43,11 +43,11 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 136465.64,
-    "total_return": 0.364495,
-    "sharpe": 0.913167,
+    "final_value": 137035.52,
+    "total_return": 0.370193,
+    "sharpe": 0.923855,
     "max_drawdown": -0.16305,
-    "n_decisions": 7530,
+    "n_decisions": 7540,
     "n_transactions": 5534
   },
   {
@@ -60,11 +60,11 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 133508.07,
-    "total_return": 0.334905,
-    "sharpe": 0.833063,
+    "final_value": 134383.3,
+    "total_return": 0.343657,
+    "sharpe": 0.84963,
     "max_drawdown": -0.168317,
-    "n_decisions": 7530,
+    "n_decisions": 7540,
     "n_transactions": 676
   },
   {
@@ -77,11 +77,11 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 171880.59,
-    "total_return": 0.71858,
-    "sharpe": 1.522883,
+    "final_value": 172845.3,
+    "total_return": 0.728226,
+    "sharpe": 1.536604,
     "max_drawdown": -0.110314,
-    "n_decisions": 7530,
+    "n_decisions": 7540,
     "n_transactions": 5221
   },
   {
@@ -94,12 +94,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 132660.69,
-    "total_return": 0.326433,
-    "sharpe": 0.593204,
+    "final_value": 133568.45,
+    "total_return": 0.335509,
+    "sharpe": 0.604697,
     "max_drawdown": -0.314943,
-    "n_decisions": 7530,
-    "n_transactions": 5141
+    "n_decisions": 7540,
+    "n_transactions": 5143
   },
   {
     "portfolio_id": "lgbm",
@@ -111,12 +111,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 147892.37,
-    "total_return": 0.47873,
-    "sharpe": 0.999653,
+    "final_value": 148680.61,
+    "total_return": 0.486611,
+    "sharpe": 1.011438,
     "max_drawdown": -0.191254,
-    "n_decisions": 7530,
-    "n_transactions": 5075
+    "n_decisions": 7540,
+    "n_transactions": 5077
   },
   {
     "portfolio_id": "candle",
@@ -128,12 +128,12 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 142391.97,
-    "total_return": 0.423625,
-    "sharpe": 1.140019,
+    "final_value": 142993.16,
+    "total_return": 0.429636,
+    "sharpe": 1.152,
     "max_drawdown": -0.122833,
-    "n_decisions": 7530,
-    "n_transactions": 7469
+    "n_decisions": 7540,
+    "n_transactions": 7479
   },
   {
     "portfolio_id": "ensemble",
@@ -145,11 +145,11 @@
     "trade_mode": "incremental",
     "trade_size": 1,
     "initial_capital": 100000.0,
-    "final_value": 160483.23,
-    "total_return": 0.604501,
-    "sharpe": 1.237147,
+    "final_value": 161373.63,
+    "total_return": 0.613403,
+    "sharpe": 1.249761,
     "max_drawdown": -0.143184,
-    "n_decisions": 7530,
+    "n_decisions": 7540,
     "n_transactions": 4933
   },
   {
@@ -164,9 +164,9 @@
     "initial_capital": 100000.0,
     "final_value": 105707.8,
     "total_return": 0.056939,
-    "sharpe": 0.689255,
+    "sharpe": 0.688796,
     "max_drawdown": -0.029471,
-    "n_decisions": 7530,
+    "n_decisions": 7540,
     "n_transactions": 834
   }
 ]
