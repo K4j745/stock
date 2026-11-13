@@ -3,10 +3,10 @@
   "portfolio_name": "SPY \u2014 kup i trzymaj",
   "description": "Kupno samego indeksu SPY 500 za ca\u0142y kapita\u0142. Odniesienie rynkowe.",
   "initial_capital": 100000.0,
-  "final_value": 172161.03,
-  "cash": 294.7875061035156,
+  "final_value": 169003.2,
+  "cash": 24.318359375,
   "metadata": {
-    "generated_at_utc": "2026-11-12T22:41:14Z",
+    "generated_at_utc": "2026-11-13T22:28:07Z",
     "data_version": "2026-05-15",
     "strategy_version": "1.0",
     "signal_source": "buy_and_hold",
@@ -21,18 +21,18 @@
     },
     "n_decisions": 753,
     "n_transactions": 1,
-    "first_date": "2023-11-13",
-    "last_date": "2026-11-12",
+    "first_date": "2023-11-14",
+    "last_date": "2026-11-13",
     "label_mode": "binary",
     "label_version": "binary-2026-08"
   },
   "metrics": {
-    "total_return": 0.717867,
-    "cagr": 0.198799,
-    "volatility_annualised": 0.154498,
-    "sharpe_ratio": 1.250808,
-    "max_drawdown": -0.189587,
-    "calmar_ratio": 1.048589,
+    "total_return": 0.680958,
+    "cagr": 0.190106,
+    "volatility_annualised": 0.15446,
+    "sharpe_ratio": 1.203926,
+    "max_drawdown": -0.189955,
+    "calmar_ratio": 1.000791,
     "n_observations": 752,
     "trade_n_trades": 0,
     "trade_n_wins": 0,
@@ -45,12 +45,12 @@
     "trade_expectancy": null
   },
   "benchmark_metrics": {
-    "total_return": 0.719985,
-    "cagr": 0.199294,
-    "volatility_annualised": 0.154845,
-    "sharpe_ratio": 1.251018,
+    "total_return": 0.681122,
+    "cagr": 0.190145,
+    "volatility_annualised": 0.154489,
+    "sharpe_ratio": 1.203942,
     "max_drawdown": -0.189989,
-    "calmar_ratio": 1.048978,
+    "calmar_ratio": 1.000819,
     "n_observations": 752
   }
 }
