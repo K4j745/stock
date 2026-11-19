@@ -1,0 +1,135 @@
+@startuml 01_przypadki_uzycia
+' Diagram przypadków użycia — StocKK Forecast
+' Rozdział pracy: wymagania funkcjonalne
+!include _styl.iuml
+left to right direction
+skinparam actorStyle awesome
+
+title Diagram przypadków użycia — system StocKK Forecast
+
+actor "Użytkownik strony\n(odwiedzający)" as Uzytkownik
+actor "Autor / badacz\n(uruchamia pipeline lokalnie)" as Badacz
+actor "Harmonogram CI\n(GitHub Actions)" as CI <<aktor systemowy>>
+actor "Yahoo Finance\n(biblioteka yfinance)" as YF <<system zewnętrzny>>
+
+rectangle "Serwis WWW (GitHub Pages, pliki statyczne)" {
+  usecase "UC-01\nPrzeglądanie panelu\nsygnałów BUY/SELL" as UC01
+  usecase "UC-02\nFiltrowanie sygnałów\n(ticker, model, data, typ)" as UC02
+  usecase "UC-03\nPobranie eksportu CSV" as UC03
+  usecase "UC-04\nPrzeglądanie wykresów cen\n(świece, RSI, MACD, statystyki)" as UC04
+  usecase "UC-05\nPrzeglądanie wykresów\nanalizy ML (PNG)" as UC05
+  usecase "UC-06\nSymulacja własnego portfela\n(kupno / sprzedaż)" as UC06
+  usecase "UC-07\nZapis stanu portfela\nw localStorage" as UC07
+  usecase "UC-08\nEksport / import\nportfela (JSON)" as UC08
+  usecase "UC-09\nPrzełączenie waluty\nUSD / PLN" as UC09
+  usecase "UC-10\nZmiana języka PL / EN" as UC10
+  usecase "UC-11\nZmiana motywu\njasny / ciemny" as UC11
+  usecase "UC-12\nLektura instrukcji\ni metodologii" as UC12
+  usecase "UC-13\nWczytanie artefaktów\nJSON z docs/data" as UC13
+  usecase "UC-15\nPrzegląd rynku\n(KPI, mapa ciepła, liderzy)" as UC15
+  usecase "UC-16\nPorównanie portfeli\nmonitorujących\n(ML, reguły, ARIMA, benchmark)" as UC16
+}
+
+rectangle "Pipeline ML (stock_ml, uruchamiany lokalnie)" {
+  usecase "UC-20\nPobranie danych OHLCV" as UC20
+  usecase "UC-21\nArchiwizacja historii\ndo CSV w repozytorium" as UC21
+  usecase "UC-22\nBudowa macierzy cech\n(wskaźniki + cechy świecowe)" as UC22
+  usecase "UC-23\nTrening modeli\n(LR, RF, XGBoost, LightGBM)" as UC23
+  usecase "UC-24\nWalidacja walk-forward\n(okno 252 / test 21 / krok 21)" as UC24
+  usecase "UC-25\nStrojenie hiperparametrów\n(Optuna)" as UC25
+  usecase "UC-26\nTrening modelu świecowego" as UC26
+  usecase "UC-27\nEwaluacja zapisanych modeli" as UC27
+  usecase "UC-28\nBacktest strategii\n(vs kup i trzymaj, vs SPY)" as UC28
+  usecase "UC-29\nGenerowanie wykresów\ni raportów CSV/JSON" as UC29
+  usecase "UC-30\nAnaliza SHAP" as UC30
+  usecase "UC-31\nEwaluacja modelu ARIMA\n(test ADF + dobór rzędu BIC)" as UC31
+}
+
+rectangle "Generator dashboardu i publikacja (dashboard/, CI)" {
+  usecase "UC-40\nGenerowanie artefaktów\nstatycznych (docs/data)" as UC40
+  usecase "UC-41\nWczytanie modeli ML\n(stock_ml/models/saved)" as UC41
+  usecase "UC-42\nSygnał zastępczy (proxy)\nprzy braku modelu" as UC42
+  usecase "UC-43\nWyznaczenie sygnałów\n(reguły, ML, zespół,\nkup i trzymaj)" as UC43
+  usecase "UC-44\nCykliczna aktualizacja\n(cron pn–pt 17:00 UTC)" as UC44
+  usecase "UC-45\nPublikacja dashboardu\n(commit + push docs/)" as UC45
+  usecase "UC-46\nPobranie kursu USD/PLN" as UC46
+  usecase "UC-47\nSygnały ARIMA\n(okno kroczące, ADF + BIC)" as UC47
+  usecase "UC-48\nSymulacja 10 portfeli\nmonitorujących" as UC48
+}
+
+Uzytkownik --> UC15
+Uzytkownik --> UC01
+Uzytkownik --> UC04
+Uzytkownik --> UC05
+Uzytkownik --> UC06
+Uzytkownik --> UC16
+Uzytkownik --> UC10
+Uzytkownik --> UC11
+Uzytkownik --> UC12
+
+Badacz --> UC20
+Badacz --> UC23
+Badacz --> UC26
+Badacz --> UC27
+Badacz --> UC28
+Badacz --> UC29
+Badacz --> UC30
+Badacz --> UC31
+Badacz --> UC40
+
+CI --> UC44
+UC20 --> YF
+UC40 --> YF
+UC46 --> YF
+
+UC15 ..> UC13 : <<include>>
+UC01 ..> UC13 : <<include>>
+UC04 ..> UC13 : <<include>>
+UC05 ..> UC13 : <<include>>
+UC16 ..> UC13 : <<include>>
+UC06 ..> UC07 : <<include>>
+
+UC22 ..> UC20 : <<include>>
+UC23 ..> UC22 : <<include>>
+UC23 ..> UC24 : <<include>>
+UC26 ..> UC22 : <<include>>
+UC27 ..> UC22 : <<include>>
+UC28 ..> UC22 : <<include>>
+UC30 ..> UC22 : <<include>>
+UC31 ..> UC24 : <<include>>
+
+UC40 ..> UC43 : <<include>>
+UC40 ..> UC47 : <<include>>
+UC40 ..> UC48 : <<include>>
+UC40 ..> UC46 : <<include>>
+UC43 ..> UC41 : <<include>>
+UC44 ..> UC40 : <<include>>
+UC44 ..> UC45 : <<include>>
+
+UC02 ..> UC01 : <<extend>>
+UC03 ..> UC01 : <<extend>>
+UC08 ..> UC06 : <<extend>>
+UC09 ..> UC06 : <<extend>>
+UC25 ..> UC23 : <<extend>>
+UC21 ..> UC20 : <<extend>>
+UC42 ..> UC41 : <<extend>>
+
+note right of UC42
+  Tylko awaryjnie: modele są w repozytorium
+  (stock_ml/models/saved), więc CI używa
+  prawdziwych modeli. Proxy włącza brak pliku
+  modelu lub niezgodność zestawu cech.
+end note
+
+note right of UC47
+  ARIMA nie wymaga zapisanego modelu:
+  co 21 sesji test ADF i kryterium BIC
+  dobierają rząd na 252 poprzednich zwrotach.
+end note
+
+note bottom of UC07
+  Dane portfela nie opuszczają przeglądarki:
+  brak back-endu, bazy danych i kont.
+end note
+
+@enduml

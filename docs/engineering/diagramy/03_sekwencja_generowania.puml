@@ -1,0 +1,121 @@
+@startuml 03_sekwencja_generowania
+' Diagram sekwencji — cykliczna aktualizacja dashboardu i odczyt przez użytkownika
+' Rozdział pracy: implementacja
+!include _styl.iuml
+autonumber
+
+title Diagram sekwencji — generowanie danych dashboardu i odczyt przez użytkownika
+
+actor "Harmonogram CI\n(GitHub Actions)" as CI
+actor "Użytkownik" as User
+
+box "Generator dashboardu (dashboard/)" #FAFAFA
+  participant "generate.py" as GEN
+  participant "config_loader" as CFG
+  participant "data_fetcher" as FETCH
+  participant "ml_loader" as MLL
+  participant "arima_signals" as ARS
+  participant "signals" as SIG
+  participant "portfolio" as PORT
+  participant "exporters" as EXP
+end box
+
+participant "Yahoo Finance" as YF <<system zewnętrzny>>
+database "Archiwum CSV\nstock_ml/data/historical" as ARCH
+database "Modele\nstock_ml/models/saved" as ART
+database "docs/data\n(JSON, CSV)" as DOCS
+participant "GitHub Pages" as PAGES
+participant "Przeglądarka" as BR
+
+== Uruchomienie (cron pn–pt 17:00 UTC) ==
+CI -> GEN : python dashboard/generate.py
+activate GEN
+GEN -> CFG : load_config("config.json")
+CFG --> GEN : tickery, modele, próg 0,2%,\nustawienia ARIMA, 10 portfeli
+
+== Dane rynkowe ==
+loop dla każdego tickera (10 spółek + SPY)
+  GEN -> FETCH : download(ticker, 3y, 1d)
+  activate FETCH
+  loop maks. 3 próby
+    FETCH -> YF : yfinance.download()
+    YF --> FETCH : OHLCV lub błąd
+  end
+  alt brak danych po ponowieniach
+    FETCH -> ARCH : odczyt archiwum CSV
+    ARCH --> FETCH : notowania historyczne
+  end
+  FETCH --> GEN : OHLCV + wskaźniki
+  deactivate FETCH
+end
+
+== Sygnały ==
+loop dla każdej spółki (bez SPY)
+  GEN -> SIG : technical_rule_based(df)
+  SIG --> GEN : sygnały regułowe
+
+  loop dla każdego modelu ML (LR, RF, XGBoost, LightGBM, świecowy)
+    GEN -> MLL : model_probabilities(model, ticker, df)
+    activate MLL
+    MLL -> ART : model + skaler (tag bin2)
+    alt plik modelu istnieje i cechy się zgadzają
+      ART --> MLL : model
+      MLL -> MLL : odtworzenie cech stock_ml,\nskalowanie, predict_proba
+      MLL --> GEN : P(wzrost), źródło = model
+    else brak pliku lub niezgodne cechy
+      MLL -> MLL : deterministyczne proxy
+      MLL --> GEN : P(wzrost), źródło = model_proxy
+    end
+    deactivate MLL
+    GEN -> SIG : from_probabilities(P, próg 0,5)
+    SIG --> GEN : BUY / SELL; HOLD, gdy brak prognozy
+  end
+
+  GEN -> SIG : ensemble_majority(sygnały ML)
+  SIG --> GEN : sygnał zespołu (HOLD, gdy brak głosów)
+
+  GEN -> ARS : arima_probabilities(Close, próg 0,2%)
+  activate ARS
+  loop co 21 sesji, okno 252 poprzednich zwrotów
+    ARS -> ARS : test ADF → d
+    ARS -> ARS : siatka p, q ≤ 2 → najmniejsze BIC
+    ARS -> ARS : prognozy o 1 krok,\nP(zwrot > 0,2%)
+  end
+  ARS --> GEN : P(zwrot > próg); NaN w rozgrzewce
+  deactivate ARS
+  GEN -> SIG : to_signals(P)
+  SIG --> GEN : BUY / SELL; HOLD w rozgrzewce
+end
+
+== Portfele ==
+GEN -> PORT : run_portfolio_backtest() × 10
+activate PORT
+PORT -> PORT : sygnał → decyzja → transakcja,\nwycena dzienna, metryki
+PORT --> GEN : wyniki portfeli i benchmarku SPY
+deactivate PORT
+
+== Eksport ==
+GEN -> EXP : zapis artefaktów
+activate EXP
+EXP -> DOCS : signals/latest.json, history.json,\nportfolios/*/, models/*/, tickers/*/,\nexports/*.csv, meta.json, fx.json
+deactivate EXP
+GEN --> CI : kod wyjścia 0
+deactivate GEN
+
+== Publikacja ==
+alt zmiany w docs/
+  CI -> PAGES : git commit + push → wdrożenie
+else brak zmian
+  CI -> CI : pominięcie commita
+end
+
+== Odczyt przez użytkownika ==
+User -> BR : otwarcie strony
+BR -> PAGES : GET *.html, assets/*.js, *.css
+PAGES --> BR : pliki statyczne
+BR -> PAGES : GET data/*.json
+PAGES --> BR : sygnały, portfele, metadane
+BR -> BR : render KPI, wykresów i tabel;\nportfel z localStorage
+BR --> User : dashboard
+
+@enduml

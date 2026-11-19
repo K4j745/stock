@@ -1,0 +1,145 @@
+@startuml 11_klasy_dashboard
+' Diagram klas — moduły generatora dashboardu i rdzenia ARIMA
+' Rozdział pracy: implementacja (projekt oparty na modułach i funkcjach)
+!include _styl.iuml
+
+title Diagram klas — generator dashboardu (dashboard/lib) i rdzeń ARIMA
+
+package "dashboard" {
+  class "generate.py" as GEN <<moduł>> {
+    + main()
+    + generate_all_signals(reg, prices, config)
+    + run_all_portfolios(config, prices, signals)
+    + build_signal_records(...)
+    + build_model_summaries(...)
+    - _arima_signals(ticker, df, config, buy_threshold)
+  }
+}
+
+package "dashboard.lib" {
+  class TickerInfo <<dataclass, frozen>> {
+    symbol : str
+    name : str
+    sector : str
+  }
+  class ModelInfo <<dataclass, frozen>> {
+    name : str
+    family : str
+    description : str
+  }
+  class Registry <<dataclass>> {
+    tickers : List[TickerInfo]
+    benchmark : str
+    models : List[ModelInfo]
+    / symbols : List[str] [property]
+    / model_names : List[str] [property]
+    + to_dict() : Dict
+  }
+  class "registry" as REGM <<moduł>> {
+    + build_registry(config) : Registry
+  }
+  class "config_loader" as CFGM <<moduł>> {
+    + load_config(path) : Dict
+  }
+  class "data_fetcher" as FETCHM <<moduł>> {
+    + download(symbol, period, interval) : DataFrame
+  }
+  class "ml_loader" as MLM <<moduł>> {
+    + model_probabilities(model, ticker, df, cfg)
+    + detect_real_artifacts(cfg) : Dict
+    + ensure_stock_ml_on_path() : bool
+  }
+  class "signals" as SIGM <<moduł>> {
+    + technical_rule_based(df, rules) : DataFrame
+    + from_probabilities(p, buy, sell) : DataFrame
+    + ensemble_majority(per_model) : DataFrame
+    + buy_and_hold(df) : DataFrame
+  }
+  class ArimaSettings <<NamedTuple>> {
+    selection : str
+    order : (p, d, q)
+    max_p, max_q : int
+    adf_alpha : float
+    window, min_train, refit_every : int
+  }
+  class "arima_signals" as ARSM <<moduł>> {
+    + arima_probabilities(close, threshold, settings, ticker) : Series
+    + to_signals(probabilities, buy_threshold) : DataFrame
+    + model_version(settings) : str
+  }
+  class Position <<dataclass>> {
+    ticker : str
+    shares : float
+    cost_basis : float
+    entry_date : str
+    last_signal_id : str
+  }
+  class BacktestResult <<dataclass>> {
+    portfolio_id : str
+    initial_capital : float
+    final_value : float
+    cash : float
+    transactions : List[Dict]
+    decisions : List[Dict]
+    equity_curve : List[Dict]
+    positions : List[Dict]
+    metrics : Dict
+    benchmark_metrics : Dict
+  }
+  class "portfolio" as PORTM <<moduł>> {
+    + run_portfolio_backtest(cfg, prices, signals, benchmark, ...) : BacktestResult
+  }
+  class "metrics" as METM <<moduł>> {
+    + portfolio_metrics(equity_curve, daily_returns, ..., risk_free_rate=0) : Dict
+    + classification_metrics(signals, realised_up) : Dict
+  }
+  class "exporters" as EXPM <<moduł>> {
+    + write_signals_bundle(...)
+    + write_portfolio(dir, result)
+    + write_model_summaries(...)
+    + write_global_exports(...)
+  }
+}
+
+package "stock_ml.models" {
+  class OneStepForecast <<NamedTuple>> {
+    mean : ndarray
+    std : ndarray
+    converged : bool
+  }
+  class OrderSelection <<NamedTuple>> {
+    order : (p, d, q)
+    bic : float
+    adf_pvalue : float
+  }
+  class "arima_core" as CORE <<moduł>> {
+    + adf_pvalue(series) : float
+    + select_order(train, max_p, max_q, adf_alpha) : OrderSelection
+    + forecast_one_step(train, test, order) : OneStepForecast
+    + forecast_auto(train, test, ...) : (OneStepForecast, OrderSelection)
+    + probability_above(mean, std, threshold) : ndarray
+  }
+}
+
+Registry "1" *-- "*" TickerInfo
+Registry "1" *-- "*" ModelInfo
+REGM ..> Registry : tworzy
+GEN ..> CFGM
+GEN ..> REGM
+GEN ..> FETCHM
+GEN ..> MLM
+GEN ..> ARSM
+GEN ..> SIGM
+GEN ..> PORTM
+GEN ..> EXPM
+ARSM ..> ArimaSettings
+ARSM ..> CORE
+ARSM ..> SIGM
+CORE ..> OneStepForecast
+CORE ..> OrderSelection
+PORTM ..> Position
+PORTM ..> BacktestResult : zwraca
+PORTM ..> METM
+EXPM ..> BacktestResult
+
+@enduml

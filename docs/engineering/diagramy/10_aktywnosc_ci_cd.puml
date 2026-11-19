@@ -1,0 +1,47 @@
+@startuml 10_aktywnosc_ci_cd
+' Diagram aktywności — workflow GitHub Actions (.github/workflows/dashboard.yml)
+' Rozdział pracy: wdrożenie i automatyzacja
+!include _styl.iuml
+
+title Diagram aktywności — automatyczna aktualizacja dashboardu (GitHub Actions)
+
+start
+:Wyzwalacz: cron pn–pt 17:00 UTC
+lub uruchomienie ręczne (workflow_dispatch);
+:Checkout repozytorium
+(kod + modele stock_ml/models/saved);
+:Python 3.11, instalacja dashboard/requirements.txt
+(wersje bibliotek przypięte do zapisanych modeli);
+
+partition "Wykresy ML (best effort, błąd nie przerywa)" {
+  :Instalacja stock_ml/requirements.txt;
+  if (Są modele w models/saved?) then (tak)
+    :python -m stock_ml.main report;
+    :python -m stock_ml.main plots;
+  else (nie)
+    :Pominięcie generowania wykresów;
+  endif
+}
+
+:Archiwizacja notowań z ostatnich 90 dni
+do stock_ml/data/historical (best effort);
+:python dashboard/generate.py
+(sygnały, ARIMA, 10 portfeli, eksport docs/data);
+
+if (Zmiany w docs/ lub archiwum CSV?) then (tak)
+  :git commit jako github-actions[bot]
+  i push (GITHUB_TOKEN);
+  :GitHub Pages: pages build and deployment;
+  :Publikacja nowej wersji strony;
+else (nie)
+  :Brak commita;
+endif
+stop
+
+note right
+  Generator kończy się błędem i nie publikuje
+  pustych danych, gdy nie pobrano żadnych notowań:
+  poprzednia wersja strony pozostaje dostępna.
+end note
+
+@enduml

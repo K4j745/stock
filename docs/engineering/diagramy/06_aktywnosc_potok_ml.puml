@@ -1,0 +1,78 @@
+@startuml 06_aktywnosc_potok_ml
+' Diagram aktywności — potok badawczy uczenia maszynowego (stock_ml)
+' Rozdział pracy: metodyka
+!include _styl.iuml
+
+title Diagram aktywności — trening i ewaluacja modeli (stock_ml)
+
+start
+:Wczytanie konfiguracji (config.py):
+10 spółek, okres 2011-04-01 – 2026-04-01,
+próg etykiety 0,2% (bin2) lub 0,5% (bin5);
+
+partition "Dane" {
+  :Pobranie notowań OHLCV (yfinance);
+  if (Pobranie udane?) then (tak)
+    :Zapis do pamięci podręcznej
+    (Parquet / CSV);
+  else (nie)
+    :Odczyt archiwum CSV
+    z repozytorium;
+  endif
+  :Czyszczenie danych;
+}
+
+partition "Cechy i etykiety" {
+  :Wskaźniki techniczne
+  (RSI, MACD, Bollinger, SMA/EMA, zwroty opóźnione);
+  :Cechy świecowe (geometria świecy);
+  :Etykieta: 1 (BUY), gdy zwrot następnego dnia > próg,
+  inaczej 0 (SELL);
+  :Usunięcie kolumn z przeciekiem danych
+  (np. Log_return) i wierszy z brakami;
+}
+
+partition "Walidacja walk-forward" {
+  :Podział na foldy: trening 252, test 21, krok 21 (165 foldów);
+  repeat
+    :Dopasowanie skalera tylko na treningu;
+    fork
+      :Regresja logistyczna;
+    fork again
+      :Las losowy;
+    fork again
+      :XGBoost;
+    fork again
+      :LightGBM;
+    fork again
+      :ARIMA na stopach zwrotu
+      (ADF + BIC, patrz diagram 07);
+    end fork
+    :Prognoza na 21 sesjach testu;
+    :Metryki foldu: dokładność, precyzja, czułość,
+    F1, ROC AUC, MCC;
+  repeat while (Kolejny fold?) is (tak) not (nie)
+  :Średnie metryk z foldów;
+}
+
+partition "Modele finalne" {
+  :Trening modeli na ostatnim oknie treningowym;
+  :Zapis modeli i skalerów
+  (stock_ml/models/saved, tag bin2 / bin5);
+}
+
+partition "Raporty" {
+  :Raport wyników (CSV, JSON);
+  :Wykresy: porównanie modeli, macierze pomyłek,
+  istotność cech, krzywe kapitału;
+  :Analiza SHAP (XGBoost);
+}
+stop
+
+note right
+  Osobna ścieżka: model świecowy
+  (cechy świecowe + bazowe) trenowany
+  tym samym schematem walk-forward.
+end note
+
+@enduml

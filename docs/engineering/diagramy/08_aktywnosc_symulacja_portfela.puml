@@ -1,0 +1,70 @@
+@startuml 08_aktywnosc_symulacja_portfela
+' Diagram aktywności — symulacja portfela monitorującego (dashboard/lib/portfolio.py)
+' Rozdział pracy: symulacja strategii inwestycyjnej
+!include _styl.iuml
+
+title Diagram aktywności — symulacja portfela (tryb przyrostowy, 1 akcja na sygnał)
+
+start
+:Konfiguracja portfela: 10 spółek, kapitał 100 000 USD,
+źródło sygnału (reguły, model ML, zespół, ARIMA),
+seed_shares = 10, trade_size = 1;
+
+partition "Pozycje startowe (SEED)" {
+  :Dla każdej spółki zakup 10 akcji
+  po cenie otwarcia pierwszej sesji
+  (ograniczenie dostępną gotówką);
+  :Zapis decyzji i transakcji SEED;
+}
+
+repeat :Kolejna sesja d;
+  :Wycena portfela przed decyzjami
+  (gotówka + akcje po cenie zamknięcia);
+  repeat :Kolejna spółka t;
+    :Pobranie sygnału źródła dla (t, d);
+    if (Jest sygnał?) then (nie)
+      :Pominięcie spółki w tej sesji;
+    else (tak)
+      :Cena wykonania = otwarcie sesji d
+      (zamknięcie, gdy brak otwarcia);
+      switch (Sygnał)
+      case (BUY)
+        if (Gotówka wystarcza na co najmniej 1 akcję?) then (tak)
+          :Kupno min(1, możliwe) akcji;
+          :Aktualizacja średniej ceny zakupu;
+        else (nie)
+          :HOLD (brak środków);
+        endif
+      case (SELL)
+        if (Pozycja > 0?) then (tak)
+          :Sprzedaż min(1, posiadane) akcji;
+          :Zrealizowany wynik transakcji;
+        else (nie)
+          :HOLD (brak akcji);
+        endif
+      case (HOLD)
+        :Brak transakcji
+        (rozgrzewka lub brak prognozy);
+      endswitch
+      :Zapis decyzji (decision_id → signal_id);
+      if (Doszło do transakcji?) then (tak)
+        :Zapis transakcji (transaction_id);
+      endif
+    endif
+  repeat while (Kolejna spółka?) is (tak) not (nie)
+  :Punkt krzywej kapitału: wartość portfela,
+  gotówka, kwota zainwestowana;
+repeat while (Kolejna sesja?) is (tak) not (nie)
+
+partition "Podsumowanie" {
+  :Obsunięcia (drawdown) i skumulowany wynik;
+  :Metryki: zwrot całkowity, CAGR, zmienność,
+  Sharpe (średni nadwyżkowy zwrot / odchylenie × √252),
+  maks. obsunięcie, Calmar, statystyki transakcji;
+  :Benchmark: SPY kup i trzymaj w tym samym okresie;
+  :Eksport: decisions, transactions, equity_curve,
+  positions, metrics, summary, trades.csv;
+}
+stop
+
+@enduml
