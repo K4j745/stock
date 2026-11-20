@@ -195,5 +195,7 @@ def predict_candle_proba(
         model.load_model(model_path)
     else:
         model = joblib.load(model_path)
-    proba = model.predict_proba(X_s)[:, 1]
+    # A plain array, as ml_loader passes to the other models: XGBoost 3.1 cannot
+    # read the column names of a pandas 3 frame and refuses the prediction.
+    proba = model.predict_proba(X_s.to_numpy())[:, 1]
     return pd.Series(proba, index=X.index, name="candle_prob_up")
