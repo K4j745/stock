@@ -1,0 +1,21 @@
+tag,ticker,shared_top10,shared_features,same_top1
+bin2,AAPL,7,"ATR_14, HL_spread, MACD, ROC_5, Return_lag_3, Return_lag_5, Stoch_D",True
+bin2,MSFT,9,"HL_spread, OBV, ROC_10, Return_lag_1, Return_lag_2, Return_lag_3, Return_lag_5, Stoch_K, Volume_ratio",True
+bin2,JPM,9,"HL_spread, OBV, ROC_10, ROC_5, Return_lag_1, Return_lag_10, Return_lag_2, Return_lag_5, Stoch_K",False
+bin2,XOM,8,"ATR_14, HL_spread, ROC_5, Return_lag_1, Return_lag_10, Return_lag_3, Return_lag_5, Stoch_K",True
+bin2,JNJ,9,"BB_upper, HL_spread, MACD_signal, OBV, ROC_10, ROC_5, RSI_14, Return_lag_2, Stoch_D",False
+bin2,UNH,9,"BB_lower, OBV, Return_lag_1, Return_lag_10, Return_lag_2, Return_lag_3, Return_lag_5, Stoch_D, Volume_ratio",False
+bin2,PG,8,"BB_width, MACD_signal, OBV, ROC_5, Return_lag_10, Return_lag_2, Return_lag_3, Return_lag_5",False
+bin2,WMT,8,"OBV, ROC_5, Return_lag_10, Return_lag_2, Return_lag_3, SMA_20, Stoch_K, Volume_ratio",False
+bin2,KO,8,"ATR_14, OBV, Return_lag_10, Return_lag_2, Return_lag_3, SMA_50, Stoch_D, Stoch_K",False
+bin2,NEE,7,"ROC_5, RSI_14, Return_lag_1, Return_lag_10, Return_lag_3, Return_lag_5, Stoch_D",True
+bin5,AAPL,9,"ATR_14, MACD, OBV, ROC_5, RSI_14, Return_lag_1, Return_lag_3, Return_lag_5, Stoch_D",True
+bin5,MSFT,9,"ATR_14, BB_width, HL_spread, Return_lag_1, Return_lag_10, Return_lag_2, Return_lag_3, Stoch_K, Volume_ratio",True
+bin5,JPM,8,"HL_spread, ROC_10, RSI_14, Return_lag_1, Return_lag_3, Return_lag_5, Stoch_K, Volume_ratio",True
+bin5,XOM,8,"ATR_14, MACD_signal, ROC_5, Return_lag_1, Return_lag_5, SMA_50, Stoch_D, Volume_ratio",True
+bin5,JNJ,5,"ATR_14, HL_spread, OBV, ROC_5, Return_lag_3",False
+bin5,UNH,8,"BB_lower, BB_width, OBV, Return_lag_1, Return_lag_10, Return_lag_3, Return_lag_5, Stoch_D",True
+bin5,PG,7,"BB_width, HL_spread, OBV, ROC_10, Return_lag_10, Return_lag_2, Return_lag_3",False
+bin5,WMT,8,"OBV, ROC_10, ROC_5, Return_lag_10, Return_lag_3, Return_lag_5, Stoch_D, Volume_ratio",True
+bin5,KO,8,"BB_lower, BB_width, Return_lag_10, Return_lag_3, SMA_5, SMA_50, Stoch_D, Stoch_K",False
+bin5,NEE,7,"HL_spread, ROC_5, RSI_14, Return_lag_10, Return_lag_2, Return_lag_3, Return_lag_5",True
