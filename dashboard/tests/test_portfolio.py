@@ -148,3 +148,76 @@ def test_seed_capped_by_available_cash():
     }
     res = portfolio.run_portfolio_backtest(cfg, prices, signals)
     assert res.positions[0]["shares"] == 2  # floor(250 / 100)
+
+
+# --- No lookahead: a signal is computed from the day's close, so it can only be
+#     traded at the next session's open.
+
+@pytest.mark.unit
+def test_signal_is_executed_at_next_sessions_open():
+    res = _run({"max_positions": 1}, sigs=["BUY", "HOLD", "HOLD", "HOLD"])
+
+    buy = [t for t in res.transactions if t["action"] == "BUY"]
+    assert len(buy) == 1
+    assert buy[0]["signal_date"] == "2026-01-02"
+    assert buy[0]["execution_date"] == "2026-01-05"
+    assert buy[0]["execution_price"] == 110  # Open of 2026-01-05, not of the signal day
+
+
+@pytest.mark.unit
+def test_signal_does_not_change_the_position_on_its_own_day():
+    res = _run({"max_positions": 1}, sigs=["BUY", "HOLD", "HOLD", "HOLD"])
+
+    first_day = res.equity_curve[0]
+    assert first_day["invested"] == 0
+    assert first_day["cash"] == 100000
+
+
+@pytest.mark.unit
+def test_signal_on_the_last_day_is_not_executed():
+    res = _run({"max_positions": 1}, sigs=["HOLD", "HOLD", "HOLD", "BUY"])
+
+    assert [t for t in res.transactions if t["action"] == "BUY"] == []
+    assert res.positions == []
+
+
+@pytest.mark.unit
+def test_decision_reports_indicators_known_at_signal_time():
+    prices = _prices(DATES, opens=[100, 110, 120, 130], closes=[105, 115, 125, 135])
+    prices["RSI"] = [10.0, 20.0, 30.0, 40.0]
+    signals = {"AAPL": {"logistic_regression": _signals(DATES, ["BUY", "HOLD", "HOLD", "HOLD"])}}
+    cfg = {"id": "t", "name": "Test", "tickers": ["AAPL"], "initial_capital": 100000,
+           "signal_source": "logistic_regression", "rules": {"max_positions": 1}}
+
+    res = portfolio.run_portfolio_backtest(cfg, {"AAPL": prices}, signals)
+
+    buy = next(t for t in res.transactions if t["action"] == "BUY")
+    assert buy["rsi"] == 10.0  # RSI of the signal day, not of the execution day
+
+
+@pytest.mark.unit
+def test_buy_and_hold_still_enters_on_the_first_open():
+    # A constant BUY uses no market information, so it needs no delay.
+    prices = {"AAPL": _prices(DATES, opens=[100, 110, 120, 130], closes=[105, 115, 125, 135])}
+    signals = {"AAPL": {"buy_and_hold": _signals(DATES, ["BUY"] * 4)}}
+    cfg = {"id": "bh", "name": "B&H", "tickers": ["AAPL"], "initial_capital": 100000,
+           "signal_source": "buy_and_hold", "rules": {"max_positions": 1}}
+
+    res = portfolio.run_portfolio_backtest(cfg, prices, signals)
+
+    buy = next(t for t in res.transactions if t["action"] == "BUY")
+    assert buy["execution_date"] == "2026-01-02"
+    assert buy["execution_price"] == 100
+
+
+@pytest.mark.unit
+def test_zero_lag_reproduces_same_day_execution_for_comparison():
+    prices = {"AAPL": _prices(DATES, opens=[100, 110, 120, 130], closes=[105, 115, 125, 135])}
+    signals = {"AAPL": {"logistic_regression": _signals(DATES, ["BUY", "HOLD", "HOLD", "HOLD"])}}
+    cfg = {"id": "t", "name": "Test", "tickers": ["AAPL"], "initial_capital": 100000,
+           "signal_source": "logistic_regression", "rules": {"max_positions": 1}}
+
+    res = portfolio.run_portfolio_backtest(cfg, prices, signals, signal_lag=0)
+
+    buy = next(t for t in res.transactions if t["action"] == "BUY")
+    assert buy["signal_date"] == buy["execution_date"] == "2026-01-02"

@@ -19,6 +19,11 @@ three distinct concepts that we keep separate by storing IDs that link them:
 
 So one signal can produce zero or one decisions, and one decision can produce
 zero or one transactions (HOLD decisions produce no transaction).
+
+Timing: a signal for day d is computed from that day's bar, including its
+close, so it is traded at the open of the next session (``signal_lag=1``). A
+constant buy-and-hold signal uses no market information and is traded on the
+day itself. The decision record keeps ``signal_date`` and ``execution_date``.
 """
 from __future__ import annotations
 
@@ -88,6 +93,7 @@ def run_portfolio_backtest(
     strategy_version: str = "1.0",
     label_mode: str = "binary",
     label_version: str = "binary-2026-05",
+    signal_lag: int = 1,
 ) -> BacktestResult:
     """Simulate the portfolio day-by-day and return a full audit trail.
 
@@ -97,6 +103,11 @@ def run_portfolio_backtest(
 
     ``prices_by_ticker[ticker]`` must be a DataFrame with OHLCV + indicator
     columns (Open/High/Low/Close/Volume + RSI/MACD/etc).
+
+    ``signal_lag`` is how many sessions pass between a signal and its trade.
+    The default 1 trades at the next open; 0 trades at the open of the
+    signal's own day, which uses its close before it exists, and is kept only
+    to measure that lookahead.
     """
     pid = portfolio_cfg["id"]
     tickers = [t for t in portfolio_cfg["tickers"] if t in prices_by_ticker]
@@ -112,6 +123,7 @@ def run_portfolio_backtest(
         )
 
     signal_source = portfolio_cfg.get("signal_source", "technical_rule_based")
+    lag = 0 if signal_source == "buy_and_hold" else int(signal_lag)
     rules = portfolio_cfg.get("rules", {}) or {}
     note = portfolio_cfg.get("note", "")
 
@@ -183,7 +195,7 @@ def run_portfolio_backtest(
                 model_name="seed", sig_row={"signal": "SEED", "triggered_rules": "seed_position"},
                 sig_id=sig_id, decision_id=decision_id, action="SEED",
                 execution_price=price, prev_close=_previous_close(df, first_day),
-                row=row, quantity=qty, shares_before=0.0, shares_after=pos.shares,
+                row=row, signal_day=first_day, signal_bar=row, quantity=qty, shares_before=0.0, shares_after=pos.shares,
                 cash_before=cash_before, cash_after=cash,
                 pos_val_before=0.0, pos_val_after=pos.shares * price,
                 portfolio_value_before=cash_before,
@@ -212,11 +224,15 @@ def run_portfolio_backtest(
             if d not in df.index:
                 continue
 
-            # Decide the signal for the day based on the configured source
+            # Trade today on the signal of ``lag`` sessions ago: a signal needs
+            # its day's close, which is not known at that day's open.
+            signal_day = _signal_day(df.index, d, lag)
+            if signal_day is None:
+                continue
             chosen_signal = _resolve_signal_for_day(
                 signal_source=signal_source,
                 ticker=t,
-                day=d,
+                day=signal_day,
                 signals_by_model=signals_by_ticker_model.get(t, {}),
                 rules=rules,
             )
@@ -227,6 +243,7 @@ def run_portfolio_backtest(
             sig_id = chosen_signal["signal_id"]
 
             row = df.loc[d]
+            signal_bar = df.loc[signal_day]
             execution_price = float(row["Open"]) if pd.notna(row.get("Open")) else float(row["Close"])
             prev_close = _previous_close(df, d)
 
@@ -323,14 +340,14 @@ def run_portfolio_backtest(
 
             # forward returns of the underlying (not portfolio) — these are
             # really for *signal* effectiveness analysis, not for P&L.
-            r1, r5, r20 = _forward_returns(df, d)
+            r1, r5, r20 = _forward_returns(df, signal_day)
 
             decision_record = _build_decision_record(
                 portfolio_cfg=portfolio_cfg, ticker=t, day=d,
                 model_name=sig_model, sig_row=sig_row, sig_id=sig_id,
                 decision_id=decision_id, action=action,
                 execution_price=execution_price, prev_close=prev_close,
-                row=row, quantity=quantity,
+                row=row, signal_day=signal_day, signal_bar=signal_bar, quantity=quantity,
                 shares_before=shares_before, shares_after=shares_after,
                 cash_before=cash_before, cash_after=cash,
                 pos_val_before=pos_val_before, pos_val_after=pos_val_after,
@@ -487,6 +504,12 @@ def _forward_returns(df: pd.DataFrame, day):
     return out[0], out[1], out[2]
 
 
+def _signal_day(index: pd.DatetimeIndex, day, lag: int):
+    """The session ``lag`` sessions before ``day`` in this ticker's calendar, or None."""
+    position = index.get_loc(day)
+    return index[position - lag] if position >= lag else None
+
+
 def _resolve_signal_for_day(signal_source: str, ticker: str, day,
                             signals_by_model: Dict[str, pd.DataFrame],
                             rules: Dict) -> Optional[Dict]:
@@ -506,7 +529,7 @@ def _resolve_signal_for_day(signal_source: str, ticker: str, day,
 
 def _build_decision_record(portfolio_cfg, ticker, day, model_name, sig_row, sig_id,
                            decision_id, action, execution_price, prev_close,
-                           row, quantity, shares_before, shares_after,
+                           row, signal_day, signal_bar, quantity, shares_before, shares_after,
                            cash_before, cash_after, pos_val_before, pos_val_after,
                            portfolio_value_before, portfolio_value_after,
                            weight_target, weight_actual, weight_before,
@@ -515,7 +538,12 @@ def _build_decision_record(portfolio_cfg, ticker, day, model_name, sig_row, sig_
                            data_version, strategy_version,
                            label_mode, label_version,
                            r1, r5, r20):
-    """Assemble the rich decision/transaction record (matches the prompt's spec)."""
+    """Assemble the rich decision/transaction record (matches the prompt's spec).
+
+    ``row`` is the execution day's bar (prices); ``signal_bar`` is the bar the
+    signal was computed from, so the indicators shown are the ones known when
+    the decision was made.
+    """
     def _f(x, n=4):
         if x is None or (isinstance(x, float) and (np.isnan(x) or np.isinf(x))):
             return None
@@ -541,6 +569,7 @@ def _build_decision_record(portfolio_cfg, ticker, day, model_name, sig_row, sig_
         "action": action,
         "decision_timestamp_utc": generated_at,
         "market_date": day.strftime("%Y-%m-%d"),
+        "signal_date": signal_day.strftime("%Y-%m-%d"),
         "execution_date": day.strftime("%Y-%m-%d"),
         "execution_price": _f(execution_price, 4),
         "previous_close": _f(prev_close, 4),
@@ -571,15 +600,15 @@ def _build_decision_record(portfolio_cfg, ticker, day, model_name, sig_row, sig_
         "probability_up": _f(sig_row.get("probability_up"), 4),
         "threshold_used": _f(sig_row.get("threshold_used"), 4),
 
-        "rsi": _f(row.get("RSI"), 2),
-        "macd": _f(row.get("MACD"), 4),
-        "macd_signal": _f(row.get("MACD_signal"), 4),
-        "macd_hist": _f(row.get("MACD_hist"), 4),
-        "bb_upper": _f(row.get("BB_upper"), 4),
-        "bb_lower": _f(row.get("BB_lower"), 4),
-        "bb_middle": _f(row.get("BB_middle"), 4),
-        "sma20": _f(row.get("SMA20"), 4),
-        "sma50": _f(row.get("SMA50"), 4),
+        "rsi": _f(signal_bar.get("RSI"), 2),
+        "macd": _f(signal_bar.get("MACD"), 4),
+        "macd_signal": _f(signal_bar.get("MACD_signal"), 4),
+        "macd_hist": _f(signal_bar.get("MACD_hist"), 4),
+        "bb_upper": _f(signal_bar.get("BB_upper"), 4),
+        "bb_lower": _f(signal_bar.get("BB_lower"), 4),
+        "bb_middle": _f(signal_bar.get("BB_middle"), 4),
+        "sma20": _f(signal_bar.get("SMA20"), 4),
+        "sma50": _f(signal_bar.get("SMA50"), 4),
 
         "return_1d_after": r1,
         "return_5d_after": r5,
