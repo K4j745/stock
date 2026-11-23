@@ -1,5 +1,5 @@
 yfinance
-pandas
+pandas==2.3.3  # same version as the research runs, so CI computes in the same environment
 numpy
 ta
 statsmodels>=0.14

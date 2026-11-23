@@ -17,13 +17,33 @@ logger = logging.getLogger(__name__)
 PLOTS_DIR = os.path.join(REPORTS_DIR, "plots")
 os.makedirs(PLOTS_DIR, exist_ok=True)
 
+# The shap library draws English axis labels; the thesis charts are in Polish.
+SUMMARY_XLABEL = "Wartość SHAP (wpływ na wynik modelu)"
+BAR_XLABEL = "Średnia |wartość SHAP| (średni wpływ na wynik modelu)"
+COLORBAR_LABEL = "Wartość cechy"
+COLORBAR_ENDS = ("Niska", "Wysoka")
+
+
+def _polish_summary_labels(fig) -> None:
+    """Translate the axis and colour-bar labels of a SHAP beeswarm plot."""
+    main_ax, *other_axes = fig.axes
+    main_ax.set_xlabel(SUMMARY_XLABEL)
+    if other_axes:
+        colorbar_ax = other_axes[-1]
+        colorbar_ax.set_ylabel(COLORBAR_LABEL)
+        if len(colorbar_ax.get_yticks()) == 2:
+            colorbar_ax.set_yticklabels(COLORBAR_ENDS)
+
 
 def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: str = "A",
                       tuned: bool = False, n_samples: int = 500,
                       label_mode: str = DEFAULT_LABEL_MODE,
-                      threshold: float = LABEL_THRESHOLD):
+                      threshold: float = LABEL_THRESHOLD) -> pd.Series | None:
     """
     Generate SHAP plots for a trained model.
+
+    Returns the mean absolute SHAP value of each feature, sorted from the most
+    to the least important, or None when the model or scaler is missing.
 
     Plots saved to reports/plots/:
     - shap_summary_{ticker}_{model}_{label_version}.png
@@ -53,7 +73,7 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
     scaler_path = os.path.join(MODEL_DIR, f"scaler_{ticker}_{label_version}{suffix}.joblib")
     if not os.path.exists(scaler_path):
         logger.error(f"Scaler not found: {scaler_path}")
-        return
+        return None
     scaler = joblib.load(scaler_path)
     X_scaled = scaler.transform(X_sample)
     X_scaled_df = pd.DataFrame(X_scaled, columns=X_sample.columns, index=X_sample.index)
@@ -64,7 +84,7 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
         model_path = os.path.join(MODEL_DIR, f"xgboost_{ticker}_{label_version}{suffix}.json")
         if not os.path.exists(model_path):
             logger.error(f"Model not found: {model_path}")
-            return
+            return None
         model = xgb.XGBClassifier()
         model.load_model(model_path)
         explainer = shap.TreeExplainer(model)
@@ -73,19 +93,19 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
         model_path = os.path.join(MODEL_DIR, f"lightgbm_{ticker}_{label_version}{suffix}.txt")
         if not os.path.exists(model_path):
             logger.error(f"Model not found: {model_path}")
-            return
+            return None
         model = lgb.Booster(model_file=model_path)
         explainer = shap.TreeExplainer(model)
     elif model_name == "random_forest":
         model_path = os.path.join(MODEL_DIR, f"random_forest_{ticker}_{label_version}{suffix}.joblib")
         if not os.path.exists(model_path):
             logger.error(f"Model not found: {model_path}")
-            return
+            return None
         model = joblib.load(model_path)
         explainer = shap.TreeExplainer(model)
     else:
         logger.error(f"SHAP not supported for model: {model_name}")
-        return
+        return None
 
     shap_values = explainer.shap_values(X_scaled_df)
 
@@ -100,6 +120,7 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
     # 1. Summary plot (beeswarm)
     plt.figure(figsize=(10, 8))
     shap.summary_plot(shap_vals, X_scaled_df, show=False, plot_size=None)
+    _polish_summary_labels(plt.gcf())
     plt.title(f"Wykres zbiorczy SHAP\n{label}", fontsize=12)
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"shap_summary_{ticker}_{model_name}_{label_version}{suffix}.png")
@@ -110,6 +131,7 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
     # 2. Bar plot (mean absolute SHAP)
     plt.figure(figsize=(10, 8))
     shap.summary_plot(shap_vals, X_scaled_df, plot_type="bar", show=False, plot_size=None)
+    plt.gca().set_xlabel(BAR_XLABEL)
     plt.title(f"Istotność cech (SHAP)\n{label}", fontsize=12)
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"shap_bar_{ticker}_{model_name}_{label_version}{suffix}.png")
@@ -143,3 +165,5 @@ def run_shap_analysis(ticker: str, model_name: str = "xgboost", label_version: s
         logger.warning(f"Waterfall plot failed: {e}")
 
     logger.info(f"SHAP analysis complete for {ticker} | {model_name}")
+    importance = np.abs(np.asarray(shap_vals)).mean(axis=0)
+    return pd.Series(importance, index=X_scaled_df.columns, name="mean_abs_shap").sort_values(ascending=False)

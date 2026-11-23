@@ -268,7 +268,7 @@
         <p><strong>Co oznacza etykieta <code>proxy</code> przy sygnale?</strong><br>
         Że dla danej spółki nie był dostępny wytrenowany artefakt modelu i sygnał policzono uproszczoną regułą zastępczą. Sygnały oznaczone jako <code>proxy</code> <strong>nie są</strong> predykcją modelu ML i nie powinny być tak interpretowane.</p>
         <p><strong>Dlaczego wyniki backtestu są lepsze niż realne byłyby na rynku?</strong><br>
-        Backtest zakłada wykonanie po cenie zamknięcia i nie modeluje pełnych kosztów transakcyjnych, poślizgu ani wpływu zlecenia na rynek. Służy porównaniu modeli między sobą, a nie prognozie realnego zysku.</p>
+        Sygnał z dnia d jest wykonywany po cenie otwarcia następnej sesji, bo wymaga zamknięcia dnia d. Backtest nie modeluje pełnych kosztów transakcyjnych, poślizgu ani wpływu zlecenia na rynek. Służy porównaniu modeli między sobą, a nie prognozie realnego zysku.</p>
       </div>
 
       <h3>Problemy techniczne</h3>
@@ -495,7 +495,7 @@
         <p><strong>What does the <code>proxy</code> tag on a signal mean?</strong><br>
         That no trained model artifact was available for that stock, so the signal was computed with a simplified fallback rule. Signals tagged <code>proxy</code> are <strong>not</strong> ML model predictions and should not be read as such.</p>
         <p><strong>Why do the backtest results look better than real-world trading would?</strong><br>
-        The backtest assumes execution at the closing price and does not model full transaction costs, slippage or market impact. It is meant for comparing models against each other, not for forecasting real profit.</p>
+        A signal from day d is executed at the next session's open, because it needs day d's close. The backtest does not model full transaction costs, slippage or market impact. It is meant for comparing models against each other, not for forecasting real profit.</p>
       </div>
 
       <h3>Technical problems</h3>
