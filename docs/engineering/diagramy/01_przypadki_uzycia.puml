@@ -50,7 +50,7 @@ rectangle "Generator dashboardu i publikacja (dashboard/, CI)" {
   usecase "UC-41\nWczytanie modeli ML\n(stock_ml/models/saved)" as UC41
   usecase "UC-42\nSygnał zastępczy (proxy)\nprzy braku modelu" as UC42
   usecase "UC-43\nWyznaczenie sygnałów\n(reguły, ML, zespół,\nkup i trzymaj)" as UC43
-  usecase "UC-44\nCykliczna aktualizacja\n(cron pn–pt 17:00 UTC)" as UC44
+  usecase "UC-44\nCykliczna aktualizacja\n(cron pn–pt 22:30 UTC)" as UC44
   usecase "UC-45\nPublikacja dashboardu\n(commit + push docs/)" as UC45
   usecase "UC-46\nPobranie kursu USD/PLN" as UC46
   usecase "UC-47\nSygnały ARIMA\n(okno kroczące, ADF + BIC)" as UC47

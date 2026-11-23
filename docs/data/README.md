@@ -3,7 +3,7 @@
 Everything under `docs/data/` is **generated output**, not hand-authored source.
 It is produced by `python dashboard/generate.py` and refreshed on a schedule by
 the *Update Dashboard Data* GitHub Actions workflow (`.github/workflows/dashboard.yml`,
-Mon–Fri 17:00 UTC). GitHub Pages serves this folder statically; the frontend
+Mon–Fri 22:30 UTC). GitHub Pages serves this folder statically; the frontend
 `fetch()`es the JSON at runtime.
 
 ## Why not Git LFS?
@@ -47,7 +47,7 @@ The default branch gets a **daily bot commit** that rewrites `docs/data/**`. Any
 that also regenerates that data will conflict with each new bot commit until it
 merges. Practical guidance:
 
-- **Merge data PRs promptly** — before the next scheduled bot run (Mon–Fri 17:00 UTC).
+- **Merge data PRs promptly** — before the next scheduled bot run (Mon–Fri 22:30 UTC).
 - With the `merge=keep-ours` driver configured, `git merge origin/<default-branch>`
   into your feature branch resolves the data automatically; only real code changes
   can then conflict.

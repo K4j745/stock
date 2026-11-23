@@ -29,7 +29,7 @@ Ze względu na jednoosobowy charakter zespołu zrezygnowano z formalnych artefak
   w metadanych każdego przebiegu generatora (`docs/data/meta.json`), co pozwala odtworzyć,
   która wersja kodu wygenerowała daną wersję danych.
 - **Ciągła integracja i dostarczanie.** GitHub Actions (`.github/workflows/dashboard.yml`)
-  uruchamia generator według harmonogramu (`cron: 0 17 * * 1-5`, po zamknięciu sesji na giełdach
+  uruchamia generator według harmonogramu (`cron: 30 22 * * 1-5`, po zamknięciu sesji na giełdach
   amerykańskich) oraz na żądanie (`workflow_dispatch`). Zadanie kończy się automatycznym commitem
   i wypchnięciem katalogu `docs/`, co jest równoznaczne z publikacją nowej wersji serwisu
   na GitHub Pages.

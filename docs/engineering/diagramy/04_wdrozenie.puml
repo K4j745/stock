@@ -19,7 +19,7 @@ cloud "GitHub" {
     artifact ".github/workflows/dashboard.yml" as A_WF
   }
 
-  node "Runner GitHub Actions\nubuntu-latest, Python 3.11\n<<cron pn–pt 17:00 UTC>>" as RUNNER {
+  node "Runner GitHub Actions\nubuntu-latest, Python 3.11\n<<cron pn–pt 22:30 UTC>>" as RUNNER {
     artifact "dashboard/generate.py" as A_GEN_CI
     artifact "zależności: pandas, yfinance,\nscikit-learn 1.7.2, XGBoost 3.1.1,\nLightGBM 4.6.0, statsmodels" as A_DEPS
   }

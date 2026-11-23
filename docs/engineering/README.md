@@ -94,7 +94,7 @@ flowchart LR
         UC41["UC-41 Wczytanie artefaktów ML"]
         UC42["UC-42 Zejście do proxy<br/>przy braku artefaktów"]
         UC43["UC-43 Wyznaczenie sygnałów"]
-        UC44["UC-44 Cykliczna aktualizacja<br/>cron pn-pt 17:00 UTC"]
+        UC44["UC-44 Cykliczna aktualizacja<br/>cron pn-pt 22:30 UTC"]
         UC45["UC-45 Publikacja dashboardu"]
         UC46["UC-46 Pobranie kursu USD/PLN"]
     end

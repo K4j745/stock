@@ -15,7 +15,7 @@ Site URL: `https://<user>.github.io/<repo>/`
 ## Data updates
 
 The workflow `.github/workflows/dashboard.yml`:
-- Schedule: Mon-Fri 17:00 UTC (after US market close)
+- Schedule: Mon-Fri 22:30 UTC (after US market close)
 - Manual: Actions → *Update Dashboard Data* → *Run workflow*
 
 Local generation:

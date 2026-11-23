@@ -6,7 +6,7 @@
 title Diagram aktywności — automatyczna aktualizacja dashboardu (GitHub Actions)
 
 start
-:Wyzwalacz: cron pn–pt 17:00 UTC
+:Wyzwalacz: cron pn–pt 22:30 UTC
 lub uruchomienie ręczne (workflow_dispatch);
 :Checkout repozytorium
 (kod + modele stock_ml/models/saved);

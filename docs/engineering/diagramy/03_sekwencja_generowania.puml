@@ -27,7 +27,7 @@ database "docs/data\n(JSON, CSV)" as DOCS
 participant "GitHub Pages" as PAGES
 participant "Przeglądarka" as BR
 
-== Uruchomienie (cron pn–pt 17:00 UTC) ==
+== Uruchomienie (cron pn–pt 22:30 UTC) ==
 CI -> GEN : python dashboard/generate.py
 activate GEN
 GEN -> CFG : load_config("config.json")
