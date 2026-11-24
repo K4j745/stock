@@ -1,59 +1,66 @@
-' Wspólny styl diagramów pracy inżynierskiej (dołączany przez !include).
-skinparam backgroundColor #FFFFFF
+' ===== Styl wspólny rycin (wg wytycznych autora) =====
+skinparam packageStyle rectangle
 skinparam shadowing false
-skinparam defaultFontName "Segoe UI"
+skinparam defaultFontName Arial
 skinparam defaultFontSize 12
-skinparam ArrowColor #37474F
-skinparam roundCorner 6
-skinparam titleFontSize 15
-skinparam note {
-  BackgroundColor #FFFDE7
-  BorderColor #B8A85A
-}
-skinparam package {
-  BackgroundColor #FAFAFA
-  BorderColor #90A4AE
-}
-skinparam rectangle {
-  BackgroundColor #FAFAFA
-  BorderColor #90A4AE
-}
-skinparam component {
-  BackgroundColor #ECEFF1
-  BorderColor #546E7A
-}
-skinparam database {
-  BackgroundColor #ECEFF1
-  BorderColor #546E7A
-}
-skinparam node {
-  BackgroundColor #F5F7F8
-  BorderColor #546E7A
-}
-skinparam artifact {
-  BackgroundColor #FFFFFF
-  BorderColor #78909C
-}
-skinparam usecase {
-  BackgroundColor #ECEFF1
-  BorderColor #546E7A
-}
-skinparam activity {
-  BackgroundColor #ECEFF1
-  BorderColor #546E7A
-  DiamondBackgroundColor #FFFFFF
-  DiamondBorderColor #546E7A
-}
-skinparam class {
-  BackgroundColor #ECEFF1
-  BorderColor #546E7A
-  HeaderBackgroundColor #CFD8DC
-}
-skinparam sequence {
-  LifeLineBorderColor #90A4AE
-  LifeLineBackgroundColor #ECEFF1
-  ParticipantBorderColor #546E7A
-  ParticipantBackgroundColor #ECEFF1
-  ActorBorderColor #546E7A
-  BoxBorderColor #B0BEC5
-}
+skinparam defaultFontColor Black
+skinparam ArrowColor Black
+skinparam ArrowFontSize 11
+skinparam actorBackgroundColor #7EC8E3
+skinparam actorBorderColor Black
+skinparam usecaseBackgroundColor #7EC8E3
+skinparam usecaseBorderColor Black
+skinparam rectangleBackgroundColor White
+skinparam rectangleBorderColor Black
+skinparam packageBackgroundColor White
+skinparam packageBorderColor Black
+skinparam componentBackgroundColor #7EC8E3
+skinparam componentBorderColor Black
+skinparam interfaceBackgroundColor #7EC8E3
+skinparam interfaceBorderColor Black
+skinparam databaseBackgroundColor #7EC8E3
+skinparam databaseBorderColor Black
+skinparam artifactBackgroundColor #7EC8E3
+skinparam artifactBorderColor Black
+skinparam nodeBackgroundColor White
+skinparam nodeBorderColor Black
+skinparam cloudBackgroundColor White
+skinparam cloudBorderColor Black
+skinparam noteBackgroundColor White
+skinparam noteBorderColor Black
+skinparam noteFontSize 11
+skinparam legendBackgroundColor White
+skinparam legendBorderColor Black
+skinparam legendFontSize 11
+skinparam activityBackgroundColor #7EC8E3
+skinparam activityBorderColor Black
+skinparam activityDiamondBackgroundColor White
+skinparam activityDiamondBorderColor Black
+skinparam activityStartColor Black
+skinparam activityEndColor Black
+skinparam activityBarColor Black
+skinparam partitionBackgroundColor White
+skinparam partitionBorderColor Black
+skinparam classBackgroundColor White
+skinparam classBorderColor Black
+skinparam classHeaderBackgroundColor #7EC8E3
+skinparam classAttributeIconSize 0
+skinparam sequenceParticipantBackgroundColor #7EC8E3
+skinparam sequenceParticipantBorderColor Black
+skinparam sequenceActorBackgroundColor #7EC8E3
+skinparam sequenceActorBorderColor Black
+skinparam sequenceLifeLineBorderColor Black
+skinparam sequenceLifeLineBackgroundColor #7EC8E3
+skinparam sequenceBoxBackgroundColor White
+skinparam sequenceBoxBorderColor Black
+skinparam sequenceGroupBackgroundColor #7EC8E3
+skinparam sequenceGroupBorderColor Black
+skinparam sequenceDividerBackgroundColor White
+skinparam sequenceDividerBorderColor Black
+skinparam sequenceReferenceBackgroundColor White
+skinparam sequenceReferenceBorderColor Black
+<style>
+package { HorizontalAlignment left }
+rectangle { HorizontalAlignment left }
+</style>
+' ===== koniec stylu =====

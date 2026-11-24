@@ -1,0 +1,47 @@
+@startuml R06_symulacja_portfela
+' Ryc. 6 — symulacja portfela monitorującego w trybie przyrostowym (rozdz. Projekt i implementacja)
+' Zgodnie z kodem: dashboard/lib/portfolio.py (run_portfolio_backtest, signal_lag = 1, _signal_day;
+' poprawka c32b8cc5 z 2026-11-20), dashboard/lib/metrics.py,
+' dashboard/config.json (seed_shares = 10, trade_mode = incremental, trade_size = 1).
+!include _styl.iuml
+
+start
+:Kapitał 100 000 USD, źródło sygnałów z konfiguracji.
+Pozycje startowe (SEED): po 10 akcji każdej
+z 10 spółek po cenie otwarcia pierwszej sesji;
+repeat :Kolejna sesja d;
+  repeat :Kolejna spółka;
+    if (Jest sygnał spółki
+    z poprzedniej sesji (d−1)?) then (tak)
+      if (BUY i gotówka
+      na 1 akcję?) then (tak)
+        :Kupno 1 akcji po cenie
+        otwarcia sesji d;
+      (nie) elseif (SELL i posiadane
+      akcje?) then (tak)
+        :Sprzedaż 1 akcji po cenie
+        otwarcia sesji d;
+      else (nie)
+        :Brak transakcji;
+      endif
+      :Zapis decyzji (data sygnału, data wykonania)
+      i transakcji, jeśli do niej doszło;
+    else (nie)
+    endif
+  repeat while (Kolejna spółka?) is (tak) not (nie)
+  :Wycena po cenach zamknięcia sesji d
+  (punkt krzywej kapitału);
+repeat while (Kolejna sesja?) is (tak) not (nie)
+:Metryki (zwrot, CAGR, zmienność, Sharpe,
+maks. obsunięcie, Calmar, statystyki transakcji),
+porównanie z SPY i eksport do docs/data/portfolios;
+stop
+
+legend bottom
+  Sygnał z sesji d−1 powstaje z danych do jej zamknięcia, więc jest wykonywany
+  na otwarciu następnej sesji spółki; sygnał z ostatniej sesji nie daje transakcji.
+  Bez opóźnienia: pozycje SEED i portfele „kup i trzymaj” (SPY, koszyk 10 spółek,
+  tryb all_in), które kupują w pierwszej sesji. HOLD oznacza brak prognozy
+  (np. rozgrzewka ARIMA). Symulacja nie uwzględnia kosztów transakcyjnych.
+endlegend
+@enduml

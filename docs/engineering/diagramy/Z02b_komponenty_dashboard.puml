@@ -1,0 +1,55 @@
+@startuml Z02b_komponenty_dashboard
+' Załącznik — komponenty generatora danych serwisu (dashboard/) i ich zależności
+' Strzałka przerywana: import modułu; strzałka ciągła: zapis lub odczyt plików
+' albo pobranie danych. Zgodnie z instrukcjami import w dashboard/generate.py i lib/*.py.
+!include _styl.iuml
+skinparam nodesep 30
+skinparam ranksep 40
+
+component "generate.py" as GEN
+database "config.json" as CONF
+component "Yahoo Finance" as YF <<zewnętrzny>>
+database "stock_ml/\ndata/historical" as HIST
+
+package "dashboard/lib" as LIB {
+  component "config_loader,\nregistry" as CFG
+  component "data_fetcher" as FETCH
+  component "indicators" as IND
+  component "arima_signals" as ARS
+  component "ml_loader" as MLL
+  component "signals" as SIG
+  component "portfolio" as PORT
+  component "metrics" as MET
+  component "exporters,\naudit" as EXP
+}
+
+package "stock_ml" as SML {
+  component "models.\narima_core" as CORE
+  component "data, features,\nmodels.candle_model" as SMLF
+}
+database "stock_ml/\nmodels/saved" as SAVED
+database "docs/data" as DOCS
+
+GEN ..> LIB : importuje\nwszystkie moduły
+
+CFG -[hidden]right- FETCH
+FETCH -[hidden]right- IND
+CFG -[hidden]down- ARS
+ARS ..> MLL
+MLL ..> SIG
+ARS -[hidden]down- PORT
+PORT ..> MET
+MET -[hidden]right- EXP
+ARS ..> SIG
+
+CONF <-- CFG : odczyt
+YF <-- FETCH : 3 próby
+HIST <-- FETCH : odczyt\nawaryjny
+
+ARS ..> CORE
+MLL ..> SMLF
+MLL --> SAVED : odczyt
+EXP --> DOCS : zapis
+MET -[hidden]down- SMLF
+SIG -[hidden]down- CORE
+@enduml

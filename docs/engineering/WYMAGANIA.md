@@ -216,7 +216,7 @@ nie jest udostępniona użytkownikowi końcowemu), **planowane** (funkcja nie zo
 
 ## 4. Macierz pokrycia
 
-Macierz wiąże przypadki użycia z diagramu przypadków użycia (`diagramy/01_przypadki_uzycia.puml`) z wymaganiami
+Macierz wiąże przypadki użycia z diagramu przypadków użycia (`diagramy/R03_przypadki_uzycia_przeglad.puml` i `diagramy/Z01a_…` – `Z01d_…`) z wymaganiami
 funkcjonalnymi. Pozwala to wykazać, że każdy zidentyfikowany przypadek użycia ma odpowiadające mu
 wymaganie oraz że żadne wymaganie krytyczne nie pozostaje poza modelem zachowania systemu.
 

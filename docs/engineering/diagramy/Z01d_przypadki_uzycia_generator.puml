@@ -1,0 +1,41 @@
+@startuml Z01d_przypadki_uzycia_generator
+' Załącznik — przypadki użycia generatora danych serwisu (dashboard/generate.py)
+' Zgodnie z: dashboard/generate.py, dashboard/lib/*.py, dashboard/config.json.
+!include _styl.iuml
+left to right direction
+skinparam ranksep 40
+
+actor "Harmonogram\nGitHub Actions" as CI
+actor "Autor\n(badacz)" as B
+actor "Yahoo\nFinance" as YF <<system zewnętrzny>>
+
+rectangle "Generator danych serwisu (dashboard/)" {
+  usecase "UC-40 Generowanie\ndanych serwisu\n(docs/data)" as UC40
+  usecase "UC-49 Pobranie notowań\n(3 próby, potem\narchiwum CSV)" as UC49
+  usecase "UC-46 Pobranie\nkursu USD/PLN" as UC46
+  usecase "UC-47 Sygnały ARIMA\n(okno kroczące,\nADF + BIC)" as UC47
+  usecase "UC-48 Symulacja\n10 portfeli" as UC48
+  usecase "UC-43 Sygnały: reguły,\nmodele ML, zespół,\nkup i trzymaj" as UC43
+  usecase "UC-41 Wczytanie\nmodeli ML" as UC41
+  usecase "UC-42 Sygnał\nzastępczy" as UC42
+}
+
+CI -- UC40
+B -- UC40
+
+UC40 ..> UC43 : <<include>>
+UC40 ..> UC47 : <<include>>
+UC40 ..> UC48 : <<include>>
+UC40 ..> UC49 : <<include>>
+UC40 ..> UC46 : <<include>>
+UC43 ..> UC41 : <<include>>
+UC42 .right.> UC41 : <<extend>>
+
+UC49 -- YF
+UC46 -- YF
+
+legend bottom
+  UC-42: sygnał zastępczy (proxy) liczony ze wskaźników, gdy brakuje pliku modelu
+  lub skalera, cechy nie zgadzają się ze skalerem albo wczytanie się nie powiedzie.
+endlegend
+@enduml

@@ -1,0 +1,64 @@
+@startuml Z08b_klasy_sygnaly_arima
+' Załącznik — diagram klas 2/3: sygnały i ARIMA
+' Zgodnie z kodem: dashboard/lib/signals.py, ml_loader.py, arima_signals.py
+' oraz stock_ml/models/arima_core.py.
+!include _styl.iuml
+hide circle
+hide empty members
+skinparam nodesep 25
+skinparam ranksep 45
+
+  class "arima_signals" as ARS <<moduł dashboard>> {
+    +arima_probabilities(close, threshold,
+      settings, ticker) : Series
+    +to_signals(probabilities, buy)
+    +model_version(settings) : str
+  }
+  class ArimaSettings <<NamedTuple>> {
+    selection : str
+    order : Tuple[int, int, int]
+    max_p, max_q : int
+    adf_alpha : float
+    window, min_train, refit_every : int
+  }
+  class "ml_loader" as MLL <<moduł dashboard>> {
+    +model_probabilities(model, ticker, df, cfg)
+    +detect_real_artifacts(cfg) : Dict
+    +ensure_stock_ml_on_path() : bool
+  }
+  class "signals" as SIG <<moduł dashboard>> {
+    +technical_rule_based(df, rules)
+    +from_probabilities(p, buy, sell)
+    +ensemble_majority(per_model)
+    +buy_and_hold(df)
+    +proxy_logistic(), proxy_random_forest(),
+     proxy_xgboost(), proxy_lightgbm(),
+     proxy_candle()
+  }
+
+  class "arima_core" as CORE <<moduł stock_ml>> {
+    +adf_pvalue(series) : float
+    +select_order(train, max_p, max_q, adf_alpha)
+    +forecast_one_step(train, test, order)
+    +forecast_auto(train, test, max_p, max_q,
+      adf_alpha)
+    +probability_above(mean, std, threshold)
+  }
+  class OneStepForecast <<NamedTuple>> {
+    mean, std : ndarray
+    converged : bool
+  }
+  class OrderSelection <<NamedTuple>> {
+    order : Tuple[int, int, int]
+    bic, adf_pvalue : float
+  }
+
+ARS ..> ArimaSettings
+ARS ..> MLL : ścieżka stock_ml
+ARS ..> SIG
+ARS ..> CORE
+MLL ..> SIG : proxy
+CORE ..> OneStepForecast
+CORE ..> OrderSelection
+ArimaSettings -[hidden]down- CORE
+@enduml

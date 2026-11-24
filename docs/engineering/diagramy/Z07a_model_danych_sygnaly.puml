@@ -1,0 +1,87 @@
+@startuml Z07a_model_danych_sygnaly
+' Załącznik — model danych 1/2: rejestr, notowania, sygnały, podsumowania (docs/data)
+' Zgodnie z kodem: dashboard/lib/exporters.py, registry.py, audit.py, generate.py
+' (build_signal_records, build_model_summaries, fetch_fx_usd_pln).
+' Stereotyp klasy = plik JSON, w którym zapisywane są obiekty.
+!include _styl.iuml
+hide circle
+hide methods
+skinparam nodesep 30
+skinparam ranksep 50
+
+class Ticker <<registry/tickers.json>> {
+  symbol : string
+  name : string
+  sector : string
+}
+
+class Model <<registry/models.json>> {
+  name : string
+  family : technical | ml |
+    statistical | other
+  description : string
+}
+
+class OhlcvBar <<{T}_ohlcv.json>> {
+  date : date
+  open, high, low, close : float
+  volume : int
+  rsi, macd, macd_signal,
+    macd_hist : float
+  bb_upper, bb_middle, bb_lower : float
+  sma20, sma50, ema12, ema26 : float
+  return_1d, return_5d, return_20d : float
+}
+
+class Signal <<signals/history.json>> {
+  signal_id : string [PK]
+  signal_date : date
+  ticker : string [FK]
+  model_name : string [FK]
+  signal_source, model_version : string
+  signal : BUY | SELL | HOLD
+  signal_reason : string
+  probability_up, confidence : float
+  threshold_used : float
+  triggered_rules : string
+  executed_in_portfolio : bool
+  portfolio_ids : string[]
+  return_1d_after, return_5d_after,
+    return_20d_after : float
+  label_version, data_version : string
+}
+
+class ModelSummary <<models/{m}/summary.json>> {
+  model_name : string
+  n_signals : int
+  overall : metryki klasyfikacji
+  per_ticker : metryki dla spółek
+}
+
+class RunMeta <<meta.json>> {
+  generated_at_utc : datetime
+  git_commit : string
+  data_version : string
+  label : mode, threshold, version
+  ml_artifacts_present : map
+}
+
+class FxRate <<fx.json>> {
+  rate : float
+  as_of : date
+  source : yfinance | fallback_constant
+}
+
+Ticker "1" -- "*" OhlcvBar
+Ticker "1" -- "*" Signal
+Model "1" -- "*" Signal
+Model "1" -- "1" ModelSummary
+OhlcvBar -[hidden]down- RunMeta
+ModelSummary -[hidden]down- FxRate
+
+legend bottom
+  signals/latest.json: ostatni sygnał dla każdej pary (spółka, model). OHLCV zapisywane
+  jest też w tickers/{T}/ohlcv.json. Sygnały kup i trzymaj nie mają wpisu w rejestrze modeli.
+  Brak bazy danych: relacje realizują identyfikatory łączone w przeglądarce.
+endlegend
+@enduml
