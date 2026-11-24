@@ -3,10 +3,10 @@
   "ticker": "WMT",
   "tag": "bin5",
   "threshold": 0.005,
-  "n": 3722,
+  "n": 3721,
   "n_buy": 1187,
   "start": "2011-06-13",
-  "end": "2026-03-31"
+  "end": "2026-03-30"
  },
  "folds": {
   "logistic_regression": [

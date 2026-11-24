@@ -3,10 +3,10 @@
   "ticker": "XOM",
   "tag": "bin2",
   "threshold": 0.002,
-  "n": 3722,
+  "n": 3721,
   "n_buy": 1647,
   "start": "2011-06-13",
-  "end": "2026-03-31"
+  "end": "2026-03-30"
  },
  "folds": {
   "logistic_regression": [
