@@ -9,13 +9,15 @@ prediction and the metrics of every fold.
 
 ``summarize`` turns those files into the thesis tables: class balance,
 classification metrics with their spread, and a backtest of each model's
-strategy on its out-of-sample predictions only.
+strategy on its out-of-sample predictions only. The backtest also includes
+the dashboard's technical rules (no ML), computed from data up to each close.
 
 Usage:
     python thesis_results.py collect --ticker AAPL --threshold 0.002
     python thesis_results.py summarize
 """
 import argparse
+import functools
 import json
 import logging
 import os
@@ -51,6 +53,9 @@ RAW_DIR = os.path.join(OUT_DIR, "raw")
 THRESHOLDS = (0.002, 0.005, 0.01)
 METRICS = ("accuracy", "precision", "recall", "f1", "roc_auc", "mcc")
 MODEL_ORDER = ("logistic_regression", "random_forest", "xgboost", "lightgbm", "candle", "arima")
+RULES = "technical_rules"
+BACKTEST_ORDER = MODEL_ORDER + (RULES,)  # the rules are not a classifier of the labels
+DASHBOARD_DIR = os.path.join(REPO_ROOT, "dashboard")
 
 
 def _tag(threshold: float) -> str:
@@ -153,13 +158,36 @@ def collect(ticker: str, threshold: float) -> None:
     logger.info("Collected %s %s: %d out-of-sample days", ticker, tag, len(table))
 
 
+@functools.lru_cache(maxsize=None)
+def technical_rule_positions(ticker: str) -> pd.Series:
+    """1 where the dashboard's technical rules say BUY on day t, else 0.
+
+    Uses ``dashboard/lib/signals.py::technical_rule_based`` with the rule
+    settings from ``dashboard/config.json``. The indicators are trailing
+    windows, so day t uses data up to its close only. The rules do not depend
+    on the label threshold.
+    """
+    if DASHBOARD_DIR not in sys.path:
+        sys.path.insert(0, DASHBOARD_DIR)
+    from lib import indicators as dashboard_indicators
+    from lib import signals as dashboard_signals
+
+    with open(os.path.join(DASHBOARD_DIR, "config.json"), encoding="utf-8") as fh:
+        rules = json.load(fh)["technical_signals"]
+    prices = clean_data(download_single(ticker))
+    signals = dashboard_signals.technical_rule_based(dashboard_indicators.compute(prices), rules)
+    return (signals["signal"] == "BUY").astype(float)
+
+
 def _load(tag: str):
     folds, preds = {}, {}
     for ticker in TICKERS:
         with open(os.path.join(RAW_DIR, f"{ticker}_{tag}_folds.json"), encoding="utf-8") as fh:
             folds[ticker] = json.load(fh)
-        preds[ticker] = pd.read_csv(os.path.join(RAW_DIR, f"{ticker}_{tag}_predictions.csv"),
-                                    index_col="date", parse_dates=True)
+        table = pd.read_csv(os.path.join(RAW_DIR, f"{ticker}_{tag}_predictions.csv"),
+                            index_col="date", parse_dates=True)
+        table[f"{RULES}_pred"] = technical_rule_positions(ticker).reindex(table.index)
+        preds[ticker] = table
     return folds, preds
 
 
@@ -193,6 +221,14 @@ def _strategy_metrics(returns: pd.Series, position: pd.Series = None) -> dict:
     return metrics
 
 
+def _portfolio_activity(positions: list) -> dict:
+    """Mean exposure over tickers and total position changes, for portfolio rows."""
+    return {
+        "exposure": round(float(np.mean([p.mean() for p in positions])), 4),
+        "position_changes": int(sum(p.diff().abs().sum() for p in positions)),
+    }
+
+
 def _backtest_tables(preds_by_ticker: dict, tag: str):
     """Long when the model predicts BUY, cash otherwise; equal weight across tickers.
 
@@ -200,18 +236,20 @@ def _backtest_tables(preds_by_ticker: dict, tag: str):
     with an out-of-sample prediction from every model are used, so all
     strategies cover the same period. No transaction costs are charged.
     """
-    model_cols = [f"{m}_pred" for m in MODEL_ORDER]
-    strategy_returns = {m: [] for m in MODEL_ORDER}
+    model_cols = [f"{m}_pred" for m in BACKTEST_ORDER]
+    strategy_returns = {m: [] for m in BACKTEST_ORDER}
+    strategy_positions = {m: [] for m in BACKTEST_ORDER}
     buy_hold, per_ticker = [], []
     for ticker, table in preds_by_ticker.items():
         common = table.dropna(subset=model_cols + ["next_return"])
         buy_hold.append(common["next_return"].rename(ticker))
         per_ticker.append({"tag": tag, "ticker": ticker, "strategy": "buy_and_hold",
                            **_strategy_metrics(common["next_return"])})
-        for model in MODEL_ORDER:
+        for model in BACKTEST_ORDER:
             position = common[f"{model}_pred"]
             returns = (position * common["next_return"]).rename(ticker)
             strategy_returns[model].append(returns)
+            strategy_positions[model].append(position)
             per_ticker.append({"tag": tag, "ticker": ticker, "strategy": model,
                                **_strategy_metrics(returns, position)})
 
@@ -223,9 +261,10 @@ def _backtest_tables(preds_by_ticker: dict, tag: str):
         {"tag": tag, "strategy": "spy_buy_and_hold", **_strategy_metrics(spy)},
         {"tag": tag, "strategy": "basket_buy_and_hold", **_strategy_metrics(basket_bh)},
     ]
-    for model in MODEL_ORDER:
+    for model in BACKTEST_ORDER:
         returns = pd.concat(strategy_returns[model], axis=1).reindex(period).mean(axis=1)
-        summary.append({"tag": tag, "strategy": model, **_strategy_metrics(returns)})
+        summary.append({"tag": tag, "strategy": model, **_strategy_metrics(returns),
+                        **_portfolio_activity(strategy_positions[model])})
     return per_ticker, summary, (str(period[0].date()), str(period[-1].date()))
 
 
@@ -262,6 +301,7 @@ def summarize() -> None:
             "walk_forward": {"train": WF_TRAIN_SIZE, "test": WF_TEST_SIZE, "step": WF_STEP, "mode": WF_MODE},
             "backtest_periods": periods,
             "models": list(MODEL_ORDER),
+            "backtest_strategies": list(BACKTEST_ORDER),
         }, fh, indent=2)
     logger.info("Thesis tables written to %s", OUT_DIR)
 

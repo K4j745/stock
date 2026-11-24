@@ -38,9 +38,13 @@ Ze względu na jednoosobowy charakter zespołu zrezygnowano z formalnych artefak
   `docs/data/README.md`, `docs/LICENSING.md` oraz niniejszy katalog `docs/engineering/`.
 
 Istotną decyzją procesową było **rozdzielenie środowiska treningu i środowiska publikacji**.
-Trening modeli odbywa się wyłącznie na stacji roboczej autora, a katalog `stock_ml/models/saved/`
-został objęty plikiem `.gitignore`. Środowisko ciągłej integracji nie trenuje modeli — wykonuje
-jedynie generator danych. Konsekwencje tej decyzji dla wymagań funkcjonalnych opisano w części 2.2.
+Trening modeli odbywa się wyłącznie na stacji roboczej autora. Wytrenowane artefakty (katalog
+`stock_ml/models/saved/`, 140 plików) są wersjonowane w repozytorium razem z przypiętymi wersjami
+bibliotek (`dashboard/requirements.txt`), aby środowisko ciągłej integracji korzystało z dokładnie
+tych samych modeli. Środowisko ciągłej integracji nie trenuje modeli — wczytuje zapisane artefakty
+do wyznaczania sygnałów i wykresów oraz uruchamia generator danych. Plik `.gitignore` wyklucza
+z repozytorium jedynie pliki lokalnych poświadczeń (`.env`, `.env.*`) oraz pliki tymczasowe.
+Konsekwencje tej decyzji dla wymagań funkcjonalnych opisano w części 2.2.
 
 ## 2. Wymagania funkcjonalne
 
@@ -99,7 +103,7 @@ nie jest udostępniona użytkownikowi końcowemu), **planowane** (funkcja nie zo
 | FR-23 | Sygnały z prawdopodobieństw modeli | Przekształcenie prawdopodobieństwa klasy wzrostowej w decyzję binarną według progu 0,5, dla każdego z pięciu strumieni modelowych. | krytyczny | zrealizowane |
 | FR-24 | Sygnał zespołowy | Wyznaczenie decyzji zbiorczej metodą głosowania większościowego, z minimalną liczbą zgodnych głosów równą dwa. | wysoki | zrealizowane |
 | FR-25 | Strategia odniesienia kup-i-trzymaj | Publikacja strumienia sygnałów odpowiadającego strategii pasywnej, stanowiącego punkt odniesienia dla pozostałych strumieni. | wysoki | zrealizowane |
-| FR-26 | Wycena portfeli modelowych | Wyznaczenie i publikacja historii wartości portfeli prowadzonych według sygnałów poszczególnych modeli. | średni | częściowo |
+| FR-26 | Wycena portfeli modelowych | Wyznaczenie i publikacja historii wartości portfeli prowadzonych według sygnałów poszczególnych modeli. | średni | zrealizowane |
 | FR-27 | Eksport artefaktów JSON | Zapis pakietu sygnałów (najnowsze i historyczne), szeregów cenowych dla poszczególnych tickerów, rejestrów pomocniczych, kursu walutowego oraz metadanych do katalogu `docs/data/`. | krytyczny | zrealizowane |
 | FR-28 | Eksport zbiorczy CSV | Publikacja zbiorczych plików CSV z sygnałami, umożliwiających dalszą analizę poza serwisem. | wysoki | zrealizowane |
 | FR-29 | Metadane przebiegu | Zapis identyfikatora commitu, wersji użytych bibliotek, wersji etykiety, progów decyzyjnych, informacji o obecności artefaktów ML oraz znacznika czasu zakończenia przebiegu. | wysoki | zrealizowane |
@@ -110,11 +114,13 @@ nie jest udostępniona użytkownikowi końcowemu), **planowane** (funkcja nie zo
 
 **Uzasadnienie statusów odbiegających od pełnej realizacji:**
 
-- **FR-26 — częściowo.** Moduł wyceny portfeli jest zaimplementowany, jednak w bieżącej
-  konfiguracji lista portfeli jest pusta. Metadane przebiegu raportują zerową liczbę portfeli,
-  a publikowany indeks portfeli jest pustą tablicą. Funkcja nie jest zatem widoczna dla
-  użytkownika serwisu; jej włączenie wymaga wyłącznie uzupełnienia konfiguracji, co czyni
-  to wymaganie kandydatem do domknięcia w kolejnej iteracji.
+- **FR-26 — zrealizowane.** Konfiguracja definiuje 10 portfeli (dwa portfele kup i trzymaj,
+  reguły techniczne, pięć modeli uczenia maszynowego, ensemble i ARIMA). Każdy przebieg publikuje
+  ich indeks, krzywą wartości, decyzje, transakcje i metryki (`docs/data/portfolios/`), a strona
+  portfeli je prezentuje. Sygnał z dnia d, wyznaczany po zamknięciu sesji, jest wykonywany po
+  cenie otwarcia następnej sesji, a rekord decyzji przechowuje osobno datę sygnału i datę
+  wykonania. Wcześniejsza wersja wykonywała sygnał tego samego dnia, czyli korzystała
+  z informacji z przyszłości; błąd poprawiono 2026-11-20 i objęto testami jednostkowymi.
 - **FR-31 — zrealizowane.** Moduł pobierania danych ponawia nieudane pobranie trzykrotnie
   z narastającym opóźnieniem, weryfikuje kompletność kolumn OHLCV, a po wyczerpaniu prób
   sięga po zatwierdzoną w repozytorium kopię CSV z katalogu archiwum i przycina ją do
@@ -185,7 +191,7 @@ nie jest udostępniona użytkownikowi końcowemu), **planowane** (funkcja nie zo
 | NFR-12 | Bezpieczeństwo | Dane wprowadzone przez użytkownika nie opuszczają jego urządzenia. | Portfele, wybór języka, motywu i waluty przechowywane są wyłącznie w pamięci lokalnej przeglądarki; nie istnieje kanał przesyłania ich na serwer. | zrealizowane |
 | NFR-13 | Bezpieczeństwo | Repozytorium nie zawiera sekretów ani kluczy dostępowych. | Źródło danych nie wymaga klucza API, a zadanie ciągłej integracji korzysta wyłącznie z wbudowanego tokenu środowiska z jawnie ograniczonym uprawnieniem zapisu zawartości. | zrealizowane |
 | NFR-14 | Bezpieczeństwo | Dane wstawiane do drzewa dokumentu są zabezpieczone przed wstrzyknięciem znaczników. | W module portfela zastosowano funkcję ucieczki znaków specjalnych; pozostałe widoki renderują dane pochodzące wyłącznie z własnego generatora, jednak nie stosują tego zabezpieczenia konsekwentnie. | częściowo |
-| NFR-15 | Bezpieczeństwo | Zasoby pobierane z sieci dostarczania treści są weryfikowane, a polityka bezpieczeństwa treści ograniczona. | Biblioteki wykresów ładowane są z sieci CDN bez atrybutu kontroli integralności; nie zdefiniowano polityki bezpieczeństwa treści. | planowane |
+| NFR-15 | Bezpieczeństwo | Zasoby pobierane z sieci dostarczania treści są weryfikowane, a polityka bezpieczeństwa treści ograniczona. | Wszystkie siedem stron definiuje politykę bezpieczeństwa treści (znacznik `meta`), ograniczającą skrypty do własnej domeny i dwóch sieci CDN, a wtyczki, formularze i zmianę adresu bazowego blokującą; polityka dopuszcza jednak skrypty i style wbudowane (`'unsafe-inline'`). Biblioteki wykresów (Chart.js, Plotly) ładowane są z wersją przypiętą w adresie, ale bez atrybutu kontroli integralności (`integrity`). | częściowo |
 | NFR-16 | Użyteczność i dostępność | Interfejs dostępny jest w języku polskim i angielskim. | Przełącznik języka działa i zapamiętuje wybór, jednak nie wszystkie ciągi znaków są objęte słownikiem tłumaczeń. | częściowo |
 | NFR-17 | Użyteczność i dostępność | Użytkownik może wybrać jasny lub ciemny wariant kolorystyczny. | Motyw ustawiany atrybutem na elemencie głównym dokumentu i zapamiętywany w pamięci lokalnej; oba warianty zdefiniowane zmiennymi CSS. | zrealizowane |
 | NFR-18 | Użyteczność i dostępność | Serwis pozostaje czytelny na urządzeniach mobilnych. | Reguły zapytań medialnych zdefiniowano dla arkuszy wspólnych oraz stron przeglądu, wykresów, cen i portfela; najszerszy widok — tabela sygnałów — nie ma dedykowanego układu mobilnego. | częściowo |
@@ -199,7 +205,7 @@ nie jest udostępniona użytkownikowi końcowemu), **planowane** (funkcja nie zo
 | NFR-26 | Przenośność | Serwis działa w aktualnych wersjach przeglądarek opartych na silnikach Blink, Gecko i WebKit. | Wykorzystano wyłącznie standardowe API przeglądarkowe; nie przeprowadzono jednak testów wieloprzeglądarkowych. | częściowo |
 | NFR-27 | Utrzymywalność | Kod podzielony jest na moduły o jednej odpowiedzialności. | Podsystemy rozdzielone na katalogi tematyczne; moduły generatora odpowiadają pojedynczym etapom przetwarzania. | zrealizowane |
 | NFR-28 | Utrzymywalność | Parametry sterujące wydzielone są z kodu. | Progi, listy tickerów i parametry walidacji zdefiniowano w module konfiguracyjnym pipeline'u oraz w pliku konfiguracyjnym generatora. | zrealizowane |
-| NFR-29 | Utrzymywalność | Kluczowa logika przetwarzania objęta jest testami jednostkowymi. | W repozytorium znajduje się jeden moduł testowy obejmujący osiem przypadków dla cech świecowych; moduły generatora sygnałów i eksportu nie mają testów. | częściowo |
+| NFR-29 | Utrzymywalność | Kluczowa logika przetwarzania objęta jest testami jednostkowymi. | Osiem modułów testowych `pytest` (64 przypadki): w pipeline'ie uczenia maszynowego cechy świecowe, model ARIMA wraz z testem ADF i doborem rzędu przez BIC oraz obliczenia tabel wyników (metryki łączne, koszty transakcyjne, strategie losowe, reguły techniczne bez informacji z przyszłości); w generatorze sygnały techniczne i probabilistyczne, sygnały ARIMA oraz symulator portfela, w tym brak wykonania sygnału przed jego wyznaczeniem. Testów nie mają moduły pobierania danych, budowy cech i walidacji kroczącej, ładowania modeli oraz eksportu. | częściowo |
 | NFR-30 | Utrzymywalność | Testy uruchamiane są automatycznie przy każdej zmianie kodu. | Jedyny zdefiniowany przepływ pracy ciągłej integracji odpowiada za generowanie danych; nie zawiera kroku uruchamiania testów. | planowane |
 | NFR-31 | Utrzymywalność | Każdy przebieg jest identyfikowalny i możliwy do powiązania z wersją kodu. | Metadane przebiegu zawierają identyfikator commitu, wersje bibliotek, wersję etykiety oraz informację o obecności artefaktów modeli. | zrealizowane |
 | NFR-32 | Utrzymywalność | Projekt posiada dokumentację techniczną i projektową. | Dokumentacja modułów, opis struktury katalogu danych, opis metodologii, analiza licencyjna oraz niniejszy katalog dokumentacji inżynierskiej z trzema diagramami UML. | zrealizowane |
@@ -245,7 +251,7 @@ wymaganie oraz że żadne wymaganie krytyczne nie pozostaje poza modelem zachowa
 | UC-40 Generowanie artefaktów statycznych | FR-17, FR-18, FR-27, FR-28, FR-29, FR-33 | pełne |
 | UC-41 Wczytanie artefaktów ML | FR-20 | pełne |
 | UC-42 Zejście do proxy | FR-21, FR-37 | pełne |
-| UC-43 Wyznaczenie sygnałów | FR-22, FR-23, FR-24, FR-25, FR-26 | częściowe (portfele modelowe niepublikowane — FR-26) |
+| UC-43 Wyznaczenie sygnałów | FR-22, FR-23, FR-24, FR-25, FR-26 | pełne |
 | UC-44 Cykliczna aktualizacja danych | FR-32, FR-30 | pełne |
 | UC-45 Publikacja dashboardu | FR-32 | pełne |
 | UC-46 Pobranie kursu USD/PLN | FR-19 | pełne |
@@ -258,15 +264,15 @@ dlatego świadomie pominięto je na diagramie przypadków użycia.
 ## 5. Podsumowanie stanu realizacji
 
 Zdefiniowano **54 wymagania funkcjonalne** oraz **36 wymagań niefunkcjonalnych**. Wśród wymagań
-funkcjonalnych 49 ma status zrealizowanych, cztery zrealizowano częściowo (FR-13, FR-16, FR-26,
+funkcjonalnych 50 ma status zrealizowanych, trzy zrealizowano częściowo (FR-13, FR-16,
 FR-46), a jedno pozostaje w fazie planowania (FR-54). Wszystkie wymagania oznaczone
 priorytetem krytycznym są zrealizowane w pełni, co oznacza, że system realizuje cel pracy
 w zakładanym zakresie: pozyskuje dane, buduje cechy, trenuje i waliduje modele bez przecieku
 informacji z przyszłości, wyznacza sygnały inwestycyjne, symuluje strategię i publikuje wyniki
 w postaci dostępnego publicznie serwisu.
 
-Wśród wymagań niefunkcjonalnych 23 uznano za zrealizowane, osiem za zrealizowane częściowo,
-a pięć za planowane (NFR-03, NFR-10, NFR-15, NFR-30, NFR-36). Największy dług techniczny dotyczy
+Wśród wymagań niefunkcjonalnych 23 uznano za zrealizowane, dziewięć za zrealizowane częściowo,
+a cztery za planowane (NFR-03, NFR-10, NFR-30, NFR-36). Największy dług techniczny dotyczy
 trzech obszarów: rozmiaru artefaktu historii sygnałów pobieranego przez przeglądarkę, pokrycia
 testami automatycznymi oraz formalnego potwierdzenia zgodności z wytycznymi dostępności.
 Obszary te wyznaczają naturalny kierunek dalszego rozwoju systemu.
