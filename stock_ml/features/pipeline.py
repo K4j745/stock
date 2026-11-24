@@ -90,7 +90,7 @@ def build_feature_matrix(
             f"Unknown label_mode '{label_mode}'. Use 'binary', 'multiclass', or 'legacy'."
         )
 
-    # 5. Remove NaN rows (last row will be NaN due to shift(-1) in labels)
+    # 5. Remove NaN rows (indicator warm-up, and the last row, which has no label)
     df = df.dropna()
 
     # 6. Split into X and y - drop OHLCV, label, and leakage columns

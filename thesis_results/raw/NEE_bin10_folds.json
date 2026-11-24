@@ -3,10 +3,10 @@
   "ticker": "NEE",
   "tag": "bin10",
   "threshold": 0.01,
-  "n": 3722,
+  "n": 3721,
   "n_buy": 708,
   "start": "2011-06-13",
-  "end": "2026-03-31"
+  "end": "2026-03-30"
  },
  "folds": {
   "logistic_regression": [
