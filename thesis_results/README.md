@@ -133,6 +133,52 @@ Interpretacja:
   się cecha najważniejsza.
 - Las losowy pominięto (opcjonalny, do załącznika).
 
+### 6. Reguły techniczne bez uczenia maszynowego (strategia `technical_rules`)
+
+- **Sygnały:** dokładnie funkcja `dashboard/lib/signals.py::technical_rule_based` z ustawieniami
+  z `dashboard/config.json` (`technical_signals`), czyli te same reguły co portfel `reguly_tech`
+  na dashboardzie. Liczona w `stock_ml/thesis_results.py::technical_rule_positions`.
+  - Cztery reguły na stronę: RSI(14) poniżej 35 / powyżej 65, przecięcie MACD z linią sygnału,
+    zamknięcie poza wstęgą Bollingera (20, 2), zamknięcie powyżej / poniżej SMA20 i SMA50.
+  - Decyduje wynik netto (liczba reguł kupna minus sprzedaży); przy remisie kupno, jeśli
+    zamknięcie jest powyżej SMA50.
+- **Bez informacji z przyszłości:** wskaźniki (biblioteka `ta`) to okna wsteczne, więc decyzja
+  z dnia t korzysta wyłącznie z danych do zamknięcia dnia t. Sprawdza to test
+  `stock_ml/tests/test_thesis_rules.py`: pozycje policzone na danych uciętych są identyczne
+  z pozycjami policzonymi na pełnych danych.
+- **Zasady backtestu:** jak dla modeli — pozycja długa przy BUY, inaczej gotówka, zwrot od
+  zamknięcia t do zamknięcia t+1, ten sam wspólny okres (2012-06-12 – 2026-03-24, 3465 sesji),
+  równe wagi i codzienne równoważenie. Notowania pochodzą z tego samego źródła co dane badawcze.
+- **Progi etykiet:** reguły od nich nie zależą, więc ich wiersze są takie same dla `bin2`, `bin5`
+  i `bin10`. Powtórzono je w każdym progu dla spójności tabel.
+- **Gdzie są wyniki:** `technical_rules` jako strategia w `backtest_podsumowanie.csv`,
+  `backtest_spolki.csv`, `backtest_koszty_*.csv` (0/5/10 pb) i `losowe_strategie.csv` (oba
+  warianty, z własną ekspozycją). Reguły nie są klasyfikatorem etykiet, więc nie ma ich
+  w tabelach klasyfikacji.
+- **Aktywność:** w podsumowaniach backtestu doszły kolumny `exposure` (średni po spółkach udział
+  dni w pozycji) i `position_changes` (łączna liczba zmian pozycji w 10 spółkach) dla każdej
+  strategii.
+- **Losowania:** reguły mają własny strumień liczb losowych (ziarno 20261121), więc losowania
+  dla modeli są identyczne jak przed dodaniem reguł.
+
+Wyniki (bez kosztów, okres wspólny):
+
+| Strategia | Zwrot całkowity | CAGR | Sharpe | Maks. obsunięcie | Ekspozycja | Zmiany pozycji |
+|---|---|---|---|---|---|---|
+| SPY kup i trzymaj | 531,6% | 14,3% | 0,886 | −33,7% | — | — |
+| Koszyk kup i trzymaj | 748,6% | 16,8% | 1,130 | −30,9% | — | — |
+| Reguły techniczne | 298,7% | 10,6% | 1,255 | −9,0% | 61,5% | 5902 |
+| LightGBM, próg 0,2% (najlepszy model) | 163,6% | 7,3% | 0,897 | −13,3% | 38,6% | 11 250 |
+
+- **Z kosztami** Sharpe reguł wynosi 0,996 przy 5 pb i 0,737 przy 10 pb, bo zmieniają pozycję
+  rzadziej niż modele drzewiaste.
+- **Wobec losowego wyczucia momentu** (wariant `shared_shift`, 0 pb) percentyl CAGR wynosi
+  tylko 64, czyli brak przewagi w zwrocie. Percentyl Sharpe’a to 97, a obsunięcia 100.
+- **Interpretacja:** przewaga reguł polega na ograniczaniu ryzyka. Filtr trendu (SMA50)
+  wychodzi z rynku w spadkach, więc zmienność i obsunięcie są dużo mniejsze niż w losowym
+  wyczuciu momentu o tej samej ekspozycji. To odwrotność modeli ML, które częściej trzymają
+  pozycję w okresach dużych wahań.
+
 ## Migawka dashboardu po poprawce (`dashboard_migawka_2026-11-19_v2/`) — do cytowania
 
 - **Błąd i poprawka:** do 2026-11-20 symulator portfeli (`dashboard/lib/portfolio.py`) wykonywał

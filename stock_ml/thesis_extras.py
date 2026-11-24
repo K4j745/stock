@@ -26,7 +26,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from config import BENCHMARK, TICKERS  # noqa: E402
 from data.download import download_single  # noqa: E402
 from data.preprocess import clean_data  # noqa: E402
-from thesis_results import MODEL_ORDER, OUT_DIR, THRESHOLDS, _load, _strategy_metrics, _tag  # noqa: E402
+from thesis_results import (  # noqa: E402
+    BACKTEST_ORDER, MODEL_ORDER, OUT_DIR, THRESHOLDS, _load, _portfolio_activity, _strategy_metrics, _tag,
+)
 
 logger = logging.getLogger("stock_ml")
 
@@ -118,7 +120,7 @@ def pooled() -> None:
 
 def _common_rows(preds_by_ticker: dict) -> dict:
     """Per ticker, the days on which every model has a prediction (as in thesis_results)."""
-    cols = [f"{m}_pred" for m in MODEL_ORDER] + ["next_return"]
+    cols = [f"{m}_pred" for m in BACKTEST_ORDER] + ["next_return"]
     return {t: table.dropna(subset=cols) for t, table in preds_by_ticker.items()}
 
 
@@ -156,17 +158,19 @@ def costs() -> None:
             summary.append({**base, "strategy": "spy_buy_and_hold",
                             **_strategy_metrics(_net_returns(pd.Series(1.0, index=spy.index), spy, cost))})
             strategies = {"buy_and_hold": lambda t: pd.Series(1.0, index=t.index)}
-            strategies.update({m: (lambda t, m=m: t[f"{m}_pred"]) for m in MODEL_ORDER})
+            strategies.update({m: (lambda t, m=m: t[f"{m}_pred"]) for m in BACKTEST_ORDER})
             for name, position_of in strategies.items():
-                series = []
+                series, positions = [], []
                 for ticker, table in common.items():
                     position = position_of(table)
                     returns = _net_returns(position, table["next_return"], cost).rename(ticker)
                     series.append(returns)
+                    positions.append(position)
                     per_ticker.append({**base, "ticker": ticker, "strategy": name,
                                        **_strategy_metrics(returns, position)})
                 label = "basket_buy_and_hold" if name == "buy_and_hold" else name
-                summary.append({**base, "strategy": label, **_strategy_metrics(_portfolio(series, period))})
+                summary.append({**base, "strategy": label, **_strategy_metrics(_portfolio(series, period)),
+                                **_portfolio_activity(positions)})
     _write(pd.DataFrame(summary), "backtest_koszty_podsumowanie.csv")
     _write(pd.DataFrame(per_ticker), "backtest_koszty_spolki.csv")
 
@@ -258,17 +262,21 @@ def _model_paths(common: dict, model: str, period: pd.Index) -> tuple:
 
 
 def random_baseline() -> None:
-    rng = np.random.default_rng(SEED)
+    # The models keep the stream they had before the rules were added, so their
+    # draws do not change; the rules get a stream of their own.
+    model_rng = np.random.default_rng(SEED)
+    rules_rng = np.random.default_rng(SEED + 1)
     rows = []
     for threshold in THRESHOLDS:
         tag = _tag(threshold)
         common = _common_rows(_load(tag)[1])
         period = _period(common)
         n_tickers = len(common)
-        for model in MODEL_ORDER:
+        for model in BACKTEST_ORDER:
             model_gross, model_turns = _model_paths(common, model, period)
             exposure = float(np.mean([t[f"{model}_pred"].mean() for t in common.values()]))
             for null_name, null in NULLS.items():
+                rng = model_rng if model in MODEL_ORDER else rules_rng
                 gross, turns = _random_paths(common, model, period, rng, null)
                 for cost in COST_BPS:
                     c = cost / 1e4
