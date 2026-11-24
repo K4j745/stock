@@ -1,0 +1,40 @@
+@startuml Z05c_sekwencja_portfele_eksport
+' Załącznik — sekwencja 3/4: portfele i eksport danych
+' Zgodnie z kodem: dashboard/generate.py (main, run_all_portfolios, build_signal_records,
+' build_model_summaries, fetch_fx_usd_pln, copy_report_plots), lib/portfolio.py,
+' lib/metrics.py, lib/exporters.py, lib/audit.py.
+!include _styl.iuml
+hide footbox
+skinparam maxMessageSize 105
+autonumber
+
+actor "GitHub\nActions" as CI
+participant "generate.py" as GEN
+participant "portfolio" as PORT
+participant "metrics" as MET
+participant "data_fetcher" as FETCH
+participant "exporters,\naudit" as EXP
+database "docs/data" as DOCS
+
+activate GEN
+loop 10 portfeli z config.json
+  GEN -> PORT : run_portfolio_backtest()
+  activate PORT
+  PORT -> PORT : symulacja sesja po sesji: sygnał z sesji d−1 wykonany na otwarciu sesji d (ryc. 6)
+  PORT -> MET : portfolio_metrics(), trade_metrics()
+  MET --> PORT : metryki portfela i SPY
+  PORT --> GEN : BacktestResult
+  deactivate PORT
+end
+GEN -> GEN : build_signal_records() (oznaczenie sygnałów wykonanych)
+GEN -> GEN : build_model_summaries()
+GEN -> FETCH : download("USDPLN=X")
+FETCH --> GEN : kurs albo brak (wtedy 4,0)
+GEN -> EXP : meta, rejestr, fx, OHLCV i sygnały spółek, pakiet sygnałów, podsumowania modeli, portfele, eksporty CSV
+activate EXP
+EXP -> DOCS : zapis plików JSON i CSV
+deactivate EXP
+GEN -> GEN : copy_report_plots() (docs/charts/plots, plots_index.json)
+GEN --> CI : koniec (kod 0)
+deactivate GEN
+@enduml

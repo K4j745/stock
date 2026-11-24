@@ -1,0 +1,52 @@
+@startuml R03_przypadki_uzycia_przeglad
+' Ryc. 3 — przypadki użycia, widok ogólny (rozdz. Projekt i implementacja)
+' Szczegóły w załączniku: Z1 (serwis WWW), Z2 (potok ML), Z3 (aktualizacja), Z4 (generator).
+' Aktor główny serwisu po lewej, autor, harmonogram i Yahoo Finance po prawej.
+!include _styl.iuml
+left to right direction
+skinparam ranksep 50
+
+actor "Użytkownik\nserwisu" as U
+
+rectangle "Serwis WWW (docs/)" {
+  usecase "Przegląd rynku\ni sygnałów BUY/SELL\n<size:10>UC-01–03, UC-15</size>" as S1
+  usecase "Wykresy cen\ni analizy ML\n<size:10>UC-04, UC-05</size>" as S2
+  usecase "Porównanie portfeli\nmonitorujących\n<size:10>UC-16</size>" as S3
+  usecase "Symulacja własnego\nportfela\n<size:10>UC-06–09</size>" as S4
+  usecase "Zmiana języka\ni motywu\n<size:10>UC-10, UC-11</size>" as S5
+}
+
+rectangle "Potok ML (stock_ml/)" {
+  usecase "Trening i walidacja\nmodeli ML\n<size:10>UC-20–27</size>" as M1
+  usecase "Ewaluacja modelu\nARIMA\n<size:10>UC-31</size>" as M2
+  usecase "Wykresy, backtest\ni analiza SHAP\n<size:10>UC-28–30</size>" as M3
+}
+
+rectangle "Generator i publikacja" {
+  usecase "Generowanie danych\nserwisu\n<size:10>UC-40–43, UC-46–49</size>" as G1
+  usecase "Cykliczna aktualizacja\ni publikacja\n<size:10>UC-21, UC-44, UC-45</size>" as G2
+}
+
+actor "Autor\n(badacz)" as B
+actor "Harmonogram\nGitHub Actions" as CI
+actor "Yahoo Finance" as YF <<system zewnętrzny>>
+
+U -- S1
+U -- S2
+U -- S3
+U -- S4
+U -- S5
+
+S1 -[hidden]- M1
+S3 -[hidden]- M3
+S5 -[hidden]- G2
+
+M1 -- B
+M2 -- B
+M3 -- B
+G1 -- B
+G2 -- CI
+G2 .right.> G1 : <<include>>
+M1 -- YF
+G1 -- YF
+@enduml

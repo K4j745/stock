@@ -1,0 +1,58 @@
+@startuml Z04_os_czasu_walk_forward
+' Załącznik — foldy walk-forward na osi czasu na tle okna danych serwisu
+' Daty foldów przeliczone na danych AAPL (stock_ml/features/validation.py; takie same dla XOM).
+' Okno serwisu: data_period = "3y" (dashboard/config.json), stan przebiegu z 2026-11-19
+' (okno przesuwa się z każdą aktualizacją; przed wstawieniem do pracy wpisać datę migawki).
+!include _styl.iuml
+<style>
+timingDiagram {
+  LineColor Black
+  FontColor Black
+}
+</style>
+use date format "YYYY"
+scale 31536000 as 40 pixels
+
+concise "Fold 1" as F1
+concise "Fold 2" as F2
+concise "Fold 165" as FN
+concise "Modele finalne (serwis)" as FIN
+concise "Okno danych serwisu" as D
+
+@2011/06/13
+F1 is " " #7EC8E3
+FN is {-}
+FIN is {-}
+D is {-}
+@2011/07/13
+F2 is " " #7EC8E3
+@2012/06/12
+F1 is " " #Black
+@2012/07/12
+F1 is {-}
+F2 is " " #Black
+@2012/08/10
+F2 is {-}
+@2023/11/20
+D is " " #White
+@2025/02/21
+FN is " " #7EC8E3
+FIN is " " #7EC8E3
+D is " " #7EC8E3
+@2026/02/24
+FN is " " #Black
+FIN is {-}
+D is " " #White
+@2026/03/25
+FN is {-}
+@2026/11/20
+D is {-}
+
+legend bottom
+  Kolor jasnoniebieski: okno uczące (252 sesje); czarny: test (21 sesji).
+  Fold 1: uczenie 2011-06-13 – 2012-06-11, test 2012-06-12 – 2012-07-11.
+  Fold 165 i modele finalne: uczenie 2025-02-21 – 2026-02-23 (test foldu do 2026-03-24).
+  Okno serwisu 2023-11-20 – 2026-11-19: odcinek jasnoniebieski to dane, na których uczono
+  modele finalne; dopiero od 2026-02-24 dane są dla modeli ML w pełni nowe.
+endlegend
+@enduml

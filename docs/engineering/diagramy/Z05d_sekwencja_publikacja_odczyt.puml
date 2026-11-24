@@ -1,0 +1,37 @@
+@startuml Z05d_sekwencja_publikacja_odczyt
+' Załącznik — sekwencja 4/4: publikacja i odczyt przez użytkownika
+' Zgodnie z: .github/workflows/dashboard.yml (krok Commit and push), docs/*.html, docs/assets/app.js.
+!include _styl.iuml
+hide footbox
+skinparam maxMessageSize 105
+autonumber
+
+actor "GitHub\nActions" as CI
+participant "Repozytorium\nGit" as REPO
+participant "GitHub\nPages" as PAGES
+participant "Przeglądarka" as BR
+actor "Użytkownik" as U
+
+CI -> CI : git add docs/ stock_ml/data/historical/
+alt są zmiany
+  CI -> REPO : commit i push (GITHUB_TOKEN)
+  REPO -> PAGES : wdrożenie katalogu docs/
+else brak zmian
+  CI -> CI : pominięcie commita
+end
+
+== dowolnie później ==
+
+U -> BR : otwarcie strony
+BR -> PAGES : GET *.html, assets/*.js, *.css
+PAGES --> BR : pliki statyczne
+BR -> PAGES : GET data/*.json
+PAGES --> BR : sygnały, portfele, metadane
+BR -> BR : język, motyw i portfele\nz localStorage
+BR --> U : widok serwisu
+opt symulacja własnego portfela
+  U -> BR : kupno lub sprzedaż
+  BR -> BR : wycena i zapis w localStorage
+  BR --> U : zaktualizowany portfel
+end
+@enduml

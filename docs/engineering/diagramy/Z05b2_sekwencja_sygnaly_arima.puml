@@ -1,0 +1,30 @@
+@startuml Z05b2_sekwencja_sygnaly_arima
+' Załącznik — sekwencja 2b: sygnały ARIMA dla jednej spółki (bez SPY)
+' Zgodnie z kodem: dashboard/generate.py (_arima_signals), dashboard/lib/arima_signals.py
+' (arima_probabilities, to_signals; min_train = 60, train_window = 252, refit_every = 21),
+' stock_ml/models/arima_core.py (forecast_auto, probability_above).
+!include _styl.iuml
+hide footbox
+skinparam maxMessageSize 120
+autonumber
+
+participant "generate.py" as GEN
+participant "arima_signals" as ARS
+participant "arima_core" as CORE
+
+GEN -> ARS : arima_probabilities(Close, 0,2%, ustawienia)
+activate ARS
+loop co 21 sesji, od sesji 60
+  ARS -> CORE : forecast_auto(do 252 poprzednich zwrotów, 21 kolejnych sesji)
+  activate CORE
+  CORE -> CORE : ADF → d; siatka p, q = 0, 1, 2; najmniejsze BIC
+  CORE --> ARS : prognozy jednokrokowe i wybrany rząd
+  deactivate CORE
+  ARS -> CORE : probability_above(średnia, błąd std., 0,2%)
+  CORE --> ARS : P(zwrot > 0,2%)
+end
+ARS --> GEN : P(zwrot > 0,2%); brak wartości przed 1. dopasowaniem
+deactivate ARS
+GEN -> ARS : to_signals(P, 0,5)
+ARS --> GEN : BUY, gdy P ≥ 0,5, inaczej SELL; HOLD przed 1. dopasowaniem
+@enduml

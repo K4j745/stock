@@ -9,14 +9,14 @@ giełdowych z wykorzystaniem metod uczenia maszynowego oraz symulacja strategii 
 
 | Plik | Opis |
 |------|------|
-| `diagramy/` | Komplet 11 diagramów PlantUML do pracy (przypadki użycia, komponenty, sekwencja, wdrożenie, walk-forward, aktywności, model danych, klasy); opis w `diagramy/README.md` |
+| `diagramy/` | Komplet 26 diagramów PlantUML do pracy (6 rycin do tekstu głównego `R…` i 20 do załącznika `Z…`: przypadki użycia, komponenty, sekwencje, wdrożenie, walk-forward, aktywności, model danych, klasy) z wersjami SVG; opis w `diagramy/README.md` |
 | `README.md` | Ten dokument — te same trzy diagramy w notacji Mermaid, renderowane bezpośrednio przez GitHub |
 | `WYMAGANIA.md` | Rozdział z wymaganiami funkcjonalnymi i niefunkcjonalnymi wraz z macierzą pokrycia |
 
 Pliki `.puml` w katalogu `diagramy/` są źródłem diagramów w jakości nadającej się do druku. Można je wygenerować lokalnie:
 
 ```bash
-java -jar plantuml.jar -charset UTF-8 -tsvg docs/engineering/diagramy/*.puml
+cd docs/engineering/diagramy && java -jar plantuml.jar -charset UTF-8 -tsvg *.puml
 ```
 
 Wersje Mermaid poniżej to szybki podgląd starszego stanu; aktualne diagramy (z modelem ARIMA
@@ -48,7 +48,8 @@ Mermaid nie posiada natywnej notacji diagramu przypadków użycia, dlatego poni�
 odwzorowuje jego strukturę za pomocą grafu skierowanego: aktorzy znajdują się po lewej stronie,
 przypadki użycia zostały pogrupowane w trzy granice systemu, a relacje `<<include>>`
 i `<<extend>>` opisano etykietami krawędzi. Wersja kanoniczna znajduje się w pliku
-`diagramy/01_przypadki_uzycia.puml`.
+`diagramy/R03_przypadki_uzycia_przeglad.puml` (widok ogólny) oraz `diagramy/Z01a_…` – `Z01d_…`
+(szczegóły).
 
 ```mermaid
 flowchart LR
@@ -179,7 +180,7 @@ flowchart LR
 
 Scenariusz obejmuje pełny cykl życia danych: od uruchomienia zadania cyklicznego, przez pobranie
 notowań, wyznaczenie sygnałów i publikację artefaktów, aż po wczytanie plików JSON przez
-przeglądarkę odwiedzającego. Wersja kanoniczna znajduje się w pliku `diagramy/03_sekwencja_generowania.puml`.
+przeglądarkę odwiedzającego. Wersja kanoniczna znajduje się w plikach `diagramy/Z05a_…` – `Z05d_…`.
 
 ```mermaid
 sequenceDiagram
@@ -320,7 +321,8 @@ sequenceDiagram
 ## 3. Diagram komponentów
 
 Diagram przedstawia sześć warstw systemu wraz z kierunkami zależności oraz interfejsami,
-przez które warstwy się komunikują. Wersja kanoniczna znajduje się w pliku `diagramy/02_komponenty.puml`.
+przez które warstwy się komunikują. Wersja kanoniczna znajduje się w plikach `diagramy/R04_komponenty_przeglad.puml`,
+`diagramy/Z02a_komponenty_stock_ml.puml` i `diagramy/Z02b_komponenty_dashboard.puml`.
 
 ```mermaid
 flowchart TB

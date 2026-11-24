@@ -1,0 +1,50 @@
+@startuml R01_walk_forward_schemat
+' Ryc. 1 — schemat walidacji walk-forward z oknem kroczącym (rozdz. Metodyka)
+' Zgodnie z kodem: stock_ml/config.py (WF_TRAIN_SIZE = 252, WF_TEST_SIZE = 21, WF_STEP = 21,
+' WF_MODE = "rolling") i stock_ml/features/validation.py (get_time_series_folds).
+' Skala osi czasu: 1 sesja = 1 jednostka. Daty ostatniego foldu przeliczone na danych AAPL.
+!include _styl.iuml
+<style>
+timingDiagram {
+  LineColor Black
+  FontColor Black
+  arrow { LineColor Black }
+}
+</style>
+hide time-axis
+scale 21 as 40 pixels
+
+concise "Fold 1" as F1
+concise "Fold 2" as F2
+concise "Fold 3" as F3
+
+@0
+F1 is "uczenie" #7EC8E3
+F2 is {-}
+F3 is {-}
+@21
+F2 is "uczenie" #7EC8E3
+@42
+F3 is "uczenie" #7EC8E3
+@252
+F1 is "test" #FFFFFF
+@273
+F1 is {-}
+F2 is "test" #FFFFFF
+@294
+F2 is {-}
+F3 is "test" #FFFFFF
+@315
+F3 is {-}
+
+F1@0 <-> @252 : okno uczące: 252 sesje
+F1@252 <-> @273 : test: 21
+F3@21 <-> @42 : krok: 21
+
+legend bottom left
+  Skaler i model dopasowywane są tylko na oknie uczącym, metryki liczone na 21 sesjach testu.
+  Kolejne foldy przesuwają się o 21 sesji (okno kroczące, starsze dane są pomijane).
+  Łącznie 165 foldów na spółkę; ostatni: uczenie 2025-02-21 – 2026-02-23,
+  test 2026-02-24 – 2026-03-24.
+endlegend
+@enduml
