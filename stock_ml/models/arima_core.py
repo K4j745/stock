@@ -148,5 +148,10 @@ def forecast_auto(
 
 
 def probability_above(mean: np.ndarray, std: np.ndarray, threshold: float) -> np.ndarray:
-    """Return P(return > threshold) under the normal forecast distribution."""
+    """Return P(return > threshold) under the normal forecast distribution.
+
+    This is the score for ROC AUC (and the probability shown on the dashboard).
+    The BUY decision itself is simply ``mean > threshold``, which is the same as
+    a probability above 0.5.
+    """
     return norm.sf(threshold, loc=mean, scale=std)

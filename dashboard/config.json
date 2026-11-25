@@ -75,7 +75,7 @@
     "train_window": 252,
     "min_train": 60,
     "refit_every": 21,
-    "_note": "ARIMA on daily returns, Box-Jenkins style. No saved artifacts: refitted every 21 sessions on the previous 252 (at least 60) returns. At each refit an ADF test on that window picks d (0 if the unit root is rejected at adf_alpha, else 1) and the lowest BIC over p <= max_p, q <= max_q picks the order, so every forecast uses only past data. order is used only when order_selection is fixed. BUY when P(next-day return > label threshold) >= 0.5, the same rule as the ML models. HOLD until the first fit. Not part of ensemble_majority."
+    "_note": "ARIMA on daily returns, Box-Jenkins style. No saved artifacts: refitted every 21 sessions on the previous 252 (at least 60) returns. At each refit an ADF test on that window picks d (0 if the unit root is rejected at adf_alpha, else 1) and the lowest BIC over p <= max_p, q <= max_q picks the order, so every forecast uses only past data. order is used only when order_selection is fixed. BUY when the forecast return reaches the label threshold, which under the normal forecast distribution is the same as P(next-day return > label threshold) >= 0.5, the probability rule of the ML models. HOLD until the first fit. Not part of ensemble_majority."
   },
 
   "portfolios": [

@@ -77,6 +77,11 @@ Dokładność klasyfikatora, który zawsze przewiduje SELL, wynosi 1 − udział
 liczona na dniach ocenianych przez cztery główne modele, dla każdej spółki i łącznie (`RAZEM`).
 W tabelach łącznych jest liczona na dniach danego modelu.
 
+| Podstawa | 0,2% | 0,5% | 1,0% |
+|---|---|---|---|
+| okresy testowe walk-forward (`klasyfikator_zawsze_sell.csv`, 34 650 dni) | 55,4% | 66,8% | 81,1% |
+| wszystkie obserwacje (`udzial_klas.csv`, 37 210 dni) | 55,4% | 66,7% | 81,0% |
+
 ### 3. Backtest z kosztami (`backtest_koszty_podsumowanie.csv`, `backtest_koszty_spolki.csv`)
 
 - **Warianty kosztów:** 0, 5 i 10 punktów bazowych za każde wejście lub wyjście z pozycji
@@ -99,8 +104,8 @@ wariant:
   opóźnienie, wspólne dla wszystkich spółek, co najmniej 21 sesji.
   - Zachowane zostaje także to, że model często trzyma wiele spółek jednocześnie, czyli
     zmienność portfela jest porównywalna.
-- **`run_shuffle`:** osobno dla każdej spółki odcinki „w pozycji” i „w gotówce” ustawione
-  w losowej kolejności.
+- **`run_shuffle` (wariant kontrolny, nieopisywany w pracy):** osobno dla każdej spółki odcinki
+  „w pozycji” i „w gotówce” ustawione w losowej kolejności.
   - Rozbija to jednoczesność pozycji między spółkami, przez co losowy portfel jest bardziej
     zdywersyfikowany i ma niższą zmienność.
   - Ten wariant zaniża więc ocenę modelu w Sharpe i obsunięciu; podano go dla porównania.
