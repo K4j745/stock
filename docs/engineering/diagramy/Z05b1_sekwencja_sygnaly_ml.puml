@@ -1,0 +1,40 @@
+@startuml Z05b1_sekwencja_sygnaly_ml
+' Załącznik — sekwencja 2a: sygnały reguł i modeli ML dla jednej spółki
+' Zgodnie z kodem: dashboard/generate.py (generate_all_signals),
+' dashboard/lib/signals.py, dashboard/lib/ml_loader.py.
+!include _styl.iuml
+hide footbox
+skinparam maxMessageSize 120
+autonumber
+
+participant "generate.py" as GEN
+participant "signals" as SIG
+participant "ml_loader" as MLL
+database "models/saved" as SAVED
+
+GEN -> SIG : technical_rule_based(df)
+SIG --> GEN : BUY albo SELL (reguły)
+opt spółka (nie SPY)
+  loop 5 modeli ML: LR, RF, XGBoost, LightGBM, świecowy
+    GEN -> MLL : model_probabilities(model, spółka, df)
+    activate MLL
+    MLL -> SAVED : model i skaler (znacznik bin2)
+    alt pliki są i cechy się zgadzają
+      SAVED --> MLL : model, skaler
+      MLL -> MLL : cechy stock_ml, skalowanie, predict_proba
+      MLL --> GEN : P(wzrost), źródło: model
+    else brak plików, niezgodne cechy lub błąd
+      MLL -> MLL : funkcja zastępcza
+      MLL --> GEN : P(wzrost), źródło: proxy
+    end
+    deactivate MLL
+    GEN -> SIG : from_probabilities(P, 0,5)
+    SIG --> GEN : BUY, gdy P ≥ 0,5, inaczej SELL; HOLD przy braku prognozy
+  end
+  GEN -> SIG : ensemble_majority(sygnały ML)
+  SIG --> GEN : sygnał większości głosów
+  ref over GEN, SIG : sygnały ARIMA (następna rycina)
+end
+GEN -> SIG : buy_and_hold(df)
+SIG --> GEN : BUY pierwszego dnia, potem HOLD
+@enduml

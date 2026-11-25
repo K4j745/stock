@@ -1,0 +1,38 @@
+{
+ "generated_at_utc": "2026-11-20T18:53:59Z",
+ "end": "2026-11-19",
+ "split_date": "2026-02-24",
+ "data_period": "3y",
+ "execution": "signal of day d traded at the open of the next session (signal_lag=1); buy_and_hold traded on the day itself",
+ "commit": "1f0f5fbd",
+ "uncommitted_changes": true,
+ "signal_sources": {
+  "arima": [
+   "arima"
+  ],
+  "buy_and_hold": [
+   "buy_and_hold"
+  ],
+  "candle": [
+   "candle"
+  ],
+  "ensemble_majority": [
+   "ensemble_majority"
+  ],
+  "lightgbm": [
+   "lightgbm"
+  ],
+  "logistic_regression": [
+   "logistic_regression"
+  ],
+  "random_forest": [
+   "random_forest"
+  ],
+  "technical_rule_based": [
+   "technical_rule_based"
+  ],
+  "xgboost": [
+   "xgboost"
+  ]
+ }
+}

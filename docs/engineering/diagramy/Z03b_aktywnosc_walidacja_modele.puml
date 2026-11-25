@@ -1,0 +1,38 @@
+@startuml Z03b_aktywnosc_walidacja_modele
+' Załącznik — potok ML 2/2: walidacja walk-forward i modele finalne (python stock_ml/main.py train)
+' Zgodnie z kodem: stock_ml/models/train.py (train_all_models), features/validation.py,
+' models/evaluate.py, models/tune.py, reports/generate.py.
+!include _styl.iuml
+
+start
+:Macierz cech X i etykiety y (poprzednia rycina);
+partition "Walidacja walk-forward (osobno dla każdego z 4 modeli)" {
+  repeat :Kolejny fold (165: uczenie 252, test 21, krok 21);
+    :StandardScaler dopasowany
+    tylko na oknie uczącym;
+    :Trening modelu: regresja logistyczna,
+    las losowy, XGBoost albo LightGBM;
+    :Predykcja i metryki na 21 sesjach testu
+    (dokładność, precyzja, czułość, F1, ROC AUC, MCC);
+  repeat while (Kolejny fold?) is (tak) not (nie)
+  :Średnie metryk z foldów;
+}
+partition "Modele finalne" {
+  :Trening na ostatnim oknie uczącym
+  (2025-02-21 – 2026-02-23);
+  :Zapis modeli i skalera w models/saved
+  oraz wyników w reports/ (CSV, JSON);
+}
+if (Opcja --tune?) then (tak)
+  :Strojenie Optuna (XGBoost, LightGBM),
+  modele z przyrostkiem _tuned;
+else (nie)
+endif
+stop
+
+legend bottom
+  Osobne polecenia main.py: candle (model świecowy, ten sam
+  schemat walidacji), arima (ryc. 2), report, plots, shap,
+  backtest, evaluate.
+endlegend
+@enduml

@@ -1,0 +1,74 @@
+[
+  {
+    "ticker": "XOM",
+    "shares": 90.0,
+    "avg_cost": 144.2061,
+    "last_price": 158.23,
+    "market_value": 14240.7,
+    "unrealised_pnl_abs": 1262.15,
+    "unrealised_pnl_pct": 0.097249,
+    "entry_date": "2026-11-24",
+    "entry_price": 157.4199981689453,
+    "last_signal_id": "S-XOM-random_forest-20261123-02da96"
+  },
+  {
+    "ticker": "JNJ",
+    "shares": 238.0,
+    "avg_cost": 215.6368,
+    "last_price": 276.46,
+    "market_value": 65797.48,
+    "unrealised_pnl_abs": 14475.92,
+    "unrealised_pnl_pct": 0.282063,
+    "entry_date": "2026-11-18",
+    "entry_price": 275.54998779296875,
+    "last_signal_id": "S-JNJ-random_forest-20261117-be5e44"
+  },
+  {
+    "ticker": "PG",
+    "shares": 8.0,
+    "avg_cost": 162.8933,
+    "last_price": 172.47,
+    "market_value": 1379.76,
+    "unrealised_pnl_abs": 76.61,
+    "unrealised_pnl_pct": 0.058791,
+    "entry_date": "2026-11-17",
+    "entry_price": 171.33999633789062,
+    "last_signal_id": "S-PG-random_forest-20261116-252fc1"
+  },
+  {
+    "ticker": "KO",
+    "shares": 430.0,
+    "avg_cost": 73.426,
+    "last_price": 97.62,
+    "market_value": 41976.6,
+    "unrealised_pnl_abs": 10403.43,
+    "unrealised_pnl_pct": 0.329502,
+    "entry_date": "2026-11-23",
+    "entry_price": 94.5999984741211,
+    "last_signal_id": "S-KO-random_forest-20261120-a5b12b"
+  },
+  {
+    "ticker": "WMT",
+    "shares": 212.0,
+    "avg_cost": 102.4145,
+    "last_price": 132.31,
+    "market_value": 28049.72,
+    "unrealised_pnl_abs": 6337.84,
+    "unrealised_pnl_pct": 0.291906,
+    "entry_date": "2026-11-11",
+    "entry_price": 124.33000183105469,
+    "last_signal_id": "S-WMT-random_forest-20261110-cb1ae0"
+  },
+  {
+    "ticker": "NEE",
+    "shares": 186.0,
+    "avg_cost": 83.2095,
+    "last_price": 84.58,
+    "market_value": 15731.88,
+    "unrealised_pnl_abs": 254.91,
+    "unrealised_pnl_pct": 0.01647,
+    "entry_date": "2026-11-20",
+    "entry_price": 84.66000366210938,
+    "last_signal_id": "S-NEE-random_forest-20261119-b16944"
+  }
+]

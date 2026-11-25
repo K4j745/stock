@@ -1,0 +1,85 @@
+@startuml Z07b_model_danych_portfele
+' Załącznik — model danych 2/2: portfele monitorujące (docs/data/portfolios)
+' Zgodnie z kodem: dashboard/lib/portfolio.py (_build_decision_record, positions_list,
+' equity_curve), exporters.py (write_portfolio), generate.py (portfolio_index).
+' Pola signal_date i execution_date: poprawka c32b8cc5 (feat/practical-jepsen, 2026-11-20).
+!include _styl.iuml
+hide circle
+hide methods
+skinparam nodesep 30
+skinparam ranksep 50
+
+class Portfolio <<portfolios/index.json>> {
+  portfolio_id : string [PK]
+  portfolio_name : string
+  signal_source : string
+  trade_mode : incremental | all_in
+  initial_capital, final_value : float
+  total_return, sharpe : float
+  max_drawdown : float
+  n_decisions, n_transactions : int
+}
+
+class Signal <<signals/history.json>> {
+  signal_id : string [PK]
+}
+
+class Decision <<{id}/decisions.json>> {
+  decision_id : string [PK]
+  signal_id : string [FK]
+  transaction_id : string | null
+  ticker : string
+  signal_date : date
+  execution_date : date
+  market_date : date [= execution_date]
+  action : BUY | SELL | HOLD | SEED
+  quantity, execution_price : float
+  shares_before, shares_after : float
+  cash_before, cash_after : float
+  portfolio_value_after : float
+  trade_pnl_abs : float | null
+  reason : string
+}
+
+class Transaction <<{id}/transactions.json>> {
+  transaction_id : string [PK]
+  pozostałe pola jak w Decision
+}
+
+class Position <<{id}/positions.json>> {
+  ticker : string
+  shares, avg_cost : float
+  last_price, market_value : float
+  unrealised_pnl_abs : float
+  last_signal_id : string
+}
+
+class EquityPoint <<{id}/equity_curve.json>> {
+  date : date
+  portfolio_value, cash : float
+  invested, peak, drawdown : float
+}
+
+class Metrics <<{id}/metrics.json>> {
+  performance : total_return, cagr,
+    volatility, sharpe_ratio,
+    max_drawdown, calmar_ratio, trade_*
+  benchmark : te same miary dla SPY
+}
+
+Portfolio "1" *-- "*" Decision
+Portfolio "1" *-- "*" Position
+Portfolio "1" *-- "*" EquityPoint
+Portfolio "1" *-- "1" Metrics
+Signal "1" -right- "*" Decision
+Decision "1" -- "0..1" Transaction
+Position -[hidden]down- EquityPoint
+EquityPoint -[hidden]down- Metrics
+
+legend bottom
+  Transakcja to decyzja, która zmieniła portfel (ma transaction_id); zapisywana
+  także w trades.csv. Decyzje SEED (pozycje startowe) mają własny signal_id.
+  signal_date: sesja sygnału (d−1); execution_date: sesja wykonania (d), poza
+  SEED i kup i trzymaj, gdzie obie daty są równe.
+endlegend
+@enduml

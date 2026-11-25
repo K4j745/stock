@@ -1,0 +1,50 @@
+@startuml Z01b_przypadki_uzycia_potok_ml
+' Załącznik — przypadki użycia potoku uczenia maszynowego (stock_ml/)
+' Zgodnie z: stock_ml/main.py (polecenia train, candle, arima, backtest, evaluate, report,
+' shap, plots) i stock_ml/data/download_historical.py.
+!include _styl.iuml
+left to right direction
+skinparam ranksep 40
+
+actor "Autor\n(badacz)" as B
+actor "Yahoo\nFinance" as YF <<system zewnętrzny>>
+
+rectangle "Potok ML (stock_ml/, stacja robocza autora)" {
+  usecase "UC-23 Trening modeli ML\n(LR, RF, XGBoost, LightGBM)" as UC23
+  usecase "UC-26 Trening\nmodelu świecowego" as UC26
+  usecase "UC-31 Ewaluacja\nmodelu ARIMA" as UC31
+  usecase "UC-27 Ewaluacja\nzapisanych modeli" as UC27
+  usecase "UC-28 Backtest\nstrategii" as UC28
+  usecase "UC-29 Wykresy\nanalityczne" as UC29
+  usecase "UC-30 Analiza\nSHAP" as UC30
+  usecase "UC-21 Archiwizacja\nnotowań w CSV" as UC21
+
+  usecase "UC-25 Strojenie\n(Optuna)" as UC25
+  usecase "UC-24 Walidacja\nwalk-forward" as UC24
+  usecase "UC-22 Macierz cech\ni etykiet (pobranie\nOHLCV, cechy, etykiety)" as UC22
+}
+
+B -- UC23
+B -- UC26
+B -- UC31
+B -- UC27
+B -- UC28
+B -- UC29
+B -- UC30
+B -- UC21
+
+UC23 <.. UC25 : <<extend>>
+UC23 ..> UC24 : <<include>>
+UC26 ..> UC24 : <<include>>
+UC31 ..> UC24 : <<include>>
+UC23 ..> UC22 : <<include>>
+UC26 ..> UC22 : <<include>>
+UC31 ..> UC22 : <<include>>
+UC27 ..> UC22 : <<include>>
+UC28 ..> UC22 : <<include>>
+UC29 ..> UC22 : <<include>>
+UC30 ..> UC22 : <<include>>
+
+UC22 -- YF
+UC21 -- YF
+@enduml

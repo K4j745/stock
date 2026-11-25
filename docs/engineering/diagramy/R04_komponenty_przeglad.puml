@@ -1,0 +1,50 @@
+@startuml R04_komponenty_przeglad
+' Ryc. 4 — architektura: komponenty i ich zależności (rozdz. Projekt i implementacja)
+' Szczegóły w załączniku: Z5 (stock_ml), Z6 (dashboard).
+' Strzałka ciągła: korzystanie z komponentu lub zapis/odczyt danych;
+' przerywana: import kodu z innego podsystemu.
+' Ramka stock_ml/ to kod i artefakty w repozytorium (generator czyta je po checkout).
+!include _styl.iuml
+
+package "Przeglądarka użytkownika" {
+  component "Strony serwisu\n(HTML, assets/app.js)" as UI
+  component "Plotly.js,\nChart.js" as LIBS
+  database "localStorage" as LS
+}
+
+database "docs/data (JSON, CSV)\ndocs/charts/plots (PNG)\nna GitHub Pages" as DATA
+
+component "Generator danych serwisu\n(dashboard/generate.py, lib/)\nw GitHub Actions" as GEN
+
+package "stock_ml/" {
+  component "Potok ML\n(main.py)" as ML
+  component "Rdzeń ARIMA\n(arima_core.py)" as CORE
+  database "models/saved\n(140 modeli\ni skalerów)" as SAVED
+  database "data/historical\n(archiwum CSV)" as HIST
+}
+
+component "Yahoo Finance" as YF <<system zewnętrzny>>
+
+UI -right-> LIBS
+UI -left-> LS : portfele,\nustawienia
+UI --> DATA : HTTP GET
+
+DATA <-- GEN : zapisuje
+GEN ..> ML : cechy, model\nświecowy
+GEN ..> CORE : ten sam\nrdzeń
+GEN --> SAVED : wczytuje
+GEN --> HIST : odczyt\nawaryjny
+
+ML -right-> CORE
+ML --> SAVED : zapisuje
+
+SAVED -[hidden]-> YF
+ML --> YF : OHLCV
+GEN --> YF : OHLCV,\nkurs USD/PLN
+
+legend bottom
+  stock_ml/: kod i artefakty w repozytorium. Potok ML uruchamia autor na stacji
+  roboczej (np. main.py train), a modele i archiwum CSV zatwierdza w repozytorium.
+  Generator w GitHub Actions korzysta z nich po pobraniu repozytorium (checkout).
+endlegend
+@enduml

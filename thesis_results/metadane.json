@@ -1,0 +1,45 @@
+{
+  "generated_at_utc": "2026-11-24T12:41:56+00:00",
+  "thresholds": [
+    0.002,
+    0.005,
+    0.01
+  ],
+  "walk_forward": {
+    "train": 252,
+    "test": 21,
+    "step": 21,
+    "mode": "rolling"
+  },
+  "backtest_periods": {
+    "bin2": [
+      "2012-06-12",
+      "2026-03-24"
+    ],
+    "bin5": [
+      "2012-06-12",
+      "2026-03-24"
+    ],
+    "bin10": [
+      "2012-06-12",
+      "2026-03-24"
+    ]
+  },
+  "models": [
+    "logistic_regression",
+    "random_forest",
+    "xgboost",
+    "lightgbm",
+    "candle",
+    "arima"
+  ],
+  "backtest_strategies": [
+    "logistic_regression",
+    "random_forest",
+    "xgboost",
+    "lightgbm",
+    "candle",
+    "arima",
+    "technical_rules"
+  ]
+}

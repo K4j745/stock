@@ -1,0 +1,44 @@
+@startuml Z05a_sekwencja_notowania
+' Załącznik — sekwencja 1/4: start generatora i pobranie notowań
+' Zgodnie z kodem: dashboard/generate.py (main, fetch_all_prices),
+' dashboard/lib/data_fetcher.py (download, MAX_ATTEMPTS = 3, BACKOFF_BASE_SECONDS = 2),
+' dashboard/lib/indicators.py (compute).
+!include _styl.iuml
+hide footbox
+skinparam maxMessageSize 105
+autonumber
+
+actor "GitHub\nActions" as CI
+participant "generate.py" as GEN
+participant "data_fetcher" as FETCH
+participant "indicators" as IND
+participant "Yahoo\nFinance" as YF
+database "Archiwum CSV\n(data/historical)" as ARCH
+
+CI -> GEN : python dashboard/generate.py
+activate GEN
+GEN -> GEN : load_config(), build_registry(),\nmetadane przebiegu
+loop dla każdego symbolu (10 spółek i SPY)
+  GEN -> FETCH : download(symbol, "3y", "1d")
+  activate FETCH
+  loop do 3 prób (przerwy 2 s i 4 s)
+    FETCH -> YF : yf.download()
+    YF --> FETCH : OHLCV lub błąd
+  end
+  opt brak poprawnych danych po 3 próbach
+    FETCH -> ARCH : odczyt pliku CSV symbolu
+    ARCH --> FETCH : notowania z ostatnich 3 lat
+  end
+  FETCH --> GEN : OHLCV albo brak danych
+  deactivate FETCH
+  opt są dane
+    GEN -> IND : compute(df)
+    activate IND
+    IND --> GEN : RSI, MACD, wstęgi Bollingera,\nSMA, EMA, stopy zwrotu
+    deactivate IND
+  end
+end
+opt nie pobrano żadnego symbolu
+  GEN --> CI : koniec bez zapisu plików (kod 0)
+end
+@enduml

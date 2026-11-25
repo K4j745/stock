@@ -1,0 +1,75 @@
+@startuml Z08a_klasy_generator_dane
+' Załącznik — diagram klas 1/2: orkiestracja, dane i eksport (dashboard/)
+' Projekt oparty na modułach i funkcjach: moduł pokazano jako klasę ze stereotypem «moduł».
+' Zgodnie z kodem: dashboard/generate.py, lib/config_loader.py, registry.py,
+' data_fetcher.py, indicators.py, exporters.py, audit.py.
+!include _styl.iuml
+hide circle
+hide empty members
+skinparam nodesep 25
+skinparam ranksep 45
+left to right direction
+
+class "generate.py" as GEN <<moduł>> {
+  + main()
+  + fetch_all_prices(reg, period, interval)
+  + fetch_fx_usd_pln()
+  + generate_all_signals(reg, prices, config)
+  + run_all_portfolios(config, prices, sigs)
+  + build_signal_records(...)
+  + build_model_summaries(...)
+  + copy_report_plots()
+  - _arima_signals(ticker, df, config, buy)
+}
+
+class "config_loader" as CFG <<moduł>> {
+  + load_config(path) : Dict
+}
+class "registry" as REG <<moduł>> {
+  + build_registry(config) : Registry
+}
+class Registry <<dataclass>> {
+  tickers : List[TickerInfo]
+  benchmark : str
+  models : List[ModelInfo]
+  + to_dict() : Dict
+}
+class TickerInfo <<dataclass, frozen>> {
+  symbol, name, sector : str
+}
+class ModelInfo <<dataclass, frozen>> {
+  name, family, description : str
+}
+class "data_fetcher" as FETCH <<moduł>> {
+  + download(symbol, period, interval)
+  + clear_cache()
+}
+class "indicators" as IND <<moduł>> {
+  + compute(df) : DataFrame
+}
+class "exporters" as EXP <<moduł>> {
+  + write_meta(), write_last_updated()
+  + write_registry(), write_ticker_ohlcv()
+  + write_ticker_signals()
+  + write_signals_bundle()
+  + write_model_summaries()
+  + write_portfolio(), write_portfolio_index()
+  + write_global_exports(), write_csv()
+}
+class "audit" as AUD <<moduł>> {
+  + build_run_metadata(root, config, status)
+  + git_commit_hash(root) : str
+  + write_json(path, data)
+}
+
+GEN ..> CFG
+GEN ..> REG
+GEN ..> FETCH
+GEN ..> IND
+GEN ..> EXP
+GEN ..> AUD
+REG .right.> Registry : tworzy
+Registry "1" *-- "*" TickerInfo
+Registry "1" *-- "*" ModelInfo
+EXP ..> AUD
+@enduml

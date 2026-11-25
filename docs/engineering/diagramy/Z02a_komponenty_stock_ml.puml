@@ -1,0 +1,65 @@
+@startuml Z02a_komponenty_stock_ml
+' Załącznik — komponenty potoku ML (stock_ml/) i ich zależności
+' Strzałka przerywana: import modułu (zgodnie z instrukcjami import w kodzie);
+' strzałka ciągła: zapis lub odczyt plików. Wszystkie moduły importują config.py.
+!include _styl.iuml
+skinparam nodesep 25
+skinparam ranksep 45
+
+component "main.py" as MAIN
+
+package "stock_ml" {
+  component "models" as MODELS
+  component "arima_\nbaseline" as ARB
+  component "backtest" as BT
+  component "reports" as REP
+  component "reports.\ngenerate" as GENR
+  component "arima_\ncore" as CORE
+  component "features" as FEAT
+  component "data" as DATA
+  component "download_\nhistorical" as DLH
+}
+
+database "models/\nsaved" as SAVED
+database "reports/" as OUT
+database "data/raw" as RAW
+database "data/\nhistorical" as HIST
+component "Yahoo\nFinance" as YF <<system\nzewnętrzny>>
+
+MAIN ..> MODELS
+MAIN ..> ARB
+MAIN ..> BT
+MAIN ..> REP
+
+MODELS ..> FEAT
+MODELS ..> DATA
+MODELS ..> GENR
+ARB ..> FEAT
+ARB ..> DATA
+ARB ..> CORE
+ARB ..> GENR
+BT ..> FEAT
+BT ..> DATA
+REP ..> FEAT
+REP ..> DATA
+REP ..> BT
+FEAT ..> DATA
+
+MODELS --> SAVED
+BT --> SAVED
+REP --> SAVED
+REP --> OUT
+GENR --> OUT
+DATA --> RAW
+DATA --> YF
+DLH --> YF
+DLH --> HIST
+
+legend bottom
+  models: train, candle_model, tune, evaluate (zapis i odczyt modeli)
+  features: pipeline, indicators, candle_features, labels, validation
+  data: download (pamięć podręczna data/raw), preprocess
+  reports: plots, shap_analysis (wykresy PNG); reports.generate: wyniki CSV i JSON
+  backtest: run, strategy, portfolio; arima_baseline, arima_core: pakiet models
+endlegend
+@enduml

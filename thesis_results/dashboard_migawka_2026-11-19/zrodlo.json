@@ -1,0 +1,43 @@
+{
+ "commit": "f18686ed",
+ "generated_at_utc": "2026-11-19T23:27:53Z",
+ "split_date": "2026-02-24",
+ "signal_sources": [
+  [
+   "arima",
+   "arima"
+  ],
+  [
+   "buy_and_hold",
+   "buy_and_hold"
+  ],
+  [
+   "candle",
+   "candle_proxy"
+  ],
+  [
+   "ensemble_majority",
+   "ensemble_majority"
+  ],
+  [
+   "lightgbm",
+   "lightgbm"
+  ],
+  [
+   "logistic_regression",
+   "logistic_regression"
+  ],
+  [
+   "random_forest",
+   "random_forest"
+  ],
+  [
+   "technical_rule_based",
+   "technical_rule_based"
+  ],
+  [
+   "xgboost",
+   "xgboost"
+  ]
+ ]
+}

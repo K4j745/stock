@@ -1,0 +1,66 @@
+' ===== Styl wspólny rycin (wg wytycznych autora) =====
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam defaultFontColor Black
+skinparam ArrowColor Black
+skinparam ArrowFontSize 11
+skinparam actorBackgroundColor #7EC8E3
+skinparam actorBorderColor Black
+skinparam usecaseBackgroundColor #7EC8E3
+skinparam usecaseBorderColor Black
+skinparam rectangleBackgroundColor White
+skinparam rectangleBorderColor Black
+skinparam packageBackgroundColor White
+skinparam packageBorderColor Black
+skinparam componentBackgroundColor #7EC8E3
+skinparam componentBorderColor Black
+skinparam interfaceBackgroundColor #7EC8E3
+skinparam interfaceBorderColor Black
+skinparam databaseBackgroundColor #7EC8E3
+skinparam databaseBorderColor Black
+skinparam artifactBackgroundColor #7EC8E3
+skinparam artifactBorderColor Black
+skinparam nodeBackgroundColor White
+skinparam nodeBorderColor Black
+skinparam cloudBackgroundColor White
+skinparam cloudBorderColor Black
+skinparam noteBackgroundColor White
+skinparam noteBorderColor Black
+skinparam noteFontSize 11
+skinparam legendBackgroundColor White
+skinparam legendBorderColor Black
+skinparam legendFontSize 11
+skinparam activityBackgroundColor #7EC8E3
+skinparam activityBorderColor Black
+skinparam activityDiamondBackgroundColor White
+skinparam activityDiamondBorderColor Black
+skinparam activityStartColor Black
+skinparam activityEndColor Black
+skinparam activityBarColor Black
+skinparam partitionBackgroundColor White
+skinparam partitionBorderColor Black
+skinparam classBackgroundColor White
+skinparam classBorderColor Black
+skinparam classHeaderBackgroundColor #7EC8E3
+skinparam classAttributeIconSize 0
+skinparam sequenceParticipantBackgroundColor #7EC8E3
+skinparam sequenceParticipantBorderColor Black
+skinparam sequenceActorBackgroundColor #7EC8E3
+skinparam sequenceActorBorderColor Black
+skinparam sequenceLifeLineBorderColor Black
+skinparam sequenceLifeLineBackgroundColor #7EC8E3
+skinparam sequenceBoxBackgroundColor White
+skinparam sequenceBoxBorderColor Black
+skinparam sequenceGroupBackgroundColor #7EC8E3
+skinparam sequenceGroupBorderColor Black
+skinparam sequenceDividerBackgroundColor White
+skinparam sequenceDividerBorderColor Black
+skinparam sequenceReferenceBackgroundColor White
+skinparam sequenceReferenceBorderColor Black
+<style>
+package { HorizontalAlignment left }
+rectangle { HorizontalAlignment left }
+</style>
+' ===== koniec stylu =====

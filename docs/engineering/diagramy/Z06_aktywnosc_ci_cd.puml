@@ -1,0 +1,44 @@
+@startuml Z06_aktywnosc_ci_cd
+' Załącznik — automatyczna aktualizacja serwisu (.github/workflows/dashboard.yml)
+!include _styl.iuml
+
+start
+:Harmonogram pn–pt 22:30 UTC lub
+uruchomienie ręczne; checkout repozytorium
+(kod, modele, archiwum CSV); Python 3.11,
+instalacja dashboard/requirements.txt;
+partition "Wykresy ML (błąd nie przerywa)" {
+  :Instalacja stock_ml/requirements.txt;
+  if (Są pliki w models/saved?) then (tak)
+    :stock_ml.main report
+    i stock_ml.main plots;
+  else (nie)
+  endif
+}
+:Archiwizacja notowań z 90 dni
+(download_historical.py,
+błąd nie przerywa);
+:python dashboard/generate.py;
+if (Wyjątek w generatorze?) then (tak)
+  :Przebieg nieudany,
+  bez commita;
+  end
+else (nie)
+endif
+if (Zmiany w docs/ lub
+stock_ml/data/historical/?) then (tak)
+  :Commit jako github-actions[bot]
+  i push; GitHub Pages publikuje
+  nową wersję strony;
+else (nie)
+  :Brak commita;
+endif
+stop
+
+legend bottom
+  Gdy nie pobrano żadnych notowań, generate.py
+  kończy pracę bez zapisu plików (kod 0); commit
+  obejmuje wtedy co najwyżej archiwum CSV,
+  a opublikowana strona się nie zmienia.
+endlegend
+@enduml

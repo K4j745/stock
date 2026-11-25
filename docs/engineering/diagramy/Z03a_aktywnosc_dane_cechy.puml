@@ -1,0 +1,38 @@
+@startuml Z03a_aktywnosc_dane_cechy
+' Załącznik — potok ML 1/2: dane, cechy i etykiety (features/pipeline.py: build_feature_matrix)
+' Zgodnie z kodem: stock_ml/data/download.py, data/preprocess.py, features/indicators.py,
+' features/labels.py, features/pipeline.py, config.py.
+!include _styl.iuml
+
+start
+partition "Dane" {
+  if (Plik Parquet w data/raw
+  i brak opcji --refresh?) then (tak)
+    :Odczyt z pamięci
+    podręcznej;
+  else (nie)
+    :Pobranie OHLCV z yfinance,
+    zapis Parquet i CSV;
+  endif
+  :Czyszczenie: duplikaty dat, braki danych;
+}
+partition "Cechy i etykiety" {
+  :27 cech technicznych: SMA, EMA, MACD, RSI,
+  oscylator stochastyczny, ROC, wstęgi Bollingera,
+  ATR, OBV, względny wolumen, zwroty opóźnione,
+  rozpiętość dzienna;
+  :Etykieta 1 (BUY), gdy zwrot następnej sesji > próg,
+  w przeciwnym razie 0 (SELL);
+  :Usunięcie wierszy z brakami oraz kolumn OHLCV
+  i Log_return (ochrona przed przeciekiem);
+}
+:Macierz cech X i etykiety y
+(wejście walidacji: następna rycina);
+stop
+
+legend bottom
+  Dane z okresu 2011-04-01 – 2026-04-01; próg etykiety
+  0,2%, 0,5% lub 1,0%. Model świecowy (polecenie candle)
+  używa cech świecowych i 7 cech bazowych.
+endlegend
+@enduml

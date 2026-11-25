@@ -1,0 +1,57 @@
+@startuml R05_wdrozenie
+' Ryc. 5 — diagram wdrożenia (rozdz. Projekt i implementacja)
+' Zgodnie z: .github/workflows/dashboard.yml, dashboard/requirements.txt, docs/README.md
+' (GitHub Pages: publikacja katalogu /docs z gałęzi repozytorium).
+' Węzły opisane są listą artefaktów, które się na nich znajdują.
+!include _styl.iuml
+skinparam nodeBackgroundColor #7EC8E3
+
+node BR [
+  <b>Przeglądarka WWW</b>
+  (urządzenie użytkownika)
+  ----
+  strony serwisu (HTML, JS)
+  localStorage: portfele, ustawienia
+]
+cloud "CDN\n(Plotly.js, Chart.js)" as CDN
+
+rectangle "GitHub" {
+  node PAGES [
+    <b>GitHub Pages</b>
+    ----
+    HTML, CSS, JS
+    dane JSON i CSV, wykresy PNG
+  ]
+  node REPO [
+    <b>Repozytorium Git</b> (K4j745/stock)
+    ----
+    kod: stock_ml/, dashboard/
+    stock_ml/models/saved (140 plików, 43 MB)
+    stock_ml/data/historical (archiwum CSV)
+    docs/ (strona i dane)
+  ]
+  node RUN [
+    <b>Runner GitHub Actions</b>
+    (ubuntu-latest, Python 3.11)
+    pn–pt 22:30 UTC lub ręcznie
+    ----
+    download_historical.py
+    dashboard/generate.py
+  ]
+}
+
+node PC [
+  <b>Stacja robocza autora</b>
+  ----
+  stock_ml/ (trening modeli)
+]
+cloud "Yahoo Finance" as YF
+
+BR -right-> CDN : biblioteki\nwykresów
+BR --> PAGES : HTTPS GET
+PAGES <-- REPO : publikacja\nkatalogu docs/
+REPO <--> RUN : checkout /\ncommit docs/\ni archiwum CSV
+RUN --> YF : notowania,\nkurs USD/PLN
+PC -up-> REPO : git push
+PC -right-> YF : notowania
+@enduml

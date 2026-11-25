@@ -1,0 +1,44 @@
+@startuml R02_arima_fold
+' Ryc. 2 — ARIMA w jednym foldzie walidacji walk-forward (rozdz. Metodyka)
+' Zgodnie z kodem: stock_ml/models/arima_core.py (adf_pvalue, _candidates, forecast_auto,
+' probability_above) i stock_ml/models/arima_baseline.py (walk_forward_arima).
+' Parametry: stock_ml/config.py (ARIMA_MAX_P = 2, ARIMA_MAX_Q = 2, ARIMA_ADF_ALPHA = 0.05).
+!include _styl.iuml
+
+start
+partition "Identyfikacja" {
+  :Test ADF na oknie uczącym foldu
+  (252 dzienne stopy zwrotu; H0: pierwiastek jednostkowy);
+  if (p-wartość < 0,05?) then (tak)
+    :d = 0;
+  else (nie)
+    :d = 1;
+  endif
+}
+partition "Estymacja i wybór rzędu" {
+  repeat
+    :Estymacja ARIMA(p, d, q) metodą największej
+    wiarygodności dla kolejnej pary p, q = 0, 1, 2;
+    :Jeśli estymacja zbieżna: wpis BIC do rankingu;
+  repeat while (Kolejna para (p, q)?) is (tak) not (nie)
+  :Wybór modelu o najmniejszym BIC;
+  repeat
+    :Prognozy jednokrokowe dla 21 sesji testu
+    (parametry stałe; prognoza na dany dzień
+    korzysta tylko z wcześniejszych obserwacji);
+  backward :Następny model
+  w rankingu BIC;
+  repeat while (Prognoza niepoprawna?) is (tak) not (nie)
+}
+:Klasyfikacja: P(zwrot > próg) z rozkładu normalnego
+prognozy; BUY, gdy średnia prognozy > próg (P > 0,5),
+w przeciwnym razie SELL. Metryki foldu: dokładność,
+precyzja, czułość, F1, ROC AUC, MCC;
+stop
+
+legend bottom
+  Próg etykiety: 0,2%, 0,5% lub 1,0%. Prognoza niepoprawna: wartość nieskończona
+  lub zerowy błąd standardowy. Rząd, BIC i p-wartość ADF każdego foldu
+  zapisywane są w raporcie reports/…_arima_orders.csv.
+endlegend
+@enduml

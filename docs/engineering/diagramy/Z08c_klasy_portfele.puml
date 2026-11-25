@@ -1,0 +1,50 @@
+@startuml Z08c_klasy_portfele
+' Załącznik — diagram klas 3/3: symulacja portfeli i metryki
+' Zgodnie z kodem: dashboard/lib/portfolio.py (stan feat/practical-jepsen po c32b8cc5),
+' dashboard/lib/metrics.py.
+!include _styl.iuml
+hide circle
+hide empty members
+skinparam nodesep 30
+skinparam ranksep 45
+
+class "portfolio" as PORT <<moduł>> {
+  +run_portfolio_backtest(portfolio_cfg,
+    prices_by_ticker, signals_by_ticker_model,
+    benchmark_prices, ..., signal_lag = 1)
+    : BacktestResult
+}
+class Position <<dataclass>> {
+  ticker : str
+  shares, cost_basis : float
+  entry_date : str
+  entry_price : float
+  last_signal_id : str
+}
+class BacktestResult <<dataclass>> {
+  portfolio_id, portfolio_name : str
+  description : str
+  initial_capital, final_value, cash : float
+  transactions, decisions : List[Dict]
+  equity_curve, positions : List[Dict]
+  metrics, benchmark_metrics : Dict
+  metadata : Dict
+}
+class "metrics" as MET <<moduł>> {
+  +portfolio_metrics(equity_curve,
+    daily_returns, annualisation = 252,
+    risk_free_rate = 0) : Dict
+  +trade_metrics(trade_pnls) : Dict
+  +classification_metrics(signals,
+    realised_up) : Dict
+}
+
+PORT ..> Position : stan pozycji
+PORT ..> BacktestResult : zwraca
+PORT ..> MET
+
+legend bottom
+  signal_lag = 1: sygnał z sesji d−1 wykonywany na otwarciu sesji d;
+  dla portfeli kup i trzymaj opóźnienie wynosi 0.
+endlegend
+@enduml

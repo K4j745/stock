@@ -1,0 +1,34 @@
+@startuml Z01c_przypadki_uzycia_aktualizacja
+' Załącznik — przypadki użycia cyklicznej aktualizacji i publikacji (GitHub Actions)
+' Zgodnie z: .github/workflows/dashboard.yml.
+!include _styl.iuml
+left to right direction
+skinparam ranksep 40
+
+actor "Harmonogram\nGitHub Actions" as CI
+actor "Autor\n(badacz)" as B
+actor "Yahoo\nFinance" as YF <<system zewnętrzny>>
+
+rectangle "Aktualizacja i publikacja (GitHub Actions)" {
+  usecase "UC-44 Cykliczna aktualizacja\n(pn–pt 22:30 UTC\nlub uruchomienie ręczne)" as UC44
+  usecase "UC-29 Wykresy ML\n(gdy są modele)" as UC29
+  usecase "UC-21 Archiwizacja notowań\n(ostatnie 90 dni)" as UC21
+  usecase "UC-40 Generowanie\ndanych serwisu\n(szczegóły: następna rycina)" as UC40
+  usecase "UC-45 Publikacja\n(commit, push,\nGitHub Pages)" as UC45
+}
+
+CI -- UC44
+B -- UC44
+
+UC44 <.. UC29 : <<extend>>
+UC44 ..> UC21 : <<include>>
+UC44 ..> UC40 : <<include>>
+UC44 ..> UC45 : <<include>>
+
+UC21 -- YF
+UC40 -- YF
+
+legend bottom
+  UC-45 wykonuje się tylko wtedy, gdy zmieniły się pliki w docs/ lub archiwum CSV.
+endlegend
+@enduml
