@@ -9,7 +9,7 @@
     "unrealised_pnl_pct": -0.012494,
     "entry_date": "2026-11-20",
     "entry_price": 158.8300018310547,
-    "last_signal_id": "S-XOM-xgboost-20261119-a0c569"
+    "last_signal_id": "S-XOM-xgboost-20261119-c5d7d2"
   },
   {
     "ticker": "JNJ",
@@ -21,7 +21,7 @@
     "unrealised_pnl_pct": 0.419128,
     "entry_date": "2026-11-18",
     "entry_price": 275.54998779296875,
-    "last_signal_id": "S-JNJ-xgboost-20261117-c936f3"
+    "last_signal_id": "S-JNJ-xgboost-20261117-33604d"
   },
   {
     "ticker": "UNH",
@@ -33,7 +33,7 @@
     "unrealised_pnl_pct": -0.147184,
     "entry_date": "2026-09-17",
     "entry_price": 376.45001220703125,
-    "last_signal_id": "S-UNH-xgboost-20260916-2e4714"
+    "last_signal_id": "S-UNH-xgboost-20260916-07fc70"
   },
   {
     "ticker": "PG",
@@ -45,7 +45,7 @@
     "unrealised_pnl_pct": 0.049291,
     "entry_date": "2026-11-24",
     "entry_price": 170.91000366210938,
-    "last_signal_id": "S-PG-xgboost-20261123-36c4e6"
+    "last_signal_id": "S-PG-xgboost-20261123-248ce9"
   },
   {
     "ticker": "KO",
@@ -57,7 +57,7 @@
     "unrealised_pnl_pct": 0.209639,
     "entry_date": "2026-11-25",
     "entry_price": 98.11000061035156,
-    "last_signal_id": "S-KO-xgboost-20261124-aedae0"
+    "last_signal_id": "S-KO-xgboost-20261124-6b2268"
   },
   {
     "ticker": "WMT",
@@ -69,7 +69,7 @@
     "unrealised_pnl_pct": 0.266659,
     "entry_date": "2026-11-24",
     "entry_price": 129.94000244140625,
-    "last_signal_id": "S-WMT-xgboost-20261123-32ed44"
+    "last_signal_id": "S-WMT-xgboost-20261123-b320c0"
   },
   {
     "ticker": "NEE",
@@ -81,6 +81,6 @@
     "unrealised_pnl_pct": 0.040951,
     "entry_date": "2026-11-17",
     "entry_price": 84.68000030517578,
-    "last_signal_id": "S-NEE-xgboost-20261116-ff285d"
+    "last_signal_id": "S-NEE-xgboost-20261116-6f616c"
   }
 ]

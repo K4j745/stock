@@ -9,7 +9,7 @@
     "unrealised_pnl_pct": 0.096209,
     "entry_date": "2026-11-24",
     "entry_price": 157.4199981689453,
-    "last_signal_id": "S-XOM-random_forest-20261123-df156d"
+    "last_signal_id": "S-XOM-random_forest-20261123-7504d0"
   },
   {
     "ticker": "JNJ",
@@ -21,7 +21,7 @@
     "unrealised_pnl_pct": 0.270377,
     "entry_date": "2026-11-18",
     "entry_price": 275.54998779296875,
-    "last_signal_id": "S-JNJ-random_forest-20261117-a55ea4"
+    "last_signal_id": "S-JNJ-random_forest-20261117-f3bab1"
   },
   {
     "ticker": "PG",
@@ -33,7 +33,7 @@
     "unrealised_pnl_pct": 0.063457,
     "entry_date": "2026-11-17",
     "entry_price": 171.33999633789062,
-    "last_signal_id": "S-PG-random_forest-20261116-a2ec74"
+    "last_signal_id": "S-PG-random_forest-20261116-a45614"
   },
   {
     "ticker": "KO",
@@ -45,7 +45,7 @@
     "unrealised_pnl_pct": 0.328058,
     "entry_date": "2026-11-25",
     "entry_price": 98.11000061035156,
-    "last_signal_id": "S-KO-random_forest-20261124-210c85"
+    "last_signal_id": "S-KO-random_forest-20261124-63e36a"
   },
   {
     "ticker": "WMT",
@@ -57,7 +57,7 @@
     "unrealised_pnl_pct": 0.288294,
     "entry_date": "2026-11-11",
     "entry_price": 124.33000183105469,
-    "last_signal_id": "S-WMT-random_forest-20261110-69815c"
+    "last_signal_id": "S-WMT-random_forest-20261110-e4e1f4"
   },
   {
     "ticker": "NEE",
@@ -69,6 +69,6 @@
     "unrealised_pnl_pct": 0.02633,
     "entry_date": "2026-11-25",
     "entry_price": 84.95999908447266,
-    "last_signal_id": "S-NEE-random_forest-20261124-449d34"
+    "last_signal_id": "S-NEE-random_forest-20261124-9fe27f"
   }
 ]

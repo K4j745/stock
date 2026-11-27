@@ -9,7 +9,7 @@
     "unrealised_pnl_pct": 0.197266,
     "entry_date": "2024-04-19",
     "entry_price": 404.0299987792969,
-    "last_signal_id": "S-MSFT-logistic_regression-20240418-b51f7b"
+    "last_signal_id": "S-MSFT-logistic_regression-20240418-90ea48"
   },
   {
     "ticker": "XOM",
@@ -21,7 +21,7 @@
     "unrealised_pnl_pct": 0.428543,
     "entry_date": "2025-05-23",
     "entry_price": 102.5999984741211,
-    "last_signal_id": "S-XOM-logistic_regression-20250522-604f9f"
+    "last_signal_id": "S-XOM-logistic_regression-20250522-ee44c7"
   },
   {
     "ticker": "JNJ",
@@ -33,7 +33,7 @@
     "unrealised_pnl_pct": 0.763359,
     "entry_date": "2025-06-24",
     "entry_price": 151.5,
-    "last_signal_id": "S-JNJ-logistic_regression-20250623-ce4a30"
+    "last_signal_id": "S-JNJ-logistic_regression-20250623-fa6eb4"
   },
   {
     "ticker": "UNH",
@@ -45,7 +45,7 @@
     "unrealised_pnl_pct": -0.30674,
     "entry_date": "2024-04-19",
     "entry_price": 497.0,
-    "last_signal_id": "S-UNH-logistic_regression-20240418-ab87f8"
+    "last_signal_id": "S-UNH-logistic_regression-20240418-79c134"
   },
   {
     "ticker": "PG",
@@ -57,7 +57,7 @@
     "unrealised_pnl_pct": 0.095054,
     "entry_date": "2026-03-10",
     "entry_price": 155.49000549316406,
-    "last_signal_id": "S-PG-logistic_regression-20260309-306747"
+    "last_signal_id": "S-PG-logistic_regression-20260309-424216"
   },
   {
     "ticker": "KO",
@@ -69,7 +69,7 @@
     "unrealised_pnl_pct": 0.588883,
     "entry_date": "2025-07-17",
     "entry_price": 69.80999755859375,
-    "last_signal_id": "S-KO-logistic_regression-20250716-1c1c91"
+    "last_signal_id": "S-KO-logistic_regression-20250716-5f05b6"
   },
   {
     "ticker": "WMT",
@@ -81,7 +81,7 @@
     "unrealised_pnl_pct": 1.264599,
     "entry_date": "2024-04-18",
     "entry_price": 59.83000183105469,
-    "last_signal_id": "S-WMT-logistic_regression-20240417-c59c90"
+    "last_signal_id": "S-WMT-logistic_regression-20240417-437acf"
   },
   {
     "ticker": "NEE",
@@ -93,6 +93,6 @@
     "unrealised_pnl_pct": 0.430947,
     "entry_date": "2025-05-07",
     "entry_price": 66.26000213623047,
-    "last_signal_id": "S-NEE-logistic_regression-20250506-5b3fc2"
+    "last_signal_id": "S-NEE-logistic_regression-20250506-79d33e"
   }
 ]
